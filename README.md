@@ -1,10 +1,15 @@
 # Artworkia - Artworks Sharing Platform
 A product in our capstone project
 
+## Coding instruction
+1. Commit format: ```<name> - <content>```
+2. Using REBASING technique (1 branch - 1 task)
+3. Do NOT merge your code by yourself
+   
 ### Author: (4)
-Leader: LamVNT
-Front-end Developer: ThongNT, AnhDH
-Backend Developer: LamVNT, PhuHV
+- Leader: LamVNT
+- Front-end Developer: ThongNT, AnhDH
+- Backend Developer: LamVNT, PhuHV
 
 # Getting Started with Create React App
 
