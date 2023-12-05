@@ -1,0 +1,142 @@
+[
+    {
+        "id": "9ec5bb71264f50eb",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a70785b29bd5b1e5",
+        "type": "http in",
+        "z": "9ec5bb71264f50eb",
+        "name": "",
+        "url": "user",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 300,
+        "y": 120,
+        "wires": [
+            [
+                "26bf32488e713263",
+                "08e699d605a3719a"
+            ]
+        ]
+    },
+    {
+        "id": "d1f7187a56ebe775",
+        "type": "http response",
+        "z": "9ec5bb71264f50eb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "26bf32488e713263",
+        "type": "function",
+        "z": "9ec5bb71264f50eb",
+        "name": "function 1",
+        "func": "msg.payload = [1, 2, 3]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 120,
+        "wires": [
+            [
+                "d1f7187a56ebe775"
+            ]
+        ]
+    },
+    {
+        "id": "08e699d605a3719a",
+        "type": "debug",
+        "z": "9ec5bb71264f50eb",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "5cb743fd2d317944",
+        "type": "http in",
+        "z": "9ec5bb71264f50eb",
+        "name": "",
+        "url": "user/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "976e126a4e56e691",
+                "7c44ac062e47d829"
+            ]
+        ]
+    },
+    {
+        "id": "236e819f04d5a510",
+        "type": "http response",
+        "z": "9ec5bb71264f50eb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "976e126a4e56e691",
+        "type": "function",
+        "z": "9ec5bb71264f50eb",
+        "name": "function 2",
+        "func": "msg.payload = [1, 2, 3]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 280,
+        "wires": [
+            [
+                "236e819f04d5a510"
+            ]
+        ]
+    },
+    {
+        "id": "7c44ac062e47d829",
+        "type": "debug",
+        "z": "9ec5bb71264f50eb",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 200,
+        "wires": []
+    }
+]

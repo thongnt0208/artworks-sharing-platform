@@ -1,3 +1,11 @@
+# Artworkia - Artworks Sharing Platform
+A product in our capstone project
+
+### Author: (4)
+Leader: LamVNT
+Front-end Developer: ThongNT, AnhDH
+Backend Developer: LamVNT, PhuHV
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
