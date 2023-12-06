@@ -5,7 +5,8 @@ const ScreenHome: React.FC = () => {
   return (
     <>
       <h1>Home Screen</h1>
-      <Button></Button>
+      <Button>Home</Button>
+      <i className="pi pi-check p-mr-2"></i>
     </>
   );
 };
