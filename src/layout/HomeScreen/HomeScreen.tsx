@@ -1,12 +1,9 @@
 import React from "react";
-import { Button } from "primereact/button";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import Tag from "../../components/Tag";
-import CollectionCard from "../../components/CollectionCard";
-import ServiceCard from "../../components/ServiceCard";
+import CategoryMenu from "./CategoryMenu/CategoryMenu";
+import TagCarousel from "./TagCarousel/TagCarousel";
+import MenuTab from "./MenuTab/MenuTab";
 
-const ScreenHome: React.FC = () => {
+const HomeScreen: React.FC = () => {
   const collectionData = {
     id: 1,
     title: "Collection 1",
@@ -22,21 +19,33 @@ const ScreenHome: React.FC = () => {
   };
   return (
     <>
-      <Header />
-      <div style={{width: "80%", display: "flex", justifyContent: "space-between", margin: "50px"}}>
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <CollectionCard data={collectionData} />
-        <ServiceCard data={serviceData} />
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ width: "30%" }}>
+          <CategoryMenu
+            categories={["Hình minh họa", "Truyện tranh", "Tiểu thuyết"]}
+            selectedCategory="Hình minh họa"
+            onCategorySelect={(category) => console.log(category)}
+          />
+        </div>
+        <div style={{ width: "70%" }}>
+          <TagCarousel
+            tags={[
+              "Hình minh họa",
+              "Truyện tranh",
+              "Tiểu thuyết",
+              "Hình minh họa",
+              "Truyện tranh",
+              "Tiểu thuyết",
+              "Hình minh họa",
+              "Truyện tranh",
+              "Tiểu thuyết",
+            ]}
+          />
+        </div>
       </div>
-      <Footer />
+      <MenuTab />
     </>
   );
 };
 
-export default ScreenHome;
+export default HomeScreen;
