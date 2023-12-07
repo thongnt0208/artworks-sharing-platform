@@ -1,17 +1,18 @@
 import React from 'react';
+import { Button } from 'primereact/button';
 
 type ButtonProps = {
-  text: string;
+  text?: string;
+  icon?: string;
   onClick: () => void;
   disabled?: boolean;
 };
 
-const Button: React.FC<ButtonProps> = ({ text, onClick, disabled = false }) => {
+const DefaultButton: React.FC<ButtonProps> = ({ text, icon, onClick, disabled = false }) => {
+
   return (
-    <button onClick={onClick} disabled={disabled}>
-      {text}
-    </button>
+    <Button label={text} icon={icon} onClick={onClick} disabled={disabled} />
   );
 };
 
-export default Button;
+export default DefaultButton;
