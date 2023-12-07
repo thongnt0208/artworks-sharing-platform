@@ -24,13 +24,13 @@ const ScreenHome: React.FC = () => {
     <>
       <Header />
       <div style={{width: "80%", display: "flex", justifyContent: "space-between", margin: "50px"}}>
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
-        <Tag label="#xinchao" color="red" onClick={() => {}} />
+        <Tag label="#xinchao" color="red" />
+        <Tag label="#xinchao" color="red" />
+        <Tag label="#xinchao" color="red" />
+        <Tag label="#xinchao" color="red" />
+        <Tag label="#xinchao" color="red" />
+        <Tag label="#xinchao" color="red" />
+        <Tag label="#xinchao" color="red" />
         <CollectionCard data={collectionData} />
         <ServiceCard data={serviceData} />
       </div>

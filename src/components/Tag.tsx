@@ -4,10 +4,13 @@ import { Button } from "primereact/button";
 interface TagProps {
   label: string;
   color?: string;
-  onClick: () => void;
 }
 
-const Tag: React.FC<TagProps> = ({ label, color, onClick }) => {
+const Tag: React.FC<TagProps> = ({ label, color }) => {
+  const [isSelected, setIsSelected] = React.useState(false); 
+  const handleOnClick = () => {
+    setIsSelected(!isSelected);
+  };
   return (
     <Button
       label={label}
@@ -15,9 +18,9 @@ const Tag: React.FC<TagProps> = ({ label, color, onClick }) => {
         backgroundColor: color || "gray",
         padding: "0.5rem",
         borderRadius: "0.25rem",
-        color: "white",
-        fontWeight: "bold",
+        color: isSelected ? "red" : "white",
       }}
+      onClick={handleOnClick}
     />
   );
 };
