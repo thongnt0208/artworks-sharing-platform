@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import "./style.scss";
+import "./ArtworkCard.scss";
 
 type Props = {
   id: string;
