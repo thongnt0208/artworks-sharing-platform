@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
 import { InputText } from "primereact/inputtext";
 import { Avatar } from "primereact/avatar";
 import Notification from "./Notification";
 import DefaultButton from "./Button";
-import { Link } from "react-router-dom";
+import ProfilePopup from "./ProfilePopup";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
@@ -13,6 +14,7 @@ const avatar = require("../assets/defaultImage/default-avatar.png");
 const Header = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [showMessageNotification, setShowMessageNotification] = useState(false);
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
 
   const handleMouseEnterNotification = () => {
     setShowNotification(true);
@@ -28,6 +30,14 @@ const Header = () => {
 
   const handleMouseLeaveMessageNotification = () => {
     setShowMessageNotification(false);
+  };
+
+  const handleMouseEnterAvatarClick = () => {
+    setShowProfilePopup(true);
+  };
+
+  const handleMouseLeaveAvatarClick = () => {
+    setShowProfilePopup(false);
   };
 
   const startItems = [
@@ -119,8 +129,17 @@ const Header = () => {
             </div>
           )}
         </div>
-
-        <Avatar image={avatar} size="large" />
+        <div
+          onClick={handleMouseEnterAvatarClick}
+          onMouseLeave={handleMouseLeaveAvatarClick}
+          style={{ position: "relative", cursor: "pointer" }}>
+          <Avatar image={avatar} size="large"/>
+          {
+            showProfilePopup && (
+              <ProfilePopup />
+            )
+          }
+        </div>
       </div>,
     ],
   ];
