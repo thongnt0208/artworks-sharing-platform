@@ -22,7 +22,6 @@ const ScreenHome: React.FC = () => {
   };
   return (
     <>
-      <Header />
       <div style={{width: "80%", display: "flex", justifyContent: "space-between", margin: "50px"}}>
         <Tag label="#xinchao" color="red" />
         <Tag label="#xinchao" color="red" />
@@ -34,7 +33,6 @@ const ScreenHome: React.FC = () => {
         <CollectionCard data={collectionData} />
         <ServiceCard data={serviceData} />
       </div>
-      <Footer />
     </>
   );
 };

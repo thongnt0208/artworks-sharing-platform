@@ -7,6 +7,7 @@ import { Avatar } from "primereact/avatar";
 import Notification from "./Notification";
 import DefaultButton from "./Button";
 import ProfilePopup from "./ProfilePopup";
+import "./Header.scss";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
@@ -42,8 +43,8 @@ const Header = () => {
 
   const startItems = [
     [
-      <Link to="/" style={{ textDecoration: "none" }}>
-        <Image src={logo} alt="Logo" width="100px" style={{ padding: "0" }} />
+      <Link to="/" className="logo" >
+        <Image src={logo} alt="Logo" />
       </Link>,
     ],
   ];
@@ -60,28 +61,21 @@ const Header = () => {
 
   const endItems = [
     [
-      <div style={{ padding: "0 10px", display: "flex", flexDirection: "row" }}>
+      <div className="end-menu" style={{ padding: "0 10px", display: "flex", flexDirection: "row" }}>
         <InputText
           type="text"
           placeholder="Search"
           className="p-inputtext-sm"
         />
-        <DefaultButton text="Đăng tác phẩm" onClick={() => {}} />
+        <DefaultButton icon="" text="Đăng tác phẩm" onClick={() => {}} />
         <div
+          className="message-icon"
           onMouseEnter={handleMouseEnterMessageNotification}
           onMouseLeave={handleMouseLeaveMessageNotification}
-          style={{ position: "relative", cursor: "pointer" }}
         >
           <i className="pi pi-inbox"></i>
           {showMessageNotification && (
-            <div
-              style={{
-                position: "absolute",
-                right: "0",
-                top: "100%",
-                zIndex: 999,
-              }}
-            >
+            <div className="popup">
               <Notification
                 notification={{
                   notificationId: "1",
@@ -99,20 +93,13 @@ const Header = () => {
           )}
         </div>
         <div
+          className="notification-icon"
           onMouseEnter={handleMouseEnterNotification}
           onMouseLeave={handleMouseLeaveNotification}
-          style={{ position: "relative", cursor: "pointer" }}
         >
           <i className="pi pi-bell"></i>
           {showNotification && (
-            <div
-              style={{
-                position: "absolute",
-                right: "0",
-                top: "100%",
-                zIndex: 999,
-              }}
-            >
+            <div className="popup">
               <Notification
                 notification={{
                   notificationId: "1",
@@ -130,27 +117,24 @@ const Header = () => {
           )}
         </div>
         <div
+          className="avatar-icon"
           onClick={handleMouseEnterAvatarClick}
           onMouseLeave={handleMouseLeaveAvatarClick}
-          style={{ position: "relative", cursor: "pointer" }}>
-          <Avatar image={avatar} size="large"/>
-          {
-            showProfilePopup && (
-              <ProfilePopup />
-            )
-          }
+        >
+          <Avatar image={avatar} size="large" />
+          {showProfilePopup && <ProfilePopup username={""} email={""} />}
         </div>
       </div>,
     ],
   ];
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className="header">
       <Menubar
+        className="menubar"
         start={() => startItems}
         model={items}
         end={endItems}
-        style={{ width: "100%" }}
       />
     </div>
   );

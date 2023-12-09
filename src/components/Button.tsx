@@ -2,9 +2,9 @@ import React from 'react';
 import { Button } from 'primereact/button';
 
 type ButtonProps = {
-  text?: string;
-  icon?: string;
-  onClick: () => void;
+  text: string;
+  icon: string;
+  onClick?: () => void;
   disabled?: boolean;
 };
 
