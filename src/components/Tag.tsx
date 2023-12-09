@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "primereact/button";
+import "./Tag.scss";
 
 interface TagProps {
   label: string;
@@ -7,17 +8,16 @@ interface TagProps {
 }
 
 const Tag: React.FC<TagProps> = ({ label, color }) => {
-  const [isSelected, setIsSelected] = React.useState(false); 
+  const [isSelected, setIsSelected] = React.useState(false);
   const handleOnClick = () => {
     setIsSelected(!isSelected);
   };
   return (
     <Button
+      className="tag"
       label={label}
       style={{
         backgroundColor: color || "gray",
-        padding: "0.5rem",
-        borderRadius: "0.25rem",
         color: isSelected ? "red" : "white",
       }}
       onClick={handleOnClick}

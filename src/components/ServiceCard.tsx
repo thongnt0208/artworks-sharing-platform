@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "primereact/button";
+import "./ServiceCard.scss"
 
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
@@ -21,34 +22,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ data }, onClick) => {
 
   return (
     <Button
+      id="service-card-container"
       style={{
         backgroundImage: `url(${background})`,
-        backgroundSize: "cover",
-        backgroundColor: "transparent",
-        border: "none",
-        outline: "none",
-        borderRadius: "12px",
-        padding: 0,
-        width: "450px",
-        height: "286px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "flex-end",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          backgroundColor: "white",
-          color: "black",
-          width: "100%",
-          outline: "none",
-          border: "none"
-        }}
-      >
+      <div className="information">
         <h2 style={{ margin: 0 }}>{serviceName}</h2>
 
         <p style={{ margin: 5, textAlign: "left" }}>Từ {startingPrice} Xu</p>

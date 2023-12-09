@@ -1,0 +1,36 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  .menubar {
+    width: 100%;
+    .logo {
+      text-decoration: none;
+      padding: 0;
+
+      img {
+        width: 100px;
+        padding: 0;
+      }
+    }
+
+    .end-menu {
+      padding: 0 10px;
+      display: "flex";
+      flex-direction: "row";
+      .notification-icon,
+      .message-icon,
+      .avatar-icon {
+        position: relative;
+        cursor: pointer;
+
+        .popup {
+          position: absolute;
+          right: 0;
+          top: 100%;
+          z-index: 999;
+        }
+      }
+    }
+  }
+}
