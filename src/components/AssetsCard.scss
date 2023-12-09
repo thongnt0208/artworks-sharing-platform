@@ -1,0 +1,13 @@
+@import "./../const/variables.scss";
+
+.grid-nogutter{
+    display: flex;
+}
+
+.assets-card-container {
+    max-width: 943px;
+    max-height: 322px;
+    .thumbnail-column-container{
+        height: 322px;
+    }
+}

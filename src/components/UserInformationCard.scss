@@ -1,0 +1,20 @@
+@import "./../const/variables.scss";
+.user-information-card {
+  width: 371px;
+  text-align: center;
+  .p-card-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  .p-card-content {
+    .views-container {
+      display: flex;
+    }
+  }
+}
