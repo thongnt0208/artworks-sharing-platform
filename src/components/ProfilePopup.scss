@@ -1,0 +1,18 @@
+.notification-container {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 999;
+  background-color: white;
+  border-radius: 12px;
+  .user-information-bar {
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+  }
+}

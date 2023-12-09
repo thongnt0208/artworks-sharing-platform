@@ -1,0 +1,25 @@
+#service-card-container {
+  background-size: cover !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  width: 450px !important;
+  height: 286px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+
+  .information {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white !important;
+    color: black !important;
+    width: 100% !important;
+    outline: none !important;
+    border: none !important;
+  }
+}
