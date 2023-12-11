@@ -8,21 +8,21 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginScreen from "./layout/LoginScreen/LoginScreen";
 
 function App() {
   return (
     <PrimeReactProvider>
       <BrowserRouter>
+        <Header />
 
-      <Header />
-      
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-      </Routes>      
-      
-      <Footer />
-      
+        <Routes>
+          <Route path="/" element={<HomeScreen />} />
+          <Route path="/login" element={<LoginScreen />} />
+        </Routes>
+
+        <Footer />
       </BrowserRouter>
     </PrimeReactProvider>
   );
