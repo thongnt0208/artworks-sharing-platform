@@ -4,12 +4,15 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "primeflex/primeflex.css";
+import { AuthProvider } from "./auth/AuthContext";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
+    <AuthProvider>
       <App />
+    </AuthProvider>
   </React.StrictMode>
 );
 
