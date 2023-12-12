@@ -3,7 +3,7 @@ import CollectionInformationSection from './CollectionInformationSection/Collect
 import CollectionGallery from './CollectionGallery/CollectionGallery';
 
 const CollectionDetailScreen: React.FC = () => {
-  interface Artwork {
+  type Artwork = {
     id: string;
     title: string;
     imageUrl: string;
@@ -38,9 +38,30 @@ const CollectionDetailScreen: React.FC = () => {
       subTitle: "Subtitle 3",
     },
   ];
+
+  type CollectionInformationProps = {
+    id: string;
+    createdBy: string;
+    collectionName: string;
+    privacy: string;
+    creationDate: string;
+  }
+
+  let collectionInformationProps: CollectionInformationProps = {
+    id: "1",
+    createdBy: "<NAME>",
+    collectionName: "Collection 1",
+    privacy: "Public",
+    creationDate: "2021-08-17",
+  };
+
+  const countArtworks = () => {
+    return artworksSampleProps.length;
+  };
+
   return (
     <>
-        <CollectionInformationSection />
+        <CollectionInformationSection collectionInfo={collectionInformationProps}  />
         <CollectionGallery artworks={artworksSampleProps} />
     </>
   );
