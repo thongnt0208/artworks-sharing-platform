@@ -1,13 +1,13 @@
-import { useContext, useRef, useState } from "react";
-import AuthContext from "../../auth/AuthContext";
+import { useEffect, useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { login } from "../../auth/AuthService";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const LoginScreen = () => {
-  const { setAuthenticationInfo } = useContext(AuthContext);
+  const { authenticationInfo, setAuthenticationInfo } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", password: "" });
@@ -35,33 +35,40 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     if (validateInputs()) {
-      setTimeout(() => {
-        login(username, password)
-          .then((response) => {
-            const accessToken = response?.data?.accessToken;
-            const role = response?.data?.role;
-            setAuthenticationInfo({ username, password, accessToken, role });
+      login(username, password)
+        .then((response) => {
+          const accessToken = response?.data?.accessToken;
+          const role = response?.data?.role;
+          setAuthenticationInfo({ username, password, accessToken, role });
+
+          console.log({ username, password, accessToken, role });
+
+          toast.current.show({
+            severity: "success",
+            summary: "Login Successful",
+            detail: "You have been logged in successfully",
+            life: 3000,
+          });
+          setTimeout(() => {
             navigate("/");
+          }, 3000);
+        })
+        .catch((error) => {
+          if (error?.status !== 200) {
             toast.current.show({
-              severity: "success",
-              summary: "Login Successful",
-              detail: "You have been logged in successfully",
+              severity: "error",
+              summary: "Login Failed",
+              detail: `There was an error logging in, please try again later.`,
               life: 3000,
             });
-          })
-          .catch((error) => {
-            if (error?.status !== 200) {
-              toast.current.show({
-                severity: "error",
-                summary: "Login Failed",
-                detail: `There was an error logging in, please try again later.`,
-                life: 3000,
-              });
-            }
-          });
-      });
+          }
+        });
     }
   };
+
+  useEffect(() => {
+    console.log(authenticationInfo);
+  }, [authenticationInfo]);
 
   return (
     <div className="login-form">

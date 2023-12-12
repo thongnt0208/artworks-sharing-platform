@@ -10,19 +10,28 @@ import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginScreen from "./layout/LoginScreen/LoginScreen";
+import RequireAuth from "./auth/RequireAuth";
+import EditProfileTestPage from "./layout/TestingSreen/EditProfileTestPage";
+import { AuthProvider } from "./auth/AuthContext";
 
 function App() {
   return (
     <PrimeReactProvider>
       <BrowserRouter>
-        <Header />
+        <AuthProvider>
+          <Header />
 
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/login" element={<LoginScreen />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route element={<RequireAuth />}>
+              {/* Routes need to protect (must log in to access)*/}
+              <Route path="/editTest" element={<EditProfileTestPage />} />
+            </Route>
+          </Routes>
 
-        <Footer />
+          <Footer />
+        </AuthProvider>
       </BrowserRouter>
     </PrimeReactProvider>
   );
