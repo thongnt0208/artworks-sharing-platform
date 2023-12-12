@@ -4,15 +4,18 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "primeflex/primeflex.css";
-import { AuthProvider } from "./auth/AuthContext";
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+import { debugContextDevtool } from "react-context-devtool";
+const rootContainer = document.getElementById("root") as HTMLElement;
+
+// Create root using ReactDOM.createRoot
+const root = ReactDOM.createRoot(rootContainer);
+
+// Call debugContextDevtool and pass the root container as an argument
+debugContextDevtool(rootContainer);
+
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <App />
   </React.StrictMode>
 );
 
