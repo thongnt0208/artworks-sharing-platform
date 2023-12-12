@@ -1,0 +1,17 @@
+.collection-gallery {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  .gallery {
+    width: 100%;
+    padding: 5%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
