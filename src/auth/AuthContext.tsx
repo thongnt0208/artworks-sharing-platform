@@ -1,12 +1,35 @@
-import { createContext, useState } from "react";
+import React, { ReactNode, createContext, useState } from "react";
 
-const AuthContext = createContext({
-  authenticationInfo: {},
-  setAuthenticationInfo: (value: any) => {},
+type Props = {
+  children?: ReactNode;
+};
+type AuthContextType = {
+  authenticationInfo: {
+    username: string;
+    password: string;
+    accessToken: string;
+    role: string[] | string;
+  };
+  setAuthenticationInfo: (info: any) => void;
+};
+
+const initialValue = {
+  authenticationInfo: {
+    username: "",
+    password: "123",
+    accessToken: "aT",
+    role: "admin",
+  },
+  setAuthenticationInfo: () => {},
+};
+const AuthContext = createContext<AuthContextType>({
+  ...initialValue,
+  setAuthenticationInfo: () => {}, // Placeholder function
 });
-
-export const AuthProvider = ({ children }: any) => {
-  const [authenticationInfo, setAuthenticationInfo] = useState({});
+const AuthProvider = ({ children }: Props) => {
+  const [authenticationInfo, setAuthenticationInfo] = useState(
+    initialValue.authenticationInfo
+  );
 
   return (
     <AuthContext.Provider value={{ authenticationInfo, setAuthenticationInfo }}>
@@ -15,4 +38,4 @@ export const AuthProvider = ({ children }: any) => {
   );
 };
 
-export default AuthContext;
+export { AuthContext, AuthProvider };
