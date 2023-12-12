@@ -37,7 +37,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
         <Avatar image={logo} style={{ padding: "0" }} />
         <h2 style={{ color: "black" }}>{username}</h2>
         <p style={{ color: "black" }}>{email}</p>
-        <button onClick={onClose}>Trang cá nhân</button>
+        <button onClick={() => navigate("/profile")}>Trang cá nhân</button>
       </div>
 
       <div>
