@@ -1,48 +1,27 @@
-import React, { useState } from 'react';
-import Gallery from '../Gallery/Gallery';
+import React, { useState } from "react";
+import Gallery from "./Gallery/Gallery";
 
-const MenuTab: React.FC = () => {
+type Artwork = {
+  id: string;
+  title: string;
+  subTitle: string;
+  imageUrl: string;
+  likeNum: number;
+  viewNum: number;
+};
+
+type ArtworksProps = {
+  artworks: Artwork[];
+};
+
+const MenuTab: React.FC<ArtworksProps> = ({ artworks }) => {
   const [activeTab, setActiveTab] = useState("Following");
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 
-  interface Artwork {
-    id: string;
-    title: string;
-    imageUrl: string;
-    likeNum: number;
-    viewNum: number;
-    subTitle: string;
-  }
-
-  let artworksSampleProps: Artwork[] = [
-    {
-      id: "1",
-      title: "Artwork 1",
-      imageUrl: "https://example.com/artwork1.jpg",
-      likeNum: 10,
-      viewNum: 12,
-      subTitle: "Subtitle 1",
-    },
-    {
-      id: "2",
-      title: "Artwork 2",
-      imageUrl: "https://example.com/artwork2.jpg",
-      likeNum: 10,
-      viewNum: 12,
-      subTitle: "Subtitle 2",
-    },
-    {
-      id: "3",
-      title: "Artwork 3",
-      imageUrl: "https://example.com/artwork3.jpg",
-      likeNum: 10,
-      viewNum: 12,
-      subTitle: "Subtitle 3",
-    },
-  ];
+  console.log(artworks);
 
   return (
     <div>
@@ -60,8 +39,8 @@ const MenuTab: React.FC = () => {
           News
         </button>
       </div>
-      {activeTab === "Following" && <Gallery artworks={artworksSampleProps} />}
-      {activeTab === "News" && <Gallery artworks={artworksSampleProps} />}
+      {activeTab === "Following" && <Gallery artworks={artworks} />}
+      {activeTab === "News" && <Gallery artworks={artworks} />}
     </div>
   );
 };

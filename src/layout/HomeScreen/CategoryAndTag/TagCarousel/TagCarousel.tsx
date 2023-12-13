@@ -2,14 +2,20 @@ import React from "react";
 import { Carousel } from "primereact/carousel";
 import Tag from "../../../../components/Tag";
 
-interface TagCarouselProps {
-  tags: string[];
-}
+type TagProps = {
+  id: string;
+  tagName: string;
+};
 
-const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
-  const Item = (label: string) => {
-    return <Tag label={label} />;
+type TagsProps = {
+  tags: TagProps[];
+};
+
+const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
+  const renderTag = (tag: TagProps) => {
+    return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} />;
   };
+
   return (
     <div>
       <Carousel
@@ -17,9 +23,10 @@ const TagCarousel: React.FC<TagCarouselProps> = ({ tags }) => {
         circular
         value={tags}
         numVisible={8}
-        itemTemplate={Item}
+        itemTemplate={renderTag} // Updated to use renderTag function directly
       />
     </div>
   );
 };
+
 export default TagCarousel;
