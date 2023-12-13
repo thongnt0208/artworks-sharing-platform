@@ -2,39 +2,32 @@ import React from "react";
 import CategoryMenu from "./CategoryMenu/CategoryMenu";
 import TagCarousel from "./TagCarousel/TagCarousel";
 
-const CategoryAndTag: React.FC = () => {
-  
-  //Sample Props for TagCarousel
-  let tagSampleProps = [
-    "Hình minh họa",
-    "Truyện tranh",
-    "Tiểu thuyết",
-    "Hình minh họa",
-    "Truyện tranh",
-    "Tiểu thuyết",
-    "Hình minh họa",
-    "Truyện tranh",
-    "Tiểu thuyết",
-  ];
+type TagProps = {
+  id: string;
+  tagName: string;
+};
 
-  //Sample Props for Categories
-  let categoriesSampleProps = [
-    "Hình minh họa",
-    "Truyện tranh",
-    "Tiểu thuyết",
-  ];
+type CategoryProps = {
+  id: string;
+  categoryName: string;
+};
 
+type CategoryAndTagProps = {
+  tags: TagProps[];
+  categories: CategoryProps[];
+};
+
+const CategoryAndTag: React.FC<CategoryAndTagProps> = ({ tags, categories }) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <div style={{ width: "30%" }}>
         <CategoryMenu
-          categories={categoriesSampleProps}
-          onCategorySelect={(category) => console.log(category)}
+          categories={categories}
         />
       </div>
       <div style={{ width: "70%" }}>
         <TagCarousel
-          tags={tagSampleProps}
+          tags={tags}
         />
       </div>
     </div>

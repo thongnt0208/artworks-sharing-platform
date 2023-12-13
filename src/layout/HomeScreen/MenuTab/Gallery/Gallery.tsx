@@ -1,5 +1,5 @@
 import React from 'react';
-import ArtworkCard from '../../../components/ArtworkCard';
+import ArtworkCard from '../../../../components/ArtworkCard';
 import "./Gallery.scss"
 
 interface ArtworksProps {
