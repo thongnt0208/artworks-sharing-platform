@@ -1,20 +1,22 @@
 import React from "react";
 import Tag from "../../../../components/Tag";
 
-interface CategoryMenuProps {
-  categories: string[];
-  onCategorySelect: (category: string) => void;
-}
+type CategoryProps = {
+  id: string;
+  categoryName: string;
+};
 
-const CategoryMenu: React.FC<CategoryMenuProps> = ({ categories, onCategorySelect}) => {
-  let isSelected = false;
+type CategoriesProps = {
+  categories: CategoryProps[];
+};
 
+const CategoryMenu: React.FC<CategoriesProps> = ({ categories }) => {
   return (
     <div>
       <span>
-        {categories.map((category) => (
-          <Tag label={category} />
-        ))}
+        {categories.map((category) => {
+          return <Tag id={category.id} tagName={category.categoryName} />;
+        })}
       </span>
     </div>
   );
