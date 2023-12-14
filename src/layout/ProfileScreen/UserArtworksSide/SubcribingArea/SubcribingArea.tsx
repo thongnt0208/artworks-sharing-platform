@@ -36,7 +36,7 @@ const SubcribingAreaSection: React.FC<{
   return (
     <div className="artwork-section">
       <h2>Vùng cho người đăng ký</h2>
-      <div className="flex flex-col gap-4">
+      {/* <div className="flex flex-col gap-4">
         {collections.map((collection) => (
           <CollectionCard
             data={{
@@ -46,7 +46,7 @@ const SubcribingAreaSection: React.FC<{
             }}
           />
         ))}
-      </div>
+      </div> */}
       <div className="flex flex-col gap-4">
         {assets.map((asset) => (
           <AssetsCard
