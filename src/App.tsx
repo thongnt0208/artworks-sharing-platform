@@ -8,21 +8,30 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginScreen from "./layout/LoginScreen/LoginScreen";
+import RequireAuth from "./auth/RequireAuth";
+import EditProfileTestPage from "./layout/TestingSreen/EditProfileTestPage";
+import { AuthProvider } from "./auth/AuthContext";
 
 function App() {
   return (
     <PrimeReactProvider>
       <BrowserRouter>
+        <AuthProvider>
+          <Header />
 
-      <Header />
-      
-      <Routes>
-        <Route path="/" element={<HomeScreen />} />
-      </Routes>      
-      
-      <Footer />
-      
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route element={<RequireAuth />}>
+              {/* Routes need to protect (must log in to access)*/}
+              <Route path="/editTest" element={<EditProfileTestPage />} />
+            </Route>
+          </Routes>
+
+          <Footer />
+        </AuthProvider>
       </BrowserRouter>
     </PrimeReactProvider>
   );
