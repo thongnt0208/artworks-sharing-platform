@@ -6,7 +6,7 @@ const background = require("../assets/defaultImage/default-card-blur-image.png")
 
 interface CollectionCardProps {
   data: {
-    id: number;
+    id: string;
     // imageUrl: string;
     title: string;
     description: string;
