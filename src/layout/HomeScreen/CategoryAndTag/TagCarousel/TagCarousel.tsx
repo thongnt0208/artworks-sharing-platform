@@ -12,9 +12,9 @@ type TagsProps = {
 };
 
 const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
-  // const renderTag = (tag: TagProps) => {
-  //   return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} />;
-  // };
+  const renderTag = (tag: TagProps) => {
+    return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} />;
+  };
 
   return (
     <div>
