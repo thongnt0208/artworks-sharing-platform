@@ -13,11 +13,11 @@ type CategoriesProps = {
 const CategoryMenu: React.FC<CategoriesProps> = ({ categories }) => {
   return (
     <div>
-      {/* <span>
+      <span>
         {categories.map((category) => {
           return <Tag id={category.id} tagName={category.categoryName} />;
         })}
-      </span> */}
+      </span>
     </div>
   );
 };

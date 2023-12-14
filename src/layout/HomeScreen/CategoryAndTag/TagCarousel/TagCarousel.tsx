@@ -18,13 +18,13 @@ const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
 
   return (
     <div>
-      {/* <Carousel
+      <Carousel
         showIndicators={false}
         circular
         value={tags}
         numVisible={8}
         itemTemplate={renderTag} // Updated to use renderTag function directly
-      /> */}
+      />
     </div>
   );
 };
