@@ -50,7 +50,7 @@ const LoginScreen = () => {
             life: 3000,
           });
           setTimeout(() => {
-            navigate("/");
+            navigate("/editTest");
           }, 3000);
         })
         .catch((error) => {
