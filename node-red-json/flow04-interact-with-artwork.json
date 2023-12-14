@@ -1,0 +1,154 @@
+[
+    {
+        "id": "5155e781eb87f99d",
+        "type": "tab",
+        "label": "Interact with artworks",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "710b2a3deb879aaf",
+        "type": "http in",
+        "z": "5155e781eb87f99d",
+        "name": "Get tags data",
+        "url": "/tags",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 370,
+        "y": 1000,
+        "wires": [
+            [
+                "84c3f8b1c270a4e6"
+            ]
+        ]
+    },
+    {
+        "id": "7a08b0d3b2d6b868",
+        "type": "http response",
+        "z": "5155e781eb87f99d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 730,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "84c3f8b1c270a4e6",
+        "type": "function",
+        "z": "5155e781eb87f99d",
+        "name": "function 1",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n  {\n    \"tagName\": \"once\",\n    \"id\": \"1\"\n  },\n  {\n    \"tagName\": \"Granite\",\n    \"id\": \"2\"\n  },\n  {\n    \"tagName\": \"1080p\",\n    \"id\": \"3\"\n  },\n  {\n    \"tagName\": \"Bicycle\",\n    \"id\": \"4\"\n  },\n  {\n    \"tagName\": \"kelvin\",\n    \"id\": \"5\"\n  },\n  {\n    \"tagName\": \"incremental\",\n    \"id\": \"6\"\n  },\n  {\n    \"tagName\": \"VGA\",\n    \"id\": \"7\"\n  },\n  {\n    \"tagName\": \"Rap\",\n    \"id\": \"8\"\n  },\n  {\n    \"tagName\": \"Operations\",\n    \"id\": \"9\"\n  },\n  {\n    \"tagName\": \"East\",\n    \"id\": \"10\"\n  }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1000,
+        "wires": [
+            [
+                "7a08b0d3b2d6b868"
+            ]
+        ]
+    },
+    {
+        "id": "477688dded9c7fca",
+        "type": "http in",
+        "z": "5155e781eb87f99d",
+        "name": "Get categories data",
+        "url": "/categories",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 390,
+        "y": 1060,
+        "wires": [
+            [
+                "5c0ccd942f6cef8f"
+            ]
+        ]
+    },
+    {
+        "id": "41f0ea440ab6441e",
+        "type": "http response",
+        "z": "5155e781eb87f99d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 730,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "5c0ccd942f6cef8f",
+        "type": "function",
+        "z": "5155e781eb87f99d",
+        "name": "function 2",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n  {\n    \"categoryName\": \"Truyện tranh\",\n    \"id\": \"1\"\n  },\n  {\n    \"categoryName\": \"Hình minh họa\",\n    \"id\": \"2\"\n  },\n  {\n    \"categoryName\": \"Tiểu thuyết\",\n    \"id\": \"3\"\n  }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1060,
+        "wires": [
+            [
+                "41f0ea440ab6441e"
+            ]
+        ]
+    },
+    {
+        "id": "bbfe16adfd391468",
+        "type": "http response",
+        "z": "5155e781eb87f99d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 730,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "a9561318826e349d",
+        "type": "http in",
+        "z": "5155e781eb87f99d",
+        "name": "Get artworks data",
+        "url": "/artworks",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 390,
+        "y": 1160,
+        "wires": [
+            [
+                "654e587096416023"
+            ]
+        ]
+    },
+    {
+        "id": "654e587096416023",
+        "type": "function",
+        "z": "5155e781eb87f99d",
+        "name": "function 3",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": 1,\n  \"title\": \"Vengeance is Mine (Fukushu suruwa wareniari)\",\n  \"subTitle\": \"Pahat pojat\",\n  \"image\": \"http://dummyimage.com/184x100.png/dddddd/000000\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": 2,\n  \"title\": \"Bank, The\",\n  \"subTitle\": \"Patience Stone, The\",\n  \"image\": \"http://dummyimage.com/132x100.png/cc0000/ffffff\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": 3,\n  \"title\": \"Happiness (Schastye)\",\n  \"subTitle\": \"Pornography (Pornografia)\",\n  \"image\": \"http://dummyimage.com/232x100.png/cc0000/ffffff\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": 4,\n  \"title\": \"Gorillas in the Mist\",\n  \"subTitle\": \"2013 Rock and Roll Hall of Fame Induction Ceremony, The\",\n  \"image\": \"http://dummyimage.com/115x100.png/cc0000/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}, {\n  \"id\": 5,\n  \"title\": \"Parallel Sons\",\n  \"subTitle\": \"Tyler Perry's A Madea Christmas\",\n  \"image\": \"http://dummyimage.com/134x100.png/ff4444/ffffff\",\n  \"likeNum\": 5,\n  \"viewNum\": 5\n}, {\n  \"id\": 6,\n  \"title\": \"Messengers, The\",\n  \"subTitle\": \"Legend of the 7 Golden Vampires, The\",\n  \"image\": \"http://dummyimage.com/175x100.png/dddddd/000000\",\n  \"likeNum\": 6,\n  \"viewNum\": 6\n}, {\n  \"id\": 7,\n  \"title\": \"Three and Out (Deal Is a Deal, A)\",\n  \"subTitle\": \"Couples Retreat\",\n  \"image\": \"http://dummyimage.com/217x100.png/dddddd/000000\",\n  \"likeNum\": 7,\n  \"viewNum\": 7\n}, {\n  \"id\": 8,\n  \"title\": \"Aileen: Life and Death of a Serial Killer\",\n  \"subTitle\": \"Bestseller (Be-seu-teu-sel-leo)\",\n  \"image\": \"http://dummyimage.com/250x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 8,\n  \"viewNum\": 8\n}, {\n  \"id\": 9,\n  \"title\": \"Maybe Baby\",\n  \"subTitle\": \"Such a Long Journey\",\n  \"image\": \"http://dummyimage.com/220x100.png/ff4444/ffffff\",\n  \"likeNum\": 9,\n  \"viewNum\": 9\n}, {\n  \"id\": 10,\n  \"title\": \"Twilight\",\n  \"subTitle\": \"Kummeli Stories\",\n  \"image\": \"http://dummyimage.com/221x100.png/ff4444/ffffff\",\n  \"likeNum\": 10,\n  \"viewNum\": 10\n}]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1160,
+        "wires": [
+            [
+                "bbfe16adfd391468"
+            ]
+        ]
+    }
+]

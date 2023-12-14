@@ -1,27 +1,41 @@
-import React from "react";
 import axios from "axios";
 
-const HomeService = {
-  fetchDatda: async () => {
-    try {
-      const response = await axios.get("https://api.example.com/data");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
-    }
-  },
-  fetchAnotherData: async () => {
-    try {
-      const response = await axios.get("https://api.example.com/another-data");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching another data:", error);
-      throw error;
-    }
-  },
+export async function GetTagsData() {
+  const response = await axios.get("http://127.0.0.1:1880/tags", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.status!== 200) {
+    console.log("Error fetching tags data");
+    return [];
+  }
+  return response.data;
+}
 
-  // Add more functions for other API calls
-};
+export async function GetCategoriesData() {
+  const response = await axios.get("http://127.0.0.1:1880/categories", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.status!== 200) {
+    console.log("Error fetching tags data");
+    return [];
+  }
+  return response.data;
+}
 
-export default HomeService;
+export async function GetArtworksData() {
+  const response = await axios.get("http://127.0.0.1:1880/artworks", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.status!== 200) {
+    console.log("Error fetching artworks data");
+    return [];
+  }
+  console.log("Data ne: " + response.data);
+  return response.data;
+}
