@@ -1,40 +1,51 @@
-import React from "react";
-import { Button } from "primereact/button";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import Tag from "../../components/Tag";
-import CollectionCard from "../../components/CollectionCard";
-import ServiceCard from "../../components/ServiceCard";
+import React, {useState, useEffect} from "react";
+import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
+import MenuTab from "./MenuTab/MenuTab";
+import { GetArtworksData, GetCategoriesData, GetTagsData } from "./HomeService";
 
-const ScreenHome: React.FC = () => {
-  const collectionData = {
-    id: 1,
-    title: "Collection 1",
-    description: "Collection 1 description",
-  };
+type TagProps = {
+  id: string;
+  tagName: string;
+};
 
-  const serviceData = {
-    id: 1,
-    serviceName: "Service 1",
-    startingPrice: 1000,
-    deliveryTime: 1,
-    numberOfConcepts: 1,
-  };
+type CategoryProps = {
+  id: string;
+  categoryName: string;
+};
+
+type ArtworksProps = {
+  id: string,
+  title: string,
+  subTitle: string,
+  imageUrl: string,
+  likeNum: number,
+  viewNum: number,
+}
+
+const HomeScreen: React.FC = () => {
+  const [tags, setTags] = useState<TagProps[]>([]);
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  const [artworks, setArtworks] = useState<ArtworksProps[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tagsData = await GetTagsData();
+      setTags(tagsData);
+      const categoriesData = await GetCategoriesData();
+      setCategories(categoriesData);
+      const artworksData = await GetArtworksData();
+      setArtworks(artworksData);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
-      <div style={{width: "80%", display: "flex", justifyContent: "space-between", margin: "50px"}}>
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <Tag label="#xinchao" color="red" />
-        <CollectionCard data={collectionData} />
-        <ServiceCard data={serviceData} />
-      </div>
+      <CategoryAndTag categories={categories} tags={tags} />
+      <MenuTab artworks={artworks} />
     </>
   );
 };
 
-export default ScreenHome;
+export default HomeScreen;
