@@ -4,6 +4,7 @@ import SquareButton from "./SquareButton";
 import { useEffect, useState } from "react";
 import { fetchArtworkDetail } from "./Service";
 import Content from "./content/Content";
+import useAuth from "../../hooks/useAuth";
 // import UserInformationCard from "../../components/UserInformationCard";
 
 type Props = {};
@@ -12,7 +13,8 @@ export default function ArtworkDetail({ ...props }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({} as any);
-  const [error, setError] = useState("");
+  const [error, setError] = useState({} as any);
+  const { authenticationInfo } = useAuth();
 
   const buttonsList = [
     {
@@ -66,37 +68,41 @@ export default function ArtworkDetail({ ...props }: Props) {
     },
   ];
 
+  /* Remove the comment after add "id" field to authenticationInfo
+      let currentUserId = authenticationInfo.id;
+   */
+  let currentUserId = "thongnt"; //temporary value
+
   useEffect(() => {
-    fetchArtworkDetail(id)
+    fetchArtworkDetail(id, currentUserId)
       .then((res) => {
         setData(res.data);
-        console.log("aaaaaaaaa");
-        
         console.log(res.data);
 
         setError("");
       })
       .catch((err) => {
-        setError(err);
-        console.log("uuuuuuuuuu");
-        
+        let message = err.message || "Something went wrong";
+        setError({ ...message });
         console.log(err);
       });
   }, []);
 
   return (
     <>
+      <h1>Error state:</h1>
+      <p>{data.toString()}</p>
       <div className="artwork-detail-container">
-        <div className="title-container"></div>
         <div className="detail-container flex grid-nogutter">
           <div className="content-container col col-10">
-            {/* <Content> */}
-            <Content {...data} />
+            {data.Images && <Content {...data} />}
+            {!data.Images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
           </div>
           <div className="side-buttons-container col col-2">
-            {buttonsList.map((button) => {
+            {buttonsList.map((button, index) => {
               return (
                 <SquareButton
+                  key={index}
                   title={button.title}
                   thumbnailImg={button.thumbnailImg}
                   thumbnailAlt={button.thumbnailAlt}
@@ -110,6 +116,7 @@ export default function ArtworkDetail({ ...props }: Props) {
         </div>
 
         <div className="interartion-container">
+          <SquareButton title="Thích" thumbnailImg="" thumbnailAlt="" onClick={()=> {}}/>
           <div className="comment-container">
             <div className="comment-input-container"></div>
             <div className="comment-list-container"></div>
