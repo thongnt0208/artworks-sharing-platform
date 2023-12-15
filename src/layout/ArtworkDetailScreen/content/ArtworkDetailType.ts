@@ -7,7 +7,7 @@ export type Creator = {
   Address: string;
 };
 
-export type Comment = {
+export interface CommentType  {
   Id: string;
   UserId: string;
   Fullname: string;
@@ -35,7 +35,7 @@ export type ArtworkDetailType = {
   Category: string;
   LikeNum: number;
   ViewNum: number;
-  Comments?: Comment[];
+  Comments?: CommentType[];
   Assets?: Asset[];
   isLiked: boolean;
 };
