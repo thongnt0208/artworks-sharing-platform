@@ -6,6 +6,7 @@ import { fetchArtworkDetail } from "./Service";
 import Content from "./content/Content";
 import useAuth from "../../hooks/useAuth";
 import CommentComponent from "./comment/Comment";
+import { getButtonsList } from "./ButtonList";
 // import UserInformationCard from "../../components/UserInformationCard";
 
 type Props = {};
@@ -17,58 +18,8 @@ export default function ArtworkDetail({ ...props }: Props) {
   const [error, setError] = useState({} as any);
   const { authenticationInfo } = useAuth();
 
-  const buttonsList = [
-    {
-      title: "Theo dõi",
-      thumbnailImg: "https://placehold.in/600",
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-      },
-    },
-    {
-      title: "Thuê",
-      thumbnailImg: "https://placehold.in/600",
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-      },
-    },
-    {
-      title: "Tài nguyên",
-      thumbnailImg: "https://placehold.in/600",
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-      },
-    },
-    {
-      title: "Lưu",
-      thumbnailImg: "https://placehold.in/600",
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-      },
-    },
-    {
-      title: "Chia sẻ",
-      thumbnailImg: "https://placehold.in/600",
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-      },
-    },
-    {
-      title: "Báo cáo",
-      thumbnailImg: "https://placehold.in/600",
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-        console.log("baos caos");
-      },
-    },
-  ];
-
+  const buttonsList = getButtonsList(navigate);
+  
   /* Remove the comment after add "id" field to authenticationInfo
       let currentUserId = authenticationInfo.id;
    */
