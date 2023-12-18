@@ -16,6 +16,7 @@ export default function EditProfileTestPage({}: Props) {
   return (
     <div>
       <Button label="Logout" onClick={signOut} />
+      <Button label="Post Artwork" onClick={() => navigate("/postAw")} />
     </div>
   );
 }
