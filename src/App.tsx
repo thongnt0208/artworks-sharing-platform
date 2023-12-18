@@ -28,7 +28,12 @@ function App() {
             <Route element={<RequireAuth />}>
               {/* Routes need to protect (must log in to access)*/}
               <Route path="/editTest" element={<EditProfileTestPage />} />
+              {/* <Route path="/artwork" element={<HomeScreen />}> */}
+              {/* {" "} */}
+              {/* Artworks List component */}
+
               <Route path="/postAw" element={<PostArtworkScreen />} />
+              {/* </Route> */}
             </Route>
           </Routes>
 
