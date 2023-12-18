@@ -3,8 +3,14 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { login } from "../../auth/AuthService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import "./LoginScreen.scss";
+import { Divider } from "primereact/divider";
+import { Image } from "primereact/image";
+import logo from "../../assets/logo/logo_notext.svg";
+import logotext from "../../assets/logo/logo.png";
+import { Card } from "primereact/card";
 
 const LoginScreen = () => {
   const { authenticationInfo, setAuthenticationInfo } = useAuth();
@@ -16,6 +22,8 @@ const LoginScreen = () => {
   const toast: any = useRef(null);
 
   const validateInputs = () => {
+    console.log("Validate Inputttt");
+
     let valid = true;
     const newErrors = { username: "", password: "" };
 
@@ -71,29 +79,54 @@ const LoginScreen = () => {
   }, [authenticationInfo]);
 
   return (
-    <div className="login-form">
+    <>
       <Toast ref={toast} />
-      <div className="p-field">
-        <label htmlFor="username">Username</label>
-        <InputText
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <small className="p-error">{errors.username}</small>
+      <div className="login-container flex w-100"><div className="background-overlay"></div>
+        <div className="logo-container p-4 hidden lg:block">
+          <Image alt="logo" src={logotext} height="100" />
+        </div>
+        <Card className="login-card">
+          <div className="header-container pb-4">
+            <div className="logo flex justify-content-start lg:hidden">
+              <Image alt="logo" src={logo} height="40" />
+              <h3 className="m-0">Artworkia</h3>
+            </div>
+            <h1>Đăng nhập</h1>
+            <span>Người dùng mới?</span> <Link to={""}>Tạo tài khoản</Link>
+          </div>
+          <div className="normal-login">
+            <div className="username-container">
+              <InputText
+                id="username"
+                value={username}
+                placeholder="Tên đăng nhập"
+                onChange={(e) => setUsername(e.target.value)}
+                onBlur={() => validateInputs()}
+              />
+              <small className="p-error">{errors.username}</small>
+            </div>
+            <div className="password-container">
+              <InputText
+                id="password"
+                type="password"
+                value={password}
+                placeholder="Mật khẩu"
+                onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => validateInputs()}
+              />
+              <small className="p-error">{errors.password}</small>
+            </div>
+            <Button label="Tiếp tục" onClick={handleLogin} />
+          </div>
+
+          <Divider />
+          <div className="3party-login">
+            <div className="google-login"></div>
+            <div className="facebook-login"></div>
+          </div>
+        </Card>
       </div>
-      <div className="p-field">
-        <label htmlFor="password">Password</label>
-        <InputText
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <small className="p-error">{errors.password}</small>
-      </div>
-      <Button label="Login" onClick={handleLogin} />
-    </div>
+    </>
   );
 };
 
