@@ -13,6 +13,7 @@ import LoginScreen from "./layout/LoginScreen/LoginScreen";
 import RequireAuth from "./auth/RequireAuth";
 import EditProfileTestPage from "./layout/TestingSreen/EditProfileTestPage";
 import { AuthProvider } from "./auth/AuthContext";
+import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route element={<RequireAuth />}>
               {/* Routes need to protect (must log in to access)*/}
               <Route path="/editTest" element={<EditProfileTestPage />} />
+              <Route path="/postAw" element={<PostArtworkScreen />} />
             </Route>
           </Routes>
 
