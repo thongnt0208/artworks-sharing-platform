@@ -19,6 +19,7 @@ import ArtworkDetail from "./layout/ArtworkDetailScreen/ArtworkDetail";
 import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordScreen";
 import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
+import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route element={<RequireAuth />}>
               {/* Routes need to protect (must log in to access)*/}
               <Route path="/editTest" element={<EditProfileTestPage />} />
+              <Route path="/postAw" element={<PostArtworkScreen />} />
             </Route>
             <Route path="/profile/:id" element={<ProfileScreen />} />
           </Routes>
