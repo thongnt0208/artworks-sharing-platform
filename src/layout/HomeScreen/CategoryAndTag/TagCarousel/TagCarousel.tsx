@@ -12,19 +12,19 @@ type TagsProps = {
 };
 
 const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
-  // const renderTag = (tag: TagProps) => {
-  //   return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} />;
-  // };
+  const renderTag = (tag: TagProps) => {
+    return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} />;
+  };
 
   return (
     <div>
-      {/* <Carousel
+      <Carousel
         showIndicators={false}
         circular
         value={tags}
         numVisible={8}
         itemTemplate={renderTag} // Updated to use renderTag function directly
-      /> */}
+      />
     </div>
   );
 };

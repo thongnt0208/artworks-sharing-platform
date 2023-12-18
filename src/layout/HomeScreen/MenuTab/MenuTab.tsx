@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Gallery from "./Gallery/Gallery";
+import React, { lazy, Suspense, useState } from "react";
 
 type Artwork = {
   id: string;
@@ -14,6 +13,8 @@ type ArtworksProps = {
   artworks: Artwork[];
 };
 
+const LazyGallery = lazy(() => import("./Gallery/Gallery"));
+
 const MenuTab: React.FC<ArtworksProps> = ({ artworks }) => {
   const [activeTab, setActiveTab] = useState("Following");
 
@@ -21,7 +22,7 @@ const MenuTab: React.FC<ArtworksProps> = ({ artworks }) => {
     setActiveTab(tab);
   };
 
-  console.log(artworks);
+  
 
   return (
     <div>
@@ -39,8 +40,8 @@ const MenuTab: React.FC<ArtworksProps> = ({ artworks }) => {
           News
         </button>
       </div>
-      {activeTab === "Following" && <Gallery artworks={artworks} />}
-      {activeTab === "News" && <Gallery artworks={artworks} />}
+      {activeTab === "Following" && <LazyGallery artworks={artworks} />}
+      {activeTab === "News" && <LazyGallery artworks={artworks} />}
     </div>
   );
 };
