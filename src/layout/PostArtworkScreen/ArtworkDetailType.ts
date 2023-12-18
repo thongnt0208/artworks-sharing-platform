@@ -1,10 +1,10 @@
 export type Creator = {
     Id: string;
     Fullname: string;
-    Avatar: string;
-    Bio: string;
-    Job: string;
-    Address: string;
+    Avatar?: string;
+    Bio?: string;
+    Job?: string;
+    Address?: string;
   };
   
   export interface CommentType  {
@@ -33,8 +33,8 @@ export type Creator = {
     LastModifiedOn?: string | Date;
     Tags: string[];
     Category: string;
-    LikeNum: number;
-    ViewNum: number;
+    LikeNum?: number;
+    ViewNum?: number;
     Comments?: CommentType[];
     Assets?: Asset[];
     isLiked: boolean;
