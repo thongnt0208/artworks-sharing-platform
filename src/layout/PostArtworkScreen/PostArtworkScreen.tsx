@@ -3,6 +3,7 @@ import "./PostArtworkScreen.scss";
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import Content from "./Content";
+import InputForm from "./InputForm";
 {
   /* Import Content.ts in /ArtworkDetailScreen/content/ */
 }
@@ -20,20 +21,19 @@ export default function PostArtworkScreen({ ...props }: Props) {
   return (
     <>
       {/* <p>{JSON.stringify(data)}</p> */}
-
-      {data.Images && (
-        <div className="artwork-detail-container">
-          <div className="detail-container flex grid-nogutter">
-            <div className="left-panel-container col col-10">
-              {/* Import Content.ts in /ArtworkDetailScreen/content/ */}
-            </div>
-            <div className="right-panel-container col col-2">
-              {/* Form start here */}
-              {/* Form end here */}
-            </div>
+      <p>Hello</p>
+      <div className="artwork-detail-container">
+        <div className="detail-container flex grid-nogutter">
+          <div className="left-panel-container col col-10">
+            {/* Import Content.ts in /ArtworkDetailScreen/content/ */}
+          </div>
+          <div className="right-panel-container col col-2">
+            {/* Form start here */}
+            <InputForm />
+            {/* Form end here */}
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }
