@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { login } from "../../auth/AuthService";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 const LoginScreen = () => {
@@ -13,7 +13,10 @@ const LoginScreen = () => {
   const [errors, setErrors] = useState({ username: "", password: "" });
 
   const navigate = useNavigate();
+  const location = useLocation();
   const toast: any = useRef(null);
+
+  const previousPath = location?.state?.from?.pathname;
 
   const validateInputs = () => {
     let valid = true;
@@ -50,7 +53,7 @@ const LoginScreen = () => {
             life: 3000,
           });
           setTimeout(() => {
-            navigate("/editTest");
+            navigate(previousPath || "/");
           }, 3000);
         })
         .catch((error) => {
