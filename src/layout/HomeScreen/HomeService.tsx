@@ -47,7 +47,6 @@ export async function GetArtworksData() {
       console.log("Error fetching artworks data");
       return [];
     }
-    console.log("Data ne: " + response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching artworks data:", error);
