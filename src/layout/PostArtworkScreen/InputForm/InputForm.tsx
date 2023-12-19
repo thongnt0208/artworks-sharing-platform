@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import './InputForm.scss';
-import { maxNumberOfCategories, maxNumberOfTags } from '../../const/bizConstants';
-import { FileUpload, InputText, InputTextarea, Dropdown, Chips, Button, MultiSelect, useFormik } from '../index';
+import { maxNumberOfCategories, maxNumberOfTags } from '../../../const/bizConstants';
+import { FileUpload, InputText, InputTextarea, Dropdown, Chips, Button, MultiSelect, useFormik } from '../../index';
 
 // type option = { label: string; value: string };
 
