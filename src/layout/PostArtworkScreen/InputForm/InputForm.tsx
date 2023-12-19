@@ -38,7 +38,7 @@ export default function InputForm({ ...props }: Props) {
     Description: Yup.string().required(' không được bỏ trống'),
     Privacy: Yup.string().required(' không được bỏ trống'),
     Tags: Yup.array().min(1, 'Phải có ít nhất 1 thẻ.'),
-    Category: Yup.string().required(' không được bỏ trống'),
+    Category: Yup.array().required(' không được bỏ trống'),
     Assets: Yup.mixed().notRequired(),
   });
 
