@@ -13,7 +13,10 @@ import LoginScreen from "./layout/LoginScreen/LoginScreen";
 import RequireAuth from "./auth/RequireAuth";
 import EditProfileTestPage from "./layout/TestingSreen/EditProfileTestPage";
 import { AuthProvider } from "./auth/AuthContext";
+<<<<<<< HEAD
 import RegisterScreen from "./layout/RegisterScreen/RegisterScreen";
+=======
+>>>>>>> 76355f9a12e743a59c6dceb4936e1aa45299612b
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 
 function App() {
