@@ -33,7 +33,7 @@ function App() {
               {/* Routes need to protect (must log in to access)*/}
               <Route path="/editTest" element={<EditProfileTestPage />} />
             </Route>
-            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/profile/:id" element={<ProfileScreen />} />
           </Routes>
 
           <Footer />
