@@ -2,11 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./PostArtworkScreen.scss";
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import Content from "./Content";
-import InputForm from "./InputForm";
-{
-  /* Import Content.ts in /ArtworkDetailScreen/content/ */
-}
+import Content from "../ArtworkDetailScreen/content/Content";
+import InputForm from "./InputForm/InputForm";
 
 type Props = {};
 
