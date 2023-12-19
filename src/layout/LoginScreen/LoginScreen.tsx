@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { login } from "../../auth/AuthService";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import "./LoginScreen.scss";
 import { Divider } from "primereact/divider";
@@ -19,7 +19,10 @@ const LoginScreen = () => {
   const [errors, setErrors] = useState({ username: "", password: "" });
 
   const navigate = useNavigate();
+  const location = useLocation();
   const toast: any = useRef(null);
+
+  const previousPath = location?.state?.from?.pathname;
 
   const validateInputs = () => {
     console.log("Validate Inputttt");
@@ -58,7 +61,7 @@ const LoginScreen = () => {
             life: 3000,
           });
           setTimeout(() => {
-            navigate("/editTest");
+            navigate(previousPath || "/");
           }, 3000);
         })
         .catch((error) => {
