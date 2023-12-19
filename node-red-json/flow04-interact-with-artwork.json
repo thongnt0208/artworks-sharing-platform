@@ -1,18 +1,18 @@
 [
     {
-        "id": "5155e781eb87f99d",
+        "id": "6904f6372307aab3",
         "type": "tab",
-        "label": "Interact with artworks",
+        "label": "Flow 0401-view-artwork-detail",
         "disabled": false,
-        "info": "",
+        "info": "One sub flow in flow04-interact-with-artwork",
         "env": []
     },
     {
-        "id": "710b2a3deb879aaf",
+        "id": "f1637dc9b63f8814",
         "type": "http in",
-        "z": "5155e781eb87f99d",
-        "name": "Get tags data",
-        "url": "/tags",
+        "z": "6904f6372307aab3",
+        "name": "[GET] View artwork detail by ID",
+        "url": "/artwork/:id/:userId",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
@@ -20,14 +20,14 @@
         "y": 60,
         "wires": [
             [
-                "84c3f8b1c270a4e6"
+                "250f2ab104ec805d"
             ]
         ]
     },
     {
-        "id": "7a08b0d3b2d6b868",
+        "id": "bededfbd7f78a3d3",
         "type": "http response",
-        "z": "5155e781eb87f99d",
+        "z": "6904f6372307aab3",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -36,11 +36,11 @@
         "wires": []
     },
     {
-        "id": "84c3f8b1c270a4e6",
+        "id": "250f2ab104ec805d",
         "type": "function",
-        "z": "5155e781eb87f99d",
-        "name": "function 1",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n  {\n    \"tagName\": \"once\",\n    \"id\": \"1\"\n  },\n  {\n    \"tagName\": \"Granite\",\n    \"id\": \"2\"\n  },\n  {\n    \"tagName\": \"1080p\",\n    \"id\": \"3\"\n  },\n  {\n    \"tagName\": \"Bicycle\",\n    \"id\": \"4\"\n  },\n  {\n    \"tagName\": \"kelvin\",\n    \"id\": \"5\"\n  },\n  {\n    \"tagName\": \"incremental\",\n    \"id\": \"6\"\n  },\n  {\n    \"tagName\": \"VGA\",\n    \"id\": \"7\"\n  },\n  {\n    \"tagName\": \"Rap\",\n    \"id\": \"8\"\n  },\n  {\n    \"tagName\": \"Operations\",\n    \"id\": \"9\"\n  },\n  {\n    \"tagName\": \"East\",\n    \"id\": \"10\"\n  }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "z": "6904f6372307aab3",
+        "name": "function 8",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -51,31 +51,31 @@
         "y": 60,
         "wires": [
             [
-                "7a08b0d3b2d6b868"
+                "bededfbd7f78a3d3"
             ]
         ]
     },
     {
-        "id": "477688dded9c7fca",
+        "id": "cb0ab09bbf1a51b4",
         "type": "http in",
-        "z": "5155e781eb87f99d",
-        "name": "Get categories data",
-        "url": "/categories",
-        "method": "get",
+        "z": "6904f6372307aab3",
+        "name": "[POST] Comment to Artwork",
+        "url": "/artwork/comment/:awId/:userId",
+        "method": "post",
         "upload": false,
         "swaggerDoc": "",
         "x": 190,
         "y": 120,
         "wires": [
             [
-                "5c0ccd942f6cef8f"
+                "f2840fd7274f011b"
             ]
         ]
     },
     {
-        "id": "41f0ea440ab6441e",
+        "id": "b23aca86de5bbd7c",
         "type": "http response",
-        "z": "5155e781eb87f99d",
+        "z": "6904f6372307aab3",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -84,11 +84,11 @@
         "wires": []
     },
     {
-        "id": "5c0ccd942f6cef8f",
+        "id": "f2840fd7274f011b",
         "type": "function",
-        "z": "5155e781eb87f99d",
-        "name": "function 2",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n  {\n    \"categoryName\": \"Truyện tranh\",\n    \"id\": \"1\"\n  },\n  {\n    \"categoryName\": \"Hình minh họa\",\n    \"id\": \"2\"\n  },\n  {\n    \"categoryName\": \"Tiểu thuyết\",\n    \"id\": \"3\"\n  }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "z": "6904f6372307aab3",
+        "name": "function 9",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Get content from request body\nlet { content } = msg.req.body;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200; return new Comments list\n// ---> FAIL: return status code != 200; attach the error message\n\nmsg.payload = [\n    {\n        \"Id\": \"26fa481a-a2e4-4b7f-89b7-0946e0292f3a\",\n        \"UserId\": \"35dc8159-ab9a-42e1-8c7f-7bcd358b9ac7\",\n        \"Fullname\": \"Eleni Easeman\",\n        \"Avatar\": \"https://robohash.org/assumendanecessitatibusconsequatur.png?size=50x50&set=set1\",\n        \"Content\": \"Extended stable implementation\"\n    },\n    {\n        \"Id\": \"952a016b-cd92-4521-b2d2-48b3fb594d63\",\n        \"UserId\": \"87ab636c-808c-434e-bcc5-33ca2614c2d1\",\n        \"Fullname\": \"Genvieve Souza\",\n        \"Avatar\": \"https://robohash.org/laudantiumveniammodi.png?size=50x50&set=set1\",\n        \"Content\": \"Phased motivating application\"\n    },\n    {\n        \"Id\": \"2c5fc1ea-3acc-4b39-930e-def9835416ce\",\n        \"UserId\": \"79778a2e-9c58-420c-b10c-7a97be08deba\",\n        \"Fullname\": \"Jake Kleynen\",\n        \"Avatar\": \"https://robohash.org/impeditvoluptatemut.png?size=50x50&set=set1\",\n        \"Content\": \"Public-key uniform workforce\"\n    },\n    {\n        \"Id\": \"18a8de9f-fe7b-4431-becf-956cc539da59\",\n        \"UserId\": \"84219910-9924-4dc2-892b-4f082995562a\",\n        \"Fullname\": \"Silvano Van Schafflaer\",\n        \"Avatar\": \"https://robohash.org/aperiamautomnis.png?size=50x50&set=set1\",\n        \"Content\": \"User-friendly reciprocal archive\"\n    },\n    {\n        \"Id\": \"9df9cd21-d61f-47de-a3e4-f8400f248449\",\n        \"UserId\": \"4ec5b588-992a-4cc5-8baf-a2922e7fd6f6\",\n        \"Fullname\": \"Katlin Dobbin\",\n        \"Avatar\": \"https://robohash.org/illumcommodiadipisci.png?size=50x50&set=set1\",\n        \"Content\": \"Streamlined full-range adapter\"\n    },\n    {\n        \"Id\": \"efa690e5-31d4-46a4-908e-147f6da9930d\",\n        \"UserId\": \"38187ca4-b534-4910-8ed6-13832f914268\",\n        \"Fullname\": \"Lulita Gibling\",\n        \"Avatar\": \"https://robohash.org/molestiaeerrorarchitecto.png?size=50x50&set=set1\",\n        \"Content\": \"Face to face optimizing artificial intelligence\"\n    },\n    {\n        \"Id\": \"f3068f79-3d33-4028-9d49-1c16711932b5\",\n        \"UserId\": \"a36e2817-a7a9-4e05-9890-05904ad66cae\",\n        \"Fullname\": \"Marys Hurford\",\n        \"Avatar\": \"https://robohash.org/vitaequivoluptatum.png?size=50x50&set=set1\",\n        \"Content\": \"Automated real-time parallelism\"\n    },\n    {\n        \"Id\": \"fe1c3556-14a6-468e-aebb-fadc226808ed\",\n        \"UserId\": \"93fa991f-a306-415e-a7cb-1798b62c73a1\",\n        \"Fullname\": \"Greta Braime\",\n        \"Avatar\": \"https://robohash.org/deseruntipsumenim.png?size=50x50&set=set1\",\n        \"Content\": \"Cross-platform regional concept\"\n    },\n    {\n        \"Id\": \"80ce9c9d-8bc4-4d2d-ba1b-dd802c9def32\",\n        \"UserId\": \"559d5f83-6e78-4adb-b692-b7a6a06ff8a7\",\n        \"Fullname\": \"Linea Jallin\",\n        \"Avatar\": \"https://robohash.org/cupiditatehicexpedita.png?size=50x50&set=set1\",\n        \"Content\": \"Decentralized asymmetric installation\"\n    },\n    {\n        \"Id\": \"4bd3f447-2a7e-4ed0-8e32-18132c08477c\",\n        \"UserId\": \"3dd24bf3-315e-410c-a48b-575e00d67609\",\n        \"Fullname\": \"Mignon Wixey\",\n        \"Avatar\": \"https://robohash.org/enimutneque.png?size=50x50&set=set1\",\n        \"Content\": \"Realigned 24/7 capacity\"\n    }\n]\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -99,14 +99,14 @@
         "y": 120,
         "wires": [
             [
-                "41f0ea440ab6441e"
+                "a904bbb48b107dbd"
             ]
         ]
     },
     {
-        "id": "bbfe16adfd391468",
+        "id": "5268e152c1086f50",
         "type": "http response",
-        "z": "5155e781eb87f99d",
+        "z": "6904f6372307aab3",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -115,28 +115,59 @@
         "wires": []
     },
     {
-        "id": "a9561318826e349d",
+        "id": "a904bbb48b107dbd",
+        "type": "function",
+        "z": "6904f6372307aab3",
+        "name": "function 10",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 740,
+        "wires": [
+            [
+                "5268e152c1086f50"
+            ]
+        ]
+    },
+    {
+        "id": "c12acd9f7f0f83e3",
         "type": "http in",
-        "z": "5155e781eb87f99d",
-        "name": "Get artworks data",
-        "url": "/artworks",
-        "method": "get",
+        "z": "6904f6372307aab3",
+        "name": "[PUT] Comment to Artwork",
+        "url": "/artwork/comment/:awId/:userId",
+        "method": "put",
         "upload": false,
         "swaggerDoc": "",
         "x": 190,
         "y": 220,
         "wires": [
             [
-                "654e587096416023"
+                "4d41806c8ee07898"
             ]
         ]
     },
     {
-        "id": "654e587096416023",
+        "id": "4f226cdd36691302",
+        "type": "http response",
+        "z": "6904f6372307aab3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "4d41806c8ee07898",
         "type": "function",
-        "z": "5155e781eb87f99d",
-        "name": "function 3",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": 1,\n  \"title\": \"Vengeance is Mine (Fukushu suruwa wareniari)\",\n  \"subTitle\": \"Pahat pojat\",\n  \"image\": \"http://dummyimage.com/184x100.png/dddddd/000000\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": 2,\n  \"title\": \"Bank, The\",\n  \"subTitle\": \"Patience Stone, The\",\n  \"image\": \"http://dummyimage.com/132x100.png/cc0000/ffffff\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": 3,\n  \"title\": \"Happiness (Schastye)\",\n  \"subTitle\": \"Pornography (Pornografia)\",\n  \"image\": \"http://dummyimage.com/232x100.png/cc0000/ffffff\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": 4,\n  \"title\": \"Gorillas in the Mist\",\n  \"subTitle\": \"2013 Rock and Roll Hall of Fame Induction Ceremony, The\",\n  \"image\": \"http://dummyimage.com/115x100.png/cc0000/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}, {\n  \"id\": 5,\n  \"title\": \"Parallel Sons\",\n  \"subTitle\": \"Tyler Perry's A Madea Christmas\",\n  \"image\": \"http://dummyimage.com/134x100.png/ff4444/ffffff\",\n  \"likeNum\": 5,\n  \"viewNum\": 5\n}, {\n  \"id\": 6,\n  \"title\": \"Messengers, The\",\n  \"subTitle\": \"Legend of the 7 Golden Vampires, The\",\n  \"image\": \"http://dummyimage.com/175x100.png/dddddd/000000\",\n  \"likeNum\": 6,\n  \"viewNum\": 6\n}, {\n  \"id\": 7,\n  \"title\": \"Three and Out (Deal Is a Deal, A)\",\n  \"subTitle\": \"Couples Retreat\",\n  \"image\": \"http://dummyimage.com/217x100.png/dddddd/000000\",\n  \"likeNum\": 7,\n  \"viewNum\": 7\n}, {\n  \"id\": 8,\n  \"title\": \"Aileen: Life and Death of a Serial Killer\",\n  \"subTitle\": \"Bestseller (Be-seu-teu-sel-leo)\",\n  \"image\": \"http://dummyimage.com/250x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 8,\n  \"viewNum\": 8\n}, {\n  \"id\": 9,\n  \"title\": \"Maybe Baby\",\n  \"subTitle\": \"Such a Long Journey\",\n  \"image\": \"http://dummyimage.com/220x100.png/ff4444/ffffff\",\n  \"likeNum\": 9,\n  \"viewNum\": 9\n}, {\n  \"id\": 10,\n  \"title\": \"Twilight\",\n  \"subTitle\": \"Kummeli Stories\",\n  \"image\": \"http://dummyimage.com/221x100.png/ff4444/ffffff\",\n  \"likeNum\": 10,\n  \"viewNum\": 10\n}]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "z": "6904f6372307aab3",
+        "name": "function 11",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Get content from request body\nlet {content} = msg.req.body;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
