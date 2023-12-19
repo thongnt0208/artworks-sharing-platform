@@ -21,10 +21,10 @@ export default function PostArtworkScreen({ ...props }: Props) {
       <p>Hello</p>
       <div className="artwork-detail-container">
         <div className="detail-container flex grid-nogutter">
-          <div className="left-panel-container col col-10">
+          <div className="left-panel-container col col-9">
             {/* Import Content.ts in /ArtworkDetailScreen/content/ */}
           </div>
-          <div className="right-panel-container col col-2">
+          <div className="right-panel-container col col-3 p-3">
             {/* Form start here */}
             <InputForm />
             {/* Form end here */}

@@ -1,7 +1,17 @@
 import * as Yup from 'yup';
 import './InputForm.scss';
 import { maxNumberOfCategories, maxNumberOfTags } from '../../../const/bizConstants';
-import { FileUpload, InputText, InputTextarea, Dropdown, Chips, Button, MultiSelect, useFormik } from '../../index';
+import {
+  FileUpload,
+  InputText,
+  InputTextarea,
+  Dropdown,
+  Chips,
+  Button,
+  MultiSelect,
+  useFormik,
+} from '../../index';
+import MultipleFileUpload from '../MultipleFileUpload/MultipleFileUpload';
 
 // type option = { label: string; value: string };
 
@@ -16,17 +26,17 @@ export default function InputForm({ ...props }: Props) {
     Id: '', // Initial value for Id
     CreatedBy: '', // Initial value for CreatedBy
     Title: '',
-    Images: null,
+    Images: [],
     Description: '',
     Privacy: 'Public',
     Tags: [],
     Category: [],
-    Assets: null,
+    Assets: [],
   };
 
   const validationSchema = Yup.object().shape({
     Title: Yup.string().required(' không được bỏ trống'),
-    Images: Yup.mixed()
+    Images: Yup.array()
       .test('fileType', 'Loại file không hợp lệ. Chỉ chấp nhận jpg/png.', (value: any) => {
         if (value && value.name) {
           const extension = value.name.split('.').pop().toLowerCase();
@@ -39,7 +49,7 @@ export default function InputForm({ ...props }: Props) {
     Privacy: Yup.string().required(' không được bỏ trống'),
     Tags: Yup.array().min(1, 'Phải có ít nhất 1 thẻ.'),
     Category: Yup.array().required(' không được bỏ trống'),
-    Assets: Yup.mixed().notRequired(),
+    Assets: Yup.array().notRequired(),
   });
 
   const privacyOptions = [
@@ -58,9 +68,27 @@ export default function InputForm({ ...props }: Props) {
     initialValues,
     validationSchema,
     onSubmit: (values, actions) => {
-      // Handle form submission here
-      console.log(values);
-      // props.submitFormCallback(values);
+      const formData = new FormData();
+
+      // Loop through Images and Assets arrays and append files to FormData
+      values.Images.forEach((image, index) => {
+        formData.append(`image_${index}`, image);
+      });
+
+      values.Assets.forEach((asset, index) => {
+        formData.append(`asset_${index}`, asset);
+      });
+
+      // Add other form values to FormData
+      formData.append('Title', values.Title);
+      formData.append('Description', values.Description);
+      formData.append('Privacy', values.Privacy);
+      formData.append('Tags', JSON.stringify(values.Tags));
+      formData.append('Category', JSON.stringify(values.Category));
+
+      // Handle form submission with FormData (replace this with your submission logic)
+      console.log(formData);
+
       actions.setSubmitting(false);
     },
   });
@@ -71,7 +99,7 @@ export default function InputForm({ ...props }: Props) {
         <div className='p-fluid'>
           {/* Title field */}
           <div className='p-field'>
-            <label htmlFor='Title'>Title</label>
+            <label htmlFor='Title'>Tiêu đề</label>
             {formik.errors.Title && formik.touched.Title && (
               <small className='p-error'>{formik.errors.Title}</small>
             )}
@@ -190,6 +218,7 @@ export default function InputForm({ ...props }: Props) {
           </div>
         </div>
       </form>
+      <MultipleFileUpload/>
     </>
   );
 }
