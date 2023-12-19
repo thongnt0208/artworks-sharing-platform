@@ -18,6 +18,7 @@ import RegisterScreen from "./layout/RegisterScreen/RegisterScreen";
 import ArtworkDetail from "./layout/ArtworkDetailScreen/ArtworkDetail";
 import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordScreen";
 import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
+import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
             <Route path="/reset-password" element={<ResetPasswordScreen />} />
+            <Route path="/change-pasword" element={<ChangePasswordScreen />} />
             <Route path="/artwork/:id" element={<ArtworkDetail />} />
             <Route element={<RequireAuth />}>
               {/* Routes need to protect (must log in to access)*/}
