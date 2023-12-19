@@ -15,6 +15,7 @@ import EditProfileTestPage from "./layout/TestingSreen/EditProfileTestPage";
 import { AuthProvider } from "./auth/AuthContext";
 import RegisterScreen from "./layout/RegisterScreen/RegisterScreen";
 import ArtworkDetail from "./layout/ArtworkDetailScreen/ArtworkDetail";
+import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/change-pasword" element={<ChangePasswordScreen />} />
             <Route path="/artwork/:id" element={<ArtworkDetail />} />
             <Route element={<RequireAuth />}>
               {/* Routes need to protect (must log in to access)*/}
