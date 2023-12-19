@@ -2,6 +2,7 @@ import "./App.scss";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./layout/HomeScreen/HomeScreen";
+import ProfileScreen from "./layout/ProfileScreen/ProfileScreen";
 
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/saga-blue/theme.css";
@@ -30,6 +31,7 @@ function App() {
               {/* Routes need to protect (must log in to access)*/}
               <Route path="/editTest" element={<EditProfileTestPage />} />
             </Route>
+            <Route path="/profile" element={<ProfileScreen />} />
           </Routes>
 
           <Footer />
