@@ -1,153 +1,314 @@
 [
     {
-        "id": "5155e781eb87f99d",
+        "id": "6904f6372307aab3",
         "type": "tab",
-        "label": "Interact with artworks",
+        "label": "Flow 0401-view-artwork-detail",
         "disabled": false,
-        "info": "",
+        "info": "One sub flow in flow04-interact-with-artwork",
         "env": []
     },
     {
-        "id": "710b2a3deb879aaf",
+        "id": "f1637dc9b63f8814",
         "type": "http in",
-        "z": "5155e781eb87f99d",
-        "name": "Get tags data",
-        "url": "/tags",
+        "z": "6904f6372307aab3",
+        "name": "[GET] View artwork detail by ID",
+        "url": "/artwork/:id/:userId",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
         "x": 370,
-        "y": 1000,
+        "y": 320,
         "wires": [
             [
-                "84c3f8b1c270a4e6"
+                "737a2544d9dc7e14"
             ]
         ]
     },
     {
-        "id": "7a08b0d3b2d6b868",
+        "id": "75042ff9c7951feb",
         "type": "http response",
-        "z": "5155e781eb87f99d",
+        "z": "6904f6372307aab3",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 730,
-        "y": 1000,
+        "x": 770,
+        "y": 320,
         "wires": []
     },
     {
-        "id": "84c3f8b1c270a4e6",
+        "id": "737a2544d9dc7e14",
         "type": "function",
-        "z": "5155e781eb87f99d",
-        "name": "function 1",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n  {\n    \"tagName\": \"once\",\n    \"id\": \"1\"\n  },\n  {\n    \"tagName\": \"Granite\",\n    \"id\": \"2\"\n  },\n  {\n    \"tagName\": \"1080p\",\n    \"id\": \"3\"\n  },\n  {\n    \"tagName\": \"Bicycle\",\n    \"id\": \"4\"\n  },\n  {\n    \"tagName\": \"kelvin\",\n    \"id\": \"5\"\n  },\n  {\n    \"tagName\": \"incremental\",\n    \"id\": \"6\"\n  },\n  {\n    \"tagName\": \"VGA\",\n    \"id\": \"7\"\n  },\n  {\n    \"tagName\": \"Rap\",\n    \"id\": \"8\"\n  },\n  {\n    \"tagName\": \"Operations\",\n    \"id\": \"9\"\n  },\n  {\n    \"tagName\": \"East\",\n    \"id\": \"10\"\n  }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "z": "6904f6372307aab3",
+        "name": "function 6",
+        "func": "// Get the id from param\nlet idRequest = msg.req.params.id;\nlet idUser = msg.req.params.userId;\n\n// Query from DB then return the data\nlet mockData = [{\"Id\":\"eaba8899-1031-44ab-a625-17b89fd17fa4\",\"CreatedBy\":{\"Id\":\"2cfc4594-0ccd-4951-aec2-d7147ef8c036\",\"Fullname\":\"Ellyn Kleanthous\",\"Avatar\":\"https://robohash.org/eaautemquaerat.png?size=50x50&set=set1\",\"Bio\":\"Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\",\"Job\":\"Account Executive\",\"Address\":\"8 Dixon Center\"},\"Title\":\"Another Man's Poison\",\"Images\":[\"http://dummyimage.com/385x624.png/5fa2dd/ffffff\",\"http://dummyimage.com/541x110.png/cc0000/ffffff\",\"http://dummyimage.com/465x292.png/dddddd/000000\"],\"Description\":\"Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.\\n\\nIn hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\\n\\nAliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"ryruezm\",\"rztkqls\",\"ypgryyn\",\"gjamsyt\",\"uswqdcw\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":544,\"ViewNum\":658,\"Comments\":[{\"Id\":\"2a391c99-c52b-4de6-b84a-69b36743e146\",\"UserId\":\"9f1be095-f6ef-4b5b-83cb-d1716f875396\",\"Fullname\":\"Olympie Edgson\",\"Avatar\":\"https://robohash.org/remharumeum.png?size=50x50&set=set1\",\"Content\":\"Focused hybrid open architecture\"},{\"Id\":\"4977e02a-d5a0-412c-a863-e18d645fff6c\",\"UserId\":\"dc8cbca8-f787-41cc-a595-edf75817fb16\",\"Fullname\":\"Dominique Anwell\",\"Avatar\":\"https://robohash.org/laborumaliasad.png?size=50x50&set=set1\",\"Content\":\"Right-sized encompassing circuit\"},{\"Id\":\"9ccddf8e-6761-4a01-a8a9-4854f29b776a\",\"UserId\":\"857cc6e7-3c8c-4917-9991-154db6d9e898\",\"Fullname\":\"Myrah Braitling\",\"Avatar\":\"https://robohash.org/enimmolestiaerepellendus.png?size=50x50&set=set1\",\"Content\":\"Organic radical emulation\"},{\"Id\":\"b38b0b79-4516-4e1d-ac5c-5754f1fc66b4\",\"UserId\":\"fe45586f-fcb8-42bc-b5a4-e58fcf25e3f1\",\"Fullname\":\"Dion Warburton\",\"Avatar\":\"https://robohash.org/culpaaspernaturratione.png?size=50x50&set=set1\",\"Content\":\"Triple-buffered maximized encoding\"},{\"Id\":\"ddca9553-5c7e-4a4c-a9b8-69de6fad82dd\",\"UserId\":\"f35699ff-1436-44cb-bd07-640818ffe140\",\"Fullname\":\"Gregorius Roze\",\"Avatar\":\"https://robohash.org/temporadelectusducimus.png?size=50x50&set=set1\",\"Content\":\"Grass-roots attitude-oriented support\"},{\"Id\":\"b15ef24d-eeb5-49da-b9c6-47fa932beb53\",\"UserId\":\"16455ade-9bff-46f7-a8f4-63e60de39715\",\"Fullname\":\"Barby Nutter\",\"Avatar\":\"https://robohash.org/cumametnesciunt.png?size=50x50&set=set1\",\"Content\":\"Assimilated maximized website\"},{\"Id\":\"60c1c737-5608-4644-aabd-2df39240f680\",\"UserId\":\"0995ad8b-475e-464c-b14c-fdab0967bfc7\",\"Fullname\":\"Antonetta Gilburt\",\"Avatar\":\"https://robohash.org/molestiasenimexcepturi.png?size=50x50&set=set1\",\"Content\":\"Universal uniform challenge\"},{\"Id\":\"b56d4de8-6970-4acc-823f-305fe59aa68f\",\"UserId\":\"9a24bb26-5622-4e02-8a52-e687f75c0ade\",\"Fullname\":\"Luke Burkwood\",\"Avatar\":\"https://robohash.org/adipiscivelitullam.png?size=50x50&set=set1\",\"Content\":\"Implemented holistic help-desk\"}],\"Assets\":[{\"Id\":\"4bc793aa-9f1d-4e5b-be1c-a64c2fe13ce9\",\"AssetName\":\"Aliquam.avi\",\"AssetType\":\".cyh\",\"Price\":\"$7.01\"},{\"Id\":\"2953bd23-a88c-4cf3-a53a-bc6d03bc2a3d\",\"AssetName\":\"Tincidunt.mpeg\",\"AssetType\":\".lcb\",\"Price\":\"$9.56\"},{\"Id\":\"d05d880e-4cb8-45b4-ad0f-ef5ee0a96803\",\"AssetName\":\"AccumsanTortor.avi\",\"AssetType\":\".mrr\",\"Price\":\"$5.96\"},{\"Id\":\"3945d332-ec71-4bc3-9d0d-d425399ce0e4\",\"AssetName\":\"Praesent.gif\",\"AssetType\":\".qlm\",\"Price\":\"$9.16\"}],\"isLiked\":true},\n{\"Id\":\"4d4cbbe8-57a9-4a6c-8d59-7e5058b002c9\",\"CreatedBy\":{\"Id\":\"2fd6dca0-fd9c-454f-96f1-5accdc2338d7\",\"Fullname\":\"Shaylyn Licciardo\",\"Avatar\":\"https://robohash.org/etillotempora.png?size=50x50&set=set1\",\"Bio\":\"Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\\n\\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\\n\\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\",\"Job\":\"Editor\",\"Address\":\"76395 Packers Center\"},\"Title\":\"Woman's Face, A\",\"Images\":[\"http://dummyimage.com/294x168.png/dddddd/000000\",\"http://dummyimage.com/658x206.png/5fa2dd/ffffff\"],\"Description\":\"Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\\n\\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\\n\\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"rovpphf\",\"qccoogq\",\"kndhusf\"],\"Category\":\"Bìa sách\",\"LikeNum\":335,\"ViewNum\":1449,\"Assets\":[{\"Id\":\"c89b6d0a-e842-4170-b5e6-079e859b5cf2\",\"AssetName\":\"EleifendQuam.gif\",\"AssetType\":\".pnu\",\"Price\":\"$6.25\"},{\"Id\":\"3c9223d2-3081-4b3a-a221-1ed24d340815\",\"AssetName\":\"Mauris.mp3\",\"AssetType\":\".wew\",\"Price\":\"$7.72\"}],\"isLiked\":false},\n{\"Id\":\"9adff7b3-23a1-4a7a-929f-467734b70b7b\",\"CreatedBy\":{\"Id\":\"a856b86c-3640-4ebd-8b9b-349dc40fe680\",\"Fullname\":\"Jefferey Iliff\",\"Avatar\":\"https://robohash.org/suntminimaeos.png?size=50x50&set=set1\",\"Bio\":\"Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\",\"Job\":\"Software Test Engineer III\",\"Address\":\"0 Blue Bill Park Crossing\"},\"Title\":\"Headless Woman, The (Mujer sin cabeza, La)\",\"Images\":[\"http://dummyimage.com/162x535.png/5fa2dd/ffffff\",\"http://dummyimage.com/118x433.png/cc0000/ffffff\",\"http://dummyimage.com/461x985.png/cc0000/ffffff\",\"http://dummyimage.com/242x784.png/ff4444/ffffff\"],\"Description\":\"Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\\n\\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"oachcjb\",\"uhsqryz\",\"gfexuaa\",\"bgaogpl\",\"rkvjglm\",\"fjgcuqb\",\"umssspv\",\"fjqeotv\",\"wclmmlq\"],\"Category\":\"Minh hoạ\",\"LikeNum\":629,\"ViewNum\":1670,\"Comments\":[{\"Id\":\"e0d368ee-b9c8-4f35-aaa2-dba8ff7f981e\",\"UserId\":\"3e0b820f-2813-4f05-9fc6-41b2777faa40\",\"Fullname\":\"Roseanne Steed\",\"Avatar\":\"https://robohash.org/quiettempore.png?size=50x50&set=set1\",\"Content\":\"Re-contextualized well-modulated methodology\"},{\"Id\":\"03451fb1-19a7-459f-8f73-c062a94eed2e\",\"UserId\":\"18335a47-c34e-4d91-a0b8-e8d2f430be8c\",\"Fullname\":\"Reilly Jiles\",\"Avatar\":\"https://robohash.org/utmagnitotam.png?size=50x50&set=set1\",\"Content\":\"Cloned incremental knowledge base\"},{\"Id\":\"c41af8dc-c033-4efb-bfe5-4c4e09a78b93\",\"UserId\":\"dbb9deb7-dae4-4d4a-bd0e-4e72a577aac1\",\"Fullname\":\"Kial Olyfat\",\"Avatar\":\"https://robohash.org/facereestdignissimos.png?size=50x50&set=set1\",\"Content\":\"Sharable methodical frame\"},{\"Id\":\"e4ea599c-96b8-452e-bbaf-72caea2fca62\",\"UserId\":\"c073d8b4-e969-433f-b411-6378d47dd7c8\",\"Fullname\":\"Dagmar Piscopello\",\"Avatar\":\"https://robohash.org/consequunturaliquidsimilique.png?size=50x50&set=set1\",\"Content\":\"Stand-alone scalable circuit\"},{\"Id\":\"d4d22f8c-666e-47b9-bd60-5e837f11645e\",\"UserId\":\"11743c90-1797-41fd-8750-c5022faef170\",\"Fullname\":\"Augie Madgett\",\"Avatar\":\"https://robohash.org/quibusdamcumnihil.png?size=50x50&set=set1\",\"Content\":\"Realigned eco-centric parallelism\"}],\"Assets\":[{\"Id\":\"83d905a7-d9bb-4412-8760-d221cee77304\",\"AssetName\":\"Pretium.ppt\",\"AssetType\":\".cyt\",\"Price\":\"$5.22\"},{\"Id\":\"882865fd-8e75-44a0-ab26-9635fe72c5d6\",\"AssetName\":\"Nisl.png\",\"AssetType\":\".sei\",\"Price\":\"$9.92\"},{\"Id\":\"f332f00c-8133-404b-b778-138a47e3aa46\",\"AssetName\":\"NisiVenenatisTristique.mp3\",\"AssetType\":\".biu\",\"Price\":\"$4.79\"},{\"Id\":\"7a72657b-9fd6-415b-824d-14a8cc1da519\",\"AssetName\":\"VelitEuEst.ppt\",\"AssetType\":\".fwl\",\"Price\":\"$8.41\"},{\"Id\":\"61955ec3-f45d-4b8f-9fd7-ec143be388de\",\"AssetName\":\"JustoMaecenasRhoncus.jpeg\",\"AssetType\":\".mvx\",\"Price\":\"$7.26\"}],\"isLiked\":false},\n{\"Id\":\"3962f79b-e553-48cb-8454-354ab973b93a\",\"CreatedBy\":{\"Id\":\"54a03561-7a4b-411f-9e87-9b9ae04144b0\",\"Fullname\":\"Marga Plampeyn\",\"Avatar\":\"https://robohash.org/temporeatquevoluptatem.png?size=50x50&set=set1\",\"Bio\":\"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.\\n\\nVestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.\\n\\nDuis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\",\"Job\":\"Web Developer I\",\"Address\":\"44 Arkansas Court\"},\"Title\":\"Teen Wolf Too\",\"Images\":[\"http://dummyimage.com/273x231.png/dddddd/000000\",\"http://dummyimage.com/547x328.png/cc0000/ffffff\",\"http://dummyimage.com/689x399.png/cc0000/ffffff\"],\"Description\":\"Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"wljfacn\",\"vdihizr\",\"gosjlsl\",\"ckkmwia\",\"nnlrike\",\"kbzpmry\",\"nnhuvat\"],\"Category\":\"Minh hoạ\",\"LikeNum\":308,\"ViewNum\":1064,\"Comments\":[{\"Id\":\"f80a8395-f80d-4e54-b191-f02f8569f46c\",\"UserId\":\"44e89848-c7af-4779-a7a4-7ee5de7d37fa\",\"Fullname\":\"Jesselyn Gillibrand\",\"Avatar\":\"https://robohash.org/etnonqui.png?size=50x50&set=set1\",\"Content\":\"Phased system-worthy knowledge base\"},{\"Id\":\"ad22e570-67d9-430e-8630-b16207c9f76e\",\"UserId\":\"1a6ba84c-7e58-4268-b76d-c417190a6873\",\"Fullname\":\"Duffie Josselsohn\",\"Avatar\":\"https://robohash.org/expeditaerrorbeatae.png?size=50x50&set=set1\",\"Content\":\"Switchable human-resource flexibility\"},{\"Id\":\"eb02dc96-0d9b-4fb9-bc57-6ee3984cc42d\",\"UserId\":\"7581057a-21d5-4773-ac4c-d305c636b221\",\"Fullname\":\"Lyle Hinckesman\",\"Avatar\":\"https://robohash.org/sitofficiaet.png?size=50x50&set=set1\",\"Content\":\"Multi-channelled 6th generation leverage\"},{\"Id\":\"2560260e-c20b-4b7a-82d4-b0e6c900fc72\",\"UserId\":\"d4fc5249-b7b9-4a00-a945-dc20da0652b8\",\"Fullname\":\"Bibi Swalwel\",\"Avatar\":\"https://robohash.org/reprehenderitenimcorrupti.png?size=50x50&set=set1\",\"Content\":\"Function-based system-worthy open system\"},{\"Id\":\"e19f0925-9390-4c4e-b863-bd16258b1ad9\",\"UserId\":\"c68fc36d-5c70-499a-bb8a-229a072a0838\",\"Fullname\":\"Lyndsay Jeff\",\"Avatar\":\"https://robohash.org/illovelomnis.png?size=50x50&set=set1\",\"Content\":\"Up-sized 24 hour functionalities\"},{\"Id\":\"3e761bc5-17d2-4512-b16f-5b42e1231201\",\"UserId\":\"f1926292-e26a-49c3-a89c-3b285b9f27c0\",\"Fullname\":\"Brit Cartledge\",\"Avatar\":\"https://robohash.org/enimducimusdebitis.png?size=50x50&set=set1\",\"Content\":\"Ameliorated context-sensitive throughput\"},{\"Id\":\"0aa1508f-a1bd-4efd-bb7b-0bba273e3838\",\"UserId\":\"a36fbb4d-fc4e-4912-83ab-5b1424bd9651\",\"Fullname\":\"Glen Beldam\",\"Avatar\":\"https://robohash.org/animisuntculpa.png?size=50x50&set=set1\",\"Content\":\"Ameliorated empowering model\"},{\"Id\":\"b12807c8-8bfd-4b1f-bf12-16a7b6046f11\",\"UserId\":\"66913c39-29cb-4ac9-aaf0-a8123b1f1c48\",\"Fullname\":\"Clem Shird\",\"Avatar\":\"https://robohash.org/etexercitationemdolor.png?size=50x50&set=set1\",\"Content\":\"Universal neutral moderator\"},{\"Id\":\"bed416bb-29d7-46b0-b1cc-cb5e2c6cd04d\",\"UserId\":\"7e6fb134-16ef-4ee4-a996-c8960c88ff2f\",\"Fullname\":\"Cirstoforo Mell\",\"Avatar\":\"https://robohash.org/etrerumquia.png?size=50x50&set=set1\",\"Content\":\"Right-sized intangible success\"}],\"Assets\":[{\"Id\":\"7e1d7f5f-b66f-42af-a7c0-1a205e9757b1\",\"AssetName\":\"Dictumst.jpeg\",\"AssetType\":\".qwd\",\"Price\":\"$4.42\"},{\"Id\":\"cf3d8479-0f56-441e-b558-f3e48413e0fc\",\"AssetName\":\"Parturient.avi\",\"AssetType\":\".giy\",\"Price\":\"$9.27\"},{\"Id\":\"2a25855d-0e34-4508-8b2d-2209a22cdf6b\",\"AssetName\":\"Pellentesque.mov\",\"AssetType\":\".bkk\",\"Price\":\"$7.50\"}],\"isLiked\":true},\n{\"Id\":\"71da2158-d53a-4b94-bb00-d4e72b8e7c60\",\"CreatedBy\":{\"Id\":\"40d9e4b2-084a-41d9-a9df-22dd1adf7ce4\",\"Fullname\":\"Johnath Perocci\",\"Avatar\":\"https://robohash.org/utquieveniet.png?size=50x50&set=set1\",\"Bio\":\"Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.\\n\\nPraesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\\n\\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\",\"Job\":\"Computer Systems Analyst II\",\"Address\":\"3 Pond Way\"},\"Title\":\"Zombies on Broadway\",\"Images\":[\"http://dummyimage.com/443x578.png/cc0000/ffffff\",\"http://dummyimage.com/274x751.png/cc0000/ffffff\",\"http://dummyimage.com/575x1044.png/5fa2dd/ffffff\",\"http://dummyimage.com/456x790.png/5fa2dd/ffffff\",\"http://dummyimage.com/330x724.png/dddddd/000000\"],\"Description\":\"Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"eratvkd\",\"vtayham\",\"sozassz\",\"qqjmwzb\",\"zqxqrpe\",\"ehydxtz\",\"tukslre\"],\"Category\":\"Bìa sách\",\"LikeNum\":153,\"ViewNum\":746,\"Comments\":[],\"Assets\":[{\"Id\":\"1ae76f7f-f946-4621-b95a-2168b927e5c7\",\"AssetName\":\"LiberoRutrum.gif\",\"AssetType\":\".goc\",\"Price\":\"$3.77\"},{\"Id\":\"dcf43451-c611-46c1-bfdb-2cc6334e2bad\",\"AssetName\":\"IntegerNonVelit.avi\",\"AssetType\":\".oaa\",\"Price\":\"$8.78\"}],\"isLiked\":true},\n{\"Id\":\"bdaba8da-69aa-418a-a7af-dd3e7541e193\",\"CreatedBy\":{\"Id\":\"eebbeb21-25e5-4b30-bd3e-2dd589aa4e8f\",\"Fullname\":\"Cory O'Nion\",\"Avatar\":\"https://robohash.org/vitaeblanditiisa.png?size=50x50&set=set1\",\"Bio\":\"Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\\n\\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\",\"Job\":\"Engineer II\",\"Address\":\"2 Golf Course Crossing\"},\"Title\":\"Home Alone 4\",\"Images\":[\"http://dummyimage.com/148x377.png/5fa2dd/ffffff\",\"http://dummyimage.com/134x795.png/5fa2dd/ffffff\",\"http://dummyimage.com/497x521.png/dddddd/000000\"],\"Description\":\"Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.\\n\\nDuis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"wusnyax\",\"ojkyvkg\",\"yxwfjhb\",\"vvrhvah\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":243,\"ViewNum\":1987,\"Comments\":[{\"Id\":\"e78d980b-639e-4145-b90b-a35582a3e36f\",\"UserId\":\"00e472a4-7607-4251-9e36-0fb25b8de3d2\",\"Fullname\":\"Hymie Nash\",\"Avatar\":\"https://robohash.org/quinullaid.png?size=50x50&set=set1\",\"Content\":\"Monitored disintermediate toolset\"},{\"Id\":\"135e86f7-0b09-48b6-9ceb-54d0ef1f2e6c\",\"UserId\":\"a3c8b6f0-c61b-4a64-9f8f-a50f2308133d\",\"Fullname\":\"Sandy Norwood\",\"Avatar\":\"https://robohash.org/consequaturnatusneque.png?size=50x50&set=set1\",\"Content\":\"Synergistic intermediate functionalities\"},{\"Id\":\"b81a06de-9fdf-415e-9164-a34c04448483\",\"UserId\":\"84f249cb-391f-4017-b610-12bf1144a819\",\"Fullname\":\"Carmelle Hunstone\",\"Avatar\":\"https://robohash.org/facerevoluptatibusut.png?size=50x50&set=set1\",\"Content\":\"Managed empowering array\"},{\"Id\":\"39ec2745-5fa9-42ad-bcb4-2a54826ca723\",\"UserId\":\"a65e80a4-a658-4ff5-84ad-1567a273772b\",\"Fullname\":\"Myles Molloy\",\"Avatar\":\"https://robohash.org/voluptasdoloremqueexercitationem.png?size=50x50&set=set1\",\"Content\":\"Face to face upward-trending initiative\"},{\"Id\":\"3d5d85bf-67d7-4488-aa7f-89491f80f87e\",\"UserId\":\"06bcb00e-0efe-45d0-90b7-087419acbd95\",\"Fullname\":\"Paddie Aspling\",\"Avatar\":\"https://robohash.org/temporaquiaassumenda.png?size=50x50&set=set1\",\"Content\":\"Down-sized directional open system\"},{\"Id\":\"1c654366-bdd3-4729-88af-74088e2df780\",\"UserId\":\"8582ea2c-88d5-460b-b860-043de2c669aa\",\"Fullname\":\"Pauly Wanell\",\"Avatar\":\"https://robohash.org/voluptatemliberoblanditiis.png?size=50x50&set=set1\",\"Content\":\"Public-key cohesive attitude\"},{\"Id\":\"ba8026e8-fa5b-4241-814b-e2c13d5195be\",\"UserId\":\"30729df9-6119-4751-a283-55e07e948aa1\",\"Fullname\":\"Pattin Hogbourne\",\"Avatar\":\"https://robohash.org/quiaveroquae.png?size=50x50&set=set1\",\"Content\":\"Cross-platform global ability\"},{\"Id\":\"764ca9a6-4af2-4dc1-a959-9e8f78c059c4\",\"UserId\":\"e6af4f67-38c8-4e04-b437-c444aa999f43\",\"Fullname\":\"Keefe Pulman\",\"Avatar\":\"https://robohash.org/rerumsuscipitrepellat.png?size=50x50&set=set1\",\"Content\":\"Visionary analyzing array\"},{\"Id\":\"96650ce3-c598-4106-93bd-3a0126bccf2a\",\"UserId\":\"49be064e-7e16-4eed-9880-708c03fc37e8\",\"Fullname\":\"Saxe Whotton\",\"Avatar\":\"https://robohash.org/autlaboriosamvel.png?size=50x50&set=set1\",\"Content\":\"Seamless bottom-line workforce\"}],\"Assets\":[{\"Id\":\"fa9a1736-14c6-4047-b6ea-a73af8ec9074\",\"AssetName\":\"Diam.pdf\",\"AssetType\":\".mnw\",\"Price\":\"$0.31\"},{\"Id\":\"96b4577b-892f-4c00-a05e-4a5612423eed\",\"AssetName\":\"PortaVolutpat.jpeg\",\"AssetType\":\".fro\",\"Price\":\"$2.53\"}],\"isLiked\":true},\n{\"Id\":\"3a021a57-b682-48f5-b676-cb3283056b73\",\"CreatedBy\":{\"Id\":\"3dc60e30-7e11-4869-b4cb-b07eaa7c9c36\",\"Fullname\":\"Tobey Carriage\",\"Avatar\":\"https://robohash.org/nonutconsequatur.png?size=50x50&set=set1\",\"Bio\":\"Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.\",\"Job\":\"GIS Technical Architect\",\"Address\":\"6 Coolidge Road\"},\"Title\":\"Circus\",\"Images\":[\"http://dummyimage.com/563x753.png/cc0000/ffffff\",\"http://dummyimage.com/494x290.png/dddddd/000000\"],\"Description\":\"Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\\n\\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\\n\\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"czvndpw\",\"ojmnuit\",\"dzmtzml\",\"qillowf\",\"eoquaup\",\"xlxxdit\",\"acdjuip\",\"ibqvmsd\",\"vslfqgb\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":364,\"ViewNum\":580,\"Comments\":[{\"Id\":\"6c6373c3-7b3c-4710-a577-9131c2ce600e\",\"UserId\":\"64f2a22c-d95a-40c7-bfa5-4837440dea1e\",\"Fullname\":\"Janos Barg\",\"Avatar\":\"https://robohash.org/abvoluptasdelectus.png?size=50x50&set=set1\",\"Content\":\"Inverse heuristic structure\"},{\"Id\":\"5f32fcf8-6284-4e40-a457-2ee43679b77a\",\"UserId\":\"e582c4e6-ee2f-4f3b-8b87-c73aabfcf563\",\"Fullname\":\"Jeramie Wybrow\",\"Avatar\":\"https://robohash.org/possimusilloquam.png?size=50x50&set=set1\",\"Content\":\"Team-oriented zero tolerance encoding\"},{\"Id\":\"5bbe5c3a-ee26-4c15-9870-ff6ca79e076a\",\"UserId\":\"dfaa89b6-31e3-4ddd-9e3f-065ffeb0be13\",\"Fullname\":\"Coraline Chinn\",\"Avatar\":\"https://robohash.org/inventoreveniamlaborum.png?size=50x50&set=set1\",\"Content\":\"Multi-layered global analyzer\"},{\"Id\":\"77328a23-b573-4d01-849b-8c84c2111996\",\"UserId\":\"0de0a613-af8a-4f73-ac6c-c3d75ea15492\",\"Fullname\":\"Byron Longmead\",\"Avatar\":\"https://robohash.org/expeditaautaut.png?size=50x50&set=set1\",\"Content\":\"Expanded bi-directional local area network\"}],\"Assets\":[{\"Id\":\"3cc74e75-9023-46e3-a12d-28e4791ed39c\",\"AssetName\":\"Vivamus.avi\",\"AssetType\":\".hqv\",\"Price\":\"$1.85\"},{\"Id\":\"c8ac58c2-d549-43c3-b6a2-6963861c44a9\",\"AssetName\":\"FringillaRhoncus.xls\",\"AssetType\":\".qsz\",\"Price\":\"$9.89\"},{\"Id\":\"4e91115e-62f0-471e-8f45-e4d0679a3eb2\",\"AssetName\":\"Tempus.gif\",\"AssetType\":\".rsw\",\"Price\":\"$4.80\"}],\"isLiked\":true},\n{\"Id\":\"7fbbf6fd-c37a-41e4-8439-4edb03a92a14\",\"CreatedBy\":{\"Id\":\"156a5105-de0e-4068-bf52-98674c20dad5\",\"Fullname\":\"Elena Malkinson\",\"Avatar\":\"https://robohash.org/rerumomnissed.png?size=50x50&set=set1\",\"Bio\":\"Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.\\n\\nMaecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.\",\"Job\":\"Senior Developer\",\"Address\":\"2 Hansons Pass\"},\"Title\":\"Passing Strange\",\"Images\":[\"http://dummyimage.com/187x119.png/cc0000/ffffff\",\"http://dummyimage.com/398x325.png/ff4444/ffffff\",\"http://dummyimage.com/514x823.png/cc0000/ffffff\",\"http://dummyimage.com/632x737.png/5fa2dd/ffffff\",\"http://dummyimage.com/715x299.png/5fa2dd/ffffff\"],\"Description\":\"Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"oqmbiqm\",\"gywxyge\",\"mvzscwq\",\"pyeregu\",\"jbutmyh\",\"vkswjcn\",\"wqpsrxy\"],\"Category\":\"Bìa sách\",\"LikeNum\":987,\"ViewNum\":734,\"Comments\":[{\"Id\":\"4bef3984-5665-48b8-a11b-06ded9e70e6c\",\"UserId\":\"7b9126f9-207f-458e-adba-96939c48d223\",\"Fullname\":\"Bret Hummerston\",\"Avatar\":\"https://robohash.org/liberovoluptasasperiores.png?size=50x50&set=set1\",\"Content\":\"Vision-oriented user-facing conglomeration\"},{\"Id\":\"67d2e506-4bf4-4112-9771-e983d2acd6e6\",\"UserId\":\"fc8e14c3-7135-4f8e-9d3f-fe97d899ff1b\",\"Fullname\":\"Charles McWhorter\",\"Avatar\":\"https://robohash.org/maioresplaceattenetur.png?size=50x50&set=set1\",\"Content\":\"Open-architected homogeneous intranet\"}],\"Assets\":[{\"Id\":\"5c28d9c0-3556-4ad1-acf6-36368d4ce756\",\"AssetName\":\"AnteVivamusTortor.avi\",\"AssetType\":\".dij\",\"Price\":\"$5.00\"},{\"Id\":\"a1f21a16-7c81-49c6-890b-41a342b863f5\",\"AssetName\":\"EgetElit.mp3\",\"AssetType\":\".oih\",\"Price\":\"$9.72\"},{\"Id\":\"40ee9acf-1c68-4425-a14a-538ebebe99cc\",\"AssetName\":\"AtLoremInteger.xls\",\"AssetType\":\".ipn\",\"Price\":\"$3.40\"}],\"isLiked\":true},\n{\"Id\":\"f2ebe30d-ed3d-4159-8286-0ecb31aa686c\",\"CreatedBy\":{\"Id\":\"3c555c79-e366-4e2c-b8ea-d81573273b21\",\"Fullname\":\"Lorne Cottem\",\"Avatar\":\"https://robohash.org/velitsitvelit.png?size=50x50&set=set1\",\"Bio\":\"Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.\\n\\nDuis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\\n\\nMauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\",\"Job\":\"Data Coordinator\",\"Address\":\"32215 Fallview Way\"},\"Title\":\"Aelita: The Queen of Mars (Aelita)\",\"Images\":[\"http://dummyimage.com/656x582.png/5fa2dd/ffffff\",\"http://dummyimage.com/252x628.png/ff4444/ffffff\",\"http://dummyimage.com/158x310.png/cc0000/ffffff\",\"http://dummyimage.com/305x444.png/ff4444/ffffff\",\"http://dummyimage.com/621x298.png/5fa2dd/ffffff\"],\"Description\":\"Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.\\n\\nNullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.\\n\\nMorbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"bxzzany\",\"yzpbqin\",\"tpcvons\",\"ogwjqos\",\"wsqfhxb\",\"ykcafyl\",\"rqgitzb\",\"rymtubj\"],\"Category\":\"Bìa sách\",\"LikeNum\":125,\"ViewNum\":1903,\"Comments\":[{\"Id\":\"26fa481a-a2e4-4b7f-89b7-0946e0292f3a\",\"UserId\":\"35dc8159-ab9a-42e1-8c7f-7bcd358b9ac7\",\"Fullname\":\"Eleni Easeman\",\"Avatar\":\"https://robohash.org/assumendanecessitatibusconsequatur.png?size=50x50&set=set1\",\"Content\":\"Extended stable implementation\"},{\"Id\":\"952a016b-cd92-4521-b2d2-48b3fb594d63\",\"UserId\":\"87ab636c-808c-434e-bcc5-33ca2614c2d1\",\"Fullname\":\"Genvieve Souza\",\"Avatar\":\"https://robohash.org/laudantiumveniammodi.png?size=50x50&set=set1\",\"Content\":\"Phased motivating application\"},{\"Id\":\"2c5fc1ea-3acc-4b39-930e-def9835416ce\",\"UserId\":\"79778a2e-9c58-420c-b10c-7a97be08deba\",\"Fullname\":\"Jake Kleynen\",\"Avatar\":\"https://robohash.org/impeditvoluptatemut.png?size=50x50&set=set1\",\"Content\":\"Public-key uniform workforce\"},{\"Id\":\"18a8de9f-fe7b-4431-becf-956cc539da59\",\"UserId\":\"84219910-9924-4dc2-892b-4f082995562a\",\"Fullname\":\"Silvano Van Schafflaer\",\"Avatar\":\"https://robohash.org/aperiamautomnis.png?size=50x50&set=set1\",\"Content\":\"User-friendly reciprocal archive\"},{\"Id\":\"9df9cd21-d61f-47de-a3e4-f8400f248449\",\"UserId\":\"4ec5b588-992a-4cc5-8baf-a2922e7fd6f6\",\"Fullname\":\"Katlin Dobbin\",\"Avatar\":\"https://robohash.org/illumcommodiadipisci.png?size=50x50&set=set1\",\"Content\":\"Streamlined full-range adapter\"},{\"Id\":\"efa690e5-31d4-46a4-908e-147f6da9930d\",\"UserId\":\"38187ca4-b534-4910-8ed6-13832f914268\",\"Fullname\":\"Lulita Gibling\",\"Avatar\":\"https://robohash.org/molestiaeerrorarchitecto.png?size=50x50&set=set1\",\"Content\":\"Face to face optimizing artificial intelligence\"},{\"Id\":\"f3068f79-3d33-4028-9d49-1c16711932b5\",\"UserId\":\"a36e2817-a7a9-4e05-9890-05904ad66cae\",\"Fullname\":\"Marys Hurford\",\"Avatar\":\"https://robohash.org/vitaequivoluptatum.png?size=50x50&set=set1\",\"Content\":\"Automated real-time parallelism\"},{\"Id\":\"fe1c3556-14a6-468e-aebb-fadc226808ed\",\"UserId\":\"93fa991f-a306-415e-a7cb-1798b62c73a1\",\"Fullname\":\"Greta Braime\",\"Avatar\":\"https://robohash.org/deseruntipsumenim.png?size=50x50&set=set1\",\"Content\":\"Cross-platform regional concept\"},{\"Id\":\"80ce9c9d-8bc4-4d2d-ba1b-dd802c9def32\",\"UserId\":\"559d5f83-6e78-4adb-b692-b7a6a06ff8a7\",\"Fullname\":\"Linea Jallin\",\"Avatar\":\"https://robohash.org/cupiditatehicexpedita.png?size=50x50&set=set1\",\"Content\":\"Decentralized asymmetric installation\"},{\"Id\":\"4bd3f447-2a7e-4ed0-8e32-18132c08477c\",\"UserId\":\"3dd24bf3-315e-410c-a48b-575e00d67609\",\"Fullname\":\"Mignon Wixey\",\"Avatar\":\"https://robohash.org/enimutneque.png?size=50x50&set=set1\",\"Content\":\"Realigned 24/7 capacity\"}],\"Assets\":[{\"Id\":\"dc1ba135-dc2f-47a8-8dd5-de6d21f4c421\",\"AssetName\":\"Pellentesque.ppt\",\"AssetType\":\".fuo\",\"Price\":\"$9.99\"},{\"Id\":\"ec216b54-aec8-4178-87c5-e7f32322aedd\",\"AssetName\":\"InFaucibusOrci.jpeg\",\"AssetType\":\".xzy\",\"Price\":\"$0.48\"},{\"Id\":\"ba23f533-8b70-42b2-9b2b-0d50d166537a\",\"AssetName\":\"SedTristiqueIn.xls\",\"AssetType\":\".zxj\",\"Price\":\"$3.83\"}],\"isLiked\":false},\n{\"Id\":\"c7b3ad15-4979-4e8a-ac26-b5fef0898e66\",\"CreatedBy\":{\"Id\":\"827d9b80-41eb-469b-84e5-310855c2ae15\",\"Fullname\":\"Isadora Overstreet\",\"Avatar\":\"https://robohash.org/minusconsecteturmaxime.png?size=50x50&set=set1\",\"Bio\":\"Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.\",\"Job\":\"VP Marketing\",\"Address\":\"76118 Cambridge Terrace\"},\"Title\":\"Company Man\",\"Images\":[\"http://dummyimage.com/454x1019.png/5fa2dd/ffffff\",\"http://dummyimage.com/476x285.png/ff4444/ffffff\",\"http://dummyimage.com/244x891.png/dddddd/000000\",\"http://dummyimage.com/244x1023.png/cc0000/ffffff\"],\"Description\":\"Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\\n\\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\\n\\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"bdxogeb\",\"lnxetbw\",\"ntztems\",\"wmrracc\",\"fyhvxpd\",\"ovutirq\",\"mghvwhw\"],\"Category\":\"Minh hoạ\",\"LikeNum\":468,\"ViewNum\":789,\"Assets\":[],\"isLiked\":false},\n{\"Id\":\"6320f4a5-7f41-4798-9506-9b91dca170e2\",\"CreatedBy\":{\"Id\":\"635fb9f6-8339-4d90-88e9-da66b303c402\",\"Fullname\":\"Sashenka Lonie\",\"Avatar\":\"https://robohash.org/autemipsamnon.png?size=50x50&set=set1\",\"Bio\":\"Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\\n\\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\\n\\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\",\"Job\":\"Computer Systems Analyst II\",\"Address\":\"164 Ridgeview Center\"},\"Title\":\"Mr. Morgan's Last Love\",\"Images\":[\"http://dummyimage.com/336x1003.png/cc0000/ffffff\",\"http://dummyimage.com/373x659.png/cc0000/ffffff\"],\"Description\":\"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.\\n\\nVestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"taipxly\",\"wjewqka\",\"mypeggg\",\"qegrvgr\",\"jtwrwra\",\"bbsdfjb\",\"dwqktyj\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":493,\"ViewNum\":504,\"Assets\":[{\"Id\":\"9c2bf325-151f-4b5f-9125-383da6cd1467\",\"AssetName\":\"EnimInTempor.jpeg\",\"AssetType\":\".obp\",\"Price\":\"$0.11\"},{\"Id\":\"9fca13d9-9921-4bea-8449-325015dc95f0\",\"AssetName\":\"ConsequatDui.avi\",\"AssetType\":\".bhx\",\"Price\":\"$7.48\"},{\"Id\":\"4f5cd3f2-370b-4142-be37-06c721ba4e06\",\"AssetName\":\"Ultrices.tiff\",\"AssetType\":\".owy\",\"Price\":\"$9.32\"}],\"isLiked\":true},\n{\"Id\":\"61391225-df38-4822-9e6e-84650028f96e\",\"CreatedBy\":{\"Id\":\"cb92a617-016d-4140-8099-39d086d75b48\",\"Fullname\":\"Brenda Garrity\",\"Avatar\":\"https://robohash.org/autteneturoccaecati.png?size=50x50&set=set1\",\"Bio\":\"In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\\n\\nAliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.\\n\\nSed ante. Vivamus tortor. Duis mattis egestas metus.\",\"Job\":\"Librarian\",\"Address\":\"931 Eggendart Trail\"},\"Title\":\"I Am David\",\"Images\":[\"http://dummyimage.com/591x160.png/5fa2dd/ffffff\"],\"Description\":\"Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"izrsskt\",\"qcwaxuy\",\"wpqtcrt\",\"bcpemwx\",\"zubfucg\",\"lmqkdyf\",\"fgyhmog\",\"ccdpqbn\",\"gcuoyuy\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":815,\"ViewNum\":1701,\"Assets\":[{\"Id\":\"b16f6701-57e8-43a8-8ea1-7fa3aac3389f\",\"AssetName\":\"QuisqueUt.avi\",\"AssetType\":\".pns\",\"Price\":\"$7.95\"},{\"Id\":\"501d3f38-a4fa-4707-9dab-e48bd4456887\",\"AssetName\":\"LuctusEtUltrices.ppt\",\"AssetType\":\".sat\",\"Price\":\"$5.86\"},{\"Id\":\"a40f9df5-aa57-4062-b855-d673f2bf725a\",\"AssetName\":\"SapienIn.mp3\",\"AssetType\":\".myx\",\"Price\":\"$5.89\"}],\"isLiked\":false},\n{\"Id\":\"117ac0bf-830c-497a-8116-52dce63dd143\",\"CreatedBy\":{\"Id\":\"5e986366-d4a4-474f-a920-271246dc3cce\",\"Fullname\":\"Kain Ashbee\",\"Avatar\":\"https://robohash.org/utarchitectoquas.png?size=50x50&set=set1\",\"Bio\":\"Sed ante. Vivamus tortor. Duis mattis egestas metus.\\n\\nAenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\",\"Job\":\"Administrative Officer\",\"Address\":\"57213 Fordem Circle\"},\"Title\":\"Dead Men Don't Wear Plaid\",\"Images\":[\"http://dummyimage.com/164x470.png/dddddd/000000\",\"http://dummyimage.com/127x535.png/dddddd/000000\"],\"Description\":\"Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"uoqepcc\",\"zeftprd\",\"ciwznqt\",\"yqnufxe\",\"bfrvwby\"],\"Category\":\"Minh hoạ\",\"LikeNum\":455,\"ViewNum\":426,\"Comments\":[{\"Id\":\"d490e33f-4075-4ec6-a83a-e7b44aab10bb\",\"UserId\":\"1921c2d5-be3f-44e8-9c25-8dab3e99dfbe\",\"Fullname\":\"Van Connah\",\"Avatar\":\"https://robohash.org/harumpraesentiumlaboriosam.png?size=50x50&set=set1\",\"Content\":\"Multi-tiered content-based strategy\"},{\"Id\":\"a8114f85-5035-47a7-956f-b0fe144d2c8a\",\"UserId\":\"beca6191-37f7-4c09-8582-dafed44e4941\",\"Fullname\":\"Hedy Parradice\",\"Avatar\":\"https://robohash.org/quamquaequia.png?size=50x50&set=set1\",\"Content\":\"Profit-focused tangible protocol\"},{\"Id\":\"ebc70e74-ca02-46e0-9ba0-7daa2d454a9f\",\"UserId\":\"3ceb53e0-dd30-42be-9512-3cf3bc55c0b4\",\"Fullname\":\"Barnard Trounce\",\"Avatar\":\"https://robohash.org/laborumreiciendisdignissimos.png?size=50x50&set=set1\",\"Content\":\"Managed optimal flexibility\"},{\"Id\":\"2a07e595-0532-4492-867d-7579edb5d36e\",\"UserId\":\"3ae59029-bb32-4700-9c52-f25aa53e20e7\",\"Fullname\":\"Trina Soeiro\",\"Avatar\":\"https://robohash.org/omnisautid.png?size=50x50&set=set1\",\"Content\":\"Horizontal static superstructure\"},{\"Id\":\"139ba264-0db7-44bf-8207-fa7c0b7abd29\",\"UserId\":\"45c21f43-ee82-4ec7-aa0e-fc7a47510214\",\"Fullname\":\"Elston Halgarth\",\"Avatar\":\"https://robohash.org/sitrationearchitecto.png?size=50x50&set=set1\",\"Content\":\"Multi-lateral holistic product\"},{\"Id\":\"d0c14060-6826-416b-aadf-ebc64317a37d\",\"UserId\":\"2bbd61ae-7d87-48c1-9e2d-d2ac705bf966\",\"Fullname\":\"Merilyn Tainton\",\"Avatar\":\"https://robohash.org/estnumquamvoluptas.png?size=50x50&set=set1\",\"Content\":\"Cross-group bi-directional contingency\"},{\"Id\":\"50fbbe6b-bc72-46b3-b721-54a6e13ac765\",\"UserId\":\"956ed8e8-b2a1-45ff-8732-a5e1c0ee3c88\",\"Fullname\":\"Kirsten Tourne\",\"Avatar\":\"https://robohash.org/liberosintid.png?size=50x50&set=set1\",\"Content\":\"Stand-alone homogeneous structure\"},{\"Id\":\"0f1ceea7-c3db-4f4a-b016-28bfb2a6536a\",\"UserId\":\"2b831aff-af2f-4f67-8ebb-d069efa6de87\",\"Fullname\":\"Nicolais Belshaw\",\"Avatar\":\"https://robohash.org/ipsumaliassoluta.png?size=50x50&set=set1\",\"Content\":\"Inverse asymmetric approach\"}],\"Assets\":[],\"isLiked\":false},\n{\"Id\":\"ea3b1808-eb5a-4291-b1ec-2ac149dbcd0d\",\"CreatedBy\":{\"Id\":\"ff096ba8-d177-40d2-98c1-ca81464c4eae\",\"Fullname\":\"Barb Rawes\",\"Avatar\":\"https://robohash.org/suscipitexpeditaet.png?size=50x50&set=set1\",\"Bio\":\"In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.\",\"Job\":\"Web Designer II\",\"Address\":\"1756 Continental Street\"},\"Title\":\"Jönssonligan & den svarta diamanten\",\"Images\":[\"http://dummyimage.com/194x1064.png/5fa2dd/ffffff\"],\"Description\":\"Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"xwhgnpl\",\"wntuhwj\",\"phuedxm\",\"zfyfryb\",\"kqnwmyh\",\"ogddqke\",\"gcoaiaz\",\"bpqbrsz\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":214,\"ViewNum\":386,\"Comments\":[{\"Id\":\"65ebd93e-b7ea-450a-a08d-93a9836003c4\",\"UserId\":\"7ad08e9b-d235-4397-81d4-bdf78c2c8466\",\"Fullname\":\"Enrika Speirs\",\"Avatar\":\"https://robohash.org/omnisautemcumque.png?size=50x50&set=set1\",\"Content\":\"Mandatory secondary protocol\"}],\"Assets\":[{\"Id\":\"655418cb-6296-4549-83f7-78eefb967da2\",\"AssetName\":\"Feugiat.ppt\",\"AssetType\":\".hbj\",\"Price\":\"$1.78\"},{\"Id\":\"4022e5be-80e5-4bb3-8cfe-4cdcdf335fd8\",\"AssetName\":\"ViverraEget.txt\",\"AssetType\":\".krx\",\"Price\":\"$2.99\"},{\"Id\":\"9dbed706-519b-4cbf-945e-1a5fdcd19655\",\"AssetName\":\"SitAmetJusto.avi\",\"AssetType\":\".uvb\",\"Price\":\"$2.02\"},{\"Id\":\"07d90da4-1cec-4b94-a9c2-9679e313a7e2\",\"AssetName\":\"AmetEleifendPede.avi\",\"AssetType\":\".iyr\",\"Price\":\"$3.77\"}],\"isLiked\":false},\n{\"Id\":\"0ad8f37e-2ca0-465b-b637-369cb787bc16\",\"CreatedBy\":{\"Id\":\"d69792a4-8a28-479d-b87c-f51429e7fd6e\",\"Fullname\":\"Lazaro Kerwin\",\"Avatar\":\"https://robohash.org/quisabsit.png?size=50x50&set=set1\",\"Bio\":\"Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\\n\\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.\\n\\nQuisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.\",\"Job\":\"Operator\",\"Address\":\"8073 Rowland Trail\"},\"Title\":\"Highlander II: The Quickening\",\"Images\":[\"http://dummyimage.com/463x1051.png/dddddd/000000\",\"http://dummyimage.com/613x621.png/cc0000/ffffff\",\"http://dummyimage.com/336x895.png/dddddd/000000\"],\"Description\":\"Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\\n\\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"ntzmhuy\",\"fikuhht\",\"dgwcnar\",\"pcjowip\",\"zmxqqeo\",\"ivvnbke\",\"kyhmdgn\",\"peozocv\",\"krnwcol\",\"ukcocvk\"],\"Category\":\"Minh hoạ\",\"LikeNum\":974,\"ViewNum\":344,\"Assets\":[{\"Id\":\"e4abcfff-8e08-475d-84df-954e04396d62\",\"AssetName\":\"In.avi\",\"AssetType\":\".pdm\",\"Price\":\"$8.03\"}],\"isLiked\":false},\n{\"Id\":\"996ef5f7-e6ed-4ecf-84ae-8f0072870076\",\"CreatedBy\":{\"Id\":\"0867b784-15d0-4bce-95ca-515b1939e494\",\"Fullname\":\"Terri-jo Sandle\",\"Avatar\":\"https://robohash.org/repudiandaefacerenatus.png?size=50x50&set=set1\",\"Bio\":\"Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\",\"Job\":\"Senior Developer\",\"Address\":\"4297 Lotheville Center\"},\"Title\":\"Flowers of Shanghai (Hai shang hua)\",\"Images\":[\"http://dummyimage.com/430x109.png/dddddd/000000\",\"http://dummyimage.com/560x762.png/5fa2dd/ffffff\"],\"Description\":\"Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"ehqbfix\",\"pahqfcy\",\"rpljdvo\",\"tpsarqe\",\"tuhxvwv\",\"qkaylfd\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":524,\"ViewNum\":274,\"Comments\":[{\"Id\":\"7b94894f-f6aa-4535-89ff-0fcbc63075db\",\"UserId\":\"0272bf49-f236-47dd-a90d-7e3042c6d68f\",\"Fullname\":\"Mirabella Osbourne\",\"Avatar\":\"https://robohash.org/autoccaecatiquo.png?size=50x50&set=set1\",\"Content\":\"Up-sized system-worthy firmware\"},{\"Id\":\"9e0555e7-b805-40dc-9f26-274052fc2ab6\",\"UserId\":\"5c408280-749e-4b00-8566-5023e7968fcd\",\"Fullname\":\"Oneida Bottoner\",\"Avatar\":\"https://robohash.org/utreprehenderittemporibus.png?size=50x50&set=set1\",\"Content\":\"Proactive contextually-based utilisation\"},{\"Id\":\"6e1137ad-e5f8-4327-99a3-b49baf0c32eb\",\"UserId\":\"8e3a2ac9-af36-4e82-a2ee-2966530c3c38\",\"Fullname\":\"Flori Westhead\",\"Avatar\":\"https://robohash.org/nobisvelporro.png?size=50x50&set=set1\",\"Content\":\"Seamless executive conglomeration\"},{\"Id\":\"2ff524a7-88ab-4b0b-ace0-58c982c69a7c\",\"UserId\":\"225c0c62-fef5-4d3a-9fb7-dc29557e7e2d\",\"Fullname\":\"Betsey Rappoport\",\"Avatar\":\"https://robohash.org/aliberoodio.png?size=50x50&set=set1\",\"Content\":\"Mandatory explicit product\"},{\"Id\":\"8fb79f31-3363-48d3-890f-df1b277bccaf\",\"UserId\":\"8dfe2120-c7c0-4dba-a93b-dca9f1474504\",\"Fullname\":\"Thea Kohrs\",\"Avatar\":\"https://robohash.org/temporibusipsumsuscipit.png?size=50x50&set=set1\",\"Content\":\"Quality-focused non-volatile frame\"},{\"Id\":\"7243c598-9476-4f3e-bcfb-8b0af7433452\",\"UserId\":\"cddfd8a3-664e-4031-a14c-01dc204cec2b\",\"Fullname\":\"Damita Liccardi\",\"Avatar\":\"https://robohash.org/evenietetnon.png?size=50x50&set=set1\",\"Content\":\"Secured 5th generation system engine\"},{\"Id\":\"4bd2e731-d891-456a-9df8-619a066a415a\",\"UserId\":\"322b5045-053f-42bb-9e1a-1ca8b135d8f6\",\"Fullname\":\"Zahara Wynch\",\"Avatar\":\"https://robohash.org/autemliberovitae.png?size=50x50&set=set1\",\"Content\":\"Pre-emptive multi-tasking matrices\"},{\"Id\":\"40392f81-fb8a-4098-b9da-6e190c232433\",\"UserId\":\"10b2bfde-fe58-44e6-94cd-a031a9f8f1c8\",\"Fullname\":\"Carson Dacks\",\"Avatar\":\"https://robohash.org/voluptateseablanditiis.png?size=50x50&set=set1\",\"Content\":\"Front-line encompassing hardware\"},{\"Id\":\"b3820680-d1fe-4dbd-a7e5-ee2baa53cc73\",\"UserId\":\"dd8129ec-1c9a-45a5-bd8a-ed7af860275d\",\"Fullname\":\"Odessa Buck\",\"Avatar\":\"https://robohash.org/occaecatiinciduntdelectus.png?size=50x50&set=set1\",\"Content\":\"Fully-configurable transitional database\"}],\"Assets\":[{\"Id\":\"deb660e0-06cb-43d5-a808-8aaaae765422\",\"AssetName\":\"Elit.tiff\",\"AssetType\":\".dfi\",\"Price\":\"$3.45\"},{\"Id\":\"b0c501c2-312f-4726-8424-d12f71469099\",\"AssetName\":\"SedTristique.mpeg\",\"AssetType\":\".ktp\",\"Price\":\"$5.25\"},{\"Id\":\"e38fb173-8688-4c98-8eb5-5f28df5cfa7f\",\"AssetName\":\"UtUltricesVel.xls\",\"AssetType\":\".den\",\"Price\":\"$2.80\"},{\"Id\":\"124b9570-8c6e-4dff-8c25-86e6c300746f\",\"AssetName\":\"AmetDiam.doc\",\"AssetType\":\".uom\",\"Price\":\"$6.65\"}],\"isLiked\":false},\n{\"Id\":\"dc80a5cc-5964-498b-bf4a-81c837a1041c\",\"CreatedBy\":{\"Id\":\"79131be6-a302-40de-8375-9be9e1f91b42\",\"Fullname\":\"Bondie Curds\",\"Avatar\":\"https://robohash.org/cumestsuscipit.png?size=50x50&set=set1\",\"Bio\":\"Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\",\"Job\":\"Software Consultant\",\"Address\":\"86326 Lerdahl Terrace\"},\"Title\":\"Speechless\",\"Images\":[\"http://dummyimage.com/598x161.png/cc0000/ffffff\",\"http://dummyimage.com/406x224.png/cc0000/ffffff\",\"http://dummyimage.com/650x1014.png/5fa2dd/ffffff\",\"http://dummyimage.com/603x977.png/dddddd/000000\"],\"Description\":\"Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\\n\\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\",\"Privacy\":\"Private\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"adhguxh\",\"ttlrxtf\",\"bnjcctn\",\"dgjgxkn\",\"qgcovxc\",\"jqlksus\",\"hkevaxe\"],\"Category\":\"Bìa sách\",\"LikeNum\":607,\"ViewNum\":1650,\"Comments\":[{\"Id\":\"0e71d041-d4de-4396-bf01-293cee60b11e\",\"UserId\":\"47e64761-5eef-43cf-84ef-6fde3ac77c00\",\"Fullname\":\"Jamie Wallworth\",\"Avatar\":\"https://robohash.org/auterrorharum.png?size=50x50&set=set1\",\"Content\":\"Virtual multimedia core\"},{\"Id\":\"026b97da-f1bb-4194-b903-72ecd84a4673\",\"UserId\":\"429e5e2b-55ac-42d6-bf40-21c830353acd\",\"Fullname\":\"Teirtza Durrand\",\"Avatar\":\"https://robohash.org/maioresvelrerum.png?size=50x50&set=set1\",\"Content\":\"Open-source logistical website\"},{\"Id\":\"59f64b9a-7814-45f8-8ce8-cc91762b400b\",\"UserId\":\"a4194126-3eb0-4170-958e-8906c5e53b2b\",\"Fullname\":\"Dulce Harkus\",\"Avatar\":\"https://robohash.org/natusomnisprovident.png?size=50x50&set=set1\",\"Content\":\"Self-enabling content-based productivity\"},{\"Id\":\"5bb6a6ce-2b02-45a1-9a62-9babdf099e95\",\"UserId\":\"b49e1c2e-63af-4e3c-949f-b4190b637f50\",\"Fullname\":\"Angelo Flanders\",\"Avatar\":\"https://robohash.org/aundequisquam.png?size=50x50&set=set1\",\"Content\":\"Profit-focused foreground service-desk\"},{\"Id\":\"396e06c8-eed3-463e-9008-a8f0d7593c80\",\"UserId\":\"937f47ad-d6d2-4b30-b56a-74ce36fa7e41\",\"Fullname\":\"Melba Shoreman\",\"Avatar\":\"https://robohash.org/doloraliquidvitae.png?size=50x50&set=set1\",\"Content\":\"Progressive maximized policy\"}],\"Assets\":[{\"Id\":\"34de6743-afb5-45e8-8044-fff1384a2eba\",\"AssetName\":\"Commodo.gif\",\"AssetType\":\".viy\",\"Price\":\"$4.19\"}],\"isLiked\":false},\n{\"Id\":\"4ab90dc2-5606-4eb7-9177-823c480ddb6f\",\"CreatedBy\":{\"Id\":\"0dd0c811-d07d-402c-896c-e5a70160b81d\",\"Fullname\":\"Jareb Harses\",\"Avatar\":\"https://robohash.org/etquivoluptatem.png?size=50x50&set=set1\",\"Bio\":\"In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\",\"Job\":\"Database Administrator IV\",\"Address\":\"5129 Morrow Plaza\"},\"Title\":\"Lawless Heart, The\",\"Images\":[\"http://dummyimage.com/442x264.png/ff4444/ffffff\"],\"Description\":\"Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\\n\\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\\n\\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"tkrldlc\",\"nkykxps\",\"dpbkldk\",\"mvkldpp\",\"zmpjooe\",\"prqeokd\",\"nttpwdm\"],\"Category\":\"Minh hoạ\",\"LikeNum\":277,\"ViewNum\":1682,\"Comments\":[{\"Id\":\"2c66df00-2f95-4fed-9a3e-3bbc0bd455a4\",\"UserId\":\"489d596f-1c5f-4bc4-8306-81bd7fca32f6\",\"Fullname\":\"Dickie Marrow\",\"Avatar\":\"https://robohash.org/aperiameosodit.png?size=50x50&set=set1\",\"Content\":\"Function-based intermediate toolset\"},{\"Id\":\"117c9f43-81c4-4da3-a8dc-4821852e2b88\",\"UserId\":\"ff52332f-59e5-44b7-bb14-a46629011f44\",\"Fullname\":\"Harlin Rhyme\",\"Avatar\":\"https://robohash.org/quiapariaturreiciendis.png?size=50x50&set=set1\",\"Content\":\"Balanced eco-centric synergy\"},{\"Id\":\"c3ce98b2-a06e-4958-80a2-cee41bc30b17\",\"UserId\":\"ebc53d48-063e-4366-9e4d-20298dff3fb1\",\"Fullname\":\"Domenic Finlow\",\"Avatar\":\"https://robohash.org/minusvoluptatibusnihil.png?size=50x50&set=set1\",\"Content\":\"Cross-platform modular portal\"},{\"Id\":\"e7341d71-1d93-4a6c-bf25-22b27be45dee\",\"UserId\":\"a8d8c857-002e-42e3-9a7a-9094298fde9e\",\"Fullname\":\"Danila Kapelhof\",\"Avatar\":\"https://robohash.org/architectositiste.png?size=50x50&set=set1\",\"Content\":\"Profound fault-tolerant Graphical User Interface\"},{\"Id\":\"23847d49-5996-4b71-81ff-95c06c71496b\",\"UserId\":\"d0c1030a-901a-43b3-88b5-865dabcf379e\",\"Fullname\":\"Cherilynn Landsbury\",\"Avatar\":\"https://robohash.org/evenietvoluptatibuspossimus.png?size=50x50&set=set1\",\"Content\":\"Switchable national productivity\"}],\"Assets\":[{\"Id\":\"ab69a31b-95f1-4e7b-b0bf-50c4ae08880a\",\"AssetName\":\"SedTristique.mp3\",\"AssetType\":\".cww\",\"Price\":\"$7.62\"},{\"Id\":\"2723f61e-d175-4157-a842-9518f6c36d35\",\"AssetName\":\"EuMi.mpeg\",\"AssetType\":\".tbz\",\"Price\":\"$9.47\"},{\"Id\":\"415fc20e-4999-4542-9fa3-a874a6c2253f\",\"AssetName\":\"Nulla.ppt\",\"AssetType\":\".get\",\"Price\":\"$7.19\"},{\"Id\":\"1d5b06eb-bac7-4da6-8433-2446ab172a27\",\"AssetName\":\"ElementumLigula.ppt\",\"AssetType\":\".pfi\",\"Price\":\"$7.39\"},{\"Id\":\"67fb8e0b-d19a-4184-a865-f53923ae98ef\",\"AssetName\":\"InTempusSit.xls\",\"AssetType\":\".evd\",\"Price\":\"$9.71\"}],\"isLiked\":true},\n{\"Id\":\"5803396d-78f8-41a5-9ce7-40f1a7a4cc9d\",\"CreatedBy\":{\"Id\":\"12c77148-014f-418d-82ff-9cf28341fb45\",\"Fullname\":\"My Deme\",\"Avatar\":\"https://robohash.org/autmodiquisquam.png?size=50x50&set=set1\",\"Bio\":\"Phasellus in felis. Donec semper sapien a libero. Nam dui.\",\"Job\":\"Software Test Engineer III\",\"Address\":\"327 Thompson Pass\"},\"Title\":\"Isabelle au bois dormant\",\"Images\":[\"http://dummyimage.com/441x586.png/5fa2dd/ffffff\",\"http://dummyimage.com/504x953.png/dddddd/000000\",\"http://dummyimage.com/531x182.png/cc0000/ffffff\",\"http://dummyimage.com/272x679.png/cc0000/ffffff\"],\"Description\":\"In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"zdbkwqn\",\"ldcnotl\",\"chqlley\",\"logeqba\",\"wfqmasa\",\"ibdnqiv\",\"miqtmob\",\"rapkkuv\"],\"Category\":\"Tranh vẽ\",\"LikeNum\":926,\"ViewNum\":447,\"Comments\":[{\"Id\":\"ad645fe4-35b4-4317-a622-7b33e3a27140\",\"UserId\":\"dea4eff8-164c-4fb8-84b3-6426bf20783b\",\"Fullname\":\"Glenda Karleman\",\"Avatar\":\"https://robohash.org/advelest.png?size=50x50&set=set1\",\"Content\":\"Profound zero tolerance orchestration\"},{\"Id\":\"f6d7c1a5-9b30-45d4-b53b-b314b8606409\",\"UserId\":\"437da6c4-7de1-4d98-b3eb-eb803b41b374\",\"Fullname\":\"Benton Howie\",\"Avatar\":\"https://robohash.org/voluptasrerumodit.png?size=50x50&set=set1\",\"Content\":\"Persevering neutral infrastructure\"},{\"Id\":\"3988d311-8705-4236-962d-677da0781510\",\"UserId\":\"cb2733c7-e0fd-40af-9a9e-4080bf3e3852\",\"Fullname\":\"Worthington Udall\",\"Avatar\":\"https://robohash.org/etfacilisaliquid.png?size=50x50&set=set1\",\"Content\":\"Function-based logistical orchestration\"},{\"Id\":\"9167c0d6-277f-4df3-be94-24fdc16595b9\",\"UserId\":\"a2296952-e083-42d3-8e22-7d4d505637e9\",\"Fullname\":\"Neely Callaway\",\"Avatar\":\"https://robohash.org/voluptatemdoloribussit.png?size=50x50&set=set1\",\"Content\":\"Fundamental zero defect adapter\"},{\"Id\":\"1404c0e9-4fa2-4f5e-931d-1684024b15b7\",\"UserId\":\"eea353bd-ae03-4a86-86f0-c93492158e82\",\"Fullname\":\"Freddy Tarney\",\"Avatar\":\"https://robohash.org/consequaturrecusandaeipsam.png?size=50x50&set=set1\",\"Content\":\"Sharable clear-thinking task-force\"}],\"Assets\":[{\"Id\":\"c7b1eae2-0573-4185-83fc-52a9dbe392e8\",\"AssetName\":\"IntegerAcLeo.doc\",\"AssetType\":\".ejk\",\"Price\":\"$0.44\"},{\"Id\":\"85835d3b-e463-4b58-8394-2051efd68653\",\"AssetName\":\"NullaUltrices.mp3\",\"AssetType\":\".jmu\",\"Price\":\"$2.33\"}],\"isLiked\":true},\n{\"Id\":\"b21100dc-af03-492b-83fe-2f570079ea03\",\"CreatedBy\":{\"Id\":\"26551b49-e94f-419a-89b7-a868275e8028\",\"Fullname\":\"Blaine Semour\",\"Avatar\":\"https://robohash.org/utestet.png?size=50x50&set=set1\",\"Bio\":\"Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\",\"Job\":\"Chief Design Engineer\",\"Address\":\"80 Harbort Alley\"},\"Title\":\"Scanner Darkly, A\",\"Images\":[\"http://dummyimage.com/582x961.png/ff4444/ffffff\"],\"Description\":\"Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\\n\\nAenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\",\"Privacy\":\"Public\",\"CreatedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"LastModifiedOn\":\"error: invalid date \\\"2023-10-31\\\"\",\"Tags\":[\"txbdmnd\",\"pjlewgc\",\"dvanrpr\",\"khikbwv\"],\"Category\":\"Bìa sách\",\"LikeNum\":216,\"ViewNum\":1877,\"Comments\":[{\"Id\":\"94a8cab9-f5e8-4b09-b5be-2b643a70015d\",\"UserId\":\"856f8fa8-f3d5-4b9d-a284-e5244b0bf1b2\",\"Fullname\":\"Devinne Foystone\",\"Avatar\":\"https://robohash.org/providentveritatisillo.png?size=50x50&set=set1\",\"Content\":\"Monitored clear-thinking methodology\"},{\"Id\":\"2d11ed4e-d1a9-4c9c-a904-40a62697f806\",\"UserId\":\"1d04a964-b27f-43bd-b4ab-3cb0e4e634c3\",\"Fullname\":\"Carrol Scorer\",\"Avatar\":\"https://robohash.org/velcommodiest.png?size=50x50&set=set1\",\"Content\":\"Enhanced demand-driven instruction set\"},{\"Id\":\"e94da77f-3182-46a9-b8a8-127ae7029e64\",\"UserId\":\"35b65468-8591-4b01-b944-45e66cf8575e\",\"Fullname\":\"Ryley Robertson\",\"Avatar\":\"https://robohash.org/quinemorepudiandae.png?size=50x50&set=set1\",\"Content\":\"Secured disintermediate synergy\"},{\"Id\":\"d8728e9e-8c49-4a8b-b974-5539df7da76d\",\"UserId\":\"d65b07db-e03c-477b-8643-ab9effa3bdc6\",\"Fullname\":\"Angeli Grzeszczak\",\"Avatar\":\"https://robohash.org/uthicquae.png?size=50x50&set=set1\",\"Content\":\"Implemented secondary time-frame\"},{\"Id\":\"500636be-24b3-434c-80f9-69bdf1570458\",\"UserId\":\"58e50ac0-7ce7-4de4-9030-6b0bfddec9c1\",\"Fullname\":\"Con Becks\",\"Avatar\":\"https://robohash.org/aliasrepellendusquam.png?size=50x50&set=set1\",\"Content\":\"Sharable transitional service-desk\"},{\"Id\":\"42043034-d8b1-47d1-814b-e9a366cba9c6\",\"UserId\":\"c6089214-5c04-440f-b897-6e04e7f06e24\",\"Fullname\":\"Lorena Tompkiss\",\"Avatar\":\"https://robohash.org/omnisoditad.png?size=50x50&set=set1\",\"Content\":\"Balanced dedicated neural-net\"},{\"Id\":\"9487f518-4af0-4b12-9924-02b9972779b8\",\"UserId\":\"5fed63ff-c924-44a3-8e1e-949f7046650f\",\"Fullname\":\"Bearnard Le Grand\",\"Avatar\":\"https://robohash.org/veniamfacerecorrupti.png?size=50x50&set=set1\",\"Content\":\"Adaptive reciprocal firmware\"},{\"Id\":\"f1d1c3cc-752b-4d98-8439-ffa3e4db5337\",\"UserId\":\"43d1b398-ed44-441d-af03-257c4a205836\",\"Fullname\":\"Alonso Tatford\",\"Avatar\":\"https://robohash.org/fugaexplicabosapiente.png?size=50x50&set=set1\",\"Content\":\"Business-focused global definition\"}],\"Assets\":[{\"Id\":\"f4b2d4fd-450f-41ba-81f4-08cfd30f2894\",\"AssetName\":\"DiamIn.avi\",\"AssetType\":\".ilj\",\"Price\":\"$2.54\"},{\"Id\":\"fe54b0aa-3006-41a6-914a-4a6a7f389d7a\",\"AssetName\":\"CongueRisus.mp3\",\"AssetType\":\".smr\",\"Price\":\"$5.20\"},{\"Id\":\"e0f80450-49a4-4172-96dc-bf7e731268af\",\"AssetName\":\"Id.jpeg\",\"AssetType\":\".pdl\",\"Price\":\"$8.89\"},{\"Id\":\"3887d646-9fda-4e01-844b-96c1ca069cf4\",\"AssetName\":\"NullaTellusIn.xls\",\"AssetType\":\".cvi\",\"Price\":\"$6.18\"}],\"isLiked\":true}];\n\nmsg.payload = mockData.find(artwork => artwork.Id === idRequest)\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 1000,
+        "x": 600,
+        "y": 320,
         "wires": [
             [
-                "7a08b0d3b2d6b868"
+                "75042ff9c7951feb"
             ]
         ]
     },
     {
-        "id": "477688dded9c7fca",
+        "id": "57fcc6cf788495ac",
         "type": "http in",
-        "z": "5155e781eb87f99d",
-        "name": "Get categories data",
-        "url": "/categories",
-        "method": "get",
+        "z": "6904f6372307aab3",
+        "name": "[PUT] Like artwork",
+        "url": "/artwork/like/:awId/:userId",
+        "method": "put",
         "upload": false,
         "swaggerDoc": "",
-        "x": 390,
-        "y": 1060,
+        "x": 330,
+        "y": 440,
         "wires": [
             [
-                "5c0ccd942f6cef8f"
+                "c2428df0456287ce"
             ]
         ]
     },
     {
-        "id": "41f0ea440ab6441e",
+        "id": "d940a17d9bd32953",
         "type": "http response",
-        "z": "5155e781eb87f99d",
+        "z": "6904f6372307aab3",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 730,
-        "y": 1060,
+        "x": 770,
+        "y": 440,
         "wires": []
     },
     {
-        "id": "5c0ccd942f6cef8f",
+        "id": "c2428df0456287ce",
         "type": "function",
-        "z": "5155e781eb87f99d",
-        "name": "function 2",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n  {\n    \"categoryName\": \"Truyện tranh\",\n    \"id\": \"1\"\n  },\n  {\n    \"categoryName\": \"Hình minh họa\",\n    \"id\": \"2\"\n  },\n  {\n    \"categoryName\": \"Tiểu thuyết\",\n    \"id\": \"3\"\n  }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "z": "6904f6372307aab3",
+        "name": "function 7",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 1060,
+        "x": 600,
+        "y": 440,
         "wires": [
             [
-                "41f0ea440ab6441e"
+                "d940a17d9bd32953"
             ]
         ]
     },
     {
-        "id": "bbfe16adfd391468",
-        "type": "http response",
-        "z": "5155e781eb87f99d",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 730,
-        "y": 1160,
+        "id": "e5aff67dd176093d",
+        "type": "debug",
+        "z": "6904f6372307aab3",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 960,
         "wires": []
     },
     {
-        "id": "a9561318826e349d",
+        "id": "df401949bab4a27b",
         "type": "http in",
-        "z": "5155e781eb87f99d",
-        "name": "Get artworks data",
-        "url": "/artworks",
-        "method": "get",
+        "z": "6904f6372307aab3",
+        "name": "[DEL] Unlike artwork",
+        "url": "/artwork/unlike/:awId/:userId",
+        "method": "delete",
         "upload": false,
         "swaggerDoc": "",
-        "x": 390,
-        "y": 1160,
+        "x": 330,
+        "y": 540,
         "wires": [
             [
-                "654e587096416023"
+                "250f2ab104ec805d"
             ]
         ]
     },
     {
-        "id": "654e587096416023",
+        "id": "bededfbd7f78a3d3",
+        "type": "http response",
+        "z": "6904f6372307aab3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "250f2ab104ec805d",
         "type": "function",
-        "z": "5155e781eb87f99d",
-        "name": "function 3",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": 1,\n  \"title\": \"Vengeance is Mine (Fukushu suruwa wareniari)\",\n  \"subTitle\": \"Pahat pojat\",\n  \"image\": \"http://dummyimage.com/184x100.png/dddddd/000000\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": 2,\n  \"title\": \"Bank, The\",\n  \"subTitle\": \"Patience Stone, The\",\n  \"image\": \"http://dummyimage.com/132x100.png/cc0000/ffffff\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": 3,\n  \"title\": \"Happiness (Schastye)\",\n  \"subTitle\": \"Pornography (Pornografia)\",\n  \"image\": \"http://dummyimage.com/232x100.png/cc0000/ffffff\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": 4,\n  \"title\": \"Gorillas in the Mist\",\n  \"subTitle\": \"2013 Rock and Roll Hall of Fame Induction Ceremony, The\",\n  \"image\": \"http://dummyimage.com/115x100.png/cc0000/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}, {\n  \"id\": 5,\n  \"title\": \"Parallel Sons\",\n  \"subTitle\": \"Tyler Perry's A Madea Christmas\",\n  \"image\": \"http://dummyimage.com/134x100.png/ff4444/ffffff\",\n  \"likeNum\": 5,\n  \"viewNum\": 5\n}, {\n  \"id\": 6,\n  \"title\": \"Messengers, The\",\n  \"subTitle\": \"Legend of the 7 Golden Vampires, The\",\n  \"image\": \"http://dummyimage.com/175x100.png/dddddd/000000\",\n  \"likeNum\": 6,\n  \"viewNum\": 6\n}, {\n  \"id\": 7,\n  \"title\": \"Three and Out (Deal Is a Deal, A)\",\n  \"subTitle\": \"Couples Retreat\",\n  \"image\": \"http://dummyimage.com/217x100.png/dddddd/000000\",\n  \"likeNum\": 7,\n  \"viewNum\": 7\n}, {\n  \"id\": 8,\n  \"title\": \"Aileen: Life and Death of a Serial Killer\",\n  \"subTitle\": \"Bestseller (Be-seu-teu-sel-leo)\",\n  \"image\": \"http://dummyimage.com/250x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 8,\n  \"viewNum\": 8\n}, {\n  \"id\": 9,\n  \"title\": \"Maybe Baby\",\n  \"subTitle\": \"Such a Long Journey\",\n  \"image\": \"http://dummyimage.com/220x100.png/ff4444/ffffff\",\n  \"likeNum\": 9,\n  \"viewNum\": 9\n}, {\n  \"id\": 10,\n  \"title\": \"Twilight\",\n  \"subTitle\": \"Kummeli Stories\",\n  \"image\": \"http://dummyimage.com/221x100.png/ff4444/ffffff\",\n  \"likeNum\": 10,\n  \"viewNum\": 10\n}]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "z": "6904f6372307aab3",
+        "name": "function 8",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 1160,
+        "x": 600,
+        "y": 540,
         "wires": [
             [
-                "bbfe16adfd391468"
+                "bededfbd7f78a3d3"
+            ]
+        ]
+    },
+    {
+        "id": "cb0ab09bbf1a51b4",
+        "type": "http in",
+        "z": "6904f6372307aab3",
+        "name": "[POST] Comment to Artwork",
+        "url": "/artwork/comment/:awId/:userId",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 360,
+        "y": 640,
+        "wires": [
+            [
+                "f2840fd7274f011b"
+            ]
+        ]
+    },
+    {
+        "id": "b23aca86de5bbd7c",
+        "type": "http response",
+        "z": "6904f6372307aab3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "f2840fd7274f011b",
+        "type": "function",
+        "z": "6904f6372307aab3",
+        "name": "function 9",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Get content from request body\nlet { content } = msg.req.body;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200; return new Comments list\n// ---> FAIL: return status code != 200; attach the error message\n\nmsg.payload = [\n    {\n        \"Id\": \"26fa481a-a2e4-4b7f-89b7-0946e0292f3a\",\n        \"UserId\": \"35dc8159-ab9a-42e1-8c7f-7bcd358b9ac7\",\n        \"Fullname\": \"Eleni Easeman\",\n        \"Avatar\": \"https://robohash.org/assumendanecessitatibusconsequatur.png?size=50x50&set=set1\",\n        \"Content\": \"Extended stable implementation\"\n    },\n    {\n        \"Id\": \"952a016b-cd92-4521-b2d2-48b3fb594d63\",\n        \"UserId\": \"87ab636c-808c-434e-bcc5-33ca2614c2d1\",\n        \"Fullname\": \"Genvieve Souza\",\n        \"Avatar\": \"https://robohash.org/laudantiumveniammodi.png?size=50x50&set=set1\",\n        \"Content\": \"Phased motivating application\"\n    },\n    {\n        \"Id\": \"2c5fc1ea-3acc-4b39-930e-def9835416ce\",\n        \"UserId\": \"79778a2e-9c58-420c-b10c-7a97be08deba\",\n        \"Fullname\": \"Jake Kleynen\",\n        \"Avatar\": \"https://robohash.org/impeditvoluptatemut.png?size=50x50&set=set1\",\n        \"Content\": \"Public-key uniform workforce\"\n    },\n    {\n        \"Id\": \"18a8de9f-fe7b-4431-becf-956cc539da59\",\n        \"UserId\": \"84219910-9924-4dc2-892b-4f082995562a\",\n        \"Fullname\": \"Silvano Van Schafflaer\",\n        \"Avatar\": \"https://robohash.org/aperiamautomnis.png?size=50x50&set=set1\",\n        \"Content\": \"User-friendly reciprocal archive\"\n    },\n    {\n        \"Id\": \"9df9cd21-d61f-47de-a3e4-f8400f248449\",\n        \"UserId\": \"4ec5b588-992a-4cc5-8baf-a2922e7fd6f6\",\n        \"Fullname\": \"Katlin Dobbin\",\n        \"Avatar\": \"https://robohash.org/illumcommodiadipisci.png?size=50x50&set=set1\",\n        \"Content\": \"Streamlined full-range adapter\"\n    },\n    {\n        \"Id\": \"efa690e5-31d4-46a4-908e-147f6da9930d\",\n        \"UserId\": \"38187ca4-b534-4910-8ed6-13832f914268\",\n        \"Fullname\": \"Lulita Gibling\",\n        \"Avatar\": \"https://robohash.org/molestiaeerrorarchitecto.png?size=50x50&set=set1\",\n        \"Content\": \"Face to face optimizing artificial intelligence\"\n    },\n    {\n        \"Id\": \"f3068f79-3d33-4028-9d49-1c16711932b5\",\n        \"UserId\": \"a36e2817-a7a9-4e05-9890-05904ad66cae\",\n        \"Fullname\": \"Marys Hurford\",\n        \"Avatar\": \"https://robohash.org/vitaequivoluptatum.png?size=50x50&set=set1\",\n        \"Content\": \"Automated real-time parallelism\"\n    },\n    {\n        \"Id\": \"fe1c3556-14a6-468e-aebb-fadc226808ed\",\n        \"UserId\": \"93fa991f-a306-415e-a7cb-1798b62c73a1\",\n        \"Fullname\": \"Greta Braime\",\n        \"Avatar\": \"https://robohash.org/deseruntipsumenim.png?size=50x50&set=set1\",\n        \"Content\": \"Cross-platform regional concept\"\n    },\n    {\n        \"Id\": \"80ce9c9d-8bc4-4d2d-ba1b-dd802c9def32\",\n        \"UserId\": \"559d5f83-6e78-4adb-b692-b7a6a06ff8a7\",\n        \"Fullname\": \"Linea Jallin\",\n        \"Avatar\": \"https://robohash.org/cupiditatehicexpedita.png?size=50x50&set=set1\",\n        \"Content\": \"Decentralized asymmetric installation\"\n    },\n    {\n        \"Id\": \"4bd3f447-2a7e-4ed0-8e32-18132c08477c\",\n        \"UserId\": \"3dd24bf3-315e-410c-a48b-575e00d67609\",\n        \"Fullname\": \"Mignon Wixey\",\n        \"Avatar\": \"https://robohash.org/enimutneque.png?size=50x50&set=set1\",\n        \"Content\": \"Realigned 24/7 capacity\"\n    }\n]\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 640,
+        "wires": [
+            [
+                "b23aca86de5bbd7c"
+            ]
+        ]
+    },
+    {
+        "id": "42e52b99f94d161d",
+        "type": "http in",
+        "z": "6904f6372307aab3",
+        "name": "[DEL] Comment to Artwork",
+        "url": "/artwork/comment/:awId/:userId",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 350,
+        "y": 740,
+        "wires": [
+            [
+                "a904bbb48b107dbd"
+            ]
+        ]
+    },
+    {
+        "id": "5268e152c1086f50",
+        "type": "http response",
+        "z": "6904f6372307aab3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "a904bbb48b107dbd",
+        "type": "function",
+        "z": "6904f6372307aab3",
+        "name": "function 10",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 740,
+        "wires": [
+            [
+                "5268e152c1086f50"
+            ]
+        ]
+    },
+    {
+        "id": "c12acd9f7f0f83e3",
+        "type": "http in",
+        "z": "6904f6372307aab3",
+        "name": "[PUT] Comment to Artwork",
+        "url": "/artwork/comment/:awId/:userId",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 350,
+        "y": 820,
+        "wires": [
+            [
+                "4d41806c8ee07898"
+            ]
+        ]
+    },
+    {
+        "id": "4f226cdd36691302",
+        "type": "http response",
+        "z": "6904f6372307aab3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "4d41806c8ee07898",
+        "type": "function",
+        "z": "6904f6372307aab3",
+        "name": "function 11",
+        "func": "// Get artwork ID and user ID from parameter\nlet { awId, userId } = msg.req.params;\n\n// Get content from request body\nlet {content} = msg.req.body;\n\n// Query from DB and return the result\n// --> SUCCESSFUL: return status code === 200\n// ---> FAIL: return status code != 200; attach the error message\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 820,
+        "wires": [
+            [
+                "4f226cdd36691302"
             ]
         ]
     }
