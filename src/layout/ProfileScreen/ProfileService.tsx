@@ -1,17 +1,20 @@
-import React from 'react';
+import axios from "axios";
 
-interface ProfileServiceProps {
-    // Add any props you need for the ProfileService component
+export async function GetProfileData() {
+    try {
+        const response = await axios.get("http://127.0.0.1:1880/profile/:id", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.status !== 200) {
+            console.log("Error fetching profile data");
+            return [];
+        }
+        return response.data;
+    }
+    catch (error) {
+        console.log("Error fetching profile data:", error);
+        return [];
+    }
 }
-
-const ProfileService: React.FC<ProfileServiceProps> = () => {
-    // Add your component logic here
-
-    return (
-        <div>
-            {/* Add your JSX code here */}
-        </div>
-    );
-};
-
-export default ProfileService;
