@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import "./ArtworkCard.scss";
+import { Divider } from "primereact/divider";
 
 type Props = {
   id: string;
@@ -35,20 +36,20 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
     </div>
   );
   let footer = (
-    <>
+    <div className="footer-container">
       <Button
+        className="like-button"
         label={props.likeNum.toString()}
         icon="pi pi-heart"
         onClick={props.likeHandler}
       />
-
+      <Divider className="divider" layout="vertical" />
       <Button
-        label="Save"
+        className="save-button"
         icon="pi pi-download"
         onClick={props.saveHandler}
-        style={{ marginLeft: "0.5em" }}
       />
-    </>
+    </div>
   );
   return (
     <Card

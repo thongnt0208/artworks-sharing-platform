@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "primereact/button";
 import "./Tag.scss";
+import "../const/variables.scss";
 
 interface TagProps {
   id: string;
@@ -18,8 +19,8 @@ const Tag: React.FC<TagProps> = ({ id, tagName, color }) => {
       className="tag"
       label={tagName}
       style={{
-        backgroundColor: color || "gray",
-        color: isSelected ? "red" : "white",
+        backgroundColor: isSelected? '#00668C' : color , 
+        fontSize: isSelected? "19px" : "17px",
       }}
       onClick={handleOnClick}
     />
