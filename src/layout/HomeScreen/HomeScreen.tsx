@@ -17,7 +17,7 @@ type ArtworksProps = {
   id: string,
   title: string,
   subTitle: string,
-  imageUrl: string,
+  image: string,
   likeNum: number,
   viewNum: number,
 }
