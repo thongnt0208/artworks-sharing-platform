@@ -78,8 +78,8 @@ function CommentComponent({ ...props }: PropsType) {
       </div>
 
       <div className="comment-list-container">
-        {commentsList.length > 0 ? (
-          commentsList.map((comment) => (
+        {commentsList?.length > 0 ? (
+          commentsList?.map((comment) => (
             <Card key={comment.Id} className="p-mb-2" title="Comment">
               <div className="p-d-flex p-ai-center">
                 <img
