@@ -2,14 +2,78 @@
 
 body {
   margin: 0;
-  font-family: 'IBM Plex Sans', sans-serif, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  .text-cus-title {
+    size: 40px;
+    font-weight: bold;
+    line-height: 18.2px;
+  }
+
+  .text-cus-h1 {
+    size: 24px;
+    font-weight: 500; //medium
+    line-height: 31.2px;
+  }
+
+  .text-cus-h1-bold {
+    size: 24px;
+    font-weight: bold;
+    line-height: 31.2px;
+  }
+
+  .text-cus-h2 {
+    size: 20px;
+    font-weight: 500; //medium
+    line-height: 26px;
+  }
+
+  .text-cus-h2-bold {
+    size: 20px;
+    font-weight: bold;
+    line-height: 26px;
+  }
+
+  .text-cus-h3 {
+    size: 17px;
+    font-weight: 500; //medium
+    line-height: 20.8px;
+  }
+
+  .text-cus-h3-bold {
+    size: 17px;
+    font-weight: bold;
+    line-height: 20.8px;
+  }
+
+  .text-cus-normal {
+    size: 14px;
+    font-weight: 400; //regular
+    line-height: 18.2px;
+  }
+
+  .text-cus-normal-bold {
+    size: 14px;
+    font-weight: bold;
+    line-height: 18.2px;
+  }
+
+  .text-cus-small {
+    size: 12px;
+    font-weight: 400; //regular
+    line-height: 15.6px;
+  }
+
+  .text-cus-small-bold {
+    size: 12px;
+    font-weight: bold;
+    line-height: 15.6px;
+  }
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
