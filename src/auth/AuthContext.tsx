@@ -5,6 +5,7 @@ type Props = {
 };
 type AuthContextType = {
   authenticationInfo: {
+    id: string;
     username: string;
     password: string;
     accessToken: string;
@@ -15,6 +16,7 @@ type AuthContextType = {
 
 const initialValue = {
   authenticationInfo: {
+    id: "",
     username: "",
     password: "123",
     accessToken: "aT",
