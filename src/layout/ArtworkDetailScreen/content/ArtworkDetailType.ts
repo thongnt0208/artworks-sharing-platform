@@ -32,7 +32,7 @@ export type ArtworkDetailType = {
   CreatedOn: string | Date;
   LastModifiedOn?: string | Date;
   Tags: string[];
-  Category: string;
+  Category: string[];
   LikeNum?: number;
   ViewNum?: number;
   Comments?: CommentType[];
