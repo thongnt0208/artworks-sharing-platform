@@ -2,10 +2,16 @@
 
 .artwork-card {
   width: 298px;
-  min-height: 450px;
+  height: 550px;
   text-align: center;
   background-color: $primary-100 !important;
   border-radius: $borderRadius-100 + $padding-100;
+  display: inline-flex;
+  padding: var(--shape-padding-100, 12px) 4px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
   .header-container {
     position: relative;
     height: fit-content;
@@ -17,11 +23,44 @@
         height: 311px;
       }
     }
-
     .view-button {
       position: absolute;
       left: 35%;
       bottom: 12px;
+    }
+  }
+
+  .p-card-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .footer-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 5px;
+      width: fit-content;
+      background: $bg-100;
+      border-radius: $borderRadius-100 + $padding-100;
+      padding: 6px var(--shape-padding-100, 12px);
+      gap: 28px;
+      .like-button,
+      .save-button {
+        margin: 0;
+        padding: 0;
+        background-color: transparent;
+        color: $text-100;
+        font-weight: 700;
+        font-size: $h3;
+        border: none;
+        outline: none;
+      }
+      .divider {
+        margin: 0;
+      }
     }
   }
 }
