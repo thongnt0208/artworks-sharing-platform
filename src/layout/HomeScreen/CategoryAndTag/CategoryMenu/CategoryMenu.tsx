@@ -1,5 +1,7 @@
 import React from "react";
 import Tag from "../../../../components/Tag";
+import "./CategoryMenu.scss"
+import { GenerateRandomColorCode } from "../../../../util/GenerateRandomColorCode";
 
 type CategoryProps = {
   id: string;
@@ -12,12 +14,11 @@ type CategoriesProps = {
 
 const CategoryMenu: React.FC<CategoriesProps> = ({ categories }) => {
   return (
-    <div>
-      <span>
+    <div className="category-menu">
         {categories.map((category) => {
-          return <Tag id={category.id} tagName={category.categoryName} />;
+          const randomColorCode = GenerateRandomColorCode();
+          return <Tag id={category.id} tagName={category.categoryName} color={randomColorCode} />;
         })}
-      </span>
     </div>
   );
 };
