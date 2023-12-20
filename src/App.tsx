@@ -4,8 +4,9 @@ import Footer from "./components/Footer";
 import HomeScreen from "./layout/HomeScreen/HomeScreen";
 import ProfileScreen from "./layout/ProfileScreen/ProfileScreen";
 
-import { PrimeReactProvider } from "primereact/api";
-import "./primereact-theme/themes/mytheme/theme.scss"
+import { PrimeReactProvider, addLocale, locale } from "primereact/api";
+import "./primereact-theme/themes/mytheme/theme.scss";
+import vi from "./primereact-api/locale/vi.json";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
@@ -22,8 +23,11 @@ import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordSc
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 
 function App() {
+  addLocale("vi", vi.vi);
+  locale("vi");
+  const primereactConfigValue = {};
   return (
-    <PrimeReactProvider>
+    <PrimeReactProvider value={primereactConfigValue}>
       <BrowserRouter>
         <AuthProvider>
           <Header />
