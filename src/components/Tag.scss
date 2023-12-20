@@ -1,4 +1,31 @@
+@import "/src/const/variables.scss";
+
 .tag {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+  display: inline-flex;
+  height: 71.25px;
+  min-width: 127px;
+  max-width: 140px;
+  min-height: 71.25px;
+  padding: 15px 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: var(--shape-borderRadius-100, 12px);
+  background: var(
+    --linear-100,
+    linear-gradient(
+      104deg,
+      rgba(113, 196, 239, 0.2) 0%,
+      rgba(0, 102, 140, 0.2) 100%
+    ),
+    rgba(241, 241, 241, 0.1)
+  );
+  color: $bg-100;
+  text-align: center;
+  font-size: $h3-bold;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
