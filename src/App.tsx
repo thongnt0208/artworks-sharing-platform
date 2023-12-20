@@ -5,7 +5,7 @@ import HomeScreen from "./layout/HomeScreen/HomeScreen";
 import ProfileScreen from "./layout/ProfileScreen/ProfileScreen";
 
 import { PrimeReactProvider } from "primereact/api";
-import "primereact/resources/themes/saga-blue/theme.css";
+import "./primereact-theme/themes/mytheme/theme.scss"
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
