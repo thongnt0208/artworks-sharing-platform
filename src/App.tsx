@@ -16,7 +16,6 @@ import EditProfileTestPage from "./layout/TestingSreen/EditProfileTestPage";
 import { AuthProvider } from "./auth/AuthContext";
 import RegisterScreen from "./layout/RegisterScreen/RegisterScreen";
 import ArtworkDetail from "./layout/ArtworkDetailScreen/ArtworkDetail";
-import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordScreen";
 import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
