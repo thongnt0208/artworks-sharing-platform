@@ -2,6 +2,7 @@ import "./App.scss";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./layout/HomeScreen/HomeScreen";
+import ProfileScreen from "./layout/ProfileScreen/ProfileScreen";
 
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/saga-blue/theme.css";
@@ -16,6 +17,9 @@ import { AuthProvider } from "./auth/AuthContext";
 import RegisterScreen from "./layout/RegisterScreen/RegisterScreen";
 import ArtworkDetail from "./layout/ArtworkDetailScreen/ArtworkDetail";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
+import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordScreen";
+import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
+import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 
 function App() {
   return (
@@ -28,6 +32,9 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+            <Route path="/reset-password" element={<ResetPasswordScreen />} />
+            <Route path="/change-pasword" element={<ChangePasswordScreen />} />
             <Route path="/artwork/:id" element={<ArtworkDetail />} />
             <Route element={<RequireAuth />}>
               {/* Routes need to protect (must log in to access)*/}
@@ -39,6 +46,7 @@ function App() {
               <Route path="/postAw" element={<PostArtworkScreen />} />
               {/* </Route> */}
             </Route>
+            <Route path="/profile/:id" element={<ProfileScreen />} />
           </Routes>
 
           <Footer />

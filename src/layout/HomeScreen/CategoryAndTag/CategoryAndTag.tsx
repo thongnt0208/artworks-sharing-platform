@@ -1,6 +1,7 @@
 import React from "react";
 import CategoryMenu from "./CategoryMenu/CategoryMenu";
 import TagCarousel from "./TagCarousel/TagCarousel";
+import "./CategoryAndTag.scss";
 
 type TagProps = {
   id: string;
@@ -17,18 +18,17 @@ type CategoryAndTagProps = {
   categories: CategoryProps[];
 };
 
-const CategoryAndTag: React.FC<CategoryAndTagProps> = ({ tags, categories }) => {
+const CategoryAndTag: React.FC<CategoryAndTagProps> = ({
+  tags,
+  categories,
+}) => {
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
-      <div style={{ width: "30%" }}>
-        <CategoryMenu
-          categories={categories}
-        />
+    <div className="category-and-tag">
+      <div className="category-menu">
+        <CategoryMenu categories={categories} />
       </div>
-      <div style={{ width: "70%" }}>
-        <TagCarousel
-          tags={tags}
-        />
+      <div className="tag-carousel">
+        <TagCarousel tags={tags} />
       </div>
     </div>
   );

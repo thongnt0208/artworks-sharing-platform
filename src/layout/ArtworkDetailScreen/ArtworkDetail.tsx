@@ -19,11 +19,8 @@ export default function ArtworkDetail({ ...props }: Props) {
   const { authenticationInfo } = useAuth();
 
   const buttonsList = getButtonsList(navigate);
-  
-  /* Remove the comment after add "id" field to authenticationInfo
-      let currentUserId = authenticationInfo.id;
-   */
-  let currentUserId = "thongnt"; //temporary value
+    
+    let currentUserId = authenticationInfo.id ? authenticationInfo.id : "unknown";
 
   useEffect(() => {
     fetchArtworkDetail(id, currentUserId)
