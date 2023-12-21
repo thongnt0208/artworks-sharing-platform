@@ -1,33 +1,57 @@
 import React from "react";
 import { Button } from "primereact/button";
 import "./CollectionCard.scss";
+import { useNavigate } from "react-router-dom";
 
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
-interface CollectionCardProps {
+type Props = {
   data: {
     id: string;
     // imageUrl: string;
     title: string;
     description: string;
   };
+  profileId?: string;
+  isSubscribed?: boolean;
   onClick?: () => void;
-}
+};
 
-const CollectionCard: React.FC<CollectionCardProps> = ({ data }, onClick) => {
+const CollectionCard = ({ ...props }: Props) => {
+  const { data, isSubscribed = false, profileId } = props;
   console.log(data);
   const { id, title, description } = data;
+  const navigate = useNavigate();
 
+  const handleClick = () => {
+    if (isSubscribed) {
+      // Navigate to collection/artwork detail page
+      console.log("Navigate to collection/artwork detail page");
+      navigate(`/artwork/${data.id}`); //Trial
+    } else {
+      // Navigate to payment page
+      console.log("Navigate to payment page");
+      navigate(`/payment/${profileId}`);
+    }
+  };
   return (
-    <Button
-      id="collection-card"
-      style={{
-        backgroundImage: `url(${background})`,
-      }}
-    >
-      <h2 style={{ margin: 0 }}>{title}</h2>
-      <p>{description}</p>
-    </Button>
+    <div className="collection-card-container">
+      {!isSubscribed && (
+        <div className="need-to-subscribe-btn">
+          <Button icon="pi pi-lock" rounded >. Đăng ký để mở</Button>
+        </div>
+      )}
+      <Button
+        id="collection-card"
+        style={{
+          backgroundImage: `url(${background})`,
+        }}
+        onClick={handleClick}
+      >
+        <span className="text-cus-h3-bold">{title}</span>
+        <span className="text-cus-small">{description}</span>
+      </Button>
+    </div>
   );
 };
 
