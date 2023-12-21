@@ -21,6 +21,7 @@ import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScre
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
+import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
             <Route path="/profile/:id" element={<ProfileScreen />} >
               <Route path="/profile/:id/edit" element={<EditProfileTestPage />} />
               <Route path="/profile/:id/subscribe" element={<SubscribeArea />} />
+              <Route path="/profile/:id/subscribe/setup" element={<SetupSubscribeArea />} />
             </Route>
           </Routes>
 
