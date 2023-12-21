@@ -52,18 +52,20 @@ const ProfileScreen: React.FC = () => {
       description: "Miêu tả của collection",
     },
   ]);
+  const [isSetup, setIsSetup] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await GetProfileData();
+      // MUST-HAVE FUNCTIONS IN THE SERVICE:
       // Function 1: Get subscribe area data -> setSubscribeData
-      // Function 2: Check if the current user is subscribed to this profile or not -> setIsSubscribe
+      // Function 2: Check if the current user's id (useAuth) is the profile id or not -> setIsCreator
+      // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
+      // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
 
       setProfile(profileData);
     };
 
-    // Call a service to check if the id from param is same to current id or not (useAuth ...)
-    // --> setIsCreator
     fetchData();
   }, []);
 
@@ -86,7 +88,7 @@ const ProfileScreen: React.FC = () => {
         label="Vùng đăng ký"
         onClick={() =>
           navigate("subscribe", {
-            state: { isCreator, subscribeData, isSubscribed },
+            state: { subscribeData, isCreator, isSubscribed, isSetup },
           })
         }
       />
