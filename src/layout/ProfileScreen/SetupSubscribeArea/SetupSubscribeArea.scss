@@ -1,0 +1,23 @@
+@import "../../../const/variables.scss";
+
+.setup-subscribe-area-dialog {
+  max-width: 390px;
+  
+  .footer {
+    text-align: center;
+    padding: 20px;
+
+    button {
+      background-color: white;
+      border: 1px solid $strong-200;
+    }
+    button:hover {
+      background-color: $strong-200;
+      border: 1px solid $strong-200;
+      color: white;
+    }
+  }
+  .p-dialog-header{
+    border-bottom: none;
+  }
+}
