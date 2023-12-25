@@ -21,6 +21,7 @@ import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordSc
 import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
+import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -50,7 +51,10 @@ function App() {
               <Route path="/postAw" element={<PostArtworkScreen />} />
               {/* </Route> */}
             </Route>
-            <Route path="/profile/:id" element={<ProfileScreen />} />
+            <Route path="/profile/:id" element={<ProfileScreen />} >
+              <Route path="/profile/:id/edit" element={<EditProfileTestPage />} />
+              <Route path="/profile/:id/subscribe" element={<SubscribeArea />} />
+            </Route>
           </Routes>
 
           <Footer />

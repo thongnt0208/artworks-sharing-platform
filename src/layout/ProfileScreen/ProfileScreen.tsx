@@ -1,41 +1,71 @@
 import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Button } from "../index";
+import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
 type ProfileProps = {
-    id: string;
-    name: string;
-    isCreator: boolean;
-    job: string;
-    address: string;
-    introduction: string;
-    profileView: number;
-    artworksView: number;
-    followerNum: number;
-    followingNum: number;
+  id: string;
+  name: string;
+  isCreator: boolean;
+  job: string;
+  address: string;
+  introduction: string;
+  profileView: number;
+  artworksView: number;
+  followerNum: number;
+  followingNum: number;
 };
 
 const ProfileScreen: React.FC = () => {
-    const [profile, setProfile] = useState<ProfileProps>({
-        id: "",
-        name: "",
-        isCreator: false,
-        job: "",
-        address: "",
-        introduction: "",
-        profileView: 0,
-        artworksView: 0,
-        followerNum: 0,
-        followingNum: 0,
-    });
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<ProfileProps>({
+    id: "",
+    name: "",
+    isCreator: false,
+    job: "",
+    address: "",
+    introduction: "",
+    profileView: 0,
+    artworksView: 0,
+    followerNum: 0,
+    followingNum: 0,
+  });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const profileData = await GetProfileData();
-            setProfile(profileData);
-        };
+  const [isCreator, setIsCreator] = useState<boolean>(false);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+  const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
+    {
+      id: "1",
+      title: "Đây là một collection/artwork",
+      description: "Miêu tả của collection",
+    },
+    {
+      id: "2",
+      title: "Đây là một collection/artwork",
+      description: "Miêu tả của collection",
+    },
+    {
+      id: "3",
+      title: "Đây là một collection/artwork",
+      description: "Miêu tả của collection",
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const profileData = await GetProfileData();
+      // Function 1: Get subscribe area data -> setSubscribeData
+      // Function 2: Check if the current user is subscribed to this profile or not -> setIsSubscribe
+
+      setProfile(profileData);
+    };
+
+    // Call a service to check if the id from param is same to current id or not (useAuth ...)
+    // --> setIsCreator
     fetchData();
-    }, []);
+  }, []);
 
   return (
     <>
@@ -51,6 +81,16 @@ const ProfileScreen: React.FC = () => {
         followerNum={profile.followerNum}
         followingNum={profile.followingNum}
       />
+      <Button label="Test page" onClick={() => navigate("edit")} />
+      <Button
+        label="Vùng đăng ký"
+        onClick={() =>
+          navigate("subscribe", {
+            state: { isCreator, subscribeData, isSubscribed },
+          })
+        }
+      />
+      <Outlet />
     </>
   );
 };

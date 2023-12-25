@@ -18,9 +18,13 @@ $buttonBg: $primaryColor;
 /// @group button
 $buttonTextColor: $primaryDarkerColor;
 
+/// Thickness of a button
+/// @group button
+$fontWeight: bold;
+
 /// Border of a button
 /// @group button
-$buttonBorder: 1px solid $primaryDarkerColor;
+$buttonBorder: 0px solid;
 
 /// Background of a button in hover state
 /// @group button
