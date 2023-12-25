@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
 // import MenuTab from "./MenuTab/MenuTab";
-import "./ProfileScreen.scss";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Button } from "../index";
+import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+
 
 type ProfileProps = {
   id: string;
@@ -18,6 +21,8 @@ type ProfileProps = {
 };
 
 const ProfileScreen: React.FC = () => {
+  const navigate = useNavigate();
+
   const [profile, setProfile] = useState<ProfileProps>({
     id: "",
     name: "",
@@ -31,9 +36,36 @@ const ProfileScreen: React.FC = () => {
     followingNum: 0,
   });
 
+  const [isCreator, setIsCreator] = useState<boolean>(false);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+  const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
+    {
+      id: "1",
+      title: "Đây là một collection/artwork",
+      description: "Miêu tả của collection",
+    },
+    {
+      id: "2",
+      title: "Đây là một collection/artwork",
+      description: "Miêu tả của collection",
+    },
+    {
+      id: "3",
+      title: "Đây là một collection/artwork",
+      description: "Miêu tả của collection",
+    },
+  ]);
+  const [isSetup, setIsSetup] = useState<boolean>(false);
+
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await GetProfileData();
+      // MUST-HAVE FUNCTIONS IN THE SERVICE:
+      // Function 1: Get subscribe area data -> setSubscribeData
+      // Function 2: Check if the current user's id (useAuth) is the profile id or not -> setIsCreator
+      // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
+      // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
+
       setProfile(profileData);
     };
     fetchData();
@@ -41,21 +73,28 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <>
-      <div className="profile-screen" >
-        <UserInformationCard
-          id={profile.id}
-          name={profile.name}
-          isCreator={profile.isCreator}
-          job={profile.job}
-          address={profile.address}
-          introduction={profile.introduction}
-          profileView={profile.profileView}
-          artworksView={profile.artworksView}
-          followerNum={profile.followerNum}
-          followingNum={profile.followingNum}
-        />
-        {/* <MenuTab /> */}
-      </div>
+      <UserInformationCard
+        id={profile.id}
+        name={profile.name}
+        isCreator={profile.isCreator}
+        job={profile.job}
+        address={profile.address}
+        introduction={profile.introduction}
+        profileView={profile.profileView}
+        artworksView={profile.artworksView}
+        followerNum={profile.followerNum}
+        followingNum={profile.followingNum}
+      />
+      <Button label="Test page" onClick={() => navigate("edit")} />
+      <Button
+        label="Vùng đăng ký"
+        onClick={() =>
+          navigate("subscribe", {
+            state: { subscribeData, isCreator, isSubscribed, isSetup },
+          })
+        }
+      />
+      <Outlet />
     </>
   );
 };
