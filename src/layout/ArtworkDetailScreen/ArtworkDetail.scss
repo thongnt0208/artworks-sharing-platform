@@ -1,2 +1,21 @@
 @import "./../../const/variables.scss";
 
+.artwork-detail-container {
+  .detail-container {
+    .content-container {
+    }
+    .side-buttons-container {
+      position: fixed;
+      right: 0;
+    }
+  }
+
+  .interartion-container {
+  }
+}
+
+@media screen and (min-width: $desktop) {
+  .side-buttons-container {
+    padding-left: 30px !important;
+  }
+}
