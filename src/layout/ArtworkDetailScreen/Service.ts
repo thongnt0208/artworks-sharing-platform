@@ -6,7 +6,7 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:1880";
  * Fetches details of an artwork based on the provided ID.
  *
  * @param {string | undefined} id - The unique identifier of the artwork.
- * @param {string | undefined} userId - The identifier of the current user.
+ * @param {string | undefined} accountId - The identifier of the current user.
  * @returns {Promise<any>}
  * @example
  * const artworkDetails = await fetchArtworkDetail("thongnt");
@@ -16,11 +16,10 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:1880";
  * @version 1.0.0
  */
 export async function fetchArtworkDetail(
-  id: string | undefined,
-  userId: string | undefined
+  id: string | undefined
 ): Promise<any> {
   try {
-    const response = await axios.get(`${BASE_URL}/artwork/${id}/${userId}`);
+    const response = (await axios.get(`${BASE_URL}/artworks/${id}`));
     return response;
   } catch (error) {
     console.error("Error fetching artwork:", error);
@@ -32,21 +31,21 @@ export async function fetchArtworkDetail(
  * Likes an artwork.
  *
  * @param {string} artworkId - The ID of the artwork to be liked.
- * @param {string} userId - The ID of the user performing the like action.
+ * @param {string} accountId - The ID of the user performing the like action.
  * @returns {Promise<any>}
  * @example
- * const likedArtwork = await likeArtwork("artworkNgayXua", "userIdMuaMua");
+ * const likedArtwork = await likeArtwork("artworkNgayXua", "accountIdMuaMua");
  * console.log(likedArtwork);
  * @author ThongNT
  * @version 1.0.0
  */
 export async function likeArtwork(
   artworkId: string,
-  userId: string
+  accountId: string
 ): Promise<any> {
   try {
     const response = await axios.post(
-      `${BASE_URL}/artwork/${artworkId}/like/${userId}`
+      `${BASE_URL}/artworks/${artworkId}/like/${accountId}`
     );
     return response;
   } catch (error) {
@@ -59,21 +58,21 @@ export async function likeArtwork(
  * Unlikes an artwork.
  *
  * @param {string} artworkId - The ID of the artwork to be unliked.
- * @param {string} userId - The ID of the user performing the unlike action.
+ * @param {string} accountId - The ID of the user performing the unlike action.
  * @returns {Promise<any>}
  * @example
- * const unlikedArtwork = await unlikeArtwork("artworkId123", "userId456");
+ * const unlikedArtwork = await unlikeArtwork("artworkId123", "accountId456");
  * console.log(unlikedArtwork);
  * @author ThongNT
  * @version 1.0.0
  */
 export async function unlikeArtwork(
   artworkId: string,
-  userId: string
+  accountId: string
 ): Promise<any> {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/artwork/like/${artworkId}/${userId}`
+      `${BASE_URL}/artworks/like/${artworkId}/${accountId}`
     );
     return response;
   } catch (error) {
@@ -86,11 +85,11 @@ export async function unlikeArtwork(
  * Adds a comment to an artwork.
  *
  * @param {string} artworkId - The ID of the artwork to add the comment to.
- * @param {string} userId - The ID of the user adding the comment.
+ * @param {string} accountId - The ID of the user adding the comment.
  * @param {string} commentText - The text of the comment.
  * @returns {Promise<any>}
  * @example
- * const addedComment = await addCommentToArtwork("artworkId123", "userId456", "Great work!");
+ * const addedComment = await addCommentToArtwork("artworkId123", "accountId456", "Great work!");
  * console.log(addedComment);
  *
  * @author ThongNT
@@ -98,12 +97,12 @@ export async function unlikeArtwork(
  */
 export async function addCommentToArtwork(
   artworkId: string,
-  userId: string,
+  accountId: string,
   commentText: string
 ): Promise<any> {
   try {
     const response = await axios.post(
-      `${BASE_URL}/artwork/comment/${artworkId}/${userId}`,
+      `${BASE_URL}/artworks/comment/${artworkId}/${accountId}`,
       {
         text: commentText,
       }
@@ -134,7 +133,7 @@ export async function removeCommentFromArtwork(
 ): Promise<any> {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/artwork/comment/${artworkId}/${commentId}`
+      `${BASE_URL}/artworks/comment/${artworkId}/${commentId}`
     );
     return response;
   } catch (error) {
@@ -164,7 +163,7 @@ export async function editCommentOnArtwork(
 ): Promise<any> {
   try {
     const response = await axios.put(
-      `${BASE_URL}/artwork/comment/${artworkId}/${commentId}`,
+      `${BASE_URL}/artworks/comment/${artworkId}/${commentId}`,
       {
         newText: newText,
       }

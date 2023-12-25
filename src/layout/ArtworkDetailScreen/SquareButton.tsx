@@ -1,4 +1,3 @@
-import { Button } from "primereact/button";
 import "./SquareButton.scss";
 
 type Props = {
@@ -19,7 +18,7 @@ export default function SquareButton({ ...props }: Props) {
             alt={props.thumbnailAlt || "Hình minh hoạ cho nút bấm"}
           />
         </div>
-        <div className="square-button-title">{props.title}</div>
+        <div className="square-button-title text-cus-small">{props.title}</div>
       </div>
     </>
   );
