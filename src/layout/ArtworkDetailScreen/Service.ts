@@ -15,11 +15,9 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:1880";
  * @author ThongNT
  * @version 1.0.0
  */
-export async function fetchArtworkDetail(
-  id: string | undefined
-): Promise<any> {
+export async function fetchArtworkDetail(id: string | undefined): Promise<any> {
   try {
-    const response = (await axios.get(`${BASE_URL}/artworks/${id}`));
+    const response = await axios.get(`${BASE_URL}/artworks/${id}`);
     return response;
   } catch (error) {
     console.error("Error fetching artwork:", error);
@@ -39,14 +37,13 @@ export async function fetchArtworkDetail(
  * @author ThongNT
  * @version 1.0.0
  */
-export async function likeArtwork(
-  artworkId: string,
-  accountId: string
-): Promise<any> {
+export async function likeArtwork(artworkId: string, accountId: string): Promise<any> {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/artworks/${artworkId}/like/${accountId}`
-    );
+    let body = {
+      accountId: accountId,
+      artworkId: artworkId,
+    };
+    const response = await axios.post(`${BASE_URL}/api/likes/`, body);
     return response;
   } catch (error) {
     console.error("Error liking artwork:", error);
@@ -66,18 +63,44 @@ export async function likeArtwork(
  * @author ThongNT
  * @version 1.0.0
  */
-export async function unlikeArtwork(
-  artworkId: string,
-  accountId: string
-): Promise<any> {
+export async function unlikeArtwork(artworkId: string, accountId: string): Promise<any> {
   try {
-    const response = await axios.delete(
-      `${BASE_URL}/artworks/like/${artworkId}/${accountId}`
-    );
+    let body = {
+      accountId: accountId,
+      artworkId: artworkId,
+    };
+
+    const response = await axios({
+      method: "DELETE",
+      url: `${BASE_URL}/api/likes`,
+      data: body,
+    });
+
     return response;
   } catch (error) {
     console.error("Error unliking artwork:", error);
     throw new Error(`Error unliking artwork: ${error}`);
+  }
+}
+
+/**
+ * Fetches comments on an artwork.
+ *
+ * @param {string} artworkId - The ID of the artwork to fetch comments for.
+ * @returns {Promise<any>}
+ * @example
+ * const comments = await fetchCommentsForArtwork("artworkId123");
+ * console.log(comments);
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
+  try {
+    const response = await axios.get(`${BASE_URL}/artworks/${artworkId}/comments`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    throw new Error(`Error fetching comments: ${error}`);
   }
 }
 
@@ -100,13 +123,13 @@ export async function addCommentToArtwork(
   accountId: string,
   commentText: string
 ): Promise<any> {
+  let body = {
+    accountId: accountId,
+    artworkId: artworkId,
+    text: commentText,
+  };
   try {
-    const response = await axios.post(
-      `${BASE_URL}/artworks/comment/${artworkId}/${accountId}`,
-      {
-        text: commentText,
-      }
-    );
+    const response = await axios.post(`${BASE_URL}/artworks/${artworkId}/comments`, body);
     return response;
   } catch (error) {
     console.error("Error adding comment:", error);
@@ -127,14 +150,9 @@ export async function addCommentToArtwork(
  * @author ThongNT
  * @version 1.0.0
  */
-export async function removeCommentFromArtwork(
-  artworkId: string,
-  commentId: string
-): Promise<any> {
+export async function removeCommentFromArtwork(artworkId: string, commentId: string): Promise<any> {
   try {
-    const response = await axios.delete(
-      `${BASE_URL}/artworks/comment/${artworkId}/${commentId}`
-    );
+    const response = await axios.delete(`${BASE_URL}/artworks/comments/${artworkId}/${commentId}`);
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
@@ -162,12 +180,9 @@ export async function editCommentOnArtwork(
   newText: string
 ): Promise<any> {
   try {
-    const response = await axios.put(
-      `${BASE_URL}/artworks/comment/${artworkId}/${commentId}`,
-      {
-        newText: newText,
-      }
-    );
+    const response = await axios.put(`${BASE_URL}/artworks/comments/${artworkId}/${commentId}`, {
+      newText: newText,
+    });
     return response;
   } catch (error) {
     console.error("Error editing comment:", error);
