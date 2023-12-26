@@ -1,7 +1,7 @@
 @import "./../../const/variables.scss";
 
 .square-button-container {
-  width: fit-content;
+  width: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,8 +9,8 @@
   color: $text-100;
   cursor: pointer;
   .square-button-thumbnail-container {
-    width: 81px;
-    height: 81px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
 
     img {
@@ -18,5 +18,8 @@
       height: 100%;
       border-radius: 50%;
     }
+  }
+  .square-button-title{
+    text-align: center;
   }
 }

@@ -26,17 +26,18 @@
  */
 export function getButtonsList(
   navigate: any,
-  Ids?: [{ idName: string; value: string }]
+  data?: { accountId: string; avatar?: string;}
 ): Array<{
   title: string;
   thumbnailImg: string;
   thumbnailAlt: string;
   onclick: (id?: any) => void;
 }> {
+  const blankPic = require("../../assets/defaultImage/blank-100.png")
   return [
     {
       title: "Theo dõi",
-      thumbnailImg: "https://placehold.in/600",
+      thumbnailImg: data?.avatar || blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
@@ -44,7 +45,7 @@ export function getButtonsList(
     },
     {
       title: "Thuê",
-      thumbnailImg: "https://placehold.in/600",
+      thumbnailImg: blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
@@ -52,7 +53,7 @@ export function getButtonsList(
     },
     {
       title: "Tài nguyên",
-      thumbnailImg: "https://placehold.in/600",
+      thumbnailImg: blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
@@ -60,7 +61,7 @@ export function getButtonsList(
     },
     {
       title: "Lưu",
-      thumbnailImg: "https://placehold.in/600",
+      thumbnailImg: blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
@@ -68,7 +69,7 @@ export function getButtonsList(
     },
     {
       title: "Chia sẻ",
-      thumbnailImg: "https://placehold.in/600",
+      thumbnailImg: blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
@@ -76,7 +77,7 @@ export function getButtonsList(
     },
     {
       title: "Báo cáo",
-      thumbnailImg: "https://placehold.in/600",
+      thumbnailImg: blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
