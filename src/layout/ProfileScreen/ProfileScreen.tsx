@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
+// import MenuTab from "./MenuTab/MenuTab";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "../index";
 import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+
 
 type ProfileProps = {
   id: string;
@@ -20,6 +22,7 @@ type ProfileProps = {
 
 const ProfileScreen: React.FC = () => {
   const navigate = useNavigate();
+
   const [profile, setProfile] = useState<ProfileProps>({
     id: "",
     name: "",
@@ -65,7 +68,6 @@ const ProfileScreen: React.FC = () => {
 
       setProfile(profileData);
     };
-
     fetchData();
   }, []);
 
