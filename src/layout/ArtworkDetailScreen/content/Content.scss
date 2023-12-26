@@ -1,0 +1,21 @@
+@import "./../../../const/variables.scss";
+
+.title-container {
+  text-align: center;
+}
+.artwork-images-container{
+  img{
+    border-radius: $borderRadius-100;
+  }
+}
+.artwork-info-container {
+  position: relative;
+  .showmore-btn-container {
+    width: 100%;
+    text-align: center;
+    background-image: linear-gradient(to bottom, #ffffff00, $primary-100);
+    padding: 3rem;
+    position: absolute;
+    top: -9rem;
+  }
+}
