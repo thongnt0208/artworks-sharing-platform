@@ -2,6 +2,8 @@ import React from "react";
 import { Avatar } from "primereact/avatar";
 import { ListBox } from "primereact/listbox";
 import { useNavigate } from "react-router-dom";
+import DefaultButton from "./Button";
+import "./ProfilePopup.scss";
 
 const logo = require("../assets/defaultImage/default-avatar.png");
 
@@ -17,7 +19,6 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
   onClose,
 }) => {
   const navigate = useNavigate();
-  console.log("Jeelo" + username);
   const handleListBoxChange = (link: string) => {
     navigate(link);
   };
@@ -34,20 +35,19 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
   return (
     <div className="notification-container">
       <div className="user-information-bar">
-        <Avatar image={logo} style={{ padding: "0" }} />
-        <h2 style={{ color: "black" }}>{username}</h2>
-        <p style={{ color: "black" }}>{email}</p>
-        <button onClick={onClose}>Trang cá nhân</button>
+        <Avatar image={logo} style={{ padding: "0" }} size="xlarge" />
+        <h3>{username}</h3>
+        <p>{email}</p>
+        <DefaultButton icon="" text="Trang cá nhân" onClick={() => {}} />
       </div>
 
-      <div>
+      <div className="list-box">
         <ListBox
           options={items}
           className="w-full md:w-14rem"
           onChange={(e) => handleListBoxChange(e.value)}
         />
       </div>
-      <button onClick={onClose}>Đăng xuất</button>
     </div>
   );
 };

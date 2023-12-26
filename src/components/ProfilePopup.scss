@@ -1,18 +1,32 @@
+@import "../const/variables.scss";
+
 .notification-container {
   width: fit-content;
   height: fit-content;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 999;
-  background-color: white;
-  border-radius: 12px;
   .user-information-bar {
-    padding: 10px;
-    border-radius: 4px;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: black;
+    justify-content: center;
+    h3 {
+      margin: 0.2rem;
+      color: $text-100;
+    }
+    p {
+      margin: 0.2rem 0.2rem 1rem 0.2rem;
+      color: $bg-300;
+      font-size: $normal;
+    }
+  }
+  .list-box {
+    margin-bottom: 1rem;
+    background-color: $bg-100;
+    .p-listbox {
+    background-color: $bg-100;
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+    }
   }
 }
