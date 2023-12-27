@@ -8,6 +8,7 @@ import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
 import { CommentType } from "./content/ArtworkDetailType";
+import { ProgressSpinner } from "primereact/progressspinner";
 // import UserInformationCard from "../../components/UserInformationCard";
 
 export default function ArtworkDetail() {
@@ -70,7 +71,7 @@ export default function ArtworkDetail() {
         {data.Images && (
           <div className="artwork-detail-container">
             <div className="detail-container flex grid-nogutter">
-              <div className="content-container col col-10">
+              <div className="content-container col col-11">
                 <Content
                   data={data}
                   isLiked={isLiked}
@@ -80,7 +81,7 @@ export default function ArtworkDetail() {
                   currentUserId={currentUserId}
                 />
               </div>
-              <div className="side-buttons-container col col-2 pt-7 flex flex-column gap-4">
+              <div className="side-buttons-container col col-1 pt-7">
                 <ButtonList />
               </div>
             </div>
@@ -88,19 +89,23 @@ export default function ArtworkDetail() {
             <div className="interartion-container flex grid-nogutter">
               {/* <CommentComponent artworkId={id} userId={authenticationInfo.userId} avatar={authenticationInfo.avatar} fullName={authenticationInfo.fullname } comments={data.Comments} /> */}
               <div className="col col-5">
-                <CommentComponent
-                  artworkId={id ? id : ""}
-                  userId="thongnt"
-                  avatar="https://placehold.in/600"
-                  fullName="Nguyễn Chung Tông"
-                  comments={comments}
-                  setIsCommentChanged={setIsCommentChanged}
-                />
+                {comments.length === 0 ? (
+                  <ProgressSpinner />
+                ) : (
+                  <CommentComponent
+                    artworkId={id ? id : ""}
+                    userId="thongnt"
+                    avatar="https://placehold.in/600"
+                    fullName="Nguyễn Chung Tông"
+                    comments={comments}
+                    setIsCommentChanged={setIsCommentChanged}
+                  />
+                )}
               </div>
               <div className="creator-info-container col col-5">
                 {/* <UserInformationCard .. /> */}
               </div>
-              <div className="blank-container col col-2"/>
+              <div className="blank-container col col-2" />
             </div>
           </div>
         )}

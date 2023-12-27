@@ -37,7 +37,7 @@ $borderRadius-300: 50px;
 $padding-100: 12px;
 
 /* Screen size */
-$mobile: 768px;
-$desktop: 1024px;
-$desktop-large: 1440px;
+$mobile: 768px; //$md in PrimeFlex
+$desktop: 992px; //$lg in PrimeFlex
+$desktop-large: 1200px; //$xl in PrimeFlex
 $desktop-wide: 1920px;

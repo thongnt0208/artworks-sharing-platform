@@ -64,7 +64,7 @@ export default function ButtonList(data?: { accountId?: string; avatar?: string 
     },
   ];
   return (
-    <>
+    <div className="flex flex-column gap-4" style={{position: "fixed"}}>
       <ShareDialog visible={isShowShareDialog} setVisibility={setIsShowShareDialog}/>
       {buttonsList.map((button, index) => {
         return (
@@ -79,6 +79,6 @@ export default function ButtonList(data?: { accountId?: string; avatar?: string 
           />
         );
       })}
-    </>
+    </div>
   );
 }
