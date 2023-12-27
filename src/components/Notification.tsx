@@ -1,52 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DataScroller } from "primereact/datascroller";
+import "./Notification.scss";
+import { Avatar } from "primereact/avatar";
 
 const avatar = require("../assets/defaultImage/default-avatar.png");
 
 interface NotificationProps {
-  notification: {
+  notifications: {
     notificationId: string;
     content: string;
     notifyType: string;
     isSeen: boolean;
     creationDate: string;
-  };
-}
-interface AccountProps {
+  }[];
   account: {
     accountId: string;
     name: string;
   };
 }
 
-const Notification: React.FC<NotificationProps & AccountProps> = ({ notification, account}) => {
-  console.log(notification);
-  const itemTemplate = ({
-    notification,
-    account,
-  }: {
-    notification: NotificationProps["notification"];
-    account: AccountProps["account"];
+const Notification: React.FC<NotificationProps> = ({
+  notifications,
+  account,
+}) => {
+  const [notification, setNotification] = useState<
+    {
+      notificationId: string;
+      content: string;
+      notifyType: string;
+      isSeen: boolean;
+      creationDate: string;
+    }[]
+  >([]);
+  const itemTemplate = (data: {
+    notificationId: string;
+    content: string;
+    notifyType: string;
+    isSeen: boolean;
+    creationDate: string;
   }) => {
     return (
-      <div className="message-notification">
+      <div className="notification">
         <div className="avatar">
-          <img src={avatar} alt="Avatar" />
+        <Avatar image={avatar} size="xlarge" />
         </div>
-        <div className="notification-content">
+        {data.isSeen ? (
+          <div className="notification-content">
           <p className="notification-message">
-            {account.name} {notification.content}
+            <strong style={{color: "black", fontWeight: "bolder"}}>{account.name}</strong> {data.content}
           </p>
+          <p className="notification-date" style={{color: "#71C4EF"}}>{data.creationDate}</p>
         </div>
-        <p className="notification-date">{notification.creationDate}</p>
+        ) : (
+          <div className="notification-content" style={{ color: "grey" }}>
+          <p className="notification-message">
+            {account.name} {data.content}
+          </p>
+          <p className="notification-date">{data.creationDate}</p>
+        </div>
+        )}
       </div>
     );
   };
 
+  useEffect(() => {
+    setNotification(notifications);
+  }, [notifications]);
+
   return (
-    // <div className="message-notification">
-    <DataScroller value={[notification]} itemTemplate={itemTemplate} />
-    // </div>
+    <DataScroller
+      className="notification-container"
+      value={notification}
+      itemTemplate={itemTemplate}
+      rows={5}
+    />
   );
 };
 
