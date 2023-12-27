@@ -1,0 +1,24 @@
+@import "../const/variables.scss";
+
+.notification-container {
+  background-color: $bg-100 !important;
+  border-radius: $padding-100 !important;
+  .notification {
+    width: 22.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem;
+    .notification-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      margin-left: 0.5rem;
+      .notification-date,
+      .notification-message {
+        margin: 0.1rem;
+      }
+    }
+  }
+}

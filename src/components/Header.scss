@@ -1,34 +1,66 @@
+@import "../const/variables.scss";
+
 .header {
   display: flex;
   justify-content: space-between;
-
   .menubar {
     width: 100%;
-    .logo {
-      text-decoration: none;
-      padding: 0;
-
-      img {
-        width: 100px;
+    border-radius: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .p-menubar-start {
+      .logo {
+        text-decoration: none;
         padding: 0;
+
+        img {
+          width: 100px;
+          padding: 0;
+        }
       }
     }
+    .p-menubar-root-list {
+      padding: 0 3rem 0 3rem;
+    }
 
-    .end-menu {
-      padding: 0 10px;
-      display: "flex";
-      flex-direction: "row";
-      .notification-icon,
-      .message-icon,
-      .avatar-icon {
-        position: relative;
-        cursor: pointer;
-
-        .popup {
-          position: absolute;
-          right: 0;
-          top: 100%;
-          z-index: 999;
+    .p-menubar-end {
+      flex: 1;
+      margin: 0;
+      .end-menu {
+        width: 100%;
+        padding: 0 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        .search-bar {
+          margin: 0 1rem 0 1rem;
+        }
+        .notification-icon,
+        .message-icon,
+        .avatar-icon {
+          position: relative;
+          cursor: pointer;
+          margin: 0 1rem 0 1rem;
+          .popup {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            z-index: 999;
+            box-shadow: 26px 26px 17.9px 0px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+          }
+          .profile-popup {
+            background-color: $bg-100;
+            border-radius: 12px;
+            box-shadow: $popup-shadow;
+            border-radius: $padding-100;
+            padding: 0.5rem;
+          }
         }
       }
     }

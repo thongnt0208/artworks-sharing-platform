@@ -38,7 +38,7 @@ function App() {
     <PrimeReactProvider value={primereactConfigValue}>
       <BrowserRouter>
         <AuthProvider>
-          <Header />
+          <Header isLogin={false} />
 
           <Routes>
             <Route path="/" element={<HomeScreen />} />
