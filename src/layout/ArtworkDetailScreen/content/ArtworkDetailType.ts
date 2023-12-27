@@ -7,13 +7,15 @@ export type Creator = {
   Address?: string;
 };
 
-export interface CommentType  {
+export interface CommentType {
   Id: string;
-  UserId: string;
-  Fullname: string;
-  Avatar: string;
+  CreatedBy: {
+    Id: string;
+    Fullname: string;
+    Avatar: string;
+  };
   Content: string;
-};
+}
 
 export type Asset = {
   Id: string;
