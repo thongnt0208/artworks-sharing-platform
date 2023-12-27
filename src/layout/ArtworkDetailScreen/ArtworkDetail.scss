@@ -3,6 +3,10 @@
 .artwork-detail-container {
   .detail-container {
     .content-container {
+      .like-btn-container{
+        display: flex;
+        justify-content: center;
+      }
     }
     .side-buttons-container {
       position: fixed;
