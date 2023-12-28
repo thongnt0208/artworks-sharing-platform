@@ -1,7 +1,16 @@
-import React from "react";
-import { Carousel } from "primereact/carousel";
+import React, { useRef, useEffect } from "react";
 import Tag from "../../../../components/Tag";
 import { GenerateRandomColorCode } from "../../../../util/GenerateRandomColorCode";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+
+import "./TagCarousel.scss";
+
+// import required modules
+import { Navigation } from "swiper/modules";
 
 type TagProps = {
   id: string;
@@ -13,22 +22,32 @@ type TagsProps = {
 };
 
 const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
-
-  const renderTag = (tag: TagProps) => {
+  const productTemplate = (tag: TagProps) => {
     const randomColorCode = GenerateRandomColorCode();
-    return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} color={randomColorCode}/>;
+    return (
+      <Tag
+        key={tag.id}
+        id={tag.id}
+        tagName={tag.tagName}
+        color={randomColorCode}
+      />
+    );
   };
 
   return (
-    <div>
-      <Carousel
-        showIndicators={false}
-        circular
-        value={tags}
-        numVisible={8}
-        itemTemplate={renderTag} // Updated to use renderTag function directly
-      />
-    </div>
+    <>
+      <Swiper
+        slidesPerView={5}
+        rewind={true}
+        navigation={true}
+        modules={[Navigation]}
+        className="mySwiper"
+      >
+        {tags.map((tag) => (
+          <SwiperSlide key={tag.id}>{productTemplate(tag)}</SwiperSlide>
+        ))}
+      </Swiper>
+    </>
   );
 };
 

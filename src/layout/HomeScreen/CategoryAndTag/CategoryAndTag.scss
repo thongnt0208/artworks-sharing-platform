@@ -1,11 +1,6 @@
 .category-and-tag {
-  display: flex;
-  flex-direction: row;
-  margin: 1.25rem 0 1.25rem 0;
-  .category-menu {
-    width: 50%;
-  }
-  .tag-carousel {
-    width: 70%;
-  }
+    .category-menu-section {
+        height: fit-content;
+        border-right: 1px solid #e2e2e2;
+    }
 }

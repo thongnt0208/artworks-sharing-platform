@@ -23,11 +23,11 @@ const CategoryAndTag: React.FC<CategoryAndTagProps> = ({
   categories,
 }) => {
   return (
-    <div className="category-and-tag">
-      <div className="category-menu">
+    <div className="category-and-tag grid flex align-items-center mt-2">
+      <div className="category-menu-section col-4 flex align-items-center">
         <CategoryMenu categories={categories} />
       </div>
-      <div className="tag-carousel">
+      <div className="tag-carousel-section col-8">
         <TagCarousel tags={tags} />
       </div>
     </div>
