@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
 import { InputText } from "primereact/inputtext";
@@ -8,6 +8,9 @@ import Notification from "./Notification";
 import DefaultButton from "./Button";
 import ProfilePopup from "./ProfilePopup";
 import "./Header.scss";
+import { Button } from "primereact/button";
+import { logout } from "../auth/AuthService";
+import { removeAuthInfo } from "../util/AuthUtil";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
@@ -82,20 +85,15 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
   };
 
   useEffect(() => {
-    const handleClickOutsideProfilePopup = (event: MouseEvent) => { // Explicitly define MouseEvent
-      if (
-        profilePopupRef.current &&
-        !profilePopupRef.current.contains(event.target as Node)
-      ) {
+    const handleClickOutsideProfilePopup = (event: MouseEvent) => {
+      // Explicitly define MouseEvent
+      if (profilePopupRef.current && !profilePopupRef.current.contains(event.target as Node)) {
         setShowProfilePopup(false);
       }
     };
 
     const handleClickOutsideNotification = (event: MouseEvent) => {
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target as Node)
-      ) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setShowNotification(false);
       }
     };
@@ -147,10 +145,7 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
         {isLoginState ? (
           <>
             <DefaultButton icon="" text="Đăng tác phẩm" onClick={() => {}} />
-            <div
-              className="message-icon"
-              onClick={handleMouseEnterMessageNotification}
-            >
+            <div className="message-icon" onClick={handleMouseEnterMessageNotification}>
               <i className="pi pi-inbox"></i>
               {isLoginState && showMessageNotification && (
                 <div className="popup" ref={messageNotificationRef}>
@@ -164,12 +159,9 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
                 </div>
               )}
             </div>
-            <div
-              className="notification-icon"
-              onClick={handleMouseEnterNotification}
-            >
+            <div className="notification-icon" onClick={handleMouseEnterNotification}>
               <i className="pi pi-bell"></i>
-              { isLoginState && showNotification && (
+              {isLoginState && showNotification && (
                 <div className="popup" ref={notificationRef}>
                   <Notification
                     notifications={sampleNotificationData}
@@ -181,17 +173,11 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
                 </div>
               )}
             </div>
-            <div
-              className="avatar-icon"
-              onClick={handleMouseEnterAvatarClick}
-            >
+            <div className="avatar-icon" onClick={handleMouseEnterAvatarClick}>
               <Avatar image={avatar} size="normal" />
               {showProfilePopup && (
                 <div className="popup profile-popup" ref={profilePopupRef}>
-                  <ProfilePopup
-                    username={"danghoanganh36"}
-                    email={"danghoanganh36@gmail.com"}
-                  />
+                  <ProfilePopup username={"danghoanganh36"} email={"danghoanganh36@gmail.com"} />
                   <DefaultButton
                     icon=""
                     text="Đăng xuất"
@@ -219,14 +205,22 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
     ],
   ];
 
+  let navigate = useNavigate();
+  const handleLogoutBtn = () => {
+    logout().catch((err) => console.log('Logout ERRR', err));
+    removeAuthInfo();
+    setIsLoginState(false);
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
+  };
+
   return (
     <div className="header">
-      <Menubar
-        className="menubar"
-        start={() => startItems}
-        model={items}
-        end={endItems}
-      />
+      {isLogin.toString()}
+      {isLoginState.toString()}
+      {isLogin && <Button label="Log out" onClick={handleLogoutBtn} />}
+      <Menubar className="menubar" start={() => startItems} model={items} end={endItems} />
     </div>
   );
 };

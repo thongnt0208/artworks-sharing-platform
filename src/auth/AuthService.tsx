@@ -1,4 +1,4 @@
-import axios from "../api/axios";
+import axios, { axiosPrivate } from "../hooks/useAxios";
 
 /**
  * Login function
@@ -26,9 +26,36 @@ export async function login(username: string, password: string) {
       }
     );
     console.log(response);
-    
+
     return response;
   } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
+/**
+ * Logout function
+ *
+ * @example
+ * @description This function will be used to logout the user from server
+ * @returns Promise<any>
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function logout() {
+  try {
+    let response = await axiosPrivate.post(
+      "/auth/logout",
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  } catch (error: any) {    
     throw new Error(error);
   }
 }

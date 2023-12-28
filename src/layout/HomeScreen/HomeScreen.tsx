@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
 import MenuTab from "./MenuTab/MenuTab";
 import { GetArtworksData, GetCategoriesData, GetTagsData } from "./HomeService";
+import { Link } from "react-router-dom";
 
 type TagProps = {
   id: string;
@@ -42,6 +43,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <>
+      <Link to="/login">Log in</Link>
       <CategoryAndTag categories={categories} tags={tags} />
       <MenuTab artworks={artworks} />
     </>
