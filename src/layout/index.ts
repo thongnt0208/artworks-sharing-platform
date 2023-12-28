@@ -1,3 +1,5 @@
+import { Calendar } from 'primereact/calendar';
+import { Password } from 'primereact/password';
 import { Image } from 'primereact/image';
 import { Divider } from 'primereact/divider';
 import { Toast } from "primereact/toast";
@@ -14,4 +16,4 @@ import { MultiSelect } from 'primereact/multiselect';
 import { useFormik } from 'formik';
 
 
-export { Image, Divider, Toast,Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik };
+export { Password, Calendar, Image, Divider, Toast,Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik };

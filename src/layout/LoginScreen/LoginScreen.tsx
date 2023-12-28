@@ -81,7 +81,7 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
               <h3 className="m-0">Artworkia</h3>
             </div>
             <h1>Đăng nhập</h1>
-            <span>Người dùng mới?</span> <Link to={""}>Tạo tài khoản</Link>
+            <span>Người dùng mới?</span> <Link to={"/register"}>Tạo tài khoản</Link>
           </div>
           <div className="normal-login">
             <div className="username-container">
