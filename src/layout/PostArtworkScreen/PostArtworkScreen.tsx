@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "./PostArtworkScreen.scss";
 import { useEffect, useState } from "react";
-import useAuth from "../../hooks/useAuth";
 import Content from "../ArtworkDetailScreen/content/Content";
 import InputForm from "./InputForm/InputForm";
+import { getAuthInfo } from "../../util/AuthUtil";
 
 type Props = {};
 
@@ -11,7 +11,7 @@ export default function PostArtworkScreen({ ...props }: Props) {
   const navigate = useNavigate();
   const [data, setData] = useState({} as any);
   const [error, setError] = useState({} as any);
-  const { authenticationInfo } = useAuth();
+  const  authenticationInfo  = getAuthInfo();
 
   useEffect(() => {}, []);
 
