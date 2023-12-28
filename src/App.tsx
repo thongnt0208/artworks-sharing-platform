@@ -45,7 +45,7 @@ function App() {
           <Header isLogin={isLogin} />
 
           <Routes>
-            <Route path="/" element={<HomeScreen />} />
+            <Route path="/" element={<HomeScreen isLogin={true} />} />
             <Route path="/login" element={<LoginScreen isLogin={isLogin} setIsLogin={setIsLogin}/>} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
