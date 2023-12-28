@@ -16,8 +16,7 @@ const CategoryMenu: React.FC<CategoriesProps> = ({ categories }) => {
   return (
     <div className="category-menu">
         {categories.map((category) => {
-          const randomColorCode = GenerateRandomColorCode();
-          return <Tag id={category.id} tagName={category.categoryName} color={randomColorCode} />;
+          return <Tag id={category.id} tagName={category.categoryName} isCategory={true}/>;
         })}
     </div>
   );
