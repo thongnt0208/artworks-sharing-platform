@@ -18,6 +18,7 @@ type Props = {
 const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,6 +27,7 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
   const previousPath = location?.state?.from?.pathname;
 
   const handleLogin = () => {
+    setIsLoading(true);
     login(username, password)
       .then((response) => {
         console.log(response);
@@ -42,6 +44,7 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
 
         setAuthInfo(currentUserData);
         setIsLogin(!!id); // Assuming login is considered valid if 'id' exists
+        setIsLoading(false);
         console.log({ ...currentUserData });
 
         toast.current.show({
@@ -55,14 +58,17 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
         }, 3000);
       })
       .catch((error) => {
-        if (error?.status !== 200) {
-          toast.current.show({
-            severity: "error",
-            summary: "Đăng nhập lỗi",
-            detail: "Kiểm tra lại thông tin và thử lại sau.",
-            life: 3000,
-          });
-        }
+        console.log(error);
+        setIsLoading(false);
+        let message = "Kiểm tra lại thông tin và thử lại sau.";
+        if (error?.response?.status === 500) message = "Lỗi hệ thống, vui lòng thử lại sau.";
+        if (error?.response?.status === 401) message = "Tên đăng nhập hoặc mật khẩu không đúng.";
+        toast.current.show({
+          severity: "error",
+          summary: "Đăng nhập lỗi",
+          detail: message,
+          life: 3000,
+        });
       });
   };
 
@@ -107,6 +113,7 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
               label="Tiếp tục"
               onClick={handleLogin}
               disabled={username && password ? false : true}
+              loading={isLoading}
             />
           </div>
 

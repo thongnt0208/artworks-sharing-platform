@@ -10,7 +10,7 @@ import ProfilePopup from "./ProfilePopup";
 import "./Header.scss";
 import { Button } from "primereact/button";
 import { logout } from "../auth/AuthService";
-import { removeAuthInfo } from "../util/AuthUtil";
+import { getAuthInfo, removeAuthInfo } from "../util/AuthUtil";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
@@ -207,7 +207,8 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
 
   let navigate = useNavigate();
   const handleLogoutBtn = () => {
-    logout().catch((err) => console.log('Logout ERRR', err));
+    let accessToken = getAuthInfo()?.accessToken
+    logout(accessToken).catch((err) => console.log('Logout ERRR', err));
     removeAuthInfo();
     setIsLoginState(false);
     setTimeout(() => {
