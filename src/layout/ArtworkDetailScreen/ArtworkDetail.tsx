@@ -7,10 +7,7 @@ import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
 import { CommentType } from "./content/ArtworkDetailType";
-<<<<<<< HEAD
 import { ProgressSpinner } from "primereact/progressspinner";
-=======
->>>>>>> 0199cca119888857dc24ea2a316a5992928ed0a1
 import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
