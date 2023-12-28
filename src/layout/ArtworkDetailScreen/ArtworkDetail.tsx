@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import "./ArtworkDetail.scss";
 import { fetchArtworkDetail, fetchCommentsForArtwork } from "./Service";
-import useAuth from "../../hooks/useAuth";
 import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
 import { CommentType } from "./content/ArtworkDetailType";
+import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
 export default function ArtworkDetail() {
@@ -19,7 +19,7 @@ export default function ArtworkDetail() {
   const [isCommentChanged, setIsCommentChanged] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [error, setError] = useState({} as any);
-  const { authenticationInfo } = useAuth();
+  const  authenticationInfo  = getAuthInfo();
 
   let currentUserId = authenticationInfo.id ? authenticationInfo.id : "unknown";
 
