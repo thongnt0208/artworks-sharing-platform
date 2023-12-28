@@ -2,10 +2,10 @@
 
 .tag {
   display: inline-flex;
-  height: 71.25px;
+  min-height: 5rem;
+  max-height: 6rem;
   min-width: 127px;
-  max-width: 140px;
-  min-height: 71.25px;
+  // max-width: 140px;
   padding: 15px 20px;
   justify-content: center;
   align-items: center;
