@@ -1,7 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
-import MenuTab from "./MenuTab/MenuTab";
-import { GetArtworksData, GetCategoriesData, GetTagsData } from "./HomeService";
+import Gallery from "./Gallery/Gallery";
+import { TabMenu } from "primereact/tabmenu";
+import {
+  GetCategoriesData,
+  GetFollowingArtworksData,
+  GetNewArtworksData,
+  GetTagsData,
+} from "./HomeService";
 
 type TagProps = {
   id: string;
@@ -13,37 +19,67 @@ type CategoryProps = {
   categoryName: string;
 };
 
-type ArtworksProps = {
-  id: string,
-  title: string,
-  subTitle: string,
-  image: string,
-  likeNum: number,
-  viewNum: number,
-}
+type Artwork = {
+  id: string;
+  title: string;
+  subTitle: string;
+  images: string[];
+  likeNum: number;
+  viewNum: number;
+};
 
-const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
+  const [activeTab, setActiveTab] = useState(0);
   const [tags, setTags] = useState<TagProps[]>([]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
-  const [artworks, setArtworks] = useState<ArtworksProps[]>([]);
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const items = [
+    { label: "Mới nhất", icon: "pi pi-fw pi-compass" },
+    { label: "Theo dõi", icon: "pi pi-fw pi-users" },
+  ];
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      if (activeTab === 0) {
+        const [newArtworksData, tagsData, categoriesData] = await Promise.all([
+          GetNewArtworksData(),
+          GetTagsData(),
+          GetCategoriesData(),
+        ]);
+        setArtworks(newArtworksData);
+        setTags(tagsData);
+        setCategories(categoriesData);
+      } else if (activeTab === 1) {
+        const followingArtworksData = await GetFollowingArtworksData();
+        setArtworks(followingArtworksData);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const tagsData = await GetTagsData();
-      setTags(tagsData);
-      const categoriesData = await GetCategoriesData();
-      setCategories(categoriesData);
-      const artworksData = await GetArtworksData();
-      setArtworks(artworksData);
-    };
-
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <>
       <CategoryAndTag categories={categories} tags={tags} />
-      <MenuTab artworks={artworks} />
+      {isLogin ? (
+        <TabMenu
+          model={items}
+          activeIndex={activeTab}
+          onTabChange={(e) => setActiveTab(e.index)}
+          className="w-fit m-1 text-black-alpha-10"
+        />
+      ) : null}
+
+      {loading ? <p>Loading...</p> : <Gallery artworks={artworks} />}
     </>
   );
 };
