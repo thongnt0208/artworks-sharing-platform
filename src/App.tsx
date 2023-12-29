@@ -41,7 +41,7 @@ function App() {
           <Header isLogin={false} />
 
           <Routes>
-            <Route path="/" element={<HomeScreen />} />
+            <Route path="/" element={<HomeScreen isLogin={true} />} />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
