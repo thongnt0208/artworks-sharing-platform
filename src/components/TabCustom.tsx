@@ -25,7 +25,6 @@ export const TabCustom = (props: Props) => {
   const [activeTabClassName, setActiveTabClassName] = useState("p-button-text");
 
   useEffect(() => {
-    // Update className based on the currentTabId
     const tabsToRound = [
       "artwork",
       "assets",
