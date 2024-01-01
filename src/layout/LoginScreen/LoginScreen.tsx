@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { login } from "../../auth/AuthService";
+import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import "./LoginScreen.scss";
-import { Divider } from "primereact/divider";
-import { Image } from "primereact/image";
+
+import { InputText, Button, Toast, Divider, Image, Card } from "../index";
+
+import { login } from "../../auth/AuthService";
 import logo from "../../assets/logo/logo_notext.svg";
 import logotext from "../../assets/logo/logo.png";
-import { Card } from "primereact/card";
 
-const LoginScreen = () => {
-  const { authenticationInfo, setAuthenticationInfo } = useAuth();
+import { jwtDecode } from "jwt-decode";
+import { setAuthInfo } from "../../util/AuthUtil";
+
+type Props = {
+  isLogin: boolean;
+  setIsLogin: (value: boolean) => void;
+};
+const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ username: "", password: "" });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,67 +25,52 @@ const LoginScreen = () => {
 
   const previousPath = location?.state?.from?.pathname;
 
-  const validateInputs = () => {
-    console.log("Validate Inputttt");
-
-    let valid = true;
-    const newErrors = { username: "", password: "" };
-
-    if (!username) {
-      newErrors.username = "Username is required";
-      valid = false;
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required";
-      valid = false;
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
-
   const handleLogin = () => {
-    if (validateInputs()) {
-      login(username, password)
-        .then((response) => {
-          const accessToken = response?.data?.accessToken;
-          const role = response?.data?.role;
-          setAuthenticationInfo({ username, password, accessToken, role });
+    login(username, password)
+      .then((response) => {
+        console.log(response);
 
-          console.log({ username, password, accessToken, role });
+        const { data } = response || {};
+        const { result } = data || {};
+        const { userId: id, email, fullname, accessToken, refreshToken } = result || {};
+        const decodedAToken = jwtDecode(accessToken) as any;
+        console.log(decodedAToken);
+        const role = decodedAToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+        const exp = decodedAToken.exp;
 
+        let currentUserData = { id, email, fullname, accessToken, refreshToken, role, aTExp: exp };
+
+        setAuthInfo(currentUserData);
+        setIsLogin(!!id); // Assuming login is considered valid if 'id' exists
+        console.log({ ...currentUserData });
+
+        toast.current.show({
+          severity: "success",
+          summary: "Đăng nhập thành công",
+          detail: "Bạn sẽ được chuyển hướng trong 3 giây ...",
+          life: 3000,
+        });
+        setTimeout(() => {
+          navigate(previousPath || "/");
+        }, 3000);
+      })
+      .catch((error) => {
+        if (error?.status !== 200) {
           toast.current.show({
-            severity: "success",
-            summary: "Login Successful",
-            detail: "You have been logged in successfully",
+            severity: "error",
+            summary: "Đăng nhập lỗi",
+            detail: "Kiểm tra lại thông tin và thử lại sau.",
             life: 3000,
           });
-          setTimeout(() => {
-            navigate(previousPath || "/");
-          }, 3000);
-        })
-        .catch((error) => {
-          if (error?.status !== 200) {
-            toast.current.show({
-              severity: "error",
-              summary: "Login Failed",
-              detail: `There was an error logging in, please try again later.`,
-              life: 3000,
-            });
-          }
-        });
-    }
+        }
+      });
   };
-
-  useEffect(() => {
-    console.log(authenticationInfo);
-  }, [authenticationInfo]);
 
   return (
     <>
       <Toast ref={toast} />
-      <div className="login-container flex w-100"><div className="background-overlay"></div>
+      <div className="login-container flex w-100">
+        <div className="background-overlay"></div>
         <div className="logo-container p-4 hidden lg:block">
           <Image alt="logo" src={logotext} height="100" />
         </div>
@@ -104,9 +90,8 @@ const LoginScreen = () => {
                 value={username}
                 placeholder="Tên đăng nhập"
                 onChange={(e) => setUsername(e.target.value)}
-                onBlur={() => validateInputs()}
+                required
               />
-              <small className="p-error">{errors.username}</small>
             </div>
             <div className="password-container">
               <InputText
@@ -115,11 +100,14 @@ const LoginScreen = () => {
                 value={password}
                 placeholder="Mật khẩu"
                 onChange={(e) => setPassword(e.target.value)}
-                onBlur={() => validateInputs()}
+                required
               />
-              <small className="p-error">{errors.password}</small>
             </div>
-            <Button label="Tiếp tục" onClick={handleLogin} />
+            <Button
+              label="Tiếp tục"
+              onClick={handleLogin}
+              disabled={username && password ? false : true}
+            />
           </div>
 
           <Divider />
