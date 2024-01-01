@@ -1,14 +1,13 @@
-import { axiosPrivate } from "../api/axios";
+import { axiosPrivate } from "./useAxios";
 import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
-import useAuth from "./useAuth";
+import { getAuthInfo } from "../util/AuthUtil";
 
 const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
-    const { authenticationInfo } = useAuth();
+    const  authenticationInfo  = getAuthInfo();
 
     useEffect(() => {
-
         const requestIntercept = axiosPrivate.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {

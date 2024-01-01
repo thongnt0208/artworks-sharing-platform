@@ -4,7 +4,6 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 // import { Register } from "../../auth/AuthService";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import "./RegisterScreen.scss";
 import { Divider } from "primereact/divider";
 import { Image } from "primereact/image";
@@ -15,9 +14,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Password } from "primereact/password";
 import { Calendar } from "primereact/calendar";
+import { getAuthInfo } from "../../util/AuthUtil";
 
 const RegisterScreen = () => {
-  const { authenticationInfo, setAuthenticationInfo } = useAuth();
+  const  authenticationInfo = getAuthInfo();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", password: "" });

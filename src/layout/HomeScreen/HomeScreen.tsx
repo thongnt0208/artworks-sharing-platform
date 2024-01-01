@@ -8,6 +8,7 @@ import {
   GetNewArtworksData,
   GetTagsData,
 } from "./HomeService";
+import { Link } from "react-router-dom";
 
 type TagProps = {
   id: string;
@@ -69,6 +70,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   return (
     <>
+      <Link to="/login">Log in</Link>
       <CategoryAndTag categories={categories} tags={tags} />
       {isLogin ? (
         <TabMenu
