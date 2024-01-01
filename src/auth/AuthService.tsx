@@ -1,4 +1,4 @@
-import axios, { axiosPrivate } from "../hooks/useAxios";
+import axios from "../hooks/useAxios";
 
 /**
  * Login function
@@ -29,7 +29,7 @@ export async function login(username: string, password: string) {
 
     return response;
   } catch (error: any) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -42,20 +42,23 @@ export async function login(username: string, password: string) {
  * @author ThongNT
  * @version 1.0.0
  */
-export async function logout() {
+export async function logout(accessToken: string) {
   try {
-    let response = await axiosPrivate.post(
+    let response = await axios.post(
       "/auth/logout",
       {},
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
 
     return response;
-  } catch (error: any) {    
+  } catch (error: any) {
+    console.log(error);
+
     throw new Error(error);
   }
 }

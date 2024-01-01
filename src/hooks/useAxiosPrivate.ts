@@ -20,12 +20,17 @@ const useAxiosPrivate = () => {
         const responseIntercept = axiosPrivate.interceptors.response.use(
             response => response,
             async (error) => {
-                const prevRequest = error?.config;
+                const prevRequest = error?.config;// Retrieves the request configuration that resulted in an error
+
+                // If the error is 403 (Forbidden) and the request has not been sent
                 if (error?.response?.status === 403 && !prevRequest?.sent) {
-                    prevRequest.sent = true;
-                    const newAccessToken = await refresh();
-                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return axiosPrivate(prevRequest);
+                    prevRequest.sent = true;// Marks the request as sent to prevent multiple retries
+                    
+                    await refresh();// Calls the 'refresh' function to set a new access token to LS
+                                        
+                    // Updates the Authorization header with the new access token            
+                    prevRequest.headers['Authorization'] = `Bearer ${getAuthInfo()?.accessToken}`;
+                    return axiosPrivate(prevRequest);// Resends the updated request with the new access token
                 }
                 return Promise.reject(error);
             }
