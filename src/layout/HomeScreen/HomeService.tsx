@@ -29,6 +29,7 @@ export async function GetCategoriesData() {
       console.log("Error fetching categories data");
       return [];
     }
+    console.log("categories data:", response.data)
     return response.data;
   } catch (error) {
     console.log("Error fetching categories data:", error);

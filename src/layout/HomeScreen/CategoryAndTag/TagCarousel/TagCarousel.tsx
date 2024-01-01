@@ -6,11 +6,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/effect-fade";
 
 import "./TagCarousel.scss";
 
 // import required modules
-import { Navigation } from "swiper/modules";
+import { Mousewheel } from "swiper/modules";
 
 type TagProps = {
   id: string;
@@ -36,17 +37,21 @@ const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
 
   return (
     <>
-      <Swiper
-        slidesPerView={5}
-        rewind={true}
-        navigation={true}
-        modules={[Navigation]}
-        className="mySwiper"
-      >
-        {tags.map((tag) => (
-          <SwiperSlide key={tag.id}>{productTemplate(tag)}</SwiperSlide>
-        ))}
-      </Swiper>
+      <div className="tag-carousel">
+        <Swiper
+          direction="horizontal"
+          slidesPerView={5}
+          mousewheel={true}
+          modules={[Mousewheel]}
+          effect={"fade"}
+        >
+          {tags.map((tag) => (
+            <SwiperSlide key={tag.id}>{productTemplate(tag)}</SwiperSlide>
+          ))}
+        </Swiper>
+        <div className="style-section-right" />
+        <div className="style-section-left" />
+      </div>
     </>
   );
 };
