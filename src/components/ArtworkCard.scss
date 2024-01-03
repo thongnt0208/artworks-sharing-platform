@@ -2,7 +2,7 @@
 
 .artwork-card {
   width: 298px;
-  height: 550px;
+  height: 450px;
   text-align: center;
   background-color: $primary-100 !important;
   border-radius: $borderRadius-100 + $padding-100;
@@ -12,62 +12,68 @@
   align-items: center;
   margin-bottom: 20px;
   position: relative;
-  .header-container {
-    position: relative;
-    height: fit-content;
-    .thumbnail-container {
-      padding: $padding-100 $padding-100 0 $padding-100;
-      .thumbnail {
-        border-radius: $borderRadius-100 !important;
-        width: 100%;
-        height: 311px;
+  .p-card-header {
+    .header-container {
+      position: relative;
+      height: fit-content;
+      .thumbnail-container {
+        padding: $padding-100 $padding-100 0 $padding-100;
+        .thumbnail {
+          border-radius: $borderRadius-100 !important;
+          width: 270px;
+          height: 311px;
+        }
       }
-    }
-    .view-button {
-      position: absolute;
-      left: 35%;
-      bottom: 12px;
-      cursor: default;
+      .view-button {
+        width: fit-content;
+        height: 24px;
+        position: absolute;
+        left: 35%;
+        bottom: 12px;
+        cursor: default;
+      }
     }
   }
-
-  .p-card-footer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .footer-container {
+  .p-card-body{
+    .p-card-title {
+      font-size: $h3-bold;
+      width: 100%;
+      height: 22px;
+    }
+    .p-card-footer {
+      width: 100%;
       display: flex;
-      flex-direction: row;
       justify-content: center;
       align-items: center;
-      position: absolute;
-      bottom: 5px;
-      width: fit-content;
-      background: $bg-100;
-      border-radius: $borderRadius-100 + $padding-100;
-      padding: 6px var(--shape-padding-100, 12px);
-      gap: 28px;
-      .like-button,
-      .save-button {
-        margin: 0;
-        padding: 0;
-        background-color: transparent;
-        color: $text-100;
-        font-weight: 700;
-        font-size: $h3;
-        border: none;
-        outline: none;
-      }
-      .divider {
-        margin: 0;
+      .footer-container {
+        width: 167px;
+        height: 42px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 5px;
+        width: fit-content;
+        background: $bg-100;
+        border-radius: $borderRadius-100 + $padding-100;
+        padding: 6px var(--shape-padding-100, 12px);
+        gap: 28px;
+        .like-button,
+        .save-button {
+          margin: 0;
+          padding: 0;
+          background-color: transparent;
+          color: $text-100;
+          font-weight: 700;
+          font-size: $h3;
+          border: none;
+          outline: none;
+        }
+        .divider {
+          margin: 0;
+        }
       }
     }
   }
 }
-
-// @media screen and (min-width: 768px) {
-//     .artwork-card{
-//         max-width: 50%;
-//     }
-// }

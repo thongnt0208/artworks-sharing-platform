@@ -9,6 +9,7 @@ import {
   GetTagsData,
 } from "./HomeService";
 import { Link } from "react-router-dom";
+import "./HomeScreen.scss";
 
 type TagProps = {
   id: string;
@@ -77,7 +78,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           model={items}
           activeIndex={activeTab}
           onTabChange={(e) => setActiveTab(e.index)}
-          className="w-fit m-1 text-black-alpha-10"
+          className="w-max mb-3 text-black-alpha-90"
         />
       ) : null}
 
