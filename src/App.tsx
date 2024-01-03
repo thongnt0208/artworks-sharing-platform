@@ -64,7 +64,7 @@ function App() {
               {/* </Route> */}
             </Route>
             <Route path="/profile/:id" element={<ProfileScreen />} >
-              <Route path="/profile/:id/artwork" element={<ArtworkManagement />} />
+              <Route path="/profile/:id/artwork" element={<ArtworkManagement isLogin={isLogin}/>} />
              {/*  <Route path="/profile/:id/assets" element={<AssetScreen />} />
               <Route path="/profile/:id/service" element={<ServicesScreen />} />
               <Route path="/profile/:id/collection" element={<CollectionScreen />} /> */}

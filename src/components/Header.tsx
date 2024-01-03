@@ -177,7 +177,8 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
               <Avatar image={avatar} size="normal" />
               {showProfilePopup && (
                 <div className="popup profile-popup" ref={profilePopupRef}>
-                  <ProfilePopup username={"danghoanganh36"} email={"danghoanganh36@gmail.com"} />
+                  <ProfilePopup username={"joseeham"} email={"joseeham@gmail.com"} />
+                  {/* <ProfilePopup username={getAuthInfo().username} email={getAuthInfo().email} /> */}
                   <DefaultButton
                     icon=""
                     text="Đăng xuất"
