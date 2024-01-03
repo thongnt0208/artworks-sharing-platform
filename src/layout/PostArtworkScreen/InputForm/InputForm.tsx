@@ -1,8 +1,6 @@
-import * as Yup from 'yup';
-import './InputForm.scss';
-import { maxNumberOfCategories, maxNumberOfTags } from '../../../const/bizConstants';
+import "./InputForm.scss";
+import { maxNumberOfCategories, maxNumberOfTags } from "../../../const/bizConstants";
 import {
-  FileUpload,
   InputText,
   InputTextarea,
   Dropdown,
@@ -10,215 +8,157 @@ import {
   Button,
   MultiSelect,
   useFormik,
-} from '../../index';
-import MultipleFileUpload from '../MultipleFileUpload/MultipleFileUpload';
-
-// type option = { label: string; value: string };
+} from "../../index";
+import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
+import { initialValues, validationSchema } from "./FormikData";
+import React from "react";
 
 // type Props = {
 //   privacyOptions: [option];
 //   categoryOptions: [option];
 //   submitFormCallback: (values: any) => void;
 // };
-type Props = {};
-export default function InputForm({ ...props }: Props) {
-  const initialValues = {
-    Id: '', // Initial value for Id
-    CreatedBy: '', // Initial value for CreatedBy
-    Title: '',
-    Images: [],
-    Description: '',
-    Privacy: 'Public',
-    Tags: [],
-    Category: [],
-    Assets: [],
-  };
-
-  const validationSchema = Yup.object().shape({
-    Title: Yup.string().required(' không được bỏ trống'),
-    Images: Yup.array()
-      .test('fileType', 'Loại file không hợp lệ. Chỉ chấp nhận jpg/png.', (value: any) => {
-        if (value && value.name) {
-          const extension = value.name.split('.').pop().toLowerCase();
-          return extension === 'jpg' || extension === 'png';
-        }
-        return true; // If no file is selected, assume validation pass
-      })
-      .required(' không được bỏ trống'),
-    Description: Yup.string().required(' không được bỏ trống'),
-    Privacy: Yup.string().required(' không được bỏ trống'),
-    Tags: Yup.array().min(1, 'Phải có ít nhất 1 thẻ.'),
-    Category: Yup.array().required(' không được bỏ trống'),
-    Assets: Yup.array().notRequired(),
-  });
-
+type Props = {
+  uploadedFiles: any;
+  setUploadedFiles: (data: any) => void;
+  data: {};
+  setData: (data: any) => void;
+};
+export default function InputForm({ uploadedFiles, setUploadedFiles, data, setData }: Props) {
   const privacyOptions = [
-    { label: 'Công khai', value: 'Public' },
-    { label: 'Riêng tư', value: 'Private' },
+    { label: "Công khai", value: "Public" },
+    { label: "Riêng tư", value: "Private" },
   ];
 
   const categoryOptions = [
-    { label: 'Category 1', value: 'Category 1' },
-    { label: 'Category 2', value: 'Category 2' },
-    { label: 'Category 3', value: 'Category 3' },
-    { label: 'Category 4', value: 'Category 4' },
+    { label: "category 1", value: "category 1" },
+    { label: "category 2", value: "category 2" },
+    { label: "category 3", value: "category 3" },
+    { label: "category 4", value: "category 4" },
   ];
 
-  const formik = useFormik({
+  const formik: any = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values, actions) => {
-      const formData = new FormData();
-
-      // Loop through Images and Assets arrays and append files to FormData
-      values.Images.forEach((image, index) => {
-        formData.append(`image_${index}`, image);
-      });
-
-      values.Assets.forEach((asset, index) => {
-        formData.append(`asset_${index}`, asset);
-      });
-
-      // Add other form values to FormData
-      formData.append('Title', values.Title);
-      formData.append('Description', values.Description);
-      formData.append('Privacy', values.Privacy);
-      formData.append('Tags', JSON.stringify(values.Tags));
-      formData.append('Category', JSON.stringify(values.Category));
-
-      // Handle form submission with FormData (replace this with your submission logic)
-      console.log(formData);
-
-      actions.setSubmitting(false);
+    onSubmit: (values) => {
+      console.log(values);
     },
   });
+
+  const renderError = (field: any) => {
+    return formik.touched[field] && formik.errors[field] ? (
+      <small className="p-error">{formik.errors[field]}</small>
+    ) : null;
+  };
+
+  React.useEffect(() => {
+    setData(formik.values); // Update the data whenever formik values change
+  }, [formik.values, setData]);
 
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <div className='p-fluid'>
-          {/* Title field */}
-          <div className='p-field'>
-            <label htmlFor='Title'>Tiêu đề</label>
-            {formik.errors.Title && formik.touched.Title && (
-              <small className='p-error'>{formik.errors.Title}</small>
-            )}
+        <div className="inner-form-container">
+          {/* images field */}
+          <div className="p-field">
+            {renderError("images")}
+            <br />
+            <MultipleFileUpload
+              isImagesOnly={true}
+              uploadedFiles={uploadedFiles}
+              setUploadedFiles={setUploadedFiles}
+            />
+          </div>
+
+          {/* title field */}
+          <div className="p-field">
+            <label htmlFor="title">Tiêu đề</label>
+            {renderError("title")}
             <br />
             <InputText
-              id='Title'
-              name='Title'
-              onChange={formik.handleChange}
-              value={formik.values.Title}
+              {...formik.getFieldProps("title")}
+              placeholder="Đây là ..."
+              className="w-full"
             />
           </div>
 
-          {/* Images field */}
-          <div className='p-field'>
-            <label htmlFor='Images'>Hình ảnh</label>
-
-            {formik.errors.Images && formik.touched.Images && (
-              <small className='p-error'>{formik.errors.Images}</small>
-            )}
-            <br />
-            <FileUpload
-              id='Images'
-              name='Images'
-              mode='basic'
-              accept='image/jpeg,image/png'
-              maxFileSize={10000000} // 10MB
-              onSelect={(e) => formik.setFieldValue('Images', e.files[0])}
-            />
-          </div>
-
-          {/* Description field */}
-          <div className='p-field'>
-            <label htmlFor='Description'>Miêu tả dự án</label>
-            <br />
-            {formik.errors.Description && formik.touched.Description && (
-              <small className='p-error'>{formik.errors.Description}</small>
-            )}
+          {/* description field */}
+          <div className="p-field">
+            <label htmlFor="description">Miêu tả dự án</label>
+            {renderError("description")}
             <br />
             <InputTextarea
-              id='Description'
-              name='Description'
-              onChange={formik.handleChange}
-              value={formik.values.Description}
+              {...formik.getFieldProps("description")}
+              placeholder="Nói về ..."
+              className="w-full"
             />
           </div>
 
-          {/* Privacy field */}
-          <div className='p-field'>
-            <label htmlFor='Privacy'>Hiển thị với</label>
-            {formik.errors.Privacy && formik.touched.Privacy && (
-              <small className='p-error'>{formik.errors.Privacy}</small>
-            )}
+          {/* privacy field */}
+          <div className="p-field">
+            <label htmlFor="privacy">Hiển thị với</label>
+            {renderError("privacy")}
             <br />
             <Dropdown
-              id='Privacy'
-              name='Privacy'
+              id="privacy"
+              name="privacy"
               options={privacyOptions}
+              {...formik.getFieldProps("privacy")}
               onChange={formik.handleChange}
-              value={formik.values.Privacy}
+              value={formik.values.privacy}
+              className="w-full"
             />
           </div>
 
-          {/* Tags field */}
-          <div className='p-field'>
-            <label htmlFor='Tags'>Thẻ (từ 1 đến {maxNumberOfTags} thẻ)</label>
-            {formik.errors.Tags && formik.touched.Tags && (
-              <small className='p-error'>{formik.errors.Tags}</small>
-            )}
+          {/* tags field */}
+          <div className="p-field">
+            <label htmlFor="tags">Thẻ (từ 1 đến {maxNumberOfTags} thẻ)</label>
+            {renderError("tags")}
             <br />
             <Chips
-              id='Tags'
-              name='Tags'
+              id="tags"
+              name="tags"
               max={maxNumberOfTags}
-              value={formik.values.Tags}
-              onChange={(e) => formik.setFieldValue('Tags', e.value)}
+              value={formik.values.tags}
+              onChange={(e) => formik.setFieldValue("tags", e.value)}
+              {...formik.getFieldProps("tags")}
+              placeholder='Nhấn phím "Enter" để phân tách giữa các thẻ'
+              className="w-full"
             />
           </div>
 
-          {/* Category field */}
-          <div className='p-field'>
-            <label htmlFor='Category'>Thể loại</label>
-            {formik.errors.Category && formik.touched.Category && (
-              <small className='p-error'>{formik.errors.Category}</small>
-            )}
+          {/* category field */}
+          <div className="p-field">
+            <label htmlFor="category">Thể loại</label>
+            {renderError("category")}
             <br />
             <MultiSelect
-              id='Category'
-              name='Category'
+              id="category"
+              name="category"
               options={categoryOptions}
-              value={formik.values.Category}
+              value={formik.values.category}
               selectionLimit={maxNumberOfCategories}
-              onChange={(e) => formik.setFieldValue('Category', e.value)}
+              onChange={(e) => formik.setFieldValue("category", e.value)}
+              {...formik.getFieldProps("category")}
+              className="w-full"
             />
           </div>
 
           {/* Assets field */}
-          <div className='p-field'>
-            <label htmlFor='Assets'>Nguồn đính kèm</label>
-            <FileUpload
-              id='Assets'
-              name='Assets'
-              mode='basic'
-              accept='*'
-              maxFileSize={50000000} // 50MB
-              onSelect={(e) => formik.setFieldValue('Assets', e.files[0])}
+          <div className="p-field">
+            <label htmlFor="Assets">Nguồn đính kèm</label>
+            <MultipleFileUpload
+              isImagesOnly={false}
+              uploadedFiles={{}}
+              setUploadedFiles={() => {}}
             />
           </div>
 
-          <div className='p-field'>
-            <Button
-              type='submit'
-              label='Submit'
-              disabled={!formik.isValid}
-              className='p-button-success'
-            />
+          <div className="p-field">
+            <Button type="submit" label="Lưu" disabled={!formik.isValid} className="w-4" rounded />
           </div>
         </div>
       </form>
-      <MultipleFileUpload/>
     </>
   );
 }
