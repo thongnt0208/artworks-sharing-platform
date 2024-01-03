@@ -18,6 +18,8 @@ $colors: (
     "primary": $primaryColor
 );
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Inter&display=swap');
+
 // Mandatory Designer Variables
 @import './variables/general';
 @import './variables/form';
@@ -31,8 +33,8 @@ $colors: (
 @import './variables/_misc';
 
 :root {
-    font-family:-apple-system, 'IBM Plex Sans', BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --font-family:-apple-system, 'IBM Plex Sans', BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: 'IBM Plex Sans', BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family: 'IBM Plex Sans', BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --surface-a:#ffffff;
     --surface-b:#f8f9fa;
     --surface-c:#e9ecef;

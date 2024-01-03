@@ -1,4 +1,11 @@
 @import "../../const/variables.scss";
 
-
-
+.left-panel-container {
+  img {
+    border-radius: $borderRadius-100;
+  }
+  .tag-inline {
+    text-decoration: none;
+    color: $primary-300;
+  }
+}
