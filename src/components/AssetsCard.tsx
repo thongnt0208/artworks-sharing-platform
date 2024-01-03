@@ -4,27 +4,6 @@ import { DataView } from "primereact/dataview";
 import React from "react";
 import "./AssetsCard.scss";
 
-/* Sample props:
-let assetsCardProps = {
-    id: "1",
-    thumbnail: "https://placehold.in/600",
-    isCreator: true,
-    itemsList: [
-      {
-        id: "1",
-        name: "Item 1",
-        price: 100,
-        extension: "jpg",
-        size: 100,
-        thumbnail: "https://placehold.in/600",
-        editHandler: () => {},
-        saveHandler: () => {},
-        removeHandler: () => {},
-      },
-    ],
-  };
-*/
-
 type Item = {
   id: string;
   name: string;
@@ -37,7 +16,7 @@ type Item = {
   removeHandler?: () => void;
 };
 
-type Props = {
+type AssetsProps = {
   id: string;
   thumbnail: string;
   isCreator: boolean;
@@ -45,8 +24,9 @@ type Props = {
   onClickHandler?: () => void;
 };
 
-const AssetsCard: React.FC<Props> = (props: Props) => {
-  const totalItems = props.itemsList.length;
+const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
+  const totalItems = props.itemsList ? props.itemsList.length : 0;
+  console.log("AssetsCard props:", props);
 
   const thumbnailColumn = (image: string) => {
     return (
@@ -54,7 +34,7 @@ const AssetsCard: React.FC<Props> = (props: Props) => {
         <img
           alt="Ảnh thu nhỏ của một bài đăng"
           src={image}
-          style={{ width: "100%", height: "70%", objectFit: "cover"}}
+          style={{ width: "100%", height: "70%", objectFit: "cover" }}
         />
         <Button
           label={`Có ${totalItems} tài nguyên`}
@@ -123,7 +103,7 @@ const AssetsCard: React.FC<Props> = (props: Props) => {
             value={props.itemsList}
             itemTemplate={detailsColumn}
             paginator
-            rows={props.itemsList.length}
+            rows={props.itemsList ? props.itemsList.length : 0}
           />
         </div>
       </div>
