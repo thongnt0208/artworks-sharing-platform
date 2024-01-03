@@ -1,0 +1,15 @@
+@import "../../../const/variables.scss";
+
+.empty-template-container {
+  color: $gray-default;
+}
+
+.item-container {
+  .item-name-conatiner {
+    p {
+      width: 100%;
+      overflow-wrap: break-word;
+      text-align: start;
+    }
+  }
+}
