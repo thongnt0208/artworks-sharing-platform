@@ -4,13 +4,14 @@ import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
 import { InputText } from "primereact/inputtext";
 import { Avatar } from "primereact/avatar";
-import Notification from "./Notification";
-import DefaultButton from "./Button";
-import ProfilePopup from "./ProfilePopup";
-import "./Header.scss";
+import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { logout } from "../auth/AuthService";
 import { getAuthInfo, removeAuthInfo } from "../util/AuthUtil";
+
+import Notification from "./Notification";
+import ProfilePopup from "./ProfilePopup";
+import "./Header.scss";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
@@ -64,59 +65,27 @@ let sampleMessageData = [
 ];
 
 const Header = ({ isLogin }: { isLogin: boolean }) => {
+  let navigate = useNavigate();
+
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
+  const [showMessageNotification, setShowMessageNotification] =
+    useState<boolean>(false);
   const [showProfilePopup, setShowProfilePopup] = useState<boolean>(false);
-  const [isLoginState, setIsLoginState] = useState(isLogin);
-  const profilePopupRef = useRef<HTMLDivElement>(null);
-  const notificationRef = useRef<HTMLDivElement>(null);
-  const messageNotificationRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnterNotification = () => {
-    setShowNotification(true);
+  const handleLogoutBtn = () => {
+    let accessToken = getAuthInfo()?.accessToken;
+    logout(accessToken).catch((err) => console.log("Logout ERRR", err));
+    removeAuthInfo();
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
-  const handleMouseEnterMessageNotification = () => {
-    setShowMessageNotification(true);
+  const handleCheckLogin = () => {
+    if (!isLogin) {
+      navigate("/login");
+    }
   };
-
-  const handleMouseEnterAvatarClick = () => {
-    setShowProfilePopup(true);
-  };
-
-  useEffect(() => {
-    const handleClickOutsideProfilePopup = (event: MouseEvent) => {
-      // Explicitly define MouseEvent
-      if (profilePopupRef.current && !profilePopupRef.current.contains(event.target as Node)) {
-        setShowProfilePopup(false);
-      }
-    };
-
-    const handleClickOutsideNotification = (event: MouseEvent) => {
-      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
-        setShowNotification(false);
-      }
-    };
-
-    const handleClickOutsideMessageNotification = (event: MouseEvent) => {
-      if (
-        messageNotificationRef.current &&
-        !messageNotificationRef.current.contains(event.target as Node)
-      ) {
-        setShowMessageNotification(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutsideProfilePopup);
-    document.addEventListener("mousedown", handleClickOutsideNotification);
-    document.addEventListener("mousedown", handleClickOutsideMessageNotification);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideProfilePopup);
-      document.removeEventListener("mousedown", handleClickOutsideNotification);
-      document.removeEventListener("mousedown", handleClickOutsideMessageNotification);
-    };
-  }, []);
 
   const startItems = [
     [
@@ -135,93 +104,136 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
     },
   ];
 
-  const endItems = [
-    [
-      <div className="end-menu">
-        <span className="p-input-icon-right search-bar">
-          <InputText placeholder="Search" style={{ width: "30rem" }} />
-          <i className="pi pi-search" />
-        </span>
-        {isLoginState ? (
-          <>
-            <DefaultButton icon="" text="Đăng tác phẩm" onClick={() => {}} />
-            <div className="message-icon" onClick={handleMouseEnterMessageNotification}>
-              <i className="pi pi-inbox"></i>
-              {isLoginState && showMessageNotification && (
-                <div className="popup" ref={messageNotificationRef}>
-                  <Notification
-                    notifications={sampleMessageData}
-                    account={{
-                      accountId: "1",
-                      name: "Trung Thông",
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="notification-icon" onClick={handleMouseEnterNotification}>
-              <i className="pi pi-bell"></i>
-              {isLoginState && showNotification && (
-                <div className="popup" ref={notificationRef}>
-                  <Notification
-                    notifications={sampleNotificationData}
-                    account={{
-                      accountId: "1",
-                      name: "Trung Thông",
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="avatar-icon" onClick={handleMouseEnterAvatarClick}>
-              <Avatar image={avatar} size="normal" />
-              {showProfilePopup && (
-                <div className="popup profile-popup" ref={profilePopupRef}>
-                  <ProfilePopup username={"danghoanganh36"} email={"danghoanganh36@gmail.com"} />
-                  <DefaultButton
-                    icon=""
-                    text="Đăng xuất"
-                    onClick={() => {
-                      setIsLoginState(false);
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            <DefaultButton
-              icon=""
-              text="Đăng nhập"
-              onClick={() => {
-                setIsLoginState(true);
-              }}
-            />
-            <DefaultButton icon="" text="Đăng ký" onClick={() => {}} />
-          </>
-        )}
-      </div>,
-    ],
-  ];
-
-  let navigate = useNavigate();
-  const handleLogoutBtn = () => {
-    let accessToken = getAuthInfo()?.accessToken
-    logout(accessToken).catch((err) => console.log('Logout ERRR', err));
-    removeAuthInfo();
-    setIsLoginState(false);
-    setTimeout(() => {
-      navigate("/");
-    }, 100);
-  };
-
   return (
     <div className="header">
-      {isLogin.toString()}
-      {isLoginState.toString()}
-      {isLogin && <Button label="Log out" onClick={handleLogoutBtn} />}
-      <Menubar className="menubar" start={() => startItems} model={items} end={endItems} />
+      <Menubar
+        className="menubar"
+        start={() => startItems}
+        model={items}
+        end={[
+          [
+            <div className="end-menu">
+              <span className="p-input-icon-right search-bar">
+                <InputText placeholder="Search" style={{ width: "30rem" }} />
+                <i className="pi pi-search" />
+              </span>
+              {isLogin ? (
+                <>
+                  <Button icon="" label="Đăng tác phẩm" onClick={() => {}} />
+
+                  <div
+                    className="message-icon"
+                    onClick={() => {
+                      setShowMessageNotification(true);
+                    }}
+                  >
+                    <i className="pi pi-inbox"></i>
+                  </div>
+
+                  <div
+                    className="notification-icon"
+                    onClick={() => {
+                      setShowNotification(true);
+                    }}
+                  >
+                    <i className="pi pi-bell"></i>
+                  </div>
+
+                  <div
+                    className="avatar-icon"
+                    onClick={() => {
+                      setShowProfilePopup(true);
+                    }}
+                  >
+                    <Avatar image={avatar} size="normal" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Button
+                    icon=""
+                    label="Đăng nhập"
+                    onClick={() => {
+                      handleCheckLogin();
+                    }}
+                  />
+                  <Button
+                    icon=""
+                    label="Đăng ký"
+                    onClick={() => {
+                      navigate("/register");
+                    }}
+                  />
+                </>
+              )}
+            </div>,
+          ],
+        ]}
+      />
+
+      <Dialog
+        headerStyle={{ display: "none" }}
+        visible={showMessageNotification}
+        onHide={() => {
+          setShowMessageNotification(false);
+        }}
+        modal={true}
+        position="top-right"
+        dismissableMask={true}
+        draggable={false}
+      >
+        <Notification
+          notifications={sampleMessageData}
+          account={{
+            accountId: "1",
+            name: "Trung Thông",
+          }}
+        />
+      </Dialog>
+
+      <Dialog
+        headerStyle={{ display: "none" }}
+        visible={showNotification}
+        onHide={() => {
+          setShowNotification(false);
+        }}
+        modal={true}
+        position="top-right"
+        dismissableMask={true}
+        draggable={false}
+      >
+        <Notification
+          notifications={sampleNotificationData}
+          account={{
+            accountId: "1",
+            name: "Trung Thông",
+          }}
+        />
+      </Dialog>
+
+      <Dialog
+        headerStyle={{ display: "none" }}
+        visible={showProfilePopup}
+        onHide={() => {
+          setShowProfilePopup(false);
+        }}
+        modal={true}
+        position="top-right"
+        dismissableMask={true}
+        draggable={false}
+      >
+        <ProfilePopup
+          username={"danghoanganh36"}
+          email={"danghoanganh36@gmail.com"}
+        />
+        <Button
+          icon=""
+          label="Đăng xuất"
+          onClick={() => {
+            handleLogoutBtn();
+          }}
+        />
+      </Dialog>
     </div>
   );
 };
