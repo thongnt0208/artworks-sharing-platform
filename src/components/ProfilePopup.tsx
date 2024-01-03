@@ -2,8 +2,8 @@ import React from "react";
 import { Avatar } from "primereact/avatar";
 import { ListBox } from "primereact/listbox";
 import { useNavigate } from "react-router-dom";
-import DefaultButton from "./Button";
 import "./ProfilePopup.scss";
+import { Button } from "primereact/button";
 
 const logo = require("../assets/defaultImage/default-avatar.png");
 
@@ -23,6 +23,11 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
     navigate(link);
   };
 
+  const handleProfileClick = () => {
+    // navigate(`/profile/${username}/artwork`);
+    navigate("/profile/b015e8b9-f995-40b6-8f3f-8bcf3935eaa3/artwork");
+  };
+
   const items = [
     "Quản lý tác phẩm",
     "Bookmarks",
@@ -38,7 +43,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
         <Avatar image={logo} style={{ padding: "0" }} size="xlarge" />
         <h3>{username}</h3>
         <p>{email}</p>
-        <DefaultButton icon="" text="Trang cá nhân" onClick={() => {}} />
+        <Button label="Trang cá nhân" onClick={handleProfileClick} />
       </div>
 
       <div className="list-box">

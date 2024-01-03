@@ -23,7 +23,8 @@ import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordSc
 import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
-// import ArtworkManagement from "./layout/ProfileScreen/ArtworkScreen/ArtworkScreen";
+
+import ArtworkManagement from "./layout/ProfileScreen/ArtworkScreen/ArtworkScreen";
 // import AssetScreen from "./layout/ProfileScreen/AssetScreen/AssetScreen";
 // import ServicesScreen from "./layout/ProfileScreen/ServicesScreen/ServicesScreen";
 // import CollectionScreen from "./layout/ProfileScreen/CollectionScreen/CollectionScreen";
@@ -63,8 +64,8 @@ function App() {
               {/* </Route> */}
             </Route>
             <Route path="/profile/:id" element={<ProfileScreen />} >
-              {/* <Route path="/profile/:id/artwork" element={<ArtworkManagement />} />
-              <Route path="/profile/:id/assets" element={<AssetScreen />} />
+              <Route path="/profile/:id/artwork" element={<ArtworkManagement isLogin={isLogin}/>} />
+             {/*  <Route path="/profile/:id/assets" element={<AssetScreen />} />
               <Route path="/profile/:id/service" element={<ServicesScreen />} />
               <Route path="/profile/:id/collection" element={<CollectionScreen />} /> */}
               <Route path="/profile/:id/edit" element={<EditProfileTestPage />} />
