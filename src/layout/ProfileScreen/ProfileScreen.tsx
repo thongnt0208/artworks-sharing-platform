@@ -72,7 +72,7 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <>
-      <div className="profile-screen-container grid mt-1">
+      <div className="profile-screen-container grid grid-nogutter mt-1">
         <div className="profile-information-container col col-4">
           <UserInformationCard
             id={profile.id}
