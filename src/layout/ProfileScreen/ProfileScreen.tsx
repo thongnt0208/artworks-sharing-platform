@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
-// import MenuTab from "./MenuTab/MenuTab";
+import MenuTab from "./MenuTab/MenuTab";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "../index";
 import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
-
 
 type ProfileProps = {
   id: string;
@@ -73,19 +72,27 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <>
-      <UserInformationCard
-        id={profile.id}
-        name={profile.name}
-        isCreator={profile.isCreator}
-        job={profile.job}
-        address={profile.address}
-        introduction={profile.introduction}
-        profileView={profile.profileView}
-        artworksView={profile.artworksView}
-        followerNum={profile.followerNum}
-        followingNum={profile.followingNum}
-      />
-      <Button label="Test page" onClick={() => navigate("edit")} />
+      <div className="profile-screen-container grid grid-nogutter mt-1">
+        <div className="profile-information-container col col-4">
+          <UserInformationCard
+            id={profile.id}
+            name={profile.name}
+            isCreator={profile.isCreator}
+            job={profile.job}
+            address={profile.address}
+            introduction={profile.introduction}
+            profileView={profile.profileView}
+            artworksView={profile.artworksView}
+            followerNum={profile.followerNum}
+            followingNum={profile.followingNum}
+          />
+        </div>
+        <div className="profile-menu-container col col-8">
+          <MenuTab />
+        </div>
+      </div>
+
+      {/* <Button label="Test page" onClick={() => navigate("edit")} />
       <Button
         label="Vùng đăng ký"
         onClick={() =>
@@ -94,7 +101,7 @@ const ProfileScreen: React.FC = () => {
           })
         }
       />
-      <Outlet />
+      <Outlet /> */}
     </>
   );
 };
