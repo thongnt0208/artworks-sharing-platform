@@ -1,2 +1,31 @@
 @import "../../../const/variables.scss";
 
+form {
+  .inner-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    label {
+      //text-cus-normal-bold
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 18.2px;
+    }
+
+    input::placeholder, textarea::placeholder{
+        //text-cus-normal-bold
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 18.2px;
+        text-decoration: underline;
+        color: $bg-300;
+    }
+
+    .p-inputtext{
+        //text-cus-normal
+        font-size: 14px;
+        color: black;
+        width: 100%;
+    }
+  }
+}

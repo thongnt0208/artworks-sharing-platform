@@ -1,3 +1,6 @@
+import { Tooltip } from 'primereact/tooltip';
+import { Tag } from 'primereact/tag';
+import { ProgressBar } from 'primereact/progressbar';
 import { Calendar } from 'primereact/calendar';
 import { Password } from 'primereact/password';
 import { Image } from 'primereact/image';
@@ -16,4 +19,4 @@ import { MultiSelect } from 'primereact/multiselect';
 import { useFormik } from 'formik';
 
 
-export { Password, Calendar, Image, Divider, Toast,Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik };
+export { Tooltip, Tag, ProgressBar, Password, Calendar, Image, Divider, Toast,Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik };
