@@ -32,7 +32,7 @@ export default function PostArtworkScreen({ ...props }: Props) {
             {/* Review Description */}
             {data?.description && <p className="text-cus-body">{data?.description}</p>}
             {/* Review Tags */}
-            {data?.tags.length > 0 && (
+            {data?.tags?.length > 0 && (
               <div className="tags-container">
                 {data.tags.map((tag: string, index: number) => (
                   <Button key={index}>
