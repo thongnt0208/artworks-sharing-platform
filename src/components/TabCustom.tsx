@@ -1,6 +1,8 @@
 import { Button } from "primereact/button";
 import { useEffect, useState } from "react";
 
+import "./TabCustom.scss";
+
 /*Sample props:
 let sampleProps = {
     isLogin: true,
@@ -33,6 +35,7 @@ export const TabCustom = (props: Props) => {
       "wallet",
       "collection",
     ];
+    console.log(props.currentTabId);
     setActiveTabClassName(
       tabsToRound.includes(props.currentTabId) ? "p-button-rounded" : "p-button-text"
     );
