@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function GetProfileData() {
     try {
-        const response = await axios.get("http://127.0.0.1:1880/profile/:id", {
+        const response = await axios.get("http://127.0.0.1:1880/account/:id", {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -11,6 +11,7 @@ export async function GetProfileData() {
             console.log("Error fetching profile data");
             return [];
         }
+        console.log("Profile data:", response.data);
         return response.data;
     }
     catch (error) {

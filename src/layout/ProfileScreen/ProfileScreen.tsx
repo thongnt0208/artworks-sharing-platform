@@ -8,11 +8,14 @@ import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
 type ProfileProps = {
   id: string;
-  name: string;
-  isCreator: boolean;
-  job: string;
-  address: string;
-  introduction: string;
+  username: string;
+  fullname: string;
+  role: string;
+  isCreator: boolean,
+  // job: string;
+  // address: string;
+  bio: string;
+  avatar: string;
   profileView: number;
   artworksView: number;
   followerNum: number;
@@ -24,11 +27,14 @@ const ProfileScreen: React.FC = () => {
 
   const [profile, setProfile] = useState<ProfileProps>({
     id: "",
-    name: "",
+    username: "n/a",
+    fullname: "N/A",
+    role: "",
     isCreator: false,
-    job: "",
-    address: "",
-    introduction: "",
+    avatar: "",
+    // job: "",
+    // address: "",
+    bio: "",
     profileView: 0,
     artworksView: 0,
     followerNum: 0,
@@ -64,7 +70,7 @@ const ProfileScreen: React.FC = () => {
       // Function 2: Check if the current user's id (useAuth) is the profile id or not -> setIsCreator
       // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
       // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
-
+      
       setProfile(profileData);
     };
     fetchData();
@@ -72,22 +78,25 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <>
-      <div className="profile-screen-container grid grid-nogutter mt-1">
-        <div className="profile-information-container col col-4">
+      <div className="profile-screen-container grid grid-nogutter mt-3">
+        <div className="profile-information-container col col-3">
           <UserInformationCard
             id={profile.id}
-            name={profile.name}
+            username={profile.username}
+            fullname={profile.fullname}
+            role={profile.role}
             isCreator={profile.isCreator}
-            job={profile.job}
-            address={profile.address}
-            introduction={profile.introduction}
+            // job={profile.job}
+            // address={profile.address}
+            bio={profile.bio}
+            avatar={profile.avatar}
             profileView={profile.profileView}
             artworksView={profile.artworksView}
             followerNum={profile.followerNum}
             followingNum={profile.followingNum}
           />
         </div>
-        <div className="profile-menu-container col col-8">
+        <div className="profile-menu-container col col-9 pl-6 ">
           <MenuTab />
         </div>
       </div>
