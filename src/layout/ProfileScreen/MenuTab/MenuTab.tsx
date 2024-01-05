@@ -8,12 +8,13 @@ const MenuTab: React.FC = () => {
   const handleTabNavigation = (tabId: string) => {
     navigate(tabId);
   };
+  let currentTabId = window.location.pathname.split("/")[3];
   return (
     <div className="menu-tab">
       <div>
         <TabCustom
           isLogin={false}
-          currentTabId={""}
+          currentTabId={currentTabId}
           onClickHandler={handleTabNavigation}
         />
       </div>

@@ -1,0 +1,11 @@
+@import "/src/const/variables.scss";
+
+.p-button-text {
+    color: $strong-200;
+}
+.p-button-rounded {
+    background-color: $primary-300;
+    color: $bg-100;
+    border-radius: 50px;
+    border: 0;
+}
