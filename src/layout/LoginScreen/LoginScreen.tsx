@@ -33,8 +33,7 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
         console.log(response);
 
         const { data } = response || {};
-        const { result } = data || {};
-        const { userId: id, email, fullname, accessToken, refreshToken } = result || {};
+        const { userId: id, email, fullname, accessToken, refreshToken } = data || {};
         const decodedAToken = jwtDecode(accessToken) as any;
         console.log(decodedAToken);
         const role = decodedAToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
