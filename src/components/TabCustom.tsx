@@ -35,7 +35,6 @@ export const TabCustom = (props: Props) => {
       "wallet",
       "collection",
     ];
-    console.log(props.currentTabId);
     setActiveTabClassName(
       tabsToRound.includes(props.currentTabId) ? "p-button-rounded" : "p-button-text"
     );
