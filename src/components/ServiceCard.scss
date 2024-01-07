@@ -1,25 +1,39 @@
-#service-card-container {
-  background-size: cover !important;
-  background-color: transparent !important;
-  border: none !important;
-  outline: none !important;
-  border-radius: 12px !important;
-  padding: 0 !important;
-  width: 450px !important;
-  height: 286px !important;
-  display: flex !important;
+@import '/src/const/variables.scss';
+
+.service-card-container {
+  background-size: cover ;
+  background-color: transparent ;
+  outline: none ;
+  border-radius: $borderRadius-100 ;
+  width: 450px ;
+  height: 286px ;
+  display: flex ;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-
+  box-shadow: $card-shadow;
   .information {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: white !important;
-    color: black !important;
-    width: 100% !important;
-    outline: none !important;
-    border: none !important;
+    background-color: white ;
+    color: $primary-300 ;
+    width: 100% ;
+    border-radius: 0px 0px 12px 12px;
+    .service-card-details-top {
+      .service-name {
+        font-weight: 900 ;
+      }
+      .starting-price {
+        font-weight: 900 ;
+        color: $strong-200;
+      }
+    }
+    .hire-button-container {
+      .hire-button {
+        background-color: $strong-200;
+        color: $bg-100;
+      }
+    }
   }
 }

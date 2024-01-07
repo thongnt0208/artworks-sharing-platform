@@ -1,44 +1,53 @@
 import React from "react";
 import { Button } from "primereact/button";
-import "./ServiceCard.scss"
 
+import "./ServiceCard.scss";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
-interface ServiceCardProps {
-  data: {
-    id: number;
-    serviceName: string;
-    startingPrice: number;
-    deliveryTime: number;
-    numberOfConcepts: number;
-  };
-  onClick?: () => void;
+type Props = {
+  id: string;
+  serviceName: string;
+  description: string;
+  deliveryTime: number;
+  numberOfConcept: number;
+  numberOfRevision: number;
+  startingPrice: number;
+  coverLocation: string;
 }
-
-const ServiceCard: React.FC<ServiceCardProps> = ({ data }, onClick) => {
-  console.log(data);
-  const { id, serviceName, startingPrice, deliveryTime, numberOfConcepts } =
-    data;
-
+const ServiceCard: React.FC<Props> = ({ ...props }: Props) => {
   return (
-    <Button
-      id="service-card-container"
+    <div
+      className="service-card-container "
       style={{
         backgroundImage: `url(${background})`,
       }}
     >
       <div className="information">
-        <h2 style={{ margin: 0 }}>{serviceName}</h2>
-
-        <p style={{ margin: 5, textAlign: "left" }}>Từ {startingPrice} Xu</p>
-        <p style={{ margin: 5, textAlign: "left" }}>
-          <i className="pi pi-clock" /> Trong khoảng {deliveryTime} tuần
-        </p>
-        <p style={{ margin: 5, textAlign: "left" }}>
-          <i className="pi pi-palette" /> {numberOfConcepts} thể loại
-        </p>
+        <div className="service-card-details-top mt-2">
+          <h2 className="service-name mt-0 mb-0 ml-3 font-bold">
+            {props.serviceName}
+          </h2>
+          <p className="starting-price mt-0 mb-0 ml-3">Từ {props.startingPrice} Xu</p>
+          <p className="cover-location mt-0 mb-0 ml-3">{props.coverLocation}</p>
+        </div>
+        <div className="service-card-details-bottom mt-2 ml-3">
+          <p className="mt-1 mb-0">
+            <i className="pi pi-clock" /> Trong khoảng {props.deliveryTime} tuần
+          </p>
+          <p className="mt-1 mb-0">
+            <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}
+            {props.numberOfRevision} lần chỉnh sửa
+          </p>
+        </div>
+        <div className="hire-button-container w-full flex justify-content-center mt-3 mb-3 ">
+          <Button
+            label="Thuê"
+            rounded
+            className="hire-button border-none pl-5 pr-5"
+          />
+        </div>
       </div>
-    </Button>
+    </div>
   );
 };
 
