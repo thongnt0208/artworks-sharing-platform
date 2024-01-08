@@ -27,7 +27,7 @@ import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 import ArtworkManagement from "./layout/ProfileScreen/ArtworkScreen/ArtworkScreen";
 import AssetScreen from "./layout/ProfileScreen/AssetScreen/AssetScreen";
 // import ServicesScreen from "./layout/ProfileScreen/ServicesScreen/ServicesScreen";
-// import CollectionScreen from "./layout/ProfileScreen/CollectionScreen/CollectionScreen";
+import CollectionScreen from "./layout/ProfileScreen/CollectionTab/CollectionTab";
 import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 import { getAuthInfo } from "./util/AuthUtil";
@@ -67,8 +67,8 @@ function App() {
               <Route path="/account/:id/" element={<ArtworkManagement />} />
               <Route path="/account/:id/artwork" element={<ArtworkManagement/>} />
               <Route path="/account/:id/assets" element={<AssetScreen isLogin={isLogin} />} />
-              {/* <Route path="/profile/:id/service" element={<ServicesScreen />} />
-              <Route path="/profile/:id/collection" element={<CollectionScreen />} /> */}
+              {/* <Route path="/account/:id/service" element={<ServicesScreen />} /> */}
+              <Route path="/account/:id/collection" element={<CollectionScreen />} />
               <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
               <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
               <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
