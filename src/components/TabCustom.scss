@@ -1,9 +1,9 @@
 @import "/src/const/variables.scss";
 
-.p-button-text {
+.inactive-tab {
     color: $strong-200;
 }
-.p-button-rounded {
+.active-tab {
     background-color: $primary-300;
     color: $bg-100;
     border-radius: 50px;
