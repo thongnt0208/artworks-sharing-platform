@@ -36,7 +36,7 @@ export const TabCustom = (props: Props) => {
       "collection",
     ];
     setActiveTabClassName(
-      tabsToRound.includes(props.currentTabId) ? "p-button-rounded" : "p-button-text"
+      tabsToRound.includes(props.currentTabId) ? "p-button-rounded active-tab" : "p-button-text inactive-tab"
     );
   }, [props.currentTabId]);
 
@@ -57,7 +57,7 @@ export const TabCustom = (props: Props) => {
           id={tab.id}
           label={tab.label}
           className={
-            props.currentTabId === tab.id ? activeTabClassName : "p-button-text"
+            props.currentTabId === tab.id ? activeTabClassName : "p-button-text inactive-tab"
           }
           onClick={() => {
             props.onClickHandler(tab.id);
