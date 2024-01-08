@@ -4,8 +4,8 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router-dom";
 
-import { GetArtworksData } from "./ArtworkService";
-import "./ArtworkScreen.scss";
+import { GetArtworksData } from "./ArtworksService";
+import "./ArtworksTab.scss";
 import ArtworkCard from "../../../components/ArtworkCard";
 
 type ArtworksProps = {
