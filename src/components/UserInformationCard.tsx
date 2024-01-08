@@ -47,7 +47,7 @@ const UserInformationCard: React.FC<Props> = (props: Props) => {
     </>
   );
   return (
-    <>
+    <div className="user-information-card-container">
       <Card footer={footer} className="user-information-card">
         <div className="avatar-container">
           <img
@@ -101,7 +101,7 @@ const UserInformationCard: React.FC<Props> = (props: Props) => {
         <h3>Về tôi</h3>
         <p className="text-justify">{props.bio}</p>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router";
+import { useOutletContext } from "react-router-dom";
 
 import { GetArtworksData } from "./ArtworkService";
 import "./ArtworkScreen.scss";
@@ -11,17 +12,20 @@ type ArtworksProps = {
   id: string;
   title: string;
   subTitle: string;
-  image: string;
+  images: string[];
   likeNum: number;
   viewNum: number;
 };
 
-const ArtworkManagement: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
+const ArtworkManagement: React.FC = () => {
   let navigate = useNavigate();
+  let [accountId, isCreator] = useOutletContext() as [string, boolean];
+  console.log("User information: " , accountId, isCreator);
+
   const [artworks, setArtworks] = React.useState<ArtworksProps[]>([]);
   React.useEffect(() => {
     const fetchArtworks = async () => {
-      const response = await GetArtworksData();
+      const response = await GetArtworksData(accountId);
       if (Array.isArray(response)) {
         setArtworks(response);
       } else {
@@ -29,13 +33,13 @@ const ArtworkManagement: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       }
     };
     fetchArtworks();
-  }, []);
+  }, [accountId]);
   return (
     <>
       <h1>Các tác phẩm</h1>
       <div className="gallery grid">
         {artworks.length === 0 ? (
-          isLogin ? (
+          isCreator ? (
             <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
               <i className="pi pi-plus-circle icon m-3" />
               <Button
@@ -49,19 +53,21 @@ const ArtworkManagement: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
             <div> Tác giả chưa có tác phẩm nào </div>
           )
         ) : (
-          artworks.map((artwork) => (
-            <div className="gallery__item col col-6" key={artwork.id}>
-              <ArtworkCard
-                key={artwork.id}
-                id={artwork.id}
-                title={artwork.title}
-                subTitle={artwork.subTitle}
-                image={artwork.image}
-                likeNum={10}
-                viewNum={12}
-              />
-            </div>
-          ))
+          artworks
+            .filter((artwork) => artwork.images && artwork.images.length > 0)
+            .map((artwork) => (
+              <div className="gallery__item col col-6" key={artwork.id}>
+                <ArtworkCard
+                  key={artwork.id}
+                  id={artwork.id}
+                  title={artwork.title}
+                  subTitle={artwork.subTitle}
+                  image={artwork.images[0]}
+                  likeNum={10}
+                  viewNum={12}
+                />
+              </div>
+            ))
         )}
       </div>
     </>

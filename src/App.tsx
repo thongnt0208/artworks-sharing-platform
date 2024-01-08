@@ -63,15 +63,15 @@ function App() {
               <Route path="/postAw" element={<PostArtworkScreen />} />
               {/* </Route> */}
             </Route>
-            <Route path="/profile/:id" element={<ProfileScreen />} >
-              <Route path="/profile/:id/" element={<ArtworkManagement isLogin={isLogin}/>} />
-              <Route path="/profile/:id/artwork" element={<ArtworkManagement isLogin={isLogin}/>} />
-              <Route path="/profile/:id/assets" element={<AssetScreen isLogin={isLogin} />} />
+            <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin}/>} >
+              <Route path="/account/:id/" element={<ArtworkManagement />} />
+              <Route path="/account/:id/artwork" element={<ArtworkManagement/>} />
+              <Route path="/account/:id/assets" element={<AssetScreen isLogin={isLogin} />} />
               {/* <Route path="/profile/:id/service" element={<ServicesScreen />} />
               <Route path="/profile/:id/collection" element={<CollectionScreen />} /> */}
-              <Route path="/profile/:id/edit" element={<EditProfileTestPage />} />
-              <Route path="/profile/:id/subscribe" element={<SubscribeArea />} />
-              <Route path="/profile/:id/subscribe/setup" element={<SetupSubscribeArea />} />
+              <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
+              <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
+              <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
             </Route>
           </Routes>
 
