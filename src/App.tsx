@@ -24,7 +24,7 @@ import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScre
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 
-import ArtworkManagement from "./layout/ProfileScreen/ArtworkScreen/ArtworkScreen";
+import ArtworkManagement from "./layout/ProfileScreen/ArtworksTab/ArtworksTab";
 import AssetScreen from "./layout/ProfileScreen/AssetScreen/AssetScreen";
 import ServicesTab from "./layout/ProfileScreen/ServicesTab/ServicesTab";
 import CollectionScreen from "./layout/ProfileScreen/CollectionTab/CollectionTab";
