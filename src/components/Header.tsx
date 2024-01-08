@@ -64,27 +64,35 @@ let sampleMessageData = [
   },
 ];
 
-const Header = ({ isLogin }: { isLogin: boolean }) => {
+const Header = ({
+  isLogin,
+  setIsLogin,
+}: {
+  isLogin: boolean;
+  setIsLogin: (value: boolean) => void;
+}) => {
   let navigate = useNavigate();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [showMessageNotification, setShowMessageNotification] =
-    useState<boolean>(false);
+  const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
   const [showProfilePopup, setShowProfilePopup] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogoutBtn = () => {
     let accessToken = getAuthInfo()?.accessToken;
+    setIsLoading(true);
     logout(accessToken).catch((err) => console.log("Logout ERRR", err));
-    removeAuthInfo();
     setTimeout(() => {
+      setIsLogin(false);
+      setIsLoading(false);
+      setShowProfilePopup(false);
+      removeAuthInfo();
       navigate("/");
-    }, 100);
+    }, 1500);
   };
 
   const handleCheckLogin = () => {
-    if (!isLogin) {
-      navigate("/login");
-    }
+    !isLogin && navigate("/login");
   };
 
   const startItems = [
@@ -103,6 +111,13 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
       label: "Thuê",
     },
   ];
+
+  const dialogModelFields = {
+    modal: true,
+    position: "top-right" as const, // Set to one of the allowed values
+    dismissableMask: true,
+    draggable: false,
+  };
 
   return (
     <div className="header">
@@ -177,10 +192,7 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
         onHide={() => {
           setShowMessageNotification(false);
         }}
-        modal={true}
-        position="top-right"
-        dismissableMask={true}
-        draggable={false}
+        {...dialogModelFields}
       >
         <Notification
           notifications={sampleMessageData}
@@ -197,10 +209,7 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
         onHide={() => {
           setShowNotification(false);
         }}
-        modal={true}
-        position="top-right"
-        dismissableMask={true}
-        draggable={false}
+        {...dialogModelFields}
       >
         <Notification
           notifications={sampleNotificationData}
@@ -217,22 +226,20 @@ const Header = ({ isLogin }: { isLogin: boolean }) => {
         onHide={() => {
           setShowProfilePopup(false);
         }}
-        modal={true}
-        position="top-right"
-        dismissableMask={true}
-        draggable={false}
+        {...dialogModelFields}
       >
-        <ProfilePopup
-          username={"danghoanganh36"}
-          email={"danghoanganh36@gmail.com"}
-        />
-        <Button
-          icon=""
-          label="Đăng xuất"
-          onClick={() => {
-            handleLogoutBtn();
-          }}
-        />
+        <ProfilePopup username={"danghoanganh36"} email={"danghoanganh36@gmail.com"} />
+        <div className="flex w-full justify-content-center">
+          {/* ThongNT: Yêu cầu AnhDH chỉnh lại bằng file CSS, tại vì thấy chướng mắt quá nên phải chỉnh inline trước */}
+          <Button
+            icon=""
+            label="Đăng xuất"
+            loading={isLoading}
+            onClick={() => {
+              handleLogoutBtn();
+            }}
+          />
+        </div>
       </Dialog>
     </div>
   );
