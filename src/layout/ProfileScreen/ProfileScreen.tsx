@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
 import MenuTab from "./MenuTab/MenuTab";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../index";
 import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+import { getAuthInfo } from "../../util/AuthUtil";
 
 type ProfileProps = {
   id: string;
   username: string;
   fullname: string;
   role: string;
-  isCreator: boolean,
   // job: string;
   // address: string;
   bio: string;
@@ -22,7 +22,7 @@ type ProfileProps = {
   followingNum: number;
 };
 
-const ProfileScreen: React.FC = () => {
+const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState<ProfileProps>({
@@ -30,7 +30,6 @@ const ProfileScreen: React.FC = () => {
     username: "n/a",
     fullname: "N/A",
     role: "",
-    isCreator: false,
     avatar: "",
     // job: "",
     // address: "",
@@ -41,7 +40,7 @@ const ProfileScreen: React.FC = () => {
     followingNum: 0,
   });
 
-  const [isCreator, setIsCreator] = useState<boolean>(false);
+  const [isCreator, setIsCreator] = useState<boolean>(isLogin);
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
     {
@@ -70,8 +69,10 @@ const ProfileScreen: React.FC = () => {
       // Function 2: Check if the current user's id (useAuth) is the profile id or not -> setIsCreator
       // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
       // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
-      
       setProfile(profileData);
+      if (getAuthInfo().id === profile.id) {
+        setIsCreator(true);
+      }
     };
     fetchData();
   }, []);
@@ -85,7 +86,7 @@ const ProfileScreen: React.FC = () => {
             username={profile.username}
             fullname={profile.fullname}
             role={profile.role}
-            isCreator={profile.isCreator}
+            isCreator={isCreator}
             // job={profile.job}
             // address={profile.address}
             bio={profile.bio}
@@ -97,7 +98,7 @@ const ProfileScreen: React.FC = () => {
           />
         </div>
         <div className="profile-menu-container col col-9 pl-6 ">
-          <MenuTab />
+          <MenuTab accountId={profile.id} isCreator={isCreator} />
         </div>
       </div>
 
