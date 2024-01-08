@@ -14,8 +14,9 @@ import { setAuthInfo } from "../../util/AuthUtil";
 type Props = {
   isLogin: boolean;
   setIsLogin: (value: boolean) => void;
+  setAuthInfoChanged: (value: any) => void;
 };
-const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
+const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,8 @@ const LoginScreen = ({ isLogin, setIsLogin }: Props) => {
 
         let currentUserData = { id, email, fullname, accessToken, refreshToken, role, aTExp: exp };
 
-        setAuthInfo(currentUserData);
+        setAuthInfo(currentUserData); //set Auth info to LocalStorage
+        setAuthInfoChanged(currentUserData); //notify to state at App.tsx that the user has logged in
         setIsLogin(!!id); // Assuming login is considered valid if 'id' exists
         setIsLoading(false);
         console.log({ ...currentUserData });
