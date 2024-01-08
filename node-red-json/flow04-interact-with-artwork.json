@@ -787,7 +787,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2040,
+        "x": 2010,
         "y": 100,
         "wires": []
     },
@@ -800,7 +800,7 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 1630,
+        "x": 1580,
         "y": 100,
         "wires": [
             [
@@ -820,7 +820,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1870,
+        "x": 1830,
         "y": 100,
         "wires": [
             [
@@ -843,6 +843,102 @@
         "statusType": "auto",
         "x": 1310,
         "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0e9f53b01280b4ee",
+        "type": "http in",
+        "z": "adcc113084da2426",
+        "name": "[GET] Services of an Account",
+        "url": "/account/:accountId/service",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1580,
+        "y": 200,
+        "wires": [
+            [
+                "c0da20ad8d74a17b"
+            ]
+        ]
+    },
+    {
+        "id": "c0da20ad8d74a17b",
+        "type": "function",
+        "z": "adcc113084da2426",
+        "name": "function 25",
+        "func": "// let mockData = [{\n//   \"id\": 1,\n//   \"serviceName\": \"Research and Development\",\n//   \"description\": \"nec dui luctus rutrum nulla tellus in sagittis dui vel nisl duis ac nibh fusce lacus purus aliquet at feugiat non pretium quis lectus suspendisse potenti in eleifend quam a odio in hac habitasse platea dictumst maecenas ut massa quis augue luctus tincidunt nulla mollis\",\n//   \"deliveryTime\": 1,\n//   \"numberOfConcept\": 1,\n//   \"numberOfRevision\": 1,\n//   \"startingPrice\": 19,\n//   \"coverLocation\": \"Phitsanulok\"\n// }, {\n//   \"id\": 2,\n//   \"serviceName\": \"Human Resources\",\n//   \"description\": \"sed nisl nunc rhoncus dui vel sem sed sagittis nam congue risus semper porta volutpat quam pede lobortis ligula sit amet eleifend pede libero quis orci nullam molestie nibh in lectus pellentesque at nulla suspendisse potenti cras in purus\",\n//   \"deliveryTime\": 2,\n//   \"numberOfConcept\": 2,\n//   \"numberOfRevision\": 2,\n//   \"startingPrice\": 29,\n//   \"coverLocation\": \"Charlotte\"\n// }, {\n//   \"id\": 3,\n//   \"serviceName\": \"Sales\",\n//   \"description\": \"amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi non quam nec dui luctus rutrum nulla tellus in sagittis\",\n//   \"deliveryTime\": 3,\n//   \"numberOfConcept\": 3,\n//   \"numberOfRevision\": 3,\n//   \"startingPrice\": 96,\n//   \"coverLocation\": \"Sebina\"\n// }]\n\nlet mockData = []\n\nmsg.payload = mockData\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 200,
+        "wires": [
+            [
+                "ed6c4ffb481da5e8"
+            ]
+        ]
+    },
+    {
+        "id": "ed6c4ffb481da5e8",
+        "type": "http response",
+        "z": "adcc113084da2426",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "b049511496df1ae9",
+        "type": "http in",
+        "z": "adcc113084da2426",
+        "name": "[GET] Collections of an Account",
+        "url": "/account/:accountId/collection",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1590,
+        "y": 280,
+        "wires": [
+            [
+                "b80f5682c7da0e9d"
+            ]
+        ]
+    },
+    {
+        "id": "b80f5682c7da0e9d",
+        "type": "function",
+        "z": "adcc113084da2426",
+        "name": "function 26",
+        "func": "let mockData = [{\n  \"id\": 1,\n  \"collectionName\": \"Performance\",\n  \"privacy\": \"public\",\n  \"numberOfArtworks\": 1\n}, {\n  \"id\": 2,\n  \"collectionName\": \"Rogue Trader\",\n  \"privacy\": \"public\",\n  \"numberOfArtworks\": 2\n}]\n\nmsg.payload = mockData\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 280,
+        "wires": [
+            [
+                "054617edeca273b5"
+            ]
+        ]
+    },
+    {
+        "id": "054617edeca273b5",
+        "type": "http response",
+        "z": "adcc113084da2426",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 280,
         "wires": []
     }
 ]

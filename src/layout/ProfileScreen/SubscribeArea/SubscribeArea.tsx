@@ -56,12 +56,13 @@ export default function SubscribeArea({ ...props }: Props) {
                 <div className="collections-container">
                   {subscribeData?.map((sbs: subscribeDataType) => {
                     return (
-                      <CollectionCard
-                        key={sbs.id}
-                        data={sbs}
-                        isSubscribed={isCreator}
-                        profileId={profileId}
-                      />
+                      // <CollectionCard
+                      //   key={sbs.id}
+                      //   data={sbs}
+                      //   isSubscribed={isCreator}
+                      //   profileId={profileId}
+                      // />
+                      <></>
                     );
                   })}
                 </div>
@@ -79,12 +80,13 @@ export default function SubscribeArea({ ...props }: Props) {
         <div className="collections-container">
           {subscribeData?.map((sbs: subscribeDataType) => {
             return (
-              <CollectionCard
-                key={sbs.id}
-                data={sbs}
-                isSubscribed={isSubscribed}
-                profileId={profileId}
-              />
+              // <CollectionCard
+              //   key={sbs.id}
+              //   data={sbs}
+              //   isSubscribed={isSubscribed}
+              //   profileId={profileId}
+              // />
+              <></>
             );
           })}
         </div>
