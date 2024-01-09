@@ -8,7 +8,6 @@ import {
   GetNewArtworksData,
   GetTagsData,
 } from "./HomeService";
-import { Link } from "react-router-dom";
 import "./HomeScreen.scss";
 
 type TagProps = {
@@ -24,8 +23,8 @@ type CategoryProps = {
 type Artwork = {
   id: string;
   title: string;
-  subTitle: string;
-  images: string[];
+  creator: string;
+  image: string;
   likeNum: number;
   viewNum: number;
 };

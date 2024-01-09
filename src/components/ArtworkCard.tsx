@@ -1,13 +1,15 @@
 import React from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import "./ArtworkCard.scss";
 import { Divider } from "primereact/divider";
+
+import "./ArtworkCard.scss";
+import { formatLargeNumber } from "../util/NumberHandler";
 
 type Props = {
   id: string;
   title: string;
-  subTitle: string;
+  creator: string;
   image: string;
   likeNum: number;
   viewNum: number;
@@ -20,7 +22,7 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
   console.log(props);
   let header = (
     <div className="header-container">
-      <div className="thumbnail-container">
+      <div className="thumbnail-container pt-0">
         <img
           alt={`Hình thu nhỏ của tác phẩm tên ${props.title}`}
           src={props.image}
@@ -40,7 +42,7 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
     <div className="footer-container">
       <Button
         className="like-button"
-        label={props.likeNum.toString()}
+        label={formatLargeNumber(props.likeNum)}
         icon="pi pi-heart"
         onClick={props.likeHandler}
       />
@@ -56,7 +58,7 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
     <Card
       id={props.id}
       title={props.title}
-      subTitle={props.subTitle}
+      subTitle={`bởi ${props.creator}`}
       header={header}
       footer={footer}
       className="artwork-card cursor-pointer"
