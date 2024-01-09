@@ -1,6 +1,6 @@
 import "./App.scss";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { PrimeReactProvider, addLocale, locale } from "primereact/api";
@@ -32,7 +32,6 @@ import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 import { getAuthInfo } from "./util/AuthUtil";
 
-
 function App() {
   addLocale("vi", vi.vi);
   locale("vi");
@@ -40,42 +39,52 @@ function App() {
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
   console.log(authInfo);
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
+  
   return (
     <PrimeReactProvider value={primereactConfigValue}>
       <BrowserRouter>
-          <Header isLogin={isLogin} />
+        <Header isLogin={isLogin} setIsLogin={setIsLogin} />
 
-          <Routes>
-            <Route path="/" element={<HomeScreen isLogin={true} />} />
-            <Route path="/login" element={<LoginScreen isLogin={isLogin} setIsLogin={setIsLogin}/>} />
-            <Route path="/register" element={<RegisterScreen />} />
-            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-            <Route path="/reset-password" element={<ResetPasswordScreen />} />
-            <Route path="/change-pasword" element={<ChangePasswordScreen />} />
-            <Route path="/artwork/:id" element={<ArtworkDetail />} />
-            <Route element={<RequireAuth />}>
-              {/* Routes need to protect (must log in to access)*/}
-              <Route path="/editTest" element={<EditProfileTestPage />} />
-              {/* <Route path="/artwork" element={<HomeScreen />}> */}
-              {/* {" "} */}
-              {/* Artworks List component */}
+        <Routes>
+          <Route path="/" element={<HomeScreen isLogin={true} />} />
+          <Route
+            path="/login"
+            element={
+              <LoginScreen
+                isLogin={isLogin}
+                setIsLogin={setIsLogin}
+                setAuthInfoChanged={setAuthInfo}
+              />
+            }
+          />
+          <Route path="/register" element={<RegisterScreen />} />
+          <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+          <Route path="/reset-password" element={<ResetPasswordScreen />} />
+          <Route path="/change-pasword" element={<ChangePasswordScreen />} />
+          <Route path="/artwork/:id" element={<ArtworkDetail />} />
+          <Route element={<RequireAuth />}>
+            {/* Routes need to protect (must log in to access)*/}
+            <Route path="/editTest" element={<EditProfileTestPage />} />
+            {/* <Route path="/artwork" element={<HomeScreen />}> */}
+            {/* {" "} */}
+            {/* Artworks List component */}
 
-              <Route path="/postAw" element={<PostArtworkScreen />} />
-              {/* </Route> */}
-            </Route>
-            <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin}/>} >
-              <Route path="/account/:id/" element={<ArtworkManagement />} />
-              <Route path="/account/:id/artwork" element={<ArtworkManagement/>} />
-              <Route path="/account/:id/assets" element={<AssetScreen isLogin={isLogin} />} />
-              <Route path="/account/:id/service" element={<ServicesTab />} />
-              <Route path="/account/:id/collection" element={<CollectionScreen />} />
-              <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
-              <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
-              <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
-            </Route>
-          </Routes>
+            <Route path="/postAw" element={<PostArtworkScreen />} />
+            {/* </Route> */}
+          </Route>
+          <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
+            <Route path="/account/:id/" element={<ArtworkManagement />} />
+            <Route path="/account/:id/artwork" element={<ArtworkManagement />} />
+            <Route path="/account/:id/assets" element={<AssetScreen isLogin={isLogin} />} />
+            <Route path="/account/:id/service" element={<ServicesTab />} />
+            <Route path="/account/:id/collection" element={<CollectionScreen />} />
+            <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
+            <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
+            <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
+          </Route>
+        </Routes>
 
-          <Footer />
+        <Footer />
       </BrowserRouter>
     </PrimeReactProvider>
   );
