@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ServiceCard from "../../../components/ServiceCard";
+import { Card } from "primereact/card";
+import { Button } from "primereact/button";
 import { GetServicesData } from "./ServicesService";
 import { useOutletContext } from "react-router-dom";
 
-import "./ServicesScreen.scss";
-import { Card } from "primereact/card";
-import { Button } from "primereact/button";
+import "./ServicesView.scss";
+import ServiceCard from "../../../components/ServiceCard";
 
 type ServiceCardProps = {
   id: string;
@@ -18,7 +18,7 @@ type ServiceCardProps = {
   coverLocation: string;
 };
 
-const ServicesScreen: React.FC = () => {
+const ServicesView: React.FC = () => {
   const [services, setServices] = useState<ServiceCardProps[]>([]);
   // let [accountId, isCreator] = useOutletContext() as [string, boolean];
   let isCreator = true;
@@ -69,4 +69,4 @@ const ServicesScreen: React.FC = () => {
   );
 };
 
-export default ServicesScreen;
+export default ServicesView;
