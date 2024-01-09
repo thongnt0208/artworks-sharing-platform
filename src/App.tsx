@@ -30,6 +30,8 @@ import ServicesView from "./layout/ProfileScreen/ServicesView/ServicesView";
 import CollectionsView from "./layout/ProfileScreen/CollectionsView/CollectionsView";
 import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
+import WalletView from "./layout/ProfileScreen/WalletView/WalletView";
+
 import { getAuthInfo } from "./util/AuthUtil";
 
 function App() {
@@ -81,6 +83,7 @@ function App() {
             <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
             <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
             <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
+            <Route path="/account/:id/wallet" element={<WalletView />} />
           </Route>
         </Routes>
 
