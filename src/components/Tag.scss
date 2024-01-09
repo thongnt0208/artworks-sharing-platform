@@ -26,12 +26,27 @@
   );
   color: $bg-100;
   text-align: center;
-  font-size: $h3-bold;
+  font-size: $normal-bold;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
   .link {
     color: $bg-100;
     text-decoration: none;
+    width: fit-content;
   }
+}
+
+.category-tag {
+  background-color: $primary-100 !important;
+  background: var(
+    --linear-100,
+    linear-gradient(
+      104deg,
+      rgba(212, 236, 249, 0.2) 0%,
+      rgba(152, 210, 231, 0.2) 80%
+    ),
+    rgba(241, 241, 241, 0.1)
+  );
+  box-shadow: 0 2px 4px rgba(25, 25, 25, 0.15);
 }

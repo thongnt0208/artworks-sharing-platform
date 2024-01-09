@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Tag from "../../../../components/Tag";
-import { GenerateRandomColorCode } from "../../../../util/GenerateRandomColorCode";
+import { GenerateRandomColorCode } from "../../../../util/TagColorHandler";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
