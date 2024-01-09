@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
 import MenuTab from "./MenuTab/MenuTab";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../index";
 import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 import { getAuthInfo } from "../../util/AuthUtil";
@@ -24,6 +24,7 @@ type ProfileProps = {
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const navigate = useNavigate();
+  const profileId = useParams()?.id;
 
   const [profile, setProfile] = useState<ProfileProps>({
     id: "",
@@ -39,7 +40,6 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     followerNum: 0,
     followingNum: 0,
   });
-
   const [isCreator, setIsCreator] = useState<boolean>(isLogin);
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
@@ -63,7 +63,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const profileData = await GetProfileData();
+      const profileData = await GetProfileData(profileId || "");
       // MUST-HAVE FUNCTIONS IN THE SERVICE:
       // Function 1: Get subscribe area data -> setSubscribeData
       // Function 2: Check if the current user's id (useAuth) is the profile id or not -> setIsCreator

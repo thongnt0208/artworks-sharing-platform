@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import CollectionCard from "../../../components/CollectionCard";
-import "./CollectionTab.scss";
-import { GetCollectionsData } from "./CollectionService";
+import "./CollectionsView.scss";
+import { GetCollectionsData } from "./CollectionsService";
 
 type Props = {
   id: string;
