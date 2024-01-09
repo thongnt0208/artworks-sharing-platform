@@ -71,7 +71,6 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   return (
     <>
-      <Link to="/login">Log in</Link>
       <CategoryAndTag categories={categories} tags={tags} />
       {isLogin ? (
         <TabMenu

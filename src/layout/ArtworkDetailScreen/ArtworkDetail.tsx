@@ -22,7 +22,7 @@ export default function ArtworkDetail() {
   const [error, setError] = useState({} as any);
   const  authenticationInfo  = getAuthInfo();
 
-  let currentUserId = authenticationInfo.id ? authenticationInfo.id : "unknown";
+  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   let dialogProperties = {
     visible: true,
