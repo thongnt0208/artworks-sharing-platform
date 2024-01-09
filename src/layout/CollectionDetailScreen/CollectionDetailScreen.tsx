@@ -9,7 +9,7 @@ const CollectionDetailScreen: React.FC = () => {
     imageUrl: string;
     likeNum: number;
     viewNum: number;
-    subTitle: string;
+    creator: string;
   }
 
   let artworksSampleProps: Artwork[] = [
@@ -19,7 +19,7 @@ const CollectionDetailScreen: React.FC = () => {
       imageUrl: "https://example.com/artwork1.jpg",
       likeNum: 10,
       viewNum: 12,
-      subTitle: "Subtitle 1",
+      creator: "creator 1",
     },
     {
       id: "2",
@@ -27,7 +27,7 @@ const CollectionDetailScreen: React.FC = () => {
       imageUrl: "https://example.com/artwork2.jpg",
       likeNum: 10,
       viewNum: 12,
-      subTitle: "Subtitle 2",
+      creator: "creator 2",
     },
     {
       id: "3",
@@ -35,7 +35,7 @@ const CollectionDetailScreen: React.FC = () => {
       imageUrl: "https://example.com/artwork3.jpg",
       likeNum: 10,
       viewNum: 12,
-      subTitle: "Subtitle 3",
+      creator: "creator 3",
     },
   ];
 

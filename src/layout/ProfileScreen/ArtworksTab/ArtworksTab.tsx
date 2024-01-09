@@ -11,7 +11,7 @@ import ArtworkCard from "../../../components/ArtworkCard";
 type ArtworksProps = {
   id: string;
   title: string;
-  subTitle: string;
+  creator: string;
   images: string[];
   likeNum: number;
   viewNum: number;
@@ -61,7 +61,7 @@ const ArtworkManagement: React.FC = () => {
                   key={artwork.id}
                   id={artwork.id}
                   title={artwork.title}
-                  subTitle={artwork.subTitle}
+                  creator={artwork.creator}
                   image={artwork.images[0]}
                   likeNum={10}
                   viewNum={12}
