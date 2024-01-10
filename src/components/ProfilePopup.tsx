@@ -26,8 +26,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
 
   const handleProfileClick = () => {
     let profileId = getAuthInfo()?.id
-    // navigate(`/account/${profileId}/artwork`);
-    navigate("/account/f5f1c806-dbd6-4870-b708-f3c47cd01e09/artwork");
+    navigate(`/account/${profileId}/artwork`);
   };
 
   const items = [

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 type Artwork = {
   id: string;
   title: string;
+  creatorId: string;
   creator: string;
   image: string;
   likeNum: number;
@@ -28,6 +29,7 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
               key={artwork.id}
               id={artwork.id}
               title={artwork.title}
+              creatorId={artwork.creatorId}
               creator={artwork.creator}
               image={artwork.image}
               likeNum={artwork.likeNum}

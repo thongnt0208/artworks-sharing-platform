@@ -25,6 +25,7 @@ type ProfileProps = {
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const navigate = useNavigate();
   const profileId = useParams()?.id;
+  console.log(profileId);
 
   const [profile, setProfile] = useState<ProfileProps>({
     id: "",
@@ -70,37 +71,46 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
       // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
       setProfile(profileData);
-      if (getAuthInfo().id === profile.id) {
+      if (getAuthInfo()?.id === profile.id) {
         setIsCreator(true);
+      } else {
+        setIsCreator(false);
       }
     };
     fetchData();
-  }, []);
+  }, [profileId]);
+  console.log(profile);
 
   return (
     <>
-      <div className="profile-screen-container grid grid-nogutter mt-3">
-        <div className="profile-information-container col col-3">
-          <UserInformationCard
-            id={profile.id}
-            username={profile.username}
-            fullname={profile.fullname}
-            role={profile.role}
-            isCreator={isCreator}
-            // job={profile.job}
-            // address={profile.address}
-            bio={profile.bio}
-            avatar={profile.avatar}
-            profileView={profile.profileView}
-            artworksView={profile.artworksView}
-            followerNum={profile.followerNum}
-            followingNum={profile.followingNum}
-          />
+      {profile ? (
+        <div className="profile-screen-container grid grid-nogutter mt-3">
+          <div className="profile-information-container col col-3">
+            <UserInformationCard
+              id={profile.id}
+              username={profile.username}
+              fullname={profile.fullname}
+              role={profile.role}
+              isCreator={isCreator}
+              // job={profile.job}
+              // address={profile.address}
+              bio={profile.bio}
+              avatar={profile.avatar}
+              profileView={profile.profileView}
+              artworksView={profile.artworksView}
+              followerNum={profile.followerNum}
+              followingNum={profile.followingNum}
+            />
+          </div>
+          <div className="profile-menu-container col col-9 pl-6 ">
+            <MenuTab accountId={profile.id} isCreator={isCreator} />
+          </div>
         </div>
-        <div className="profile-menu-container col col-9 pl-6 ">
-          <MenuTab accountId={profile.id} isCreator={isCreator} />
+      ) : (
+        <div className="w-full h-screen flex justify-content-center align-items-center">
+          <h1>Opps! Chúng tôi không tìm thấy người dùng này.</h1>
         </div>
-      </div>
+      )}
 
       {/* <Button label="Test page" onClick={() => navigate("edit")} />
       <Button
