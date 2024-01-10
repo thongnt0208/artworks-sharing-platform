@@ -4,6 +4,7 @@ import { ListBox } from "primereact/listbox";
 import { useNavigate } from "react-router-dom";
 import "./ProfilePopup.scss";
 import { Button } from "primereact/button";
+import { getAuthInfo } from "../util/AuthUtil";
 
 const logo = require("../assets/defaultImage/default-avatar.png");
 
@@ -24,8 +25,9 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
   };
 
   const handleProfileClick = () => {
-    // navigate(`/profile/${username}/artwork`);
-    navigate("/profile/f5f1c806-dbd6-4870-b708-f3c47cd01e09/artwork");
+    let profileId = getAuthInfo()?.id
+    // navigate(`/account/${profileId}/artwork`);
+    navigate("/account/f5f1c806-dbd6-4870-b708-f3c47cd01e09/artwork");
   };
 
   const items = [

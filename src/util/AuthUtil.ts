@@ -64,6 +64,7 @@ const setNewAccessToken = (accessToken: string) => {
  * @version 1.0.0
  */
 const getAuthInfo = (): authInfoDataType => {
+  console.log(getFromLS("authData"));
   return getFromLS("authData");
 };
 

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router-dom";
 
 import { GetArtworksData } from "./ArtworksService";
-import "./ArtworksTab.scss";
+import "./ArtworksView.scss";
 import ArtworkCard from "../../../components/ArtworkCard";
 
 type ArtworksProps = {
@@ -17,10 +17,9 @@ type ArtworksProps = {
   viewNum: number;
 };
 
-const ArtworkManagement: React.FC = () => {
+const ArtworksView: React.FC = () => {
   let navigate = useNavigate();
   let [accountId, isCreator] = useOutletContext() as [string, boolean];
-  console.log("User information: " , accountId, isCreator);
 
   const [artworks, setArtworks] = React.useState<ArtworksProps[]>([]);
   React.useEffect(() => {
@@ -36,8 +35,8 @@ const ArtworkManagement: React.FC = () => {
   }, [accountId]);
   return (
     <>
-      <h1>Các tác phẩm</h1>
-      <div className="gallery grid">
+      <h1 className="">Các tác phẩm</h1>
+      <div className="gallery grid p-0">
         {artworks.length === 0 ? (
           isCreator ? (
             <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
@@ -56,7 +55,7 @@ const ArtworkManagement: React.FC = () => {
           artworks
             .filter((artwork) => artwork.images && artwork.images.length > 0)
             .map((artwork) => (
-              <div className="gallery__item col col-6" key={artwork.id}>
+              <div className="gallery__item col col-4" key={artwork.id}>
                 <ArtworkCard
                   key={artwork.id}
                   id={artwork.id}
@@ -74,4 +73,4 @@ const ArtworkManagement: React.FC = () => {
   );
 };
 
-export default ArtworkManagement;
+export default ArtworksView;

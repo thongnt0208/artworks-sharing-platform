@@ -24,10 +24,10 @@ import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScre
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
 
-import ArtworkManagement from "./layout/ProfileScreen/ArtworksTab/ArtworksTab";
-import AssetScreen from "./layout/ProfileScreen/AssetScreen/AssetScreen";
-import ServicesTab from "./layout/ProfileScreen/ServicesTab/ServicesTab";
-import CollectionScreen from "./layout/ProfileScreen/CollectionTab/CollectionTab";
+import ArtworksView from "./layout/ProfileScreen/ArtworksView/ArtworksView";
+import AssetsView from "./layout/ProfileScreen/AssetsView/AssetsView";
+import ServicesView from "./layout/ProfileScreen/ServicesView/ServicesView";
+import CollectionsView from "./layout/ProfileScreen/CollectionsView/CollectionsView";
 import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 import { getAuthInfo } from "./util/AuthUtil";
@@ -73,11 +73,11 @@ function App() {
             {/* </Route> */}
           </Route>
           <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
-            <Route path="/account/:id/" element={<ArtworkManagement />} />
-            <Route path="/account/:id/artwork" element={<ArtworkManagement />} />
-            <Route path="/account/:id/assets" element={<AssetScreen isLogin={isLogin} />} />
-            <Route path="/account/:id/service" element={<ServicesTab />} />
-            <Route path="/account/:id/collection" element={<CollectionScreen />} />
+            <Route path="/account/:id/" element={<ArtworksView />} />
+            <Route path="/account/:id/artwork" element={<ArtworksView />} />
+            <Route path="/account/:id/assets" element={<AssetsView isLogin={isLogin} />} />
+            <Route path="/account/:id/service" element={<ServicesView />} />
+            <Route path="/account/:id/collection" element={<CollectionsView />} />
             <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
             <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
             <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
