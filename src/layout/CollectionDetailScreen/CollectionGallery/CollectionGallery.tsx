@@ -5,6 +5,7 @@ import "./CollectionGallery.scss";
 interface ArtworksProps {
   id: string;
   title: string;
+  creatorId: string;
   creator: string;
   imageUrl: string;
   likeNum: number;
@@ -23,6 +24,7 @@ const CollectionGallery: React.FC<{ artworks: ArtworksProps[] }> = ({
             key={artwork.id}
             id={artwork.id}
             title={artwork.title}
+            creatorId={artwork.creatorId}
             creator={artwork.creator}
             image={artwork.imageUrl}
             likeNum={10}

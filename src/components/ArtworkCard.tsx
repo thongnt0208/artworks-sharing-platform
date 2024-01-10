@@ -9,6 +9,7 @@ import { formatLargeNumber } from "../util/NumberHandler";
 type Props = {
   id: string;
   title: string;
+  creatorId: string;
   creator: string;
   image: string;
   likeNum: number;
