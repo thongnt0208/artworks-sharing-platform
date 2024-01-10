@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export async function GetProfileData() {
+export async function GetProfileData(accountId: string) {
     try {
-        const response = await axios.get("http://127.0.0.1:1880/account/:id", {
+        const response = await axios.get(`http://127.0.0.1:1880/account/${accountId}`, {
             headers: {
                 "Content-Type": "application/json",
             },

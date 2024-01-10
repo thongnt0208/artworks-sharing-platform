@@ -1,11 +1,11 @@
 import React from "react";
-import { GetAssetsData } from "./AssetService";
+import { GetAssetsData } from "./AssetsService";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router";
 
 import AssetsCard from "../../../components/AssetsCard";
-import "./AssetScreen.scss";
+import "./AssetsView.scss";
 
 type Item = {
   id: string;
@@ -27,7 +27,7 @@ type AssetsProps = {
   onClickHandler?: () => void;
 };
 
-const AssetScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
+const AssetsView: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   let navigate = useNavigate();
   const [assets, setAssets] = React.useState<AssetsProps[]>([]);
   React.useEffect(() => {
@@ -78,4 +78,4 @@ const AssetScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   );
 };
 
-export default AssetScreen;
+export default AssetsView;

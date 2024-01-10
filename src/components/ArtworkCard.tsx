@@ -19,7 +19,6 @@ type Props = {
 };
 
 const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
-  console.log(props);
   let header = (
     <div className="header-container">
       <div className="thumbnail-container pt-0">
