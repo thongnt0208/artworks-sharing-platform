@@ -11,8 +11,9 @@ import ArtworkCard from "../../../components/ArtworkCard";
 type ArtworksProps = {
   id: string;
   title: string;
+  creatorId: string;
   creator: string;
-  images: string[];
+  image: string;
   likeNum: number;
   viewNum: number;
 };
@@ -36,7 +37,7 @@ const ArtworksView: React.FC = () => {
   return (
     <>
       <h1 className="">Các tác phẩm</h1>
-      <div className="gallery grid p-0">
+      <div className="gallery grid p-0 flex justify-content-start">
         {artworks.length === 0 ? (
           isCreator ? (
             <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
@@ -53,15 +54,15 @@ const ArtworksView: React.FC = () => {
           )
         ) : (
           artworks
-            .filter((artwork) => artwork.images && artwork.images.length > 0)
             .map((artwork) => (
               <div className="gallery__item col col-4" key={artwork.id}>
                 <ArtworkCard
                   key={artwork.id}
                   id={artwork.id}
                   title={artwork.title}
+                  creatorId={artwork.creatorId}
                   creator={artwork.creator}
-                  image={artwork.images[0]}
+                  image={artwork.image}
                   likeNum={10}
                   viewNum={12}
                 />
