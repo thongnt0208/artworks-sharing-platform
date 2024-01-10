@@ -3,7 +3,7 @@ import axios from "axios";
 export async function GetArtworksData(accountId: string) {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:1880/account/${accountId}/artworks`,
+      `http://127.0.0.1:1880/account/${accountId}/artwork`,
       {
         headers: {
           "Content-Type": "application/json",
