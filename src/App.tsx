@@ -9,7 +9,7 @@ import vi from "./primereact-api/locale/vi.json";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
-
+//---------------------------
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./layout/HomeScreen/HomeScreen";
@@ -23,7 +23,6 @@ import ForgotPasswordScreen from "./layout/ForgotPasswordScreen/ForgotPasswordSc
 import ResetPasswordScreen from "./layout/ForgotPasswordScreen/ResetPasswordScreen/ResetPasswordScreen";
 import ChangePasswordScreen from "./layout/ChangePasswordScreen/ChangePasswordScreen";
 import PostArtworkScreen from "./layout/PostArtworkScreen/PostArtworkScreen";
-
 import ArtworksView from "./layout/ProfileScreen/ArtworksView/ArtworksView";
 import AssetsView from "./layout/ProfileScreen/AssetsView/AssetsView";
 import ServicesView from "./layout/ProfileScreen/ServicesView/ServicesView";
@@ -31,8 +30,11 @@ import CollectionsView from "./layout/ProfileScreen/CollectionsView/CollectionsV
 import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 import WalletView from "./layout/ProfileScreen/WalletView/WalletView";
+import ChatScreen from "./layout/ChatScreen/ChatScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
+// Need to have a Centralize Component to control Header and Footer visibility (will do later)
+// import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -41,10 +43,13 @@ function App() {
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
   console.log(authInfo);
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
-  
+  // const isHeaderVisible = useHeaderVisibility();
+  // const isFooterVisible = useFooterVisibility();
+
   return (
     <PrimeReactProvider value={primereactConfigValue}>
       <BrowserRouter>
+        {/* {isHeaderVisible && <Header isLogin={isLogin} setIsLogin={setIsLogin} />} */}
         <Header isLogin={isLogin} setIsLogin={setIsLogin} />
 
         <Routes>
@@ -67,12 +72,8 @@ function App() {
           <Route element={<RequireAuth />}>
             {/* Routes need to protect (must log in to access)*/}
             <Route path="/editTest" element={<EditProfileTestPage />} />
-            {/* <Route path="/artwork" element={<HomeScreen />}> */}
-            {/* {" "} */}
-            {/* Artworks List component */}
-
-            <Route path="/postAw" element={<PostArtworkScreen />} />
-            {/* </Route> */}
+            <Route path="/artwork/post" element={<PostArtworkScreen />} />
+            <Route path="/chat" element={<ChatScreen />} />
           </Route>
           <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
             <Route path="/account/:id/" element={<ArtworksView />} />
@@ -87,6 +88,7 @@ function App() {
           </Route>
         </Routes>
 
+        {/* {isFooterVisible && <Footer />} */}
         <Footer />
       </BrowserRouter>
     </PrimeReactProvider>

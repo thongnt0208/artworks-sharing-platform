@@ -1,0 +1,61 @@
+@import "../../const/variables.scss";
+
+.message-item,
+message-item-selecting {
+  padding: 10px;
+  min-width: 315px;
+  border-radius: $borderRadius-100;
+  position: relative;
+  //   .message-item-avatar {
+  //   }
+
+  //   .message-item-content {
+  //     .message-item-header {
+  //     }
+
+  //     .message-item-text {
+  //     }
+  //   }
+
+  .text-limit {
+    width: 200px; /* Set the width to your desired value */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .message-status-content {
+    text-align: end;
+    .message-item-time {
+      color: $bg-300;
+    }
+    .message-item-seen {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%; /* Makes the square shape into a circle */
+      background-color: $strong-100; /* Change the color to your preference */
+    }
+  }
+}
+
+.message-item-selecting {
+  background-color: $bg-200;
+}
+.message-item:hover {
+  background-color: $bg-200;
+  cursor: pointer;
+}
+
+.message-item:active {
+  background-color: $bg-300;
+}
+
+.message-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 12px;
+  width: 98%;
+  border-bottom: 1px solid $bg-300;
+}
