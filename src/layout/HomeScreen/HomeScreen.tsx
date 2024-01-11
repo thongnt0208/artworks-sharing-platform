@@ -23,9 +23,9 @@ type CategoryProps = {
 type Artwork = {
   id: string;
   title: string;
-  creatorId: string;
-  creator: string;
-  image: string;
+  createdBy: string;
+  creatorFullName: string;
+  thumbnail: string;
   likeNum: number;
   viewNum: number;
 };

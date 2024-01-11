@@ -11,9 +11,9 @@ import ArtworkCard from "../../../components/ArtworkCard";
 type ArtworksProps = {
   id: string;
   title: string;
-  creatorId: string;
-  creator: string;
-  image: string;
+  createdBy: string;
+  creatorFullName: string;
+  thumbnail: string;
   likeNum: number;
   viewNum: number;
 };
@@ -60,9 +60,9 @@ const ArtworksView: React.FC = () => {
                   key={artwork.id}
                   id={artwork.id}
                   title={artwork.title}
-                  creatorId={artwork.creatorId}
-                  creator={artwork.creator}
-                  image={artwork.image}
+                  createdBy={artwork.createdBy}
+                  creatorFullName={artwork.creatorFullName}
+                  thumbnail={artwork.thumbnail}
                   likeNum={10}
                   viewNum={12}
                 />

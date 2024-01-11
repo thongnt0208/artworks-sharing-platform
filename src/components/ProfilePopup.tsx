@@ -15,8 +15,8 @@ interface ProfilePopupProps {
 }
 
 const ProfilePopup: React.FC<ProfilePopupProps> = ({
-  username = "User123",
-  email = "user123@gmail.com",
+  username = getAuthInfo()?.username,
+  email = getAuthInfo()?.email,
   onClose,
 }) => {
   const navigate = useNavigate();
@@ -42,8 +42,8 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({
     <div className="notification-container">
       <div className="user-information-bar">
         <Avatar image={logo} style={{ padding: "0" }} size="xlarge" />
-        <h3>{username}</h3>
-        <p>{email}</p>
+        <h3>{getAuthInfo()?.username}</h3>
+        <p>{getAuthInfo()?.email}</p>
         <Button label="Trang cá nhân" onClick={handleProfileClick} />
       </div>
 
