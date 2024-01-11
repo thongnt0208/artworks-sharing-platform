@@ -71,15 +71,14 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
       // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
       setProfile(profileData);
-      if (getAuthInfo()?.id === profile.id) {
+      if (getAuthInfo()?.id === profileId) {
         setIsCreator(true);
       } else {
         setIsCreator(false);
       }
     };
     fetchData();
-  }, [profileId]);
-  console.log(profile);
+  }, []);
 
   return (
     <>
