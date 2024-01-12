@@ -1,24 +1,35 @@
 import axios from "axios";
 // import axios from "../../api/axios";
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:1880";
+const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
 
 /**
  * Fetches details of an artwork based on the provided ID.
  *
  * @param {string | undefined} id - The unique identifier of the artwork.
- * @param {string | undefined} accountId - The identifier of the current user.
+ * @param {string } accountId - (not required) The identifier of the current user.
  * @returns {Promise<any>}
  * @example
  * const artworkDetails = await fetchArtworkDetail("thongnt");
  * console.log(artworkDetails);
  *
  * @author ThongNT
- * @version 1.0.0
+ * @version 2.0.0
  */
-export async function fetchArtworkDetail(id: string | undefined): Promise<any> {
+export async function fetchArtworkDetail(id: string | undefined, accountId?: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${id}`);
-    return response;
+
+    if (accountId && Array.isArray(response.data.likes)) {
+      // Check if the accountId is present in the likes array
+      const isLiked = response.data.likes.includes(accountId);
+
+      // Inject the isLiked field into the response.data
+      response.data.isLiked = isLiked;
+      return response;
+    } else {
+      response.data.isLiked = false;
+      return response;
+    }
   } catch (error) {
     console.error("Error fetching artwork:", error);
     throw new Error(`Error fetching artwork: ${error}`);

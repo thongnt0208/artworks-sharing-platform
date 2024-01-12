@@ -26,13 +26,13 @@ function CommentComponent({ ...props }: PropsType) {
 
   const addComment = () => {
     let newComment = {
-      Id: "somethingNew",
-      CreatedBy: {
-        Id: props.userId,
-        Fullname: props.fullName,
-        Avatar: props.avatar,
+      id: "somethingNew",
+      createdBy: {
+        id: props.userId,
+        fullname: props.fullName,
+        avatar: props.avatar,
       },
-      Content: commentValue,
+      content: commentValue,
     };
     const updatedCommentsList = [newComment, ...commentsList];
     // Change in UI
@@ -104,12 +104,12 @@ function CommentComponent({ ...props }: PropsType) {
               <div className="flex flex-column">
                 <div className="flex">
                   <img
-                    src={comment.CreatedBy.Avatar || blankPic}
-                    alt={comment.CreatedBy.Fullname}
+                    src={comment.createdBy.avatar || blankPic}
+                    alt={comment.createdBy.fullname}
                   />
                   <div className="flex flex-column gap-1 justify-content-center">
-                    <span className="text-cus-normal-bold">{comment.CreatedBy.Fullname}</span>
-                    <span className="content text-cus-normal">{comment.Content}</span>
+                    <span className="text-cus-normal-bold">{comment.createdBy.fullname}</span>
+                    <span className="content text-cus-normal">{comment.content}</span>
                   </div>
                 </div>
               </div>
