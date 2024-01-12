@@ -9,8 +9,9 @@ import { formatLargeNumber } from "../util/NumberHandler";
 type Props = {
   id: string;
   title: string;
-  creator: string;
-  image: string;
+  createdBy: string;
+  creatorFullName: string;
+  thumbnail: string;
   likeNum: number;
   viewNum: number;
   likeHandler?: () => void;
@@ -19,12 +20,13 @@ type Props = {
 };
 
 const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
+  console.log(props);
   let header = (
     <div className="header-container">
       <div className="thumbnail-container pt-0">
         <img
           alt={`Hình thu nhỏ của tác phẩm tên ${props.title}`}
-          src={props.image}
+          src={props.thumbnail}
           className="thumbnail border-round"
         />
       </div>
@@ -57,7 +59,7 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
     <Card
       id={props.id}
       title={props.title}
-      subTitle={`bởi ${props.creator}`}
+      subTitle={`bởi ${props.creatorFullName}`}
       header={header}
       footer={footer}
       className="artwork-card cursor-pointer"
