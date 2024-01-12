@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 type Artwork = {
   id: string;
   title: string;
-  creator: string;
-  image: string;
+  createdBy: string;
+  creatorFullName: string;
+  thumbnail: string;
   likeNum: number;
   viewNum: number;
 };
@@ -18,7 +19,7 @@ type ArtworksProps = {
 
 const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
   const navigate = useNavigate();
-
+  console.log(artworks);
   return (
     <div className="gallery grid p-0 flex justify-content-start">
       {artworks
@@ -28,8 +29,9 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
               key={artwork.id}
               id={artwork.id}
               title={artwork.title}
-              creator={artwork.creator}
-              image={artwork.image}
+              createdBy={artwork.createdBy}
+              creatorFullName={artwork.creatorFullName}
+              thumbnail={artwork.thumbnail}
               likeNum={artwork.likeNum}
               viewNum={artwork.viewNum}
               viewHandler={() => navigate(`/artwork/${artwork.id}`)}
