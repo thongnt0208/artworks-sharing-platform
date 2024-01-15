@@ -867,7 +867,7 @@
         "type": "function",
         "z": "adcc113084da2426",
         "name": "function 26",
-        "func": "let mockData = [{\n  \"id\": 1,\n  \"collectionName\": \"Performance\",\n  \"privacy\": \"public\",\n  \"numberOfArtworks\": 1\n}, {\n  \"id\": 2,\n  \"collectionName\": \"Rogue Trader\",\n  \"privacy\": \"public\",\n  \"numberOfArtworks\": 2\n}]\n\nmsg.payload = mockData\nreturn msg;",
+        "func": "let mockData = [{\n  \"id\": \"a81221cf-26fa-4226-b5dd-2248de452e41\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Performance\",\n  \"privacy\": \"Public\",\n  \"numberOfArtworks\": 2\n}, {\n  \"id\": \"46c3d1f0-9223-42ba-9e53-379aaf3c4ea6\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Rogue Trader\",\n  \"privacy\": \"Private\",\n  \"numberOfArtworks\": 2\n}]\n\nmsg.payload = mockData\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -940,5 +940,101 @@
                 "9e7236aab3871605"
             ]
         ]
+    },
+    {
+        "id": "62ad6bc5a74e1dc8",
+        "type": "http response",
+        "z": "adcc113084da2426",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "ae02bb4f76126922",
+        "type": "http in",
+        "z": "adcc113084da2426",
+        "name": "[GET] Artworks of an Collection",
+        "url": "/collection/:id/artworks",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1590,
+        "y": 400,
+        "wires": [
+            [
+                "794f03eb5903bdbf"
+            ]
+        ]
+    },
+    {
+        "id": "794f03eb5903bdbf",
+        "type": "function",
+        "z": "adcc113084da2426",
+        "name": "function 28",
+        "func": "// GET COLLECTIONS DATA FROM DB\n\n// 2 collection for testing \nlet collection1 = \"a81221cf-26fa-4226-b5dd-2248de452e41\"\nlet collection2 = \"46c3d1f0-9223-42ba-9e53-379aaf3c4ea6\"\n\nlet collectionId = msg.req.params.id;\n\nlet sampleData1 = [{\n  \"id\": \"6a2305b4-94a1-4c64-9c56-2cee23aefcbe\",\n  \"title\": \"I, Frankenstein\",\n  \"createdBy\" : \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"a7e6e633-d57d-4068-bc52-d1a9f171f11a\",\n  \"title\": \"Agnosia\",\n  \"createdBy\" : \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}]\n\nlet sampleData2 = [\n{\n  \"id\": \"80f2de44-1371-46ca-9f8e-ea193ba17f60\",\n  \"title\": \"Neds\",\n  \"createdBy\" : \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"56483e64-abbd-405c-bbd0-866e589ddffe\",\n  \"title\": \"Captivated\",\n  \"createdBy\": \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}];\n\nlet filteredData\nif (collectionId === collection1 ) {\n  filteredData = sampleData1\n} else if (collectionId === collection2) {\n  filteredData = sampleData2\n} else {\n  filteredData =[]\n}\n\nmsg.payload = filteredData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 400,
+        "wires": [
+            [
+                "62ad6bc5a74e1dc8"
+            ]
+        ]
+    },
+    {
+        "id": "a46de377f2b327b1",
+        "type": "http in",
+        "z": "adcc113084da2426",
+        "name": "[GET] Collections Detail",
+        "url": "/collection/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1560,
+        "y": 340,
+        "wires": [
+            [
+                "64cde365cdd6bf02"
+            ]
+        ]
+    },
+    {
+        "id": "64cde365cdd6bf02",
+        "type": "function",
+        "z": "adcc113084da2426",
+        "name": "function 29",
+        "func": "let collectionId = msg.req.params.id\n\nlet mockData = [{\n  \"id\": \"a81221cf-26fa-4226-b5dd-2248de452e41\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Performance\",\n  \"privacy\": \"Public\",\n  \"numberOfArtworks\": 2\n}, {\n  \"id\": \"46c3d1f0-9223-42ba-9e53-379aaf3c4ea6\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Rogue Trader\",\n  \"privacy\": \"Private\",\n  \"numberOfArtworks\": 2\n}]\n\nlet collectionDetail = mockData.find(collection => collection.id === collectionId)\n\nmsg.payload = collectionDetail\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 340,
+        "wires": [
+            [
+                "ab473c035cd16bbb"
+            ]
+        ]
+    },
+    {
+        "id": "ab473c035cd16bbb",
+        "type": "http response",
+        "z": "adcc113084da2426",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 340,
+        "wires": []
     }
 ]
