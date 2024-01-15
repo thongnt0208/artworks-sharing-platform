@@ -103,7 +103,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
             />
           </div>
           <div className="profile-menu-container col col-9 pl-6 ">
-            <MenuTab accountId={profile.id} isCreator={isCreator} />
+            <MenuTab accountId={profile.id} isCreator={isCreator} accountAvatar={profile.avatar}/>
           </div>
         </div>
       ) : (

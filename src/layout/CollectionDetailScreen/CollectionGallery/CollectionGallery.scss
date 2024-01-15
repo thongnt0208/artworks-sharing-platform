@@ -1,17 +1,19 @@
+@import "/src/const/variables.scss";
+
 .collection-gallery {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
+  padding: 0 4.375rem;
+  .title {
+    font-size: $h1-bold;
+    font-weight: bold;
+  }
   .gallery {
-    width: 100%;
-    padding: 5%;
+    width: inherit;
+    padding: 0;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
   }
 }

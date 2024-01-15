@@ -1,8 +1,9 @@
 import React from "react";
 import ArtworkCard from "../../../components/ArtworkCard";
 import "./CollectionGallery.scss";
+import { useNavigate } from "react-router-dom";
 
-interface ArtworksProps {
+type Artwork = {
   id: string;
   title: string;
   createdBy: string;
@@ -10,14 +11,18 @@ interface ArtworksProps {
   thumbnail: string;
   likeNum: number;
   viewNum: number;
-}
+};
 
-const CollectionGallery: React.FC<{ artworks: ArtworksProps[] }> = ({
-  artworks,
-}) => {
+type ArtworksProps = {
+  artworks: Artwork[];
+};
+
+const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
+  const navigate = useNavigate();
+  console.log(artworks);
   return (
     <div className="collection-gallery">
-      <h1>Collection 1</h1>
+      <p className="title">Các tác phẩm</p>
       <div className="gallery">
         {artworks.map((artwork) => (
           <ArtworkCard
@@ -27,8 +32,9 @@ const CollectionGallery: React.FC<{ artworks: ArtworksProps[] }> = ({
             createdBy={artwork.createdBy}
             creatorFullName={artwork.creatorFullName}
             thumbnail={artwork.thumbnail}
-            likeNum={10}
-            viewNum={12}
+            likeNum={artwork.likeNum}
+            viewNum={artwork.viewNum}
+            viewHandler={() => navigate(`/artwork/${artwork.id}`)}
           />
         ))}
       </div>
@@ -36,4 +42,4 @@ const CollectionGallery: React.FC<{ artworks: ArtworksProps[] }> = ({
   );
 };
 
-export default CollectionGallery;
+export default Gallery;

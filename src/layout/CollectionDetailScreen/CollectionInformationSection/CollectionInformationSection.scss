@@ -1,0 +1,92 @@
+@import "/src/const/variables.scss";
+
+.collection-info-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  margin-top: 34px;
+  .collection-info {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .account-avatar {
+      display: flex;
+      width: 113px !important;
+      height: 109px !important;
+      img {
+        width: inherit;
+        height: inherit;
+        object-fit: cover !important;
+        border-radius: 50%;
+      }
+    }
+    .collection-title {
+      font-size: $h1-bold;
+      font-weight: bold;
+      margin: 0;
+    }
+    .collection-creator {
+      margin: 0.5rem;
+    }
+    .collection-privacy {
+      margin: 0;
+      margin-bottom: 0.5rem;
+    }
+    .collection-artwork-num {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+    .edit-btn {
+      width: 100%;
+      background-color: $strong-200;
+      color: $bg-100;
+    }
+  }
+}
+
+.edit-collection-popup {
+  width: 40vw;
+  .edit-collection-popup-header {
+    height: fit-content;
+  }
+  .edit-form-container {
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    .name-input-lable,
+    .privacy-input-lable {
+      font-size: $h3-bold;
+      font-weight: 900;
+      margin: 20px 0 10px 0;
+    }
+  }
+  .footer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .edit-buttons {
+      .save-btn,
+      .cancel-btn {
+        font-size: $h3;
+        padding: 10px 30px;
+      }
+      .save-btn {
+        background-color: $strong-200;
+        color: $bg-100;
+      }
+    }
+    .delete-button {
+      .delete-btn {
+        font-size: $h3;
+        background-color: $strong-200;
+        color: $bg-100;
+        padding: 10px 40px;
+      }
+    }
+  }
+}
