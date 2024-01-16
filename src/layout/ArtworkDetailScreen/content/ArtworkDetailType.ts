@@ -1,43 +1,51 @@
 export type Creator = {
-  Id: string;
-  Fullname: string;
-  Avatar?: string;
+  id: string;
+  username?: string;
+  email: string;
+  fullname: string;
+  avatar?: string;
   Bio?: string;
   Job?: string;
   Address?: string;
 };
 
 export interface CommentType {
-  Id: string;
-  CreatedBy: {
-    Id: string;
-    Fullname: string;
-    Avatar: string;
+  id: string;
+  createdBy: {
+    id: string;
+    fullname: string;
+    avatar: string;
   };
-  Content: string;
+  content: string;
 }
 
 export type Asset = {
-  Id: string;
-  AssetName: string;
-  AssetType: string;
-  Price: string;
+  id: string;
+  assetName: string;
+  assetType?: string;
+  price: number;
+  lastModificatedOn?: string | Date;
 };
 
+export type Category = {
+  id: string;
+  categoryName: string;  
+}
+
 export type ArtworkDetailType = {
-  Id: string;
-  CreatedBy: Creator;
-  Title: string;
-  Images: string[];
-  Description: string;
-  Privacy: string;
-  CreatedOn: string | Date;
-  LastModifiedOn?: string | Date;
-  Tags: string[];
-  Category: string[];
-  LikeNum?: number;
-  ViewNum?: number;
-  Comments?: CommentType[];
-  Assets?: Asset[];
+  id: string;
+  account: Creator; //created account
+  title: string;
+  images: {location: string}[];
+  description: string | null;
+  privacy: string | number;
+  createdOn: string | Date;
+  lastModificatedOn?: string | Date;
+  tagDetails: string[] | any[];
+  categoryArtworkDetails: Category[] | any[];
+  likes?: string[];
+  views?: number;
+  comments?: CommentType[];
+  assets?: Asset[];
   isLiked: boolean;
 };
