@@ -7,14 +7,18 @@ const background = require("../assets/defaultImage/default-card-blur-image.png")
 
 type Props = {
   id: string;
+  creatorFullName: string;
   collectionName: string;
   privacy: string;
   numberOfArtworks: number;
+  accountAvatar: string;
 }
 
 const CollectionCard: React.FC<Props> = ({ ...props }: Props) => {
   const navigate = useNavigate();
+
   const handleClick = () => {
+    localStorage.setItem("accountAvatar", props.accountAvatar);
     navigate(`/collection/${props.id}`);   
   }
   return (

@@ -3,7 +3,7 @@ import { TabCustom } from "../../../components/TabCustom";
 import { useNavigate } from "react-router-dom";
 import "./MenuTab.scss";
 
-const MenuTab: React.FC<{accountId: string, isCreator: boolean}> = ({accountId, isCreator}) => {
+const MenuTab: React.FC<{accountId: string, isCreator: boolean, accountAvatar: string}> = ({accountId, isCreator, accountAvatar}) => {
   const navigate = useNavigate();
   const handleTabNavigation = (tabId: string) => {
     navigate(tabId);
@@ -19,7 +19,7 @@ const MenuTab: React.FC<{accountId: string, isCreator: boolean}> = ({accountId, 
         />
       </div>
       <div className="mt-6">
-        <Outlet context={[accountId, isCreator]} />
+        <Outlet context={[accountId, isCreator, accountAvatar]} />
       </div>
     </div>
   );

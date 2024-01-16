@@ -31,7 +31,7 @@ export const TabCustom = (props: Props) => {
       "artwork",
       "assets",
       "service",
-      "subscribe-area",
+      "subscribe",
       "wallet",
       "collection",
     ];
@@ -44,7 +44,7 @@ export const TabCustom = (props: Props) => {
     { id: "artwork", label: "Tác phẩm" },
     { id: "assets", label: "Assets" },
     { id: "service", label: "Dịch vụ" },
-    { id: "subscribe-area", label: "Vùng cho người đăng ký" },
+    { id: "subscribe", label: "Vùng cho người đăng ký" },
     { id: "wallet", label: "Quản lí ví" },
     { id: "collection", label: "Bộ sưu tập" },
   ];
