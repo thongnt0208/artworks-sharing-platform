@@ -74,7 +74,8 @@ const Header = ({
   let navigate = useNavigate();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
+  const [showMessageNotification, setShowMessageNotification] =
+    useState<boolean>(false);
   const [showProfilePopup, setShowProfilePopup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -117,6 +118,8 @@ const Header = ({
     position: "top-right" as const, // Set to one of the allowed values
     dismissableMask: true,
     draggable: false,
+    headerClassName: "popup-header",
+    closable: false,
   };
 
   return (
@@ -187,7 +190,7 @@ const Header = ({
       />
 
       <Dialog
-        headerStyle={{ display: "none" }}
+        header="Tin nhắn"
         visible={showMessageNotification}
         onHide={() => {
           setShowMessageNotification(false);
@@ -204,7 +207,7 @@ const Header = ({
       </Dialog>
 
       <Dialog
-        headerStyle={{ display: "none" }}
+        header="Thông báo"
         visible={showNotification}
         onHide={() => {
           setShowNotification(false);
@@ -221,16 +224,17 @@ const Header = ({
       </Dialog>
 
       <Dialog
-        headerStyle={{ display: "none" }}
         visible={showProfilePopup}
         onHide={() => {
           setShowProfilePopup(false);
         }}
         {...dialogModelFields}
       >
-        <ProfilePopup username={"danghoanganh36"} email={"danghoanganh36@gmail.com"} />
-        <div className="flex w-full justify-content-center">
-          {/* ThongNT: Yêu cầu AnhDH chỉnh lại bằng file CSS, tại vì thấy chướng mắt quá nên phải chỉnh inline trước */}
+        <ProfilePopup
+          username={"danghoanganh36"}
+          email={"danghoanganh36@gmail.com"}
+        />
+        <div className="flex w-full justify-content-center p-2">
           <Button
             icon=""
             label="Đăng xuất"

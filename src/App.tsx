@@ -31,6 +31,7 @@ import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 import WalletView from "./layout/ProfileScreen/WalletView/WalletView";
 import ChatScreen from "./layout/ChatScreen/ChatScreen";
+import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDetailScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
@@ -86,6 +87,7 @@ function App() {
             <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
             <Route path="/account/:id/wallet" element={<WalletView />} />
           </Route>
+          <Route path="/collection/:id" element={<CollectionDetailScreen />} />
         </Routes>
 
         {/* {isFooterVisible && <Footer />} */}

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import CollectionCard from "../../../components/CollectionCard";
 import "./CollectionsView.scss";
 import { GetCollectionsData } from "./CollectionsService";
 
 type Props = {
   id: string;
+  creatorFullName: string;
   collectionName: string;
   privacy: string;
   numberOfArtworks: number;
@@ -12,6 +14,7 @@ type Props = {
 
 const CollectionScreen: React.FC = () => {
   const [collections, setCollections] = React.useState<Props[]>([]);
+  const [accountId, isCreator, accountAvatar] = useOutletContext() as [string, boolean, string];
   useEffect(() => {
     const fetchServices = async () => {
       const response = await GetCollectionsData();
@@ -32,9 +35,11 @@ const CollectionScreen: React.FC = () => {
             <CollectionCard
               key={collection.id}
               id={collection.id}
+              creatorFullName={collection.creatorFullName}
               collectionName={collection.collectionName}
               privacy={collection.privacy}
               numberOfArtworks={collection.numberOfArtworks}
+              accountAvatar={accountAvatar}
             />
           </div>
         ))}

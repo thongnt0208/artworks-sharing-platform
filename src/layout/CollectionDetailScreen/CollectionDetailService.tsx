@@ -1,13 +1,42 @@
-import axios from 'axios';
-
-export class CollectionDetailService {
-  static async fetchCollectionDetail(collectionId: string) {
-    try {
-      const response = await axios.get(`/api/collections/${collectionId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching collection detail:', error);
-      throw error;
+import axios from "axios";
+export async function GetArtworksData(collectionId: string) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:1880/collection/${collectionId}/artworks`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.status !== 200) {
+      console.log("Error fetching tags data");
+      return [];
     }
+    return response.data;
+  } catch (error) {
+    console.log("Error fetching tags data:", error);
+    return [];
+  }
+}
+
+export async function GetCollectionData(collectionId: string) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:1880/collection/${collectionId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.status !== 200) {
+      console.log("Error fetching tags data");
+      return [];
+    }
+    return response.data;
+  } catch (error) {
+    console.log("Error fetching tags data:", error);
+    return [];
   }
 }

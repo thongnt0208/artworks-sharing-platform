@@ -49,16 +49,7 @@
   }
 }
 
-.p-dialog-mask {
-  background-color: transparent !important;
-  .p-dialog-header {
-    .p-dialog-header-icons {
-      display: none;
-    }
-  }
-  .p-dialog-content {
-    // overflow: hidden;
-    padding: 1rem;
-    border-radius: 12px;
-  }
+.popup-header {
+  padding: 10px;
+  border: 0;
 }
