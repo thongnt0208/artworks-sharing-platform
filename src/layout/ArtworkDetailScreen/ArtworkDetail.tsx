@@ -67,8 +67,8 @@ export default function ArtworkDetail() {
   return (
     <Dialog {...dialogProperties}>
       <>
-        {!data.Images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
-        {data.Images && (
+        {!data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
+        {data.images && (
           <div className="artwork-detail-container">
             <div className="detail-container flex grid-nogutter">
               <div className="content-container col col-11">

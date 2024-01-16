@@ -45,7 +45,7 @@ export default function Content({  data,  isLiked,  setIsLiked,  setError,  id, 
   return (
     <>
       <div className="title-container">
-        <h1 className="text-cus-h1-bold">{data.Title}</h1>
+        <h1 className="text-cus-h1-bold">{data.title}</h1>
       </div>
       <div
         className="artwork-images-container"
@@ -55,8 +55,8 @@ export default function Content({  data,  isLiked,  setIsLiked,  setError,  id, 
         }}
       >
         {/* Display images */}
-        {data.Images.map((image, index) => (
-          <Image key={index} src={image} alt={`Image ${index + 1}`} width="100%" />
+        {data.images?.map((image, index) => (
+          <Image key={index} src={image?.location} alt={`Image ${index + 1}`} width="100%" />
         ))}
       </div>
 
@@ -68,13 +68,13 @@ export default function Content({  data,  isLiked,  setIsLiked,  setError,  id, 
           </Button>
         </div>
         {/* Description */}
-        <p>{data.Description}</p>
+        <p>{data.description}</p>
         {/* Tags */}
         <div className="flex gap-3">
-          {data.Tags.map((tag: any) => (
-            <Button key={tag.Id}>
+          {data.tagDetails?.map((tag: any) => (
+            <Button key={tag?.id}>
               <Link to={""} className="tag-inline">
-                #{tag.TagName}
+                #{tag?.tagName}
               </Link>
             </Button>
           ))}
