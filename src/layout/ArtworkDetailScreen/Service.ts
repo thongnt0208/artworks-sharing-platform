@@ -1,4 +1,5 @@
 import axios from "axios";
+import { axiosPrivate } from "../../hooks/useAxios";
 // import axios from "../../api/axios";
 const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
 
@@ -18,8 +19,13 @@ const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:18
 export async function fetchArtworkDetail(id: string | undefined, accountId?: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${id}`);
+    console.log("response", response);
+    
 
     if (accountId && Array.isArray(response.data.likes)) {
+      console.log("accountId", accountId);
+      console.log("response.data.likes", response.data.likes);
+      
       // Check if the accountId is present in the likes array
       const isLiked = response.data.likes.includes(accountId);
 
@@ -54,11 +60,11 @@ export async function likeArtwork(artworkId: string, accountId: string): Promise
       accountId: accountId,
       artworkId: artworkId,
     };
-    const response = await axios.post(`${BASE_URL}/api/likes/`, body);
+    const response = await axiosPrivate.post(`${BASE_URL}/likes/`, body);
     return response;
   } catch (error) {
     console.error("Error liking artwork:", error);
-    throw new Error(`Error liking artwork: ${error}`);
+    throw error;
   }
 }
 
@@ -83,14 +89,14 @@ export async function unlikeArtwork(artworkId: string, accountId: string): Promi
 
     const response = await axios({
       method: "DELETE",
-      url: `${BASE_URL}/api/likes`,
+      url: `${BASE_URL}/likes`,
       data: body,
     });
 
     return response;
   } catch (error) {
     console.error("Error unliking artwork:", error);
-    throw new Error(`Error unliking artwork: ${error}`);
+    throw error;
   }
 }
 

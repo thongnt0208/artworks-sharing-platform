@@ -34,6 +34,7 @@ import ChatScreen from "./layout/ChatScreen/ChatScreen";
 import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDetailScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
+import NotFoundPage from "./pages/404";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -42,7 +43,6 @@ function App() {
   locale("vi");
   const primereactConfigValue = {};
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
-  console.log(authInfo);
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
   // const isHeaderVisible = useHeaderVisibility();
   // const isFooterVisible = useFooterVisibility();
@@ -88,6 +88,7 @@ function App() {
             <Route path="/account/:id/wallet" element={<WalletView />} />
           </Route>
           <Route path="/collection/:id" element={<CollectionDetailScreen />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         {/* {isFooterVisible && <Footer />} */}

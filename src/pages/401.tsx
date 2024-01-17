@@ -2,15 +2,11 @@ import { Button } from "primereact/button";
 import { Link } from "react-router-dom";
 
 const logo = require("../assets/logo/logo.png");
-export default function NotFoundPage() {
+export default function Forbidden401() {
   return (
     <div className="err-page-container flex align-items-center justify-content-center min-h-screen overflow-hidden">
       <div className="flex flex-column align-items-center justify-content-center">
-        <img
-          src={logo}
-          alt="Artwokia logo"
-          className="mb-5 w-6rem flex-shrink-0"
-        />
+        <img src={logo} alt="Artwokia logo" className="mb-5 w-6rem flex-shrink-0" />
         <div
           style={{
             borderRadius: "56px",
@@ -23,9 +19,12 @@ export default function NotFoundPage() {
             className="w-full surface-card py-8 px-5 sm:px-8 flex flex-column align-items-center"
             style={{ borderRadius: "53px" }}
           >
-            <span className="text-blue-500 font-bold text-3xl">404</span>
-            <h1 className="text-900 font-bold text-5xl mb-2">Không tìm thấy</h1>
-            <div className="text-600 mb-5">Địa chỉ được yêu cầu không khả dụng</div>
+            <span className="text-blue-500 font-bold text-3xl">401</span>
+            <h1 className="text-900 font-bold text-5xl mb-2">Không được truy cập</h1>
+            <div className="text-600 mb-5">
+              Rất tiếc, bạn không có quyền truy cập trang này. Vui lòng liên hệ với quản trị viên để
+              được hỗ trợ.
+            </div>
             <Link to="/" className="w-full flex align-items-center py-5 border-300 border-bottom-1">
               <span
                 className="flex justify-content-center align-items-center bg-cyan-400 border-round"
