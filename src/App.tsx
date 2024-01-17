@@ -32,6 +32,7 @@ import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupS
 import WalletView from "./layout/ProfileScreen/WalletView/WalletView";
 import ChatScreen from "./layout/ChatScreen/ChatScreen";
 import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDetailScreen";
+import HireScreen from "./layout/HireScreen/HireScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
 import NotFoundPage from "./pages/404";
@@ -89,6 +90,7 @@ function App() {
           </Route>
           <Route path="/collection/:id" element={<CollectionDetailScreen />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/hire" element={<HireScreen />} />
         </Routes>
 
         {/* {isFooterVisible && <Footer />} */}
