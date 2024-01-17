@@ -91,6 +91,7 @@ function App() {
           <Route path="/collection/:id" element={<CollectionDetailScreen />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/hire" element={<HireScreen />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         {/* {isFooterVisible && <Footer />} */}
