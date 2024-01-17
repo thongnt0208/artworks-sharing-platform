@@ -13,7 +13,7 @@ const MenuTab: React.FC<{accountId: string, isCreator: boolean, accountAvatar: s
     <div className="menu-tab">
       <div>
         <TabCustom
-          isLogin={false}
+          isCreator={isCreator}
           currentTabId={currentTabId}
           onClickHandler={handleTabNavigation}
         />

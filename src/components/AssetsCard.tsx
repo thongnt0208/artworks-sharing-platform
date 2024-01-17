@@ -1,6 +1,6 @@
-import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { DataView } from "primereact/dataview";
+import { DataScroller } from "primereact/datascroller";
+
 import React from "react";
 import "./AssetsCard.scss";
 
@@ -30,16 +30,16 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
 
   const thumbnailColumn = (image: string) => {
     return (
-      <div className="h-full">
+      <div className="w-fit flex flex-column justify-content-center align-items-end">
         <img
           alt="Ảnh thu nhỏ của một bài đăng"
           src={image}
-          style={{ width: "100%", height: "70%", objectFit: "cover" }}
+          className="thumbnail"
         />
         <Button
-          label={`Có ${totalItems} tài nguyên`}
-          icon="pi pi-list"
-          className="p-button-secondary p-ml-2"
+          className="number-of-items"
+          rounded
+          label={`Chứa ${totalItems} tài nguyên`}
           onClick={props.onClickHandler}
         />
       </div>
@@ -48,66 +48,62 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
 
   const detailsColumn = (item: Item) => {
     return (
-      <div className="grid-nogutter w-full">
-        <div className="col-4">
-          <div>
-            <span>{item.name}</span>
-            <span>{item.size} KB</span>
-          </div>
+      <div className="detail-column">
+        <div className="file-info flex flex-column justify-content-start align-items-start">
+          <span className="file-name">{item.name}</span>
+          <span className="file-size">{item.size} KB</span>
         </div>
-        <div className="col-4">
-          <span>{item.extension}</span>
+        <div className="file-type">
+          <span>.{item.extension}</span>
         </div>
-        <div className="col-4">
-          <div>
-            <span>{`$${item.price}`}</span>
-            <Button
-              icon="pi pi-cloud-download"
-              className="p-button-rounded p-button-secondary p-ml-1"
-              tooltip="Tải về"
-              tooltipOptions={{ position: "top" }}
-              onClick={item.saveHandler}
-            />
-            {props.isCreator && (
-              <>
-                <Button
-                  icon="pi pi-pencil"
-                  className="p-button-rounded p-button-secondary p-ml-1"
-                  tooltip="Sửa"
-                  tooltipOptions={{ position: "top" }}
-                  onClick={item.editHandler}
-                />
-                <Button
-                  icon="pi pi-trash"
-                  className="p-button-rounded p-button-secondary p-ml-1"
-                  tooltip="Xoá"
-                  tooltipOptions={{ position: "top" }}
-                  onClick={item.removeHandler}
-                />
-              </>
-            )}
+        <div className="file-action flex flex-row justify-content-start align-items-center">
+          <div className="file-price">
+            <span>{`${item.price} Xu`}</span>
           </div>
+          <Button
+            icon="pi pi-cloud-download"
+            className="download-button"
+            tooltip="Tải về"
+            tooltipOptions={{ position: "top" }}
+            onClick={item.saveHandler}
+          />
+          {props.isCreator && (
+            <>
+              <Button
+                icon="pi pi-pencil"
+                className="edit-button"
+                tooltip="Sửa"
+                tooltipOptions={{ position: "top" }}
+                onClick={item.editHandler}
+              />
+              <Button
+                icon="pi pi-trash"
+                className="remove-button"
+                tooltip="Xoá"
+                tooltipOptions={{ position: "top" }}
+                onClick={item.removeHandler}
+              />
+            </>
+          )}
         </div>
       </div>
     );
   };
 
   return (
-    <Card className="assets-card-container">
-      <div className="grid-nogutter">
-        <div className="col-4 thumbnail-column-container">
-          <div className="h-full">{thumbnailColumn(props.thumbnail)}</div>
-        </div>
-        <div className="col-8 detail-column-container">
-          <DataView
-            value={props.itemsList}
-            itemTemplate={detailsColumn}
-            paginator
-            rows={props.itemsList ? props.itemsList.length : 0}
-          />
-        </div>
+    <div className="assets-card-container w-full h-fit">
+      <div className="thumbnail-column-container">
+        {thumbnailColumn(props.thumbnail)}
       </div>
-    </Card>
+      <div className="detail-column-container w-full h-full">
+        <DataScroller
+          className="w-full"
+          value={props.itemsList}
+          itemTemplate={detailsColumn}
+          rows={props.itemsList ? props.itemsList.length : 0}
+        />
+      </div>
+    </div>
   );
 };
 
