@@ -6,7 +6,7 @@ export const initalValues = {
   confirmPassword: "",
   email: "",
   fullname: "",
-  birthday: null,
+  birthdate: null,
 }
 
 export const yupObject = Yup.object({
@@ -25,5 +25,5 @@ export const yupObject = Yup.object({
   fullname: Yup.string()
     .required("Họ và tên không được bỏ trống")
     .matches(/^[^\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/, "Họ và tên chỉ được chứa ký tự"),
-  birthday: Yup.date().required("Ngày sinh không được bỏ trống"),
+  birthdate: Yup.date().required("Ngày sinh không được bỏ trống"),
 });
