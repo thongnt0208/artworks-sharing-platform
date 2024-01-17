@@ -79,7 +79,7 @@ function App() {
           <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
             <Route path="/account/:id/" element={<ArtworksView />} />
             <Route path="/account/:id/artwork" element={<ArtworksView />} />
-            <Route path="/account/:id/assets" element={<AssetsView isLogin={isLogin} />} />
+            <Route path="/account/:id/assets" element={<AssetsView />} />
             <Route path="/account/:id/service" element={<ServicesView />} />
             <Route path="/account/:id/collection" element={<CollectionsView />} />
             <Route path="/account/:id/edit" element={<EditProfileTestPage />} />

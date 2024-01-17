@@ -642,21 +642,21 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1350,
-        "y": 380,
+        "x": 2010,
+        "y": 160,
         "wires": []
     },
     {
         "id": "de2af7197e19d6c7",
         "type": "http in",
         "z": "adcc113084da2426",
-        "name": "[GET] Get assets",
-        "url": "/assets",
+        "name": "[GET] Assets of an Account",
+        "url": "/account/:id/assets",
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 980,
-        "y": 380,
+        "x": 1570,
+        "y": 160,
         "wires": [
             [
                 "4595456273038625"
@@ -675,8 +675,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1180,
-        "y": 380,
+        "x": 1830,
+        "y": 160,
         "wires": [
             [
                 "87f6ab650187242e"
@@ -716,7 +716,7 @@
         "type": "function",
         "z": "adcc113084da2426",
         "name": "function 23",
-        "func": "// Query from DB then return the data\nlet profileId = msg.req.params.id;\nconsole.log(\"check profile id: \", profileId)\n\nlet mockData = [{\n  \"id\": \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"username\": \"thong\",\n  \"fullname\": \"Trung Thong\",\n  \"role\": \"Construction Manager\",\n  \"isCreator\": true,\n  \"bio\": \"vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque\",\n  \"avatar\": \"https://api.dicebear.com/7.x/open-peeps/svg?seed=Oreo&radius=50&backgroundColor=ffdfbf,b6e3f4,c0aede,d1d4f9,ffd5dc\",\n  \"profileView\": 1,\n  \"artworksView\": 1,\n  \"followerNum\": 1,\n  \"followingNum\": 1\n},\n{\n  \"id\": \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"username\": \"hoanganh\",\n  \"fullname\": \"Hoang Anh\",\n  \"role\": \"Construction Manager\",\n  \"isCreator\": false,\n  \"bio\": \"vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque\",\n  \"avatar\": \"https://api.dicebear.com/7.x/open-peeps/svg?seed=Max&backgroundColor=ffd5dc\",\n  \"profileView\": 1,\n  \"artworksView\": 1,\n  \"followerNum\": 1,\n  \"followingNum\": 1\n}\n]\n\nmsg.payload = mockData.find(account => account.id === profileId)\nreturn msg;",
+        "func": "// Query from DB then return the data\nlet profileId = msg.req.params.id;\nconsole.log(\"check profile id: \", profileId)\n\nlet mockData = [{\n  \"id\": \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"username\": \"thong\",\n  \"fullname\": \"Trung Thong\",\n  \"role\": \"Construction Manager\",\n  \"isCreator\": true,\n  \"bio\": \"vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque\",\n  \"avatar\": \"https://api.dicebear.com/7.x/open-peeps/svg?seed=Oreo&radius=50&backgroundColor=ffdfbf,b6e3f4,c0aede,d1d4f9,ffd5dc\",\n  \"profileView\": 1,\n  \"artworksView\": 1,\n  \"followerNum\": 1,\n  \"followingNum\": 1\n},\n{\n  \"id\": \"7d580000-c214-88a4-a3f1-08dc1445b3e1\",\n  \"username\": \"hoanganh\",\n  \"fullname\": \"Hoang Anh\",\n  \"role\": \"Construction Manager\",\n  \"isCreator\": false,\n  \"bio\": \"vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque\",\n  \"avatar\": \"https://api.dicebear.com/7.x/open-peeps/svg?seed=Max&backgroundColor=ffd5dc\",\n  \"profileView\": 1,\n  \"artworksView\": 1,\n  \"followerNum\": 1,\n  \"followingNum\": 1\n}\n]\n\nmsg.payload = mockData.find(account => account.id === profileId)\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -807,7 +807,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 1580,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "c0da20ad8d74a17b"
@@ -827,7 +827,7 @@
         "finalize": "",
         "libs": [],
         "x": 1830,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "ed6c4ffb481da5e8"
@@ -842,7 +842,7 @@
         "statusCode": "",
         "headers": {},
         "x": 2010,
-        "y": 200,
+        "y": 240,
         "wires": []
     },
     {
@@ -855,7 +855,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 1590,
-        "y": 280,
+        "y": 320,
         "wires": [
             [
                 "b80f5682c7da0e9d"
@@ -875,7 +875,7 @@
         "finalize": "",
         "libs": [],
         "x": 1830,
-        "y": 280,
+        "y": 320,
         "wires": [
             [
                 "054617edeca273b5"
@@ -890,7 +890,7 @@
         "statusCode": "",
         "headers": {},
         "x": 2010,
-        "y": 280,
+        "y": 320,
         "wires": []
     },
     {
@@ -949,7 +949,7 @@
         "statusCode": "",
         "headers": {},
         "x": 2010,
-        "y": 400,
+        "y": 440,
         "wires": []
     },
     {
@@ -962,7 +962,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 1590,
-        "y": 400,
+        "y": 440,
         "wires": [
             [
                 "794f03eb5903bdbf"
@@ -982,7 +982,7 @@
         "finalize": "",
         "libs": [],
         "x": 1830,
-        "y": 400,
+        "y": 440,
         "wires": [
             [
                 "62ad6bc5a74e1dc8"
@@ -999,7 +999,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 1560,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "64cde365cdd6bf02"
@@ -1019,7 +1019,7 @@
         "finalize": "",
         "libs": [],
         "x": 1830,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "ab473c035cd16bbb"
@@ -1034,7 +1034,7 @@
         "statusCode": "",
         "headers": {},
         "x": 2010,
-        "y": 340,
+        "y": 380,
         "wires": []
     }
 ]
