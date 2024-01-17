@@ -105,12 +105,8 @@ const Header = ({
   ];
 
   const items = [
-    {
-      label: "Khám phá",
-    },
-    {
-      label: "Thuê",
-    },
+    { label: 'Khám phá', command: () => navigate('/discover') },
+    { label: 'Thuê', command: () => navigate('/hire') },
   ];
 
   const dialogModelFields = {
