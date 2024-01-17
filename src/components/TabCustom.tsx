@@ -3,24 +3,16 @@ import { useEffect, useState } from "react";
 
 import "./TabCustom.scss";
 
-/*Sample props:
-let sampleProps = {
-    isLogin: true,
-    currentTabId: "artwork",
-    onClickHandler: (e: any) => {
-      console.log(e);
-    },
-  }
-*/
 type Props = {
-  isLogin: boolean;
+  isCreator: boolean;
   currentTabId: string;
-  onClickHandler: (e: any) => void; //Navigation to the chosen tab
+  onClickHandler: (e: any) => void; 
 };
 
 type Tab = {
   id: string;
   label: string;
+  disabled?: boolean; 
 };
 
 export const TabCustom = (props: Props) => {
@@ -36,22 +28,26 @@ export const TabCustom = (props: Props) => {
       "collection",
     ];
     setActiveTabClassName(
-      tabsToRound.includes(props.currentTabId) ? "p-button-rounded active-tab" : "p-button-text inactive-tab"
+      tabsToRound.includes(props.currentTabId)
+        ? "p-button-rounded active-tab"
+        : "p-button-text inactive-tab"
     );
   }, [props.currentTabId]);
 
   const tabs: Tab[] = [
     { id: "artwork", label: "Tác phẩm" },
-    { id: "assets", label: "Assets" },
+    { id: "assets", label: "Tài nguyên" },
     { id: "service", label: "Dịch vụ" },
-    { id: "subscribe", label: "Vùng cho người đăng ký" },
-    { id: "wallet", label: "Quản lí ví" },
+    { id: "subscribe", label: "Vùng cho người đăng ký", disabled: !props.isCreator },
+    { id: "wallet", label: "Quản lí ví", disabled: !props.isCreator },
     { id: "collection", label: "Bộ sưu tập" },
   ];
 
+  const visibleTabs = tabs.filter((tab) => !tab.disabled); 
+
   return (
     <>
-      {tabs.map((tab) => (
+      {visibleTabs.map((tab) => (
         <Button
           key={tab.id}
           id={tab.id}
@@ -59,9 +55,7 @@ export const TabCustom = (props: Props) => {
           className={
             props.currentTabId === tab.id ? activeTabClassName : "p-button-text inactive-tab"
           }
-          onClick={() => {
-            props.onClickHandler(tab.id);
-          }}
+          onClick={() => props.onClickHandler(tab.id)}
         />
       ))}
     </>

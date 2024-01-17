@@ -1,9 +1,23 @@
-.gallery {
+@import "/src/const/variables.scss";
+
+.assets-gallery-container {
+  .gallery {
     width: 100%;
     padding: 0;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;    
+    align-items: center;
+    .add-asset-card {
+      .icon {
+        font-size: 50px;
+        color: $text-100;
+      }
+    }
+    .gallery__item {
+        padding: 0;
+        margin-bottom: 25px;
+    }
+  }
 }

@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export async function GetAssetsData() {
+export async function GetAssetsData(accountId: string) {
     try {
-      const response = await axios.get("http://127.0.0.1:1880/assets", {
+      const response = await axios.get(`http://127.0.0.1:1880/account/${accountId}/assets`, {
         headers: {
           "Content-Type": "application/json",
         },
