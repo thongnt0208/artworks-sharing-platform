@@ -6,7 +6,8 @@ import logotext from "../../assets/logo/logo.png";
 import {  InputText,  Button,  Toast,  Divider,  Image,  Card,  useFormik,  Password,  Calendar} from "../index";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { initalValues, yupObject } from "./FormikData";
-// import { Register } from "../../auth/AuthService";
+import { register } from "../../auth/AuthService";
+import { translate2Vietnamese } from "../../util/TextHandle";
 
 const RegisterScreen = () => {
   const authenticationInfo = getAuthInfo();
@@ -15,17 +16,37 @@ const RegisterScreen = () => {
   const navigate = useNavigate();
   const toast: any = useRef(null);
 
-  const handleRegister = (values: any) => {
-    console.log(values);
-    //   navigate("/");
+  let showToastErr = (msg: string) =>
+    toast.current.show({
+      severity: "error",
+      summary: "Đăng ký thất bại",
+      detail: msg,
+    });
 
-    //   Register(username, password)
-    //     .then((response) => {
-
-    //     })
-    //     .catch((error) => {
-
-    //     });
+  const handleRegister = (formdata: any) => {
+    register(formdata)
+      .then((response) => {
+        if (response.status === 200) {
+          toast.current.show({
+            severity: "success",
+            summary: "Đăng ký thành công",
+            detail: "Bạn đang được chuyển hướng đến trang đăng nhập!",
+            life: 1500,
+          });
+          setTimeout(() => {
+            navigate("/login");
+          }, 1500);
+        } else {
+          console.log(response);
+          // Translate the response message to Vietnamese
+          translate2Vietnamese(response.response.data.errorMessage).then((errMsg) => {
+            console.log(errMsg);
+            if (!errMsg) errMsg = "Vui lòng thử lại sau giây lát!";
+            showToastErr(errMsg);
+          });
+        }
+      })
+      .catch((err) => showToastErr("Vui lòng thử lại sau giây lát!"));
   };
 
   const formik: any = useFormik({
@@ -41,8 +62,13 @@ const RegisterScreen = () => {
 
   const renderError = (field: string) => {
     return formik.touched[field] && formik.errors[field] ? (
-      <> <small className="p-error">{formik.errors[field]}</small> <br /> </>
-    ) : <br />;
+      <>
+        {" "}
+        <small className="p-error">{formik.errors[field]}</small> <br />{" "}
+      </>
+    ) : (
+      <br />
+    );
   };
 
   const pwFooter = (
@@ -121,19 +147,19 @@ const RegisterScreen = () => {
                 <InputText
                   id="fullname"
                   {...formik.getFieldProps("fullname")}
-                  placeholder="Full Name"
+                  placeholder="Tên đầy đủ"
                 />
               </div>
-              {/* Birthday InputText */}
-              <div className="birthday-container">
-                {renderError("birthday")}
+              {/* birthdate InputText */}
+              <div className="birthdate-container">
+                {renderError("birthdate")}
                 <Calendar
-                  id="birthday"
-                  name="birthday"
-                  value={formik.values.birthday}
-                  onChange={(e) => formik.setFieldValue("birthday", e.value)}
+                  id="birthdate"
+                  name="birthdate"
+                  value={formik.values.birthdate}
+                  onChange={(e) => formik.setFieldValue("birthdate", e.value)}
                   onBlur={formik.handleBlur}
-                  placeholder="Birthday"
+                  placeholder="Ngày sinh"
                   dateFormat="dd/mm/yy"
                   maxDate={today}
                 />
