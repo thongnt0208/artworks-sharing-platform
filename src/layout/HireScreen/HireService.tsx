@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function GetRecommendArtworksData() {
   try {
-    const response = await axios.get("http://127.0.0.1:1880/news", {
+    const response = await axios.get("http://127.0.0.1:1880/recommend-artworks", {
       headers: {
         "Content-Type": "application/json",
       },

@@ -1,6 +1,7 @@
 @import "./../const/variables.scss";
 .user-information-card-container {
-    max-width: 371px;
+  width: 371px;
+  margin: 33px;
   .user-information-card {
     text-align: center;
     .p-card-footer {

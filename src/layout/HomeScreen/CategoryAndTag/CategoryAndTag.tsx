@@ -1,6 +1,6 @@
 import React from "react";
 import CategoryMenu from "./CategoryMenu/CategoryMenu";
-import TagCarousel from "./TagCarousel/TagCarousel";
+import TagCarousel from "../../../components/TagCarousel";
 import "./CategoryAndTag.scss";
 
 type TagProps = {
@@ -28,7 +28,7 @@ const CategoryAndTag: React.FC<CategoryAndTagProps> = ({
         <CategoryMenu categories={categories} />
       </div>
       <div className="tag-carousel-section col-8 p-0">
-        <TagCarousel tags={tags} />
+        <TagCarousel tags={tags} slidesPerView={5}/>
       </div>
     </div>
   );

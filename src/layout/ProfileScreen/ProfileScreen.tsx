@@ -12,8 +12,8 @@ type ProfileProps = {
   username: string;
   fullname: string;
   role: string;
-  // job: string;
-  // address: string;
+  job: string;
+  address: string;
   bio: string;
   avatar: string;
   profileView: number;
@@ -33,8 +33,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     fullname: "N/A",
     role: "",
     avatar: "",
-    // job: "",
-    // address: "",
+    job: "",
+    address: "",
     bio: "",
     profileView: 0,
     artworksView: 0,
@@ -87,8 +87,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               fullname={profile.fullname}
               role={profile.role}
               isCreator={isCreator}
-              // job={profile.job}
-              // address={profile.address}
+              job={profile.job}
+              address={profile.address}
               bio={profile.bio}
               avatar={profile.avatar}
               profileView={profile.profileView}

@@ -1,5 +1,7 @@
 import React from "react";
-import CreatorInformationCard from "../../../components/CreatorInformationCard";
+import UserInformationCard from "../../../components/UserInformationCard";
+
+import "./CreatorsView.scss";
 
 type CreatorProps = {
   Id: string;
@@ -7,6 +9,7 @@ type CreatorProps = {
   Avatar: string;
   Job: string;
   Address: string;
+  IsCreator: boolean;
   followHandler?: () => void;
   hireHandler?: () => void;
 };
@@ -18,19 +21,20 @@ type CreatorsProps = {
 const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
   return (
     <div className="creators-view-container w-full flex flex-column flex-wrap justify-content-center align-items-start">
-      <h1>
-        <i className="pi pi-star text-3xl" /> Các nhà sáng tạo
-      </h1>
+      <p className="title">
+        <i className="pi pi-star text-2xl" /> Đề xuất
+      </p>
       <div className="w-fit flex flex-row flex-wrap justify-content-center align-items-center">
         {Array.isArray(creators) &&
           creators.map((creator) => (
-            <CreatorInformationCard
+            <UserInformationCard
               key={creator.Id}
               id={creator.Id}
               fullname={creator.Fullname}
               avatar={creator.Avatar}
               job={creator.Job}
               address={creator.Address}
+              isCreator={creator.IsCreator}
               followHandler={creator.followHandler}
               hireHandler={creator.hireHandler}
             />

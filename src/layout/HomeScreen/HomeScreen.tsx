@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
-import Gallery from "./Gallery/Gallery";
+import Gallery from "../../components/Gallery";
 import { TabMenu } from "primereact/tabmenu";
 import {
   GetCategoriesData,
@@ -77,7 +77,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           model={items}
           activeIndex={activeTab}
           onTabChange={(e) => setActiveTab(e.index)}
-          className="w-max mb-3 text-black-alpha-90"
+          className="w-max mb-3 text-black-alpha-90 text-lg"
         />
       ) : null}
 

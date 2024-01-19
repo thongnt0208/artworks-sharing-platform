@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import TagCarousel from './TagCarousel/TagCarousel';
+import TagCarousel from '../../../components/TagCarousel';
 import './FilterView.scss';
 
 type TagProps = {
@@ -21,10 +21,10 @@ const FilterView: React.FC<{ tags: TagProps[] }> = ({ tags }) => {
 
   return (
     <div className="filter-view grid  w-full">
-      <div className="tag-carousel-section col-9 p-3">
-        <TagCarousel tags={tags} />
+      <div className="tag-carousel-section col-10 p-3">
+        <TagCarousel tags={tags} slidesPerView={7}/>
       </div>
-      <div className="search-section col-3 p-3 flex flex-row justify-content-center align-items-center">
+      <div className="search-section col-2 p-3 flex flex-row justify-content-center align-items-center">
         <span className="search-bar p-input-icon-right">
           <i className="pi pi-search" />
           <InputText className="search-input w-full" placeholder="Tìm nhà sáng tạo"/>

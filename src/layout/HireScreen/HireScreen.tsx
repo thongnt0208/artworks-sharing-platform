@@ -27,6 +27,7 @@ type CreatorProps = {
     Avatar: string;
     Job: string;
     Address: string;
+    IsCreator: boolean;
     followHandler?: () => void;
     hireHandler?: () => void;
   };
