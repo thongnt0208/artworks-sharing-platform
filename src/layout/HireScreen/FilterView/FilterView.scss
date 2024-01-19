@@ -1,0 +1,27 @@
+@import "/src/const/variables.scss";
+
+.filter-view {
+  .search-section {
+    display: flex;
+    flex-direction: row;
+    .search-bar {
+      width: fit-content;
+      border-radius: 100px;
+      background-color: $bg-200;
+      padding: 8px;
+      .search-input {
+        border: none;
+        background-color: transparent;
+      }
+    }
+    .filter-btn {
+      width: fit-content;
+      height: fit-content;
+      margin-left: 5px;
+      padding: 8px;
+      .pi-filter {
+        font-size: 2rem;
+      }
+    }
+  }
+}
