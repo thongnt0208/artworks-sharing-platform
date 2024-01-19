@@ -65,11 +65,6 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await GetProfileData(profileId || "");
-      // MUST-HAVE FUNCTIONS IN THE SERVICE:
-      // Function 1: Get subscribe area data -> setSubscribeData
-      // Function 2: Check if the current user's id (useAuth) is the profile id or not -> setIsCreator
-      // Function 3: (after function 2 && isCreator === false) Check if the current user is subscribed to this profile or not -> setIsSubscribed
-      // Function 3: (after function 2 && isCreator === true)  Check if the current user set up the subscribe area or not -> setIsSetup
       setProfile(profileData);
       if (getAuthInfo()?.id === profileId) {
         setIsCreator(true);
@@ -103,7 +98,11 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
             />
           </div>
           <div className="profile-menu-container col col-9 pl-6 ">
-            <MenuTab accountId={profile.id} isCreator={isCreator} accountAvatar={profile.avatar}/>
+            <MenuTab
+              accountId={profile.id}
+              isCreator={isCreator}
+              accountAvatar={profile.avatar}
+            />
           </div>
         </div>
       ) : (
