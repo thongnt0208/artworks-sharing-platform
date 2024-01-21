@@ -1,12 +1,11 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import "./Comment.scss";
-import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import axios from "axios";
 import { CommentType } from "../content/ArtworkDetailType";
 import { addCommentToArtwork } from "../Service";
 import { InputTextarea } from "primereact/inputtextarea";
 import { maxCommentCharacter } from "../../../const/bizConstants";
+import { Toast } from "primereact/toast";
 
 interface PropsType {
   // Current user data
@@ -23,6 +22,7 @@ function CommentComponent({ ...props }: PropsType) {
   const [commentValue, setCommentValue] = useState<string>("");
   const [commentsList, setCommentsList] = useState<CommentType[]>(props.comments);
   const [loading, setLoading] = useState<boolean>(false);
+  const toast: any = useRef(null);
 
   const addComment = () => {
     let newComment = {
@@ -35,28 +35,35 @@ function CommentComponent({ ...props }: PropsType) {
       content: commentValue,
     };
     const updatedCommentsList = [newComment, ...commentsList];
+    const oldCommentsList = commentsList;
     // Change in UI
     setCommentsList(updatedCommentsList);
     setCommentValue(""); // Clear input after adding comment
     // Change in Server
     props.setIsCommentChanged(true);
-    // if (commentValue !== "") {
-    //   setLoading(true);
+    if (commentValue !== "") {
+      setLoading(true);
 
-    //   // API call
-    //   addCommentToArtwork(props.artworkId, props.userId, commentValue)
-    //     .then((response) => {
-    //       setCommentsList(response.data);
-    //       setCommentValue("") // Clear input after adding comment
-
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error adding comment:", error);
-    //     })
-    //     .finally(() => {
-    //       setLoading(false);
-    //     });
-    // }
+      // API call
+      addCommentToArtwork(props.artworkId, commentValue)
+        .then((response) => {
+          console.log(response.data);
+          setCommentValue(""); // Clear input after adding comment
+        })
+        .catch((error) => {
+          console.error("Error adding comment:", error);
+          setCommentsList(oldCommentsList);
+          toast.current.show({
+            severity: "error",
+            summary: "Đã xảy ra lỗi",
+            detail: "Vui lòng thử lại sau",
+            life: 3000,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   let handleInputChange = (e: any) => {
@@ -84,18 +91,21 @@ function CommentComponent({ ...props }: PropsType) {
 
   return (
     <>
-      <div className="comment-input-container">
-        <div className="flex flex-column gap-1">
-          <InputTextarea {...textareaProperties} />
-          <Button
-            className="max-w-max align-self-end"
-            label="Đăng bình luận"
-            onClick={addComment}
-            disabled={loading || !commentValue}
-          />
+      <Toast ref={toast} />
+      {props.userId && (
+        <div className="comment-input-container">
+          <div className="flex flex-column gap-1">
+            <InputTextarea {...textareaProperties} />
+            <Button
+              className="max-w-max align-self-end"
+              label="Đăng bình luận"
+              onClick={addComment}
+              disabled={loading || !commentValue}
+            />
+          </div>
+          {loading && <p>Đang tải...</p>}
         </div>
-        {loading && <p>Loading...</p>}
-      </div>
+      )}
 
       <div className="comment-list-container">
         {commentsList?.length > 0 ? (
@@ -116,7 +126,7 @@ function CommentComponent({ ...props }: PropsType) {
             </div>
           ))
         ) : (
-          <div>No comments yet.</div>
+          <div>Chưa có bình luận nào.</div>
         )}
       </div>
     </>
