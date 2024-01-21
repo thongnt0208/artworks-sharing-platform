@@ -33,7 +33,6 @@ import WalletView from "./layout/ProfileScreen/WalletView/WalletView";
 import ChatScreen from "./layout/ChatScreen/ChatScreen";
 import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDetailScreen";
 import HireScreen from "./layout/HireScreen/HireScreen";
-import HireScreen from "./layout/HireScreen/HireScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
 import NotFoundPage from "./pages/404";
