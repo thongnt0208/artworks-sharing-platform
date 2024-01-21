@@ -1,5 +1,5 @@
 import React from "react";
-import ArtworkCard from "../../../../components/ArtworkCard";
+import ArtworkCard from "./ArtworkCard";
 import "./Gallery.scss";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
   const navigate = useNavigate();
   console.log(artworks);
   return (
-    <div className="gallery w-full p-0 flex flex-wrap justify-content-around">
+    <div className="gallery w-full p-0 flex flex-wrap justify-content-center">
       {artworks
         .map((artwork) => (
           <div className="gallery__item flex flex-row flex-wrap justify-content-center" key={artwork.id}>

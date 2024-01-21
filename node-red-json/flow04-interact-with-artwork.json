@@ -535,7 +535,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
+        "x": 640,
         "y": 360,
         "wires": []
     },
@@ -544,7 +544,7 @@
         "type": "function",
         "z": "adcc113084da2426",
         "name": "function 20",
-        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": \"e0b1bb5b-4616-4815-90ac-b2fdeb754221\",\n  \"title\": \"I, Frankenstein\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"b172b0bc-6e6b-4f0f-8b52-a3d749bd32ac\",\n  \"title\": \"Agnosia\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": \"ff1f7496-837e-49ae-92d3-dcf931cd70da\",\n  \"title\": \"Neds\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"da336b7b-849a-4110-b193-14dde470ba85\",\n  \"title\": \"Captivated\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}\n// , {\n//   \"id\": \"c0540dae-12e6-4077-8f97-aac805c1b58e\",\n//   \"title\": \"Evil That Men Do, The\",\n//   \"creatorFullName\": \"Cleopatra Watkin\",\n//   \"thumbnail\": \"http://dummyimage.com/167x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 5,\n//   \"viewNum\": 5\n// }, {\n//   \"id\": \"460dd1f9-6df1-44f9-ab34-7b048b065cda\",\n//   \"title\": \"Pennies from Heaven\",\n//   \"creatorFullName\": \"Elana Persitt\",\n//   \"thumbnail\": \"http://dummyimage.com/160x100.png/ff4444/ffffff\",\n//   \"likeNum\": 6,\n//   \"viewNum\": 6\n// }, {\n//   \"id\": \"7c436cb6-b440-4021-a539-e2a01d24322e\",\n//   \"title\": \"Birthday Girl\",\n//   \"creatorFullName\": \"Kaja Alcorn\",\n//   \"thumbnail\": \"http://dummyimage.com/111x100.png/cc0000/ffffff\",\n//   \"likeNum\": 7,\n//   \"viewNum\": 7\n// }, {\n//   \"id\": \"b151e4e0-fbcc-4a30-a0d3-cb94bac78dfd\",\n//   \"title\": \"Youth of the Son\",\n//   \"creatorFullName\": \"Geoffrey Durward\",\n//   \"thumbnail\": \"http://dummyimage.com/153x100.png/ff4444/ffffff\",\n//   \"likeNum\": 8,\n//   \"viewNum\": 8\n// }, {\n//   \"id\": \"ad236276-5765-4f3c-bdba-e640fc0f8897\",\n//   \"title\": \"Grimm Love (Rohtenburg)\",\n//   \"creatorFullName\": \"Chelsie Sarten\",\n//   \"thumbnail\": \"http://dummyimage.com/230x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 9,\n//   \"viewNum\": 9\n// }, {\n//   \"id\": \"291cd899-0809-48d4-b230-4a5b84fec385\",\n//   \"title\": \"November\",\n//   \"creatorFullName\": \"Ulrike Barthot\",\n//   \"thumbnail\": \"http://dummyimage.com/178x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 10,\n//   \"viewNum\": 10\n// }\n]\nmsg.payload = sampleData\n\nreturn msg;",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": \"e0b1bb5b-4616-4815-90ac-b2fdeb754221\",\n  \"title\": \"I, Frankenstein\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"b172b0bc-6e6b-4f0f-8b52-a3d749bd32ac\",\n  \"title\": \"Agnosia\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": \"ff1f7496-837e-49ae-92d3-dcf931cd70da\",\n  \"title\": \"Neds\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"da336b7b-849a-4110-b193-14dde470ba85\",\n  \"title\": \"Captivated\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}\n, {\n  \"id\": \"c0540dae-12e6-4077-8f97-aac805c1b58e\",\n  \"title\": \"Evil That Men Do, The\",\n  \"creatorFullName\": \"Cleopatra Watkin\",\n  \"thumbnail\": \"http://dummyimage.com/167x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 5,\n  \"viewNum\": 5\n}, {\n  \"id\": \"460dd1f9-6df1-44f9-ab34-7b048b065cda\",\n  \"title\": \"Pennies from Heaven\",\n  \"creatorFullName\": \"Elana Persitt\",\n  \"thumbnail\": \"http://dummyimage.com/160x100.png/ff4444/ffffff\",\n  \"likeNum\": 6,\n  \"viewNum\": 6\n}, {\n  \"id\": \"7c436cb6-b440-4021-a539-e2a01d24322e\",\n  \"title\": \"Birthday Girl\",\n  \"creatorFullName\": \"Kaja Alcorn\",\n  \"thumbnail\": \"http://dummyimage.com/111x100.png/cc0000/ffffff\",\n  \"likeNum\": 7,\n  \"viewNum\": 7\n}, {\n  \"id\": \"b151e4e0-fbcc-4a30-a0d3-cb94bac78dfd\",\n  \"title\": \"Youth of the Son\",\n  \"creatorFullName\": \"Geoffrey Durward\",\n  \"thumbnail\": \"http://dummyimage.com/153x100.png/ff4444/ffffff\",\n  \"likeNum\": 8,\n  \"viewNum\": 8\n}, {\n  \"id\": \"ad236276-5765-4f3c-bdba-e640fc0f8897\",\n  \"title\": \"Grimm Love (Rohtenburg)\",\n  \"creatorFullName\": \"Chelsie Sarten\",\n  \"thumbnail\": \"http://dummyimage.com/230x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 9,\n  \"viewNum\": 9\n}, {\n  \"id\": \"291cd899-0809-48d4-b230-4a5b84fec385\",\n  \"title\": \"November\",\n  \"creatorFullName\": \"Ulrike Barthot\",\n  \"thumbnail\": \"http://dummyimage.com/178x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 10,\n  \"viewNum\": 10\n}\n]\nmsg.payload = sampleData\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1036,5 +1036,53 @@
         "x": 2010,
         "y": 380,
         "wires": []
+    },
+    {
+        "id": "24ae0888b70bbf84",
+        "type": "function",
+        "z": "adcc113084da2426",
+        "name": "function 30",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": \"e0b1bb5b-4616-4815-90ac-b2fdeb754221\",\n  \"title\": \"I, Frankenstein\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"b172b0bc-6e6b-4f0f-8b52-a3d749bd32ac\",\n  \"title\": \"Agnosia\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": \"ff1f7496-837e-49ae-92d3-dcf931cd70da\",\n  \"title\": \"Neds\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"da336b7b-849a-4110-b193-14dde470ba85\",\n  \"title\": \"Captivated\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}\n, {\n  \"id\": \"c0540dae-12e6-4077-8f97-aac805c1b58e\",\n  \"title\": \"Evil That Men Do, The\",\n  \"creatorFullName\": \"Cleopatra Watkin\",\n  \"thumbnail\": \"http://dummyimage.com/167x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 5,\n  \"viewNum\": 5\n}\n// , {\n//   \"id\": \"460dd1f9-6df1-44f9-ab34-7b048b065cda\",\n//   \"title\": \"Pennies from Heaven\",\n//   \"creatorFullName\": \"Elana Persitt\",\n//   \"thumbnail\": \"http://dummyimage.com/160x100.png/ff4444/ffffff\",\n//   \"likeNum\": 6,\n//   \"viewNum\": 6\n// }\n// , {\n//   \"id\": \"7c436cb6-b440-4021-a539-e2a01d24322e\",\n//   \"title\": \"Birthday Girl\",\n//   \"creatorFullName\": \"Kaja Alcorn\",\n//   \"thumbnail\": \"http://dummyimage.com/111x100.png/cc0000/ffffff\",\n//   \"likeNum\": 7,\n//   \"viewNum\": 7\n// }, {\n//   \"id\": \"b151e4e0-fbcc-4a30-a0d3-cb94bac78dfd\",\n//   \"title\": \"Youth of the Son\",\n//   \"creatorFullName\": \"Geoffrey Durward\",\n//   \"thumbnail\": \"http://dummyimage.com/153x100.png/ff4444/ffffff\",\n//   \"likeNum\": 8,\n//   \"viewNum\": 8\n// }, {\n//   \"id\": \"ad236276-5765-4f3c-bdba-e640fc0f8897\",\n//   \"title\": \"Grimm Love (Rohtenburg)\",\n//   \"creatorFullName\": \"Chelsie Sarten\",\n//   \"thumbnail\": \"http://dummyimage.com/230x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 9,\n//   \"viewNum\": 9\n// }, {\n//   \"id\": \"291cd899-0809-48d4-b230-4a5b84fec385\",\n//   \"title\": \"November\",\n//   \"creatorFullName\": \"Ulrike Barthot\",\n//   \"thumbnail\": \"http://dummyimage.com/178x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 10,\n//   \"viewNum\": 10\n// }\n]\nmsg.payload = sampleData\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 340,
+        "wires": [
+            [
+                "684d2ebe236d2f71"
+            ]
+        ]
+    },
+    {
+        "id": "684d2ebe236d2f71",
+        "type": "http response",
+        "z": "adcc113084da2426",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1280,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "a3e5e0cdcff7d415",
+        "type": "http in",
+        "z": "adcc113084da2426",
+        "name": "[GET] Recommend Artworks",
+        "url": "/recommend-artworks",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 870,
+        "y": 340,
+        "wires": [
+            [
+                "24ae0888b70bbf84"
+            ]
+        ]
     }
 ]
