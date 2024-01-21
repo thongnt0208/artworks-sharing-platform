@@ -39,7 +39,7 @@ export default function ArtworkDetail() {
       .then((res) => {
         setData(res.data);
         setIsLiked(res.data.isLiked);
-        console.log(res.data);
+        // console.log(res.data);
         setError("");
       })
       .catch((err) => {
@@ -54,7 +54,6 @@ export default function ArtworkDetail() {
     fetchCommentsForArtwork(id)
       .then((res) => {
         setComments(res.data);
-        console.log(res.data);
         setError("");
       })
       .catch((err) => {
@@ -90,7 +89,7 @@ export default function ArtworkDetail() {
               {/* <CommentComponent artworkId={id} userId={authenticationInfo.userId} avatar={authenticationInfo.avatar} fullName={authenticationInfo.fullname } comments={data.Comments} /> */}
               <div className="col col-5">
                 {comments.length === 0 ? (
-                  <ProgressSpinner />
+                  <p>Chưa có bình luận nào</p>
                 ) : (
                   <CommentComponent
                     artworkId={id ? id : ""}

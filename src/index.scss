@@ -9,6 +9,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  a{
+    text-decoration: none;
+  }
+
   .text-cus-title {
     font-size: 40px;
     font-weight: bold;
@@ -73,6 +77,14 @@ body {
     font-size: 12px;
     font-weight: bold;
     line-height: 15.6px;
+  }
+
+  .err-page-container{
+    position: absolute;
+    min-width: 100vw;
+    z-index: 11;
+    top: 0;
+    background-color: white;
   }
 }
 
