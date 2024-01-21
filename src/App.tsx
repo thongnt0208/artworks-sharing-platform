@@ -35,6 +35,7 @@ import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDe
 import HireScreen from "./layout/HireScreen/HireScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
+import NotFoundPage from "./pages/404";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -43,7 +44,6 @@ function App() {
   locale("vi");
   const primereactConfigValue = {};
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
-  console.log(authInfo);
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
   // const isHeaderVisible = useHeaderVisibility();
   // const isFooterVisible = useFooterVisibility();
