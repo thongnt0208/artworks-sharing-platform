@@ -125,28 +125,24 @@ export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
  * Adds a comment to an artwork.
  *
  * @param {string} artworkId - The ID of the artwork to add the comment to.
- * @param {string} accountId - The ID of the user adding the comment.
  * @param {string} commentText - The text of the comment.
  * @returns {Promise<any>}
  * @example
- * const addedComment = await addCommentToArtwork("artworkId123", "accountId456", "Great work!");
+ * const addedComment = await addCommentToArtwork("artworkId123", "Great work!");
  * console.log(addedComment);
  *
  * @author ThongNT
- * @version 1.0.0
+ * @version 2.0.0
  */
 export async function addCommentToArtwork(
   artworkId: string,
-  accountId: string,
   commentText: string
 ): Promise<any> {
   let body = {
-    accountId: accountId,
-    artworkId: artworkId,
-    text: commentText,
+    commentText: commentText,
   };
   try {
-    const response = await axios.post(`${BASE_URL}/artworks/${artworkId}/comments`, body);
+    const response = await axiosPrivate.post(`${BASE_URL}/artworks/${artworkId}/comments`, body);
     return response;
   } catch (error) {
     console.error("Error adding comment:", error);
