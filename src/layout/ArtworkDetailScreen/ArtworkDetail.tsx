@@ -20,7 +20,7 @@ export default function ArtworkDetail() {
   const [isCommentChanged, setIsCommentChanged] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [error, setError] = useState({} as any);
-  const  authenticationInfo  = getAuthInfo();
+  const authenticationInfo = getAuthInfo();
 
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
@@ -61,7 +61,7 @@ export default function ArtworkDetail() {
         setError({ ...message });
         console.log(err);
       });
-  }, [id, isCommentChanged]);
+  }, [id, isCommentChanged]);  
 
   return (
     <Dialog {...dialogProperties}>
@@ -81,25 +81,20 @@ export default function ArtworkDetail() {
                 />
               </div>
               <div className="side-buttons-container col col-1 pt-7">
-                <ButtonList />
+                <ButtonList data={data} />
               </div>
             </div>
 
             <div className="interartion-container flex grid-nogutter">
-              {/* <CommentComponent artworkId={id} userId={authenticationInfo.userId} avatar={authenticationInfo.avatar} fullName={authenticationInfo.fullname } comments={data.Comments} /> */}
               <div className="col col-5">
-                {comments.length === 0 ? (
-                  <p>Chưa có bình luận nào</p>
-                ) : (
-                  <CommentComponent
-                    artworkId={id ? id : ""}
-                    userId="thongnt"
-                    avatar="https://placehold.in/600"
-                    fullName="Nguyễn Chung Tông"
-                    comments={comments}
-                    setIsCommentChanged={setIsCommentChanged}
-                  />
-                )}
+                <CommentComponent
+                  artworkId={id ? id : ""}
+                  userId={authenticationInfo?.id}
+                  avatar={authenticationInfo?.avatar}
+                  fullName={authenticationInfo?.fullname}
+                  comments={comments}
+                  setIsCommentChanged={setIsCommentChanged}
+                />
               </div>
               <div className="creator-info-container col col-5">
                 {/* <UserInformationCard .. /> */}

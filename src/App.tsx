@@ -1,6 +1,6 @@
 import "./App.scss";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { PrimeReactProvider, addLocale, locale } from "primereact/api";
@@ -90,6 +90,7 @@ function App() {
           </Route>
           <Route path="/collection/:id" element={<CollectionDetailScreen />} />
           <Route path="/hire" element={<HireScreen />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         {/* {isFooterVisible && <Footer />} */}
