@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
-import "./MultipleFileUpload.scss";
+import "./MultipleAssetUpload.scss";
+// ------------------------------------------------------
+
 import { Toast } from "primereact/toast";
 import {
   FileUpload,
@@ -7,26 +9,33 @@ import {
   ItemTemplateOptions,
 } from "primereact/fileupload";
 import { Button, ProgressBar, Tooltip, Tag } from "../../index";
-import { maxSizeAssetsUpload, maxSizeImagesUpload } from "../../../const/bizConstants";
+// ------------------------------------------------------
+
+import { maxSizeAssetsUpload } from "../../../const/bizConstants";
 import { getFileExtension } from "../../../util/FileNameUtil";
+import NewAssetSection from "../NewAssetSection/NewAssetSection";
+// ------------------------------------------------------
 
 type Props = {
-  isImagesOnly: boolean;
-  uploadedFiles: any;
-  setUploadedFiles: (data: any) => void;
   onFormChange: (data: any) => void;
 };
 
-export default function MultipleFileUpload({
-  isImagesOnly,
-  uploadedFiles,
-  setUploadedFiles,
-  onFormChange,
-}: Props) {
-  const toast = useRef<Toast>(null);
-  const maxSize = isImagesOnly ? maxSizeImagesUpload : maxSizeAssetsUpload;
+// Logic flow:
+// 1. User select file
+// 2. Add infomation Dialog appear to add title, description, price of the asset at `NewAssetSection`
+// 3. User click "Lưu" button, generate an array then add this {title, description, price, file_url} object to that array
+// 4. After user click "Lưu" button, the array will be saved to the LocalStorage
+// 5. After user click "Đăng bài" button, the array will be uploaded to the server, the array will be removed from the LocalStorage
+// 4.1. If the user click "Xoá" button in the list on `MultipleAssetUpload`, check if the file is in the LocalStorage, if yes, remove it from the LocalStorage
+
+export default function MultipleAssetUpload({ onFormChange }: Props) {
   const [totalSize, setTotalSize] = useState(0);
+  const [uploadedAssets, setUploadedAssets] = useState([]);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [currentFiles, setCurrentFiles] = useState({} as any);
+  const toast = useRef<Toast>(null);
   const fileUploadRef = useRef<FileUpload>(null);
+  const maxSize = maxSizeAssetsUpload;
 
   const onTemplateSelect = (e: { files: any; originalEvent: any }) => {
     let _totalSize = totalSize;
@@ -36,8 +45,10 @@ export default function MultipleFileUpload({
     }
 
     setTotalSize(_totalSize);
-    setUploadedFiles(e.files);
-    onFormChange(e.files);
+    setCurrentFiles(e.files);
+    // setUploadedAssets(e.files);
+    // onFormChange(e.files);
+    setIsDialogVisible(true);
   };
 
   const onTemplateRemove = (file: File, callback: Function) => {
@@ -47,8 +58,8 @@ export default function MultipleFileUpload({
 
   const onRemove = (event: any) => {
     const removedFile = event.file; // Get the file being removed
-    const updatedFiles = uploadedFiles.filter((file: any) => file !== removedFile); // Filter out the removed file
-    setUploadedFiles(updatedFiles); // Update the uploadedFiles state
+    const updatedFiles = uploadedAssets.filter((file: any) => file !== removedFile); // Filter out the removed file
+    setUploadedAssets(updatedFiles); // Update the uploadedAssets state
     onFormChange(updatedFiles);
   };
 
@@ -88,9 +99,8 @@ export default function MultipleFileUpload({
           className="item-name-conatiner flex flex-column flex-wrap align-content-start"
           style={{ width: "50%" }}
         >
-          {isImagesOnly && (
-            <img alt={file.name} role="presentation" src={URL.createObjectURL(file)} width={100} />
-          )}
+          {/* Thumbnail */}
+          <img alt={file.name} role="presentation" src={URL.createObjectURL(file)} width={100} />
           <p className="text-cus-normal-bold m-0"> {file.name} </p>
           <span className="max-w-max text-cus-normal">{props.formatSize}</span>
         </div>
@@ -128,11 +138,18 @@ export default function MultipleFileUpload({
     <div>
       <Toast ref={toast} />
       <Tooltip target=".custom-choose-btn" content="Chọn files" position="bottom" />
+      <NewAssetSection
+        isVisible={isDialogVisible}
+        setIsVisible={setIsDialogVisible}
+        currentFiles={currentFiles}
+        setUploadedAssets={setUploadedAssets}
+        onFormChange={onFormChange}
+      />
       <FileUpload
         ref={fileUploadRef}
         name="demo"
         multiple
-        accept={isImagesOnly ? "image/*" : "*"}
+        accept={"*"}
         maxFileSize={maxSize}
         invalidFileSizeMessageDetail={`Kích thước file không được vượt quá ${maxSize / 1000000} MB`}
         invalidFileSizeMessageSummary={"Kích thước tệp không hợp lệ"}

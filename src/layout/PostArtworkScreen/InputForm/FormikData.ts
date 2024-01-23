@@ -1,15 +1,14 @@
 import * as Yup from "yup";
 
 export const initialValues = {
-  id: "", // Initial value for id
-  createdBy: "", // Initial value for createdBy
   title: "",
-  // images: [],
+  images: [],
+  thumbnail: null,
   description: "",
-  privacy: "Public",
+  privacy: 0,
   tags: [],
-  category: [],
-  // assets: [],
+  categories: [],
+  assets: [],
 };
 
 export const validationSchema = Yup.object().shape({
@@ -26,6 +25,6 @@ export const validationSchema = Yup.object().shape({
   description: Yup.string().required(" không được bỏ trống"),
   privacy: Yup.string().required(" không được bỏ trống"),
   tags: Yup.array().min(1, "Phải có ít nhất 1 thẻ."),
-  category: Yup.array().required(" không được bỏ trống"),
+  categories: Yup.array().required(" không được bỏ trống"),
   // assets: Yup.array().notRequired(),
 });
