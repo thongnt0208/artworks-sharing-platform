@@ -3,7 +3,6 @@ import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
 import MenuTab from "./MenuTab/MenuTab";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../index";
 import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 import { getAuthInfo } from "../../util/AuthUtil";
 
@@ -12,8 +11,8 @@ type ProfileProps = {
   username: string;
   fullname: string;
   role: string;
-  // job: string;
-  // address: string;
+  job: string;
+  address: string;
   bio: string;
   avatar: string;
   profileView: number;
@@ -33,8 +32,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     fullname: "N/A",
     role: "",
     avatar: "",
-    // job: "",
-    // address: "",
+    job: "",
+    address: "",
     bio: "",
     profileView: 0,
     artworksView: 0,
@@ -87,8 +86,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               fullname={profile.fullname}
               role={profile.role}
               isCreator={isCreator}
-              // job={profile.job}
-              // address={profile.address}
+              job={profile.job}
+              address={profile.address}
               bio={profile.bio}
               avatar={profile.avatar}
               profileView={profile.profileView}
