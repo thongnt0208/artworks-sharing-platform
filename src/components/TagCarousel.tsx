@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import Tag from "../../../../components/Tag";
-import { GenerateRandomColorCode } from "../../../../util/TagColorHandler";
+import Tag from "./Tag";
+import { GenerateRandomColorCode } from "../util/TagColorHandler";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -20,6 +20,7 @@ type TagProps = {
 
 type TagsProps = {
   tags: TagProps[];
+  slidesPerView: number;
 };
 
 const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
