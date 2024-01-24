@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import { InputNumber } from "primereact/inputnumber";
 
 import "./DepositCoin.scss";
 
@@ -11,8 +11,10 @@ interface Method {
   code: string;
 }
 
-const DepositCoin: React.FC<{ onShow: boolean }> = ({ onShow }) => {
-  const [visible, setVisible] = useState<boolean>(onShow);
+const DepositCoin: React.FC<{ isVisible: boolean; onHide: () => void }> = ({
+  isVisible,
+  onHide,
+}) => {
   const [selectedMethod, setSelectedMethod] = useState<Method | null>(null);
   const methodList: Method[] = [
     { name: "ZaloPay", code: "ZALOPAY" },
@@ -21,19 +23,16 @@ const DepositCoin: React.FC<{ onShow: boolean }> = ({ onShow }) => {
     { name: "Tài khoản ngân hàng", code: "BANK" },
   ];
 
-  useEffect(() => {
-    setVisible(onShow);
-  }, [onShow]);
-
   const handleDeposit = () => {
     // Integrate
   };
+
   return (
     <>
       <Dialog
         closable={false}
-        visible={visible}
-        onHide={() => setVisible(false)}
+        visible={isVisible}
+        onHide={onHide}
         className="deposit-dialog"
         headerClassName="deposit-dialog-header"
       >
@@ -52,7 +51,7 @@ const DepositCoin: React.FC<{ onShow: boolean }> = ({ onShow }) => {
           </div>
           <div className="amount-input">
             <label className="amount-label">Số Xu cần nạp</label>
-            <InputText type="number" className="w-full md:w-14rem" />
+            <InputNumber className="w-full md:w-14rem" />
           </div>
           <div className="action-button">
             <Button
@@ -65,7 +64,7 @@ const DepositCoin: React.FC<{ onShow: boolean }> = ({ onShow }) => {
               rounded
               className="cancel-btn"
               label="Hủy"
-              onClick={() => setVisible(false)}
+              onClick={onHide}
             />
           </div>
         </div>
