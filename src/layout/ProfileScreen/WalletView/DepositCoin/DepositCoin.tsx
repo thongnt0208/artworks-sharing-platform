@@ -3,7 +3,6 @@ import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { InputNumber } from "primereact/inputnumber";
-
 import "./DepositCoin.scss";
 
 interface Method {
