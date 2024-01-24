@@ -1,0 +1,51 @@
+@import "/src/const/variables.scss";
+
+.withdraw-dialog {
+  width: 30%;
+  .withdraw-dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    .amount-input {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      .amount-label {
+        font-size: $h3;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+    }
+    .action-button {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 30px;
+      .confirm-btn,
+      .cancel-btn {
+        width: max-content;
+        height: max-content;
+        font-size: $h3;
+        line-height: 40px;
+        padding: 0 40px;
+        margin-bottom: 10px;
+      }
+      .confirm-btn {
+        background-color: $strong-100;
+        color: $bg-100;
+        &:hover {
+          background-color: $primary-100;
+          color: $strong-200;
+        }
+      }
+    }
+  }
+}
+
+.withdraw-dialog-header {
+  padding: 5px;
+  border: 0;
+}
