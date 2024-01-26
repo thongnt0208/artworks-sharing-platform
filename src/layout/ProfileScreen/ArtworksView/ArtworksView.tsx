@@ -14,8 +14,8 @@ type ArtworksProps = {
   createdBy: string;
   creatorFullName: string;
   thumbnail: string;
-  likeNum: number;
-  viewNum: number;
+  likeCount: number;
+  viewCount: number;
 };
 
 const ArtworksView: React.FC = () => {
@@ -63,8 +63,8 @@ const ArtworksView: React.FC = () => {
                   createdBy={artwork.createdBy}
                   creatorFullName={artwork.creatorFullName}
                   thumbnail={artwork.thumbnail}
-                  likeNum={10}
-                  viewNum={12}
+                  likeCount={10}
+                  viewCount={12}
                 />
               </div>
             ))

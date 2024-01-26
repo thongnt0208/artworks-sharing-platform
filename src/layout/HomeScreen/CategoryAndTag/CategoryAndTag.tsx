@@ -28,7 +28,7 @@ const CategoryAndTag: React.FC<CategoryAndTagProps> = ({
         <CategoryMenu categories={categories} />
       </div>
       <div className="tag-carousel-section col-8 p-0">
-        <TagCarousel tags={tags} slidesPerView={5}/>
+        <TagCarousel tags={tags} slidesPerView={9}/>
       </div>
     </div>
   );
