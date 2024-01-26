@@ -31,11 +31,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   const thumbnailColumn = (image: string) => {
     return (
       <div className="w-fit flex flex-column justify-content-center align-items-end">
-        <img
-          alt="Ảnh thu nhỏ của một bài đăng"
-          src={image}
-          className="thumbnail"
-        />
+        <img alt="Ảnh thu nhỏ của một bài đăng" src={image} className="thumbnail" />
         <Button
           className="number-of-items"
           rounded
@@ -92,9 +88,10 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
 
   return (
     <div className="assets-card-container w-full h-fit">
-      <div className="thumbnail-column-container">
-        {thumbnailColumn(props.thumbnail)}
-      </div>
+      {props?.thumbnail && (
+        <div className="thumbnail-column-container">{thumbnailColumn(props.thumbnail)}</div>
+      )}
+
       <div className="detail-column-container w-full h-full">
         <DataScroller
           className="w-full"
