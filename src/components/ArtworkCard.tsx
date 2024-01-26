@@ -9,18 +9,18 @@ import { formatLargeNumber } from "../util/NumberHandler";
 type Props = {
   id: string;
   title: string;
+  thumbnail: string;
+  viewCount: number;
+  likeCount: number;
+
   createdBy: string;
   creatorFullName: string;
-  thumbnail: string;
-  likeNum: number;
-  viewNum: number;
   likeHandler?: () => void;
   viewHandler?: () => void;
   saveHandler?: () => void;
 };
 
 const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
-  console.log(props);
   let header = (
     <div className="header-container">
       <div className="thumbnail-container pt-0">
@@ -32,7 +32,7 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
       </div>
 
       <Button
-        label={props.viewNum.toString()}
+        label={props.viewCount? formatLargeNumber(props.viewCount) : "0"}
         icon="pi pi-eye"
         onClick={props.viewHandler}
         className="view-button"
@@ -43,7 +43,7 @@ const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
     <div className="footer-container">
       <Button
         className="like-button"
-        label={formatLargeNumber(props.likeNum)}
+        label={props.likeCount ? formatLargeNumber(props.likeCount) : "0"}
         icon="pi pi-heart"
         onClick={props.likeHandler}
       />
