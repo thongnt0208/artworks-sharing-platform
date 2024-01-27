@@ -227,8 +227,8 @@ const Header = ({
         {...dialogModelFields}
       >
         <ProfilePopup
-          username={"danghoanganh36"}
-          email={"danghoanganh36@gmail.com"}
+          fullname={getAuthInfo()?.fullname}
+          email={getAuthInfo()?.email}
         />
         <div className="flex w-full justify-content-center p-2">
           <Button
