@@ -23,11 +23,12 @@ type CategoryProps = {
 type Artwork = {
   id: string;
   title: string;
+  thumbnail: string;
+  viewCount: number;
+  likeCount: number;
+
   createdBy: string;
   creatorFullName: string;
-  thumbnail: string;
-  likeNum: number;
-  viewNum: number;
 };
 
 const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {

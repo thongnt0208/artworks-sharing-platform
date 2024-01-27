@@ -37,7 +37,7 @@ const CategoryMenu: React.FC<CategoriesProps> = ({ categories }) => {
       <div className="category-menu">
         <Swiper
           direction="horizontal"
-          slidesPerView={3}
+          slidesPerView={4}
           mousewheel={true}
           modules={[Mousewheel]}
           effect={"fade"}
