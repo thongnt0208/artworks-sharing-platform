@@ -9,8 +9,8 @@ type Artwork = {
   createdBy: string;
   creatorFullName: string;
   thumbnail: string;
-  likeNum: number;
-  viewNum: number;
+  likeCount: number;
+  viewCount: number;
 };
 
 type ArtworksProps = {

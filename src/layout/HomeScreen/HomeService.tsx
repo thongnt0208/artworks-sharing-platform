@@ -1,8 +1,9 @@
 import axios from "axios";
+const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 
 export async function GetTagsData() {
   try {
-    const response = await axios.get("http://127.0.0.1:1880/tags", {
+    const response = await axios.get(`${API_URL}/tags`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,7 +21,7 @@ export async function GetTagsData() {
 
 export async function GetCategoriesData() {
   try {
-    const response = await axios.get("http://127.0.0.1:1880/categories", {
+    const response = await axios.get(`${API_URL}/categories`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -29,7 +30,6 @@ export async function GetCategoriesData() {
       console.log("Error fetching categories data");
       return [];
     }
-    console.log("categories data:", response.data)
     return response.data;
   } catch (error) {
     console.log("Error fetching categories data:", error);
@@ -39,7 +39,7 @@ export async function GetCategoriesData() {
 
 export async function GetNewArtworksData() {
   try {
-    const response = await axios.get("http://127.0.0.1:1880/news", {
+    const response = await axios.get(`${API_URL}/artworks`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -57,7 +57,7 @@ export async function GetNewArtworksData() {
 
 export async function GetFollowingArtworksData() {
   try {
-    const response = await axios.get("http://127.0.0.1:1880/following", {
+    const response = await axios.get(`${API_URL}/artworks`, {
       headers: {
         "Content-Type": "application/json",
       },

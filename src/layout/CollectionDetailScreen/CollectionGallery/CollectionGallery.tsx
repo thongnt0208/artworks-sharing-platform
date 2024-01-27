@@ -32,8 +32,8 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
             createdBy={artwork.createdBy}
             creatorFullName={artwork.creatorFullName}
             thumbnail={artwork.thumbnail}
-            likeNum={artwork.likeNum}
-            viewNum={artwork.viewNum}
+            likeCount={artwork.likeNum}
+            viewCount={artwork.viewNum}
             viewHandler={() => navigate(`/artwork/${artwork.id}`)}
           />
         ))}
