@@ -74,8 +74,7 @@ const Header = ({
   let navigate = useNavigate();
 
   const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [showMessageNotification, setShowMessageNotification] =
-    useState<boolean>(false);
+  const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
   const [showProfilePopup, setShowProfilePopup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -105,8 +104,8 @@ const Header = ({
   ];
 
   const items = [
-    { label: 'Khám phá', command: () => navigate('/discover') },
-    { label: 'Thuê', command: () => navigate('/hire') },
+    { label: "Khám phá", command: () => navigate("/discover") },
+    { label: "Thuê", command: () => navigate("/hire") },
   ];
 
   const dialogModelFields = {
@@ -133,7 +132,9 @@ const Header = ({
               </span>
               {isLogin ? (
                 <>
-                  <Button icon="" label="Đăng tác phẩm" onClick={() => {}} />
+                  <Link to="/artwork/post">
+                    <Button icon="" label="Đăng tác phẩm" />
+                  </Link>
 
                   <div
                     className="message-icon"

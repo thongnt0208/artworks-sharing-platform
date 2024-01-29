@@ -59,14 +59,12 @@ export default function PostArtworkScreen({ ...props }: Props) {
             )}
           </div>
           <div className="right-panel-container col col-3 p-3">
-            {/* Form start here */}
             <InputForm
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
               data={data}
               setData={setData}
             />
-            {/* Form end here */}
           </div>
         </div>
       </div>
