@@ -24,6 +24,7 @@ type Props = {
 };
 export default function InputForm({ uploadedFiles, setUploadedFiles, data, setData }: Props) {
   const [categoriesOptions, setcategoriesOptions] = useState([] as any);
+  const [assets, setAssets] = useState([] as any);
   const [isLoading, setisLoading] = useState(false);
   const toast: any = useRef(null);
 
@@ -38,7 +39,9 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
     onSubmit: (values) => {
       const modifiedValues = values;
       modifiedValues.thumbnail = values.images[0];
-      console.log(modifiedValues);
+      if (assets) {
+        modifiedValues.assets = assets;
+      }
       setisLoading(true);
 
       // Call API to post
@@ -79,7 +82,6 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
 
   useEffect(() => {
     getCategoriesList().then((res) => {
-      console.log("cate", res);
       setcategoriesOptions(res);
     });
   }, []);
@@ -178,6 +180,8 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
           <div className="p-field">
             <label htmlFor="Assets">Nguồn đính kèm</label>
             <MultipleAssetUpload
+              assets={assets}
+              setAssets={setAssets}
               onFormChange={(assets: any) => formik.setFieldValue("assets", assets)}
             />
           </div>
