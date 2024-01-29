@@ -80,7 +80,6 @@ export default function MultipleFileUpload({
 
   const itemTemplate = (inFile: object, props: ItemTemplateOptions) => {
     const file = inFile as File;
-    console.log(file);
 
     return (
       <div className="item-container flex align-items-center flex-wrap">

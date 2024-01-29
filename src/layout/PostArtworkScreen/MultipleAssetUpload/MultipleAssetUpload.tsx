@@ -17,6 +17,8 @@ import NewAssetSection from "../NewAssetSection/NewAssetSection";
 // ------------------------------------------------------
 
 type Props = {
+  assets: any;
+  setAssets: (data: any) => void;
   onFormChange: (data: any) => void;
 };
 
@@ -28,7 +30,7 @@ type Props = {
 // 5. After user click "Đăng bài" button, the array will be uploaded to the server, the array will be removed from the LocalStorage
 // 4.1. If the user click "Xoá" button in the list on `MultipleAssetUpload`, check if the file is in the LocalStorage, if yes, remove it from the LocalStorage
 
-export default function MultipleAssetUpload({ onFormChange }: Props) {
+export default function MultipleAssetUpload({ assets, setAssets, onFormChange }: Props) {
   const [totalSize, setTotalSize] = useState(0);
   const [uploadedAssets, setUploadedAssets] = useState([]);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -91,7 +93,6 @@ export default function MultipleAssetUpload({ onFormChange }: Props) {
 
   const itemTemplate = (inFile: object, props: ItemTemplateOptions) => {
     const file = inFile as File;
-    console.log(file);
 
     return (
       <div className="item-container flex align-items-center flex-wrap">
@@ -143,6 +144,8 @@ export default function MultipleAssetUpload({ onFormChange }: Props) {
         setIsVisible={setIsDialogVisible}
         currentFiles={currentFiles}
         setUploadedAssets={setUploadedAssets}
+        assets={assets}
+        setAssets={setAssets}
         onFormChange={onFormChange}
       />
       <FileUpload

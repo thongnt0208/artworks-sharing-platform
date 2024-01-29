@@ -9,7 +9,7 @@ import { Category } from "../ArtworkDetailScreen/content/ArtworkDetailType";
  * @return
  * @example
  * @author ThongNT
- * @version 1.0.0
+ * @version 2.0.0
  */
 export async function postArtwork(formValue: any): Promise<any> {
   try {
@@ -17,10 +17,20 @@ export async function postArtwork(formValue: any): Promise<any> {
     formData.append("Title", formValue.title);
     formData.append("Description", formValue.description);
     formData.append("Privacy", formValue.privacy);
-    formValue.tags.map((tag: any)=> formData.append("Tags", tag))
+    formValue.tags.map((tag: any) => formData.append("Tags", tag));
     formValue.categories.map((category: any) => formData.append("Categories", category));
     formData.append("Thumbnail", formValue.images[0]);
     formValue.images.map((imageFile: any) => formData.append("ImageFiles", imageFile));
+
+    if (formValue.assets) {
+      const _assetsList = formValue.assets;
+      _assetsList.forEach((asset: any, index: number) => {
+        formData.append(`AssetFiles[${index}].AssetTitle`, asset.AssetTitle);
+        formData.append(`AssetFiles[${index}].Description`, asset.Description);
+        formData.append(`AssetFiles[${index}].File`, asset.File);
+        formData.append(`AssetFiles[${index}].Price`, asset.Price);
+      });
+    }
 
     return axiosPrivate.post("/artworks", formData);
   } catch {
@@ -36,12 +46,11 @@ export async function postArtwork(formValue: any): Promise<any> {
  * @example
  * getCategoryList().then((categories) => {console.log(categories)})
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.0.1
  */
 export async function getCategoriesList(): Promise<Category[]> {
   try {
     const response = await useAxios.get("/categories");
-    console.log(response);
 
     const categories = response.data;
 
