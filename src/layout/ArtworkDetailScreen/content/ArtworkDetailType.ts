@@ -29,7 +29,8 @@ export type Asset = {
 
 export type Category = {
   id: string;
-  categoryName: string;  
+  categoryName: string;
+  parent?:string;
 }
 
 export type ArtworkDetailType = {

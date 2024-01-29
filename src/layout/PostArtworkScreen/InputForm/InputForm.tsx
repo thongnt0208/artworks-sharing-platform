@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+import { getCategoriesList, postArtwork } from "../Service";
 import "./InputForm.scss";
 import { maxNumberOfCategories, maxNumberOfTags } from "../../../const/bizConstants";
 import {
@@ -8,16 +10,12 @@ import {
   Button,
   MultiSelect,
   useFormik,
+  Toast,
 } from "../../index";
 import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
 import { initialValues, validationSchema } from "./FormikData";
-import React from "react";
+import MultipleAssetUpload from "../MultipleAssetUpload/MultipleAssetUpload";
 
-// type Props = {
-//   privacyOptions: [option];
-//   categoryOptions: [option];
-//   submitFormCallback: (values: any) => void;
-// };
 type Props = {
   uploadedFiles: any;
   setUploadedFiles: (data: any) => void;
@@ -25,23 +23,47 @@ type Props = {
   setData: (data: any) => void;
 };
 export default function InputForm({ uploadedFiles, setUploadedFiles, data, setData }: Props) {
-  const privacyOptions = [
-    { label: "Công khai", value: "Public" },
-    { label: "Riêng tư", value: "Private" },
-  ];
+  const [categoriesOptions, setcategoriesOptions] = useState([] as any);
+  const [isLoading, setisLoading] = useState(false);
+  const toast: any = useRef(null);
 
-  const categoryOptions = [
-    { label: "category 1", value: "category 1" },
-    { label: "category 2", value: "category 2" },
-    { label: "category 3", value: "category 3" },
-    { label: "category 4", value: "category 4" },
+  const privacyOptions = [
+    { label: "Công khai", value: 0 },
+    { label: "Riêng tư", value: 1 },
   ];
 
   const formik: any = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      const modifiedValues = values;
+      modifiedValues.thumbnail = values.images[0];
+      console.log(modifiedValues);
+      setisLoading(true);
+
+      // Call API to post
+      postArtwork(modifiedValues)
+        .then((response) => {
+          console.log(response);
+          formik.resetForm();
+          setUploadedFiles([]);
+          toast.current.show({
+            severity: "success",
+            summary: "Đăng bài thành công",
+            detail: "Bài đăng đã được đăng tải lên hệ thống.",
+          });
+        })
+        .catch((err) => {
+          console.log("Post err: ", err);
+          toast.current.show({
+            severity: "error",
+            summary: "Đã xảy ra lỗi",
+            detail: "Vui lòng thử lại sau ít phút.",
+          });
+        })
+        .finally(() => {
+          setisLoading(false);
+        });
     },
   });
 
@@ -51,12 +73,20 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
     ) : null;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setData(formik.values); // Update the data whenever formik values change
   }, [formik.values, setData]);
 
+  useEffect(() => {
+    getCategoriesList().then((res) => {
+      console.log("cate", res);
+      setcategoriesOptions(res);
+    });
+  }, []);
+
   return (
     <>
+      <Toast ref={toast} />
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">
           {/* images field */}
@@ -67,6 +97,7 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
               isImagesOnly={true}
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
+              onFormChange={(file: any) => formik.setFieldValue("images", file)}
             />
           </div>
 
@@ -121,25 +152,24 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
               max={maxNumberOfTags}
               value={formik.values.tags}
               onChange={(e) => formik.setFieldValue("tags", e.value)}
-              {...formik.getFieldProps("tags")}
               placeholder='Nhấn phím "Enter" để phân tách giữa các thẻ'
               className="w-full"
             />
           </div>
 
-          {/* category field */}
+          {/* categories field */}
           <div className="p-field">
-            <label htmlFor="category">Thể loại</label>
-            {renderError("category")}
+            <label htmlFor="categories">Thể loại</label>
+            {renderError("categories")}
             <br />
             <MultiSelect
-              id="category"
-              name="category"
-              options={categoryOptions}
-              value={formik.values.category}
+              id="categories"
+              name="categories"
+              options={categoriesOptions}
+              value={formik.values.categories}
               selectionLimit={maxNumberOfCategories}
-              onChange={(e) => formik.setFieldValue("category", e.value)}
-              {...formik.getFieldProps("category")}
+              onChange={(e) => formik.setFieldValue("categories", e.value)}
+              {...formik.getFieldProps("categories")}
               className="w-full"
             />
           </div>
@@ -147,15 +177,20 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
           {/* Assets field */}
           <div className="p-field">
             <label htmlFor="Assets">Nguồn đính kèm</label>
-            <MultipleFileUpload
-              isImagesOnly={false}
-              uploadedFiles={{}}
-              setUploadedFiles={() => {}}
+            <MultipleAssetUpload
+              onFormChange={(assets: any) => formik.setFieldValue("assets", assets)}
             />
           </div>
 
           <div className="p-field">
-            <Button type="submit" label="Lưu" disabled={!formik.isValid} className="w-4" rounded />
+            <Button
+              type="submit"
+              label="Lưu"
+              disabled={!formik.isValid}
+              loading={isLoading}
+              className="w-4"
+              rounded
+            />
           </div>
         </div>
       </form>
