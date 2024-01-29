@@ -1,0 +1,604 @@
+[
+    {
+        "id": "a01191de753a4886",
+        "type": "tab",
+        "label": "Create request",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a3791809728cca84",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Account",
+        "url": "/account",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 100,
+        "wires": [
+            [
+                "12eb88bdf936a7ff"
+            ]
+        ]
+    },
+    {
+        "id": "5fadf8f06dabd0b4",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "12eb88bdf936a7ff",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 34",
+        "func": "// Query from DB then return the data\nlet mockData = [{\"Id\":\"801156e2-036e-4734-ab23-d761c9e71e06\",\"Fullname\":\"Flemming Solano\",\"Avatar\":\"https://robohash.org/seddoloribusvoluptatem.png?size=50x50&set=set1\",\"Bio\":\"Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\\n\\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.\",\"Job\":\"Biostatistician III\",\"Address\":\"76 Utah Hill\"},\n{\"Id\":\"678be986-1108-49d2-88ef-4c003209b16e\",\"Fullname\":\"Jaquelyn Dressel\",\"Avatar\":\"https://robohash.org/uteumin.png?size=50x50&set=set1\",\"Bio\":\"Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.\\n\\nIn hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\\n\\nAliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.\",\"Job\":\"Physical Therapy Assistant\",\"Address\":\"67 Susan Alley\"},\n{\"Id\":\"9d36976e-8a65-40ca-9099-5ea604dad11c\",\"Fullname\":\"Torrie Moutray Read\",\"Avatar\":\"https://robohash.org/estabqui.png?size=50x50&set=set1\",\"Bio\":\"Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\\n\\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\",\"Job\":\"Civil Engineer\",\"Address\":\"5527 Gerald Terrace\"},\n{\"Id\":\"54b2ffcc-2e42-4367-ad5f-982dc1a1727e\",\"Fullname\":\"Cassie Ead\",\"Avatar\":\"https://robohash.org/corrupticommodiipsam.png?size=50x50&set=set1\",\"Bio\":\"Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\\n\\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\",\"Job\":\"Research Associate\",\"Address\":\"514 1st Court\"},\n{\"Id\":\"0cc59de6-93e4-4817-87aa-168ac7f4fb08\",\"Fullname\":\"Andrej Baggiani\",\"Avatar\":\"https://robohash.org/illumexautem.png?size=50x50&set=set1\",\"Bio\":\"Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\\n\\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\\n\\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\",\"Job\":\"Database Administrator II\",\"Address\":\"73 Northfield Lane\"},\n{\"Id\":\"3718d937-f5eb-418c-a9d4-0acd0d67b16d\",\"Fullname\":\"Raffaello Androck\",\"Avatar\":\"https://robohash.org/atquesuscipitfugiat.png?size=50x50&set=set1\",\"Bio\":\"Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.\\n\\nMorbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\\n\\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\",\"Job\":\"VP Sales\",\"Address\":\"23 Karstens Way\"},\n{\"Id\":\"7d728c7b-2a1a-4771-b869-85fdba32abe0\",\"Fullname\":\"Glen Yekel\",\"Avatar\":\"https://robohash.org/inciduntmaximeet.png?size=50x50&set=set1\",\"Bio\":\"Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.\",\"Job\":\"Office Assistant II\",\"Address\":\"4 Fisk Road\"},\n{\"Id\":\"12e0d697-4628-4a15-a774-ba17fed3d4f9\",\"Fullname\":\"Brittan Stansbie\",\"Avatar\":\"https://robohash.org/distinctiositaut.png?size=50x50&set=set1\",\"Bio\":\"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.\",\"Job\":\"Web Developer IV\",\"Address\":\"890 Sloan Pass\"},\n{\"Id\":\"7dcd5560-c87c-421d-a6c3-3abd0f4909e7\",\"Fullname\":\"Tracie Doggerell\",\"Avatar\":\"https://robohash.org/quasharumrerum.png?size=50x50&set=set1\",\"Bio\":\"Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.\\n\\nPraesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\",\"Job\":\"Information Systems Manager\",\"Address\":\"588 Kenwood Terrace\"},\n{\"Id\":\"0a9c2f7a-c9cc-4a63-98e5-9fd17deff043\",\"Fullname\":\"Annelise Proudler\",\"Avatar\":\"https://robohash.org/quiasimiliqueperspiciatis.png?size=50x50&set=set1\",\"Bio\":\"In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\\n\\nAliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.\",\"Job\":\"Assistant Media Planner\",\"Address\":\"98 Rutledge Pass\"}];\n\nmsg.payload = mockData\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 100,
+        "wires": [
+            [
+                "5fadf8f06dabd0b4"
+            ]
+        ]
+    },
+    {
+        "id": "5c522597d7894c6f",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "5c9895dea27bcb1c",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Assets of an Account",
+        "url": "/account/:id/assets",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 890,
+        "y": 220,
+        "wires": [
+            [
+                "698ca915a11760b4"
+            ]
+        ]
+    },
+    {
+        "id": "698ca915a11760b4",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 37",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [\n    {\n\n        \"id\": \"asset_1\",\n        \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\",\n        \"isCreator\": true,\n        \"itemsList\": [\n            {\n                \"id\": \"1\",\n                \"name\": \"Item 1\",\n                \"price\": 20,\n                \"extension\": \"jpg\",\n                \"size\": 1024,\n                \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\"\n            },\n            {\n                \"id\": \"2\",\n                \"name\": \"Item 2\",\n                \"price\": 25,\n                \"extension\": \"png\",\n                \"size\": 2048,\n                \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\"\n            }\n        ]\n\n    },\n    {\n\n        \"id\": \"asset_2\",\n        \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\",\n        \"isCreator\": false,\n        \"itemsList\": [\n            {\n                \"id\": \"3\",\n                \"name\": \"Item 3\",\n                \"price\": 15,\n                \"extension\": \"jpeg\",\n                \"size\": 512,\n                \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\"\n            }\n        ]\n\n    },\n    {\n\n        \"id\": \"asset_3\",\n        \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\",\n        \"isCreator\": true,\n        \"itemsList\": [\n            {\n                \"id\": \"4\",\n                \"name\": \"Item 4\",\n                \"price\": 30,\n                \"extension\": \"gif\",\n                \"size\": 768,\n                \"thumbnail\": \"http://dummyimage.com/701x900.png/5fa2dd/ffffff\"\n            }\n        ]\n\n    }\n]\n\nmsg.payload = sampleData\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 220,
+        "wires": [
+            [
+                "5c522597d7894c6f"
+            ]
+        ]
+    },
+    {
+        "id": "983b9e4aa834e85a",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Account Detail",
+        "url": "/account/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "146273a610816749"
+            ]
+        ]
+    },
+    {
+        "id": "f11279975821a575",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "146273a610816749",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 38",
+        "func": "// Query from DB then return the data\nlet profileId = msg.req.params.id;\nconsole.log(\"check profile id: \", profileId)\n\nlet mockData = [{\n  \"id\": \"7d580000-c214-88a4-0f12-08dc1445b3e2\",\n  \"username\": \"thong\",\n  \"fullname\": \"Trung Thong\",\n  \"role\": \"Construction Manager\",\n  \"isCreator\": true,\n  \"bio\": \"vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque\",\n  \"avatar\": \"https://api.dicebear.com/7.x/open-peeps/svg?seed=Oreo&radius=50&backgroundColor=ffdfbf,b6e3f4,c0aede,d1d4f9,ffd5dc\",\n  \"profileView\": 1,\n  \"artworksView\": 1,\n  \"followerNum\": 1,\n  \"followingNum\": 1\n},\n{\n  \"id\": \"7d580000-c214-88a4-a3f1-08dc1445b3e1\",\n  \"username\": \"hoanganh\",\n  \"fullname\": \"Hoang Anh\",\n  \"role\": \"Construction Manager\",\n  \"isCreator\": false,\n  \"bio\": \"vulputate justo in blandit ultrices enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non ligula pellentesque ultrices phasellus id sapien in sapien iaculis congue vivamus metus arcu adipiscing molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis morbi odio odio elementum eu interdum eu tincidunt in leo maecenas pulvinar lobortis est phasellus sit amet erat nulla tempus vivamus in felis eu sapien cursus vestibulum proin eu mi nulla ac enim in tempor turpis nec euismod scelerisque\",\n  \"avatar\": \"https://api.dicebear.com/7.x/open-peeps/svg?seed=Max&backgroundColor=ffd5dc\",\n  \"profileView\": 1,\n  \"artworksView\": 1,\n  \"followerNum\": 1,\n  \"followingNum\": 1\n}\n]\n\nmsg.payload = mockData.find(account => account.id === profileId)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 160,
+        "wires": [
+            [
+                "f11279975821a575",
+                "6190bc7d03f01ea9"
+            ]
+        ]
+    },
+    {
+        "id": "bb57e518e2bdf3a7",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "2591241da83e8d3f",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Artworks of an Account",
+        "url": "/account/:id/artworks",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 900,
+        "y": 160,
+        "wires": [
+            [
+                "4d16851eaa7cdd98"
+            ]
+        ]
+    },
+    {
+        "id": "4d16851eaa7cdd98",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 39",
+        "func": "// GET TAGS DATA FROM DB\n\n// 2 account for testing \nlet trungthong = \"00030000-ac1a-0242-f86b-08dc126951bb\"\nlet hoanganh = \"00030000-ac1a-0242-442c-08dc1269642f\"\n\nlet profileId = msg.req.params.id;\n\nlet sampleData = [{\n  \"id\": \"6a2305b4-94a1-4c64-9c56-2cee23aefcbe\",\n  \"title\": \"I, Frankenstein\",\n  \"createdBy\" : \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"a7e6e633-d57d-4068-bc52-d1a9f171f11a\",\n  \"title\": \"Agnosia\",\n  \"createdBy\" : \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": \"80f2de44-1371-46ca-9f8e-ea193ba17f60\",\n  \"title\": \"Neds\",\n  \"createdBy\" : \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"56483e64-abbd-405c-bbd0-866e589ddffe\",\n  \"title\": \"Captivated\",\n  \"createdBy\": \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}];\n\nlet filteredData = sampleData.filter(item => item.createdBy === profileId);\n\nmsg.payload = filteredData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 160,
+        "wires": [
+            [
+                "bb57e518e2bdf3a7"
+            ]
+        ]
+    },
+    {
+        "id": "6190bc7d03f01ea9",
+        "type": "debug",
+        "z": "a01191de753a4886",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "840b8e3ae233782e",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Services of an Account",
+        "url": "/account/:accountId/service",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 900,
+        "y": 300,
+        "wires": [
+            [
+                "b140433d90f20a7e"
+            ]
+        ]
+    },
+    {
+        "id": "b140433d90f20a7e",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 40",
+        "func": "let mockData = [{\n  \"id\": 1,\n  \"serviceName\": \"Research and Development\",\n  \"description\": \"nec dui luctus rutrum nulla tellus in sagittis dui vel nisl duis ac nibh fusce lacus purus aliquet at feugiat non pretium quis lectus suspendisse potenti in eleifend quam a odio in hac habitasse platea dictumst maecenas ut massa quis augue luctus tincidunt nulla mollis\",\n  \"deliveryTime\": 1,\n  \"numberOfConcept\": 1,\n  \"numberOfRevision\": 1,\n  \"startingPrice\": 19,\n  \"coverLocation\": \"Phitsanulok\"\n}, {\n  \"id\": 2,\n  \"serviceName\": \"Human Resources\",\n  \"description\": \"sed nisl nunc rhoncus dui vel sem sed sagittis nam congue risus semper porta volutpat quam pede lobortis ligula sit amet eleifend pede libero quis orci nullam molestie nibh in lectus pellentesque at nulla suspendisse potenti cras in purus\",\n  \"deliveryTime\": 2,\n  \"numberOfConcept\": 2,\n  \"numberOfRevision\": 2,\n  \"startingPrice\": 29,\n  \"coverLocation\": \"Charlotte\"\n}, {\n  \"id\": 3,\n  \"serviceName\": \"Sales\",\n  \"description\": \"amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi non quam nec dui luctus rutrum nulla tellus in sagittis\",\n  \"deliveryTime\": 3,\n  \"numberOfConcept\": 3,\n  \"numberOfRevision\": 3,\n  \"startingPrice\": 96,\n  \"coverLocation\": \"Sebina\"\n}]\n\n// let mockData = []\n\nmsg.payload = mockData\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 300,
+        "wires": [
+            [
+                "6d1517e7967932ca"
+            ]
+        ]
+    },
+    {
+        "id": "6d1517e7967932ca",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5c8f02517ab7d2d6",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Collections of an Account",
+        "url": "/account/:accountId/collection",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 910,
+        "y": 380,
+        "wires": [
+            [
+                "526ab306c05c4987"
+            ]
+        ]
+    },
+    {
+        "id": "526ab306c05c4987",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 41",
+        "func": "let mockData = [{\n  \"id\": \"a81221cf-26fa-4226-b5dd-2248de452e41\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Performance\",\n  \"privacy\": \"Public\",\n  \"numberOfArtworks\": 2\n}, {\n  \"id\": \"46c3d1f0-9223-42ba-9e53-379aaf3c4ea6\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Rogue Trader\",\n  \"privacy\": \"Private\",\n  \"numberOfArtworks\": 2\n}]\n\nmsg.payload = mockData\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 380,
+        "wires": [
+            [
+                "0569bba657520417"
+            ]
+        ]
+    },
+    {
+        "id": "0569bba657520417",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "107eb5c72e30545e",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "17f73d9e1e1da25d",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Artworks of an Collection",
+        "url": "/collection/:id/artworks",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 910,
+        "y": 500,
+        "wires": [
+            [
+                "59f56143eaa13558"
+            ]
+        ]
+    },
+    {
+        "id": "59f56143eaa13558",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 42",
+        "func": "// GET COLLECTIONS DATA FROM DB\n\n// 2 collection for testing \nlet collection1 = \"a81221cf-26fa-4226-b5dd-2248de452e41\"\nlet collection2 = \"46c3d1f0-9223-42ba-9e53-379aaf3c4ea6\"\n\nlet collectionId = msg.req.params.id;\n\nlet sampleData1 = [{\n  \"id\": \"6a2305b4-94a1-4c64-9c56-2cee23aefcbe\",\n  \"title\": \"I, Frankenstein\",\n  \"createdBy\" : \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"a7e6e633-d57d-4068-bc52-d1a9f171f11a\",\n  \"title\": \"Agnosia\",\n  \"createdBy\" : \"00030000-ac1a-0242-f86b-08dc126951bb\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}]\n\nlet sampleData2 = [\n{\n  \"id\": \"80f2de44-1371-46ca-9f8e-ea193ba17f60\",\n  \"title\": \"Neds\",\n  \"createdBy\" : \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"56483e64-abbd-405c-bbd0-866e589ddffe\",\n  \"title\": \"Captivated\",\n  \"createdBy\": \"00030000-ac1a-0242-442c-08dc1269642f\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}];\n\nlet filteredData\nif (collectionId === collection1 ) {\n  filteredData = sampleData1\n} else if (collectionId === collection2) {\n  filteredData = sampleData2\n} else {\n  filteredData =[]\n}\n\nmsg.payload = filteredData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 500,
+        "wires": [
+            [
+                "107eb5c72e30545e"
+            ]
+        ]
+    },
+    {
+        "id": "43a57d2e3f67c397",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Collections Detail",
+        "url": "/collection/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 880,
+        "y": 440,
+        "wires": [
+            [
+                "c8b3aebb2e431d1e"
+            ]
+        ]
+    },
+    {
+        "id": "c8b3aebb2e431d1e",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 43",
+        "func": "let collectionId = msg.req.params.id\n\nlet mockData = [{\n  \"id\": \"a81221cf-26fa-4226-b5dd-2248de452e41\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Performance\",\n  \"privacy\": \"Public\",\n  \"numberOfArtworks\": 2\n}, {\n  \"id\": \"46c3d1f0-9223-42ba-9e53-379aaf3c4ea6\",\n  \"creatorFullName\" : \"Trung Thong\",\n  \"collectionName\": \"Rogue Trader\",\n  \"privacy\": \"Private\",\n  \"numberOfArtworks\": 2\n}]\n\nlet collectionDetail = mockData.find(collection => collection.id === collectionId)\n\nmsg.payload = collectionDetail\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 440,
+        "wires": [
+            [
+                "fe8bf24575d3605d"
+            ]
+        ]
+    },
+    {
+        "id": "fe8bf24575d3605d",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c23e3e5115bfc8ae",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 44",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": \"e0b1bb5b-4616-4815-90ac-b2fdeb754221\",\n  \"title\": \"I, Frankenstein\",\n  \"creatorFullName\": \"Elaine Begley\",\n  \"thumbnail\": \"http://dummyimage.com/169x100.png/cc0000/ffffff\",\n  \"likeNum\": 1,\n  \"viewNum\": 1\n}, {\n  \"id\": \"b172b0bc-6e6b-4f0f-8b52-a3d749bd32ac\",\n  \"title\": \"Agnosia\",\n  \"creatorFullName\": \"Valli Viegas\",\n  \"thumbnail\": \"http://dummyimage.com/144x100.png/dddddd/000000\",\n  \"likeNum\": 2,\n  \"viewNum\": 2\n}, {\n  \"id\": \"ff1f7496-837e-49ae-92d3-dcf931cd70da\",\n  \"title\": \"Neds\",\n  \"creatorFullName\": \"Chaddie Bulger\",\n  \"thumbnail\": \"http://dummyimage.com/118x100.png/dddddd/000000\",\n  \"likeNum\": 3,\n  \"viewNum\": 3\n}, {\n  \"id\": \"da336b7b-849a-4110-b193-14dde470ba85\",\n  \"title\": \"Captivated\",\n  \"creatorFullName\": \"Billi Bisatt\",\n  \"thumbnail\": \"http://dummyimage.com/236x100.png/ff4444/ffffff\",\n  \"likeNum\": 4,\n  \"viewNum\": 4\n}\n, {\n  \"id\": \"c0540dae-12e6-4077-8f97-aac805c1b58e\",\n  \"title\": \"Evil That Men Do, The\",\n  \"creatorFullName\": \"Cleopatra Watkin\",\n  \"thumbnail\": \"http://dummyimage.com/167x100.png/5fa2dd/ffffff\",\n  \"likeNum\": 5,\n  \"viewNum\": 5\n}\n// , {\n//   \"id\": \"460dd1f9-6df1-44f9-ab34-7b048b065cda\",\n//   \"title\": \"Pennies from Heaven\",\n//   \"creatorFullName\": \"Elana Persitt\",\n//   \"thumbnail\": \"http://dummyimage.com/160x100.png/ff4444/ffffff\",\n//   \"likeNum\": 6,\n//   \"viewNum\": 6\n// }\n// , {\n//   \"id\": \"7c436cb6-b440-4021-a539-e2a01d24322e\",\n//   \"title\": \"Birthday Girl\",\n//   \"creatorFullName\": \"Kaja Alcorn\",\n//   \"thumbnail\": \"http://dummyimage.com/111x100.png/cc0000/ffffff\",\n//   \"likeNum\": 7,\n//   \"viewNum\": 7\n// }, {\n//   \"id\": \"b151e4e0-fbcc-4a30-a0d3-cb94bac78dfd\",\n//   \"title\": \"Youth of the Son\",\n//   \"creatorFullName\": \"Geoffrey Durward\",\n//   \"thumbnail\": \"http://dummyimage.com/153x100.png/ff4444/ffffff\",\n//   \"likeNum\": 8,\n//   \"viewNum\": 8\n// }, {\n//   \"id\": \"ad236276-5765-4f3c-bdba-e640fc0f8897\",\n//   \"title\": \"Grimm Love (Rohtenburg)\",\n//   \"creatorFullName\": \"Chelsie Sarten\",\n//   \"thumbnail\": \"http://dummyimage.com/230x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 9,\n//   \"viewNum\": 9\n// }, {\n//   \"id\": \"291cd899-0809-48d4-b230-4a5b84fec385\",\n//   \"title\": \"November\",\n//   \"creatorFullName\": \"Ulrike Barthot\",\n//   \"thumbnail\": \"http://dummyimage.com/178x100.png/5fa2dd/ffffff\",\n//   \"likeNum\": 10,\n//   \"viewNum\": 10\n// }\n]\nmsg.payload = sampleData\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 260,
+        "wires": [
+            [
+                "17a2acad89e58012"
+            ]
+        ]
+    },
+    {
+        "id": "17a2acad89e58012",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "46d2e8a1219ee1fb",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Recommend Artworks",
+        "url": "/recommend-artworks",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 260,
+        "wires": [
+            [
+                "c23e3e5115bfc8ae"
+            ]
+        ]
+    },
+    {
+        "id": "2339ba8a1d544e93",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "c4631710f34dcea0",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Deposit/Withdraw History of an Account",
+        "url": "/account/:id/wallet-history",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 950,
+        "y": 620,
+        "wires": [
+            [
+                "c81ee3c72b21db81"
+            ]
+        ]
+    },
+    {
+        "id": "c81ee3c72b21db81",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 45",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": \"9d353769-6521-4c0c-967d-45b67dd335f4\",\n  \"amount\": \"221\",\n  \"type\": \"withdraw\",\n  \"paymentMethod\": \"Bank\",\n  \"transactionStatus\": true,\n  \"createdOn\": \"18/01/2024\"\n}, {\n  \"id\": \"62682be0-781d-4efe-8ff8-165ab3833852\",\n  \"amount\": \"960\",\n  \"type\": \"deposit\",\n  \"paymentMethod\": \"ZaloPay\",\n  \"transactionStatus\": false,\n  \"createdOn\": \"11/01/2024\"\n}, {\n  \"id\": \"7666d384-bbbc-4f71-a072-6cb6a427f723\",\n  \"amount\": \"945\",\n  \"type\": \"deposit\",\n  \"paymentMethod\": \"Bank\",\n  \"transactionStatus\": false,\n  \"createdOn\": \"09/01/2024\"\n}, {\n  \"id\": \"2123e0ea-ab29-4f8d-9143-98c6102edadd\",\n  \"amount\": \"689\",\n  \"type\": \"deposit\",\n  \"paymentMethod\": \"Bank\",\n  \"transactionStatus\": false,\n  \"createdOn\": \"15/01/2024\"\n}, {\n  \"id\": \"4106bb51-b55c-4dcf-b290-da2c65e48b59\",\n  \"amount\": \"409\",\n  \"type\": \"deposit\",\n  \"paymentMethod\": \"Momo\",\n  \"transactionStatus\": false,\n  \"createdOn\": \"16/01/2024\"\n}, {\n  \"id\": \"89093f9b-59cb-4dc3-9839-63302dfd892c\",\n  \"amount\": \"307\",\n  \"type\": \"withdraw\",\n  \"paymentMethod\": \"Momo\",\n  \"transactionStatus\": true,\n  \"createdOn\": \"14/01/2024\"\n}, {\n  \"id\": \"710df366-9d71-4467-8c70-23b820b5c7d6\",\n  \"amount\": \"173\",\n  \"type\": \"withdraw\",\n  \"paymentMethod\": \"ZaloPay\",\n  \"transactionStatus\": true,\n  \"createdOn\": \"19/01/2024\"\n}, {\n  \"id\": \"7693cf15-7fa6-490b-80e4-4ceee270a7c9\",\n  \"amount\": \"187\",\n  \"type\": \"withdraw\",\n  \"paymentMethod\": \"ZaloPay\",\n  \"transactionStatus\": true,\n  \"createdOn\": \"10/01/2024\"\n}, {\n  \"id\": \"83142ae7-d54d-4c08-9566-0e32b0863bda\",\n  \"amount\": \"7327\",\n  \"type\": \"deposit\",\n  \"paymentMethod\": \"Bank\",\n  \"transactionStatus\": true,\n  \"createdOn\": \"09/01/2024\"\n}, {\n  \"id\": \"ce5d11c6-e002-47bf-b933-7ddbbf37f71f\",\n  \"amount\": \"899\",\n  \"type\": \"deposit\",\n  \"paymentMethod\": \"Momo\",\n  \"transactionStatus\": false,\n  \"createdOn\": \"07/01/2024\"\n}]\n\nmsg.payload = sampleData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 620,
+        "wires": [
+            [
+                "2339ba8a1d544e93"
+            ]
+        ]
+    },
+    {
+        "id": "6fbdb1dfad0e7060",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "cfe217ac200dabe2",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Transaction History of an Account",
+        "url": "/account/:id/transaction",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 930,
+        "y": 560,
+        "wires": [
+            [
+                "400b2be5a572f1e5"
+            ]
+        ]
+    },
+    {
+        "id": "400b2be5a572f1e5",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 46",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = [{\n  \"id\": \"84c80f1e-6c1b-4025-abb7-4c58d45e5398\",\n  \"accountId\": \"def39599-232f-4e95-92e4-d5bd947ed1fa\",\n  \"assetId\": \"10a3502c-0c36-49e7-93d4-38b928cb707c\",\n  \"proposalId\": null,\n  \"price\": \"193\",\n  \"createdOn\": \"19/01/2024\"\n}, {\n  \"id\": \"fe667e62-22e8-4e58-b9e8-5233a1c23071\",\n  \"accountId\": \"d474a373-810d-42a7-b400-a426adc189c7\",\n  \"assetId\": null,\n  \"proposalId\": \"cfbbd7e5-f6da-4078-b418-7922fd21e8d4\",\n  \"price\": \"574\",\n  \"createdOn\": \"23/01/2024\"\n}, {\n  \"id\": \"a3e4c151-5d5c-4051-9d11-df3897a123d6\",\n  \"accountId\": \"bf9ac849-e08a-484e-afe7-3ee888b043f0\",\n  \"assetId\": \"bbb50d30-3900-4bec-a062-155800811537\",\n  \"proposalId\": null,\n  \"price\": \"363\",\n  \"createdOn\": \"05/01/2024\"\n}, {\n  \"id\": \"c6f6472b-be11-47e8-8c03-f223c4873842\",\n  \"accountId\": \"a6a714ab-66a7-435d-92b9-aed8ac8e8003\",\n  \"assetId\": null,\n  \"proposalId\": \"46f33e51-6856-48cf-a229-53d74318bf12\",\n  \"price\": \"784\",\n  \"createdOn\": \"22/01/2024\"\n}, {\n  \"id\": \"5190c845-9b6e-4bf5-ac55-cf5ceb9faea9\",\n  \"accountId\": \"2ab9005b-ef3c-43e8-ac2a-0d36f3430566\",\n  \"assetId\": \"e835ef85-6e01-4aa5-8630-920d19e63365\",\n  \"proposalId\": null,\n  \"price\": \"181\",\n  \"createdOn\": \"02/01/2024\"\n}, {\n  \"id\": \"bb888aeb-9820-4f65-a7fb-8a99987d4008\",\n  \"accountId\": \"fd6f18be-29b8-48cb-b168-da24c3b7548f\",\n  \"assetId\": null,\n  \"proposalId\": \"323f90c2-1d65-4c57-bc5b-aa26b3333a11\",\n  \"price\": \"3130\",\n  \"createdOn\": \"22/01/2024\"\n}, {\n  \"id\": \"728e6f82-9c3e-4d2e-9fea-cf34572973bf\",\n  \"accountId\": \"62342161-7bc9-4470-b547-6d44f32847e7\",\n  \"assetId\": null,\n  \"proposalId\": \"200a3c23-7508-45c7-8830-7f5cff693787\",\n  \"price\": \"476\",\n  \"createdOn\": \"20/01/2024\"\n}, {\n  \"id\": \"2db7a90a-3d9e-4365-8e90-874a8cbd4fac\",\n  \"accountId\": \"1e59318a-7900-4feb-a338-f3ea62549531\",\n  \"assetId\": null,\n  \"proposalId\": \"145f2119-4f39-4800-9ab4-321c087992cb\",\n  \"price\": \"646\",\n  \"createdOn\": \"02/01/2024\"\n}, {\n  \"id\": \"ef9df45f-fbf7-4937-9dfc-275dcfa446db\",\n  \"accountId\": \"529b6225-7d7e-4882-a1ad-c84b5b72705b\",\n  \"assetId\": null,\n  \"proposalId\": \"60056c00-8082-495a-9a28-4bd8fd53854e\",\n  \"price\": \"637\",\n  \"createdOn\": \"17/01/2024\"\n}, {\n  \"id\": \"8ee406fd-979c-425c-a7ff-6f85ff90bcf6\",\n  \"accountId\": \"4de97cd8-c55e-47be-882a-18c8f30ec274\",\n  \"assetId\": \"91327697-b346-4dbb-8a9d-db04eec98fdc\",\n  \"proposalId\": null,\n  \"price\": \"589\",\n  \"createdOn\": \"10/01/2024\"\n}];\n\nmsg.payload = sampleData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 560,
+        "wires": [
+            [
+                "6fbdb1dfad0e7060"
+            ]
+        ]
+    },
+    {
+        "id": "9d727c94acffc625",
+        "type": "http response",
+        "z": "a01191de753a4886",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "02e7b01039a9dad8",
+        "type": "http in",
+        "z": "a01191de753a4886",
+        "name": "[GET] Wallet of an Account",
+        "url": "/account/:id/wallet",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 890,
+        "y": 680,
+        "wires": [
+            [
+                "a44b0767f4eb4b0a"
+            ]
+        ]
+    },
+    {
+        "id": "a44b0767f4eb4b0a",
+        "type": "function",
+        "z": "a01191de753a4886",
+        "name": "function 47",
+        "func": "// GET TAGS DATA FROM DB\n\nlet sampleData = {\n  \"balance\" : \"1000000\",\n  \"withdrawMethod\": \"ZaloPay\",\n  \"withdrawInformation\": \"0912695680\"\n} \n\nmsg.payload = sampleData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 680,
+        "wires": [
+            [
+                "9d727c94acffc625"
+            ]
+        ]
+    }
+]
