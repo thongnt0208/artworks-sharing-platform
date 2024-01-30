@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
@@ -71,12 +71,13 @@ const Header = ({
   isLogin: boolean;
   setIsLogin: (value: boolean) => void;
 }) => {
-  let navigate = useNavigate();
-
+  const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
   const [showProfilePopup, setShowProfilePopup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [currentUrl, setCurrentUrl] = useState<string>(window.location.href || "");
 
   const handleLogoutBtn = () => {
     let accessToken = getAuthInfo()?.accessToken;
@@ -117,6 +118,18 @@ const Header = ({
     closable: false,
   };
 
+  let handleKeyDown = (e: any) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      navigate(`/search?value=${searchValue}`);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.location.href]);
+
   return (
     <div className="header">
       <Menubar
@@ -127,7 +140,18 @@ const Header = ({
           [
             <div className="end-menu">
               <span className="p-input-icon-right search-bar">
-                <InputText placeholder="Search" style={{ width: "30rem" }} />
+                {currentUrl.includes("/search") ? (
+                  <></>
+                ) : (
+                  <InputText
+                    placeholder="Search"
+                    style={{ width: "30rem" }}
+                    tooltip="Nhấn phím Enter để tìm"
+                    onKeyDown={(e: any) => handleKeyDown(e)}
+                    onInput={(e: any) => setSearchValue(e.target.value)}
+                  />
+                )}
+
                 <i className="pi pi-search" />
               </span>
               {isLogin ? (
@@ -227,10 +251,7 @@ const Header = ({
         }}
         {...dialogModelFields}
       >
-        <ProfilePopup
-          fullname={getAuthInfo()?.fullname}
-          email={getAuthInfo()?.email}
-        />
+        <ProfilePopup fullname={getAuthInfo()?.fullname} email={getAuthInfo()?.email} />
         <div className="flex w-full justify-content-center p-2">
           <Button
             icon=""
