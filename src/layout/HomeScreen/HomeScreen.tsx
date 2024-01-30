@@ -9,33 +9,20 @@ import {
   GetTagsData,
 } from "./HomeService";
 import "./HomeScreen.scss";
+import { TagProps } from "../../components/Tag";
+import { ArtworkProps } from "../../components/ArtworkCard";
+//----------------------------------------------
 
-type TagProps = {
-  id: string;
-  tagName: string;
-};
-
-type CategoryProps = {
+export type CategoryProps = {
   id: string;
   categoryName: string;
-};
-
-type Artwork = {
-  id: string;
-  title: string;
-  thumbnail: string;
-  viewCount: number;
-  likeCount: number;
-
-  createdBy: string;
-  creatorFullName: string;
 };
 
 const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [tags, setTags] = useState<TagProps[]>([]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [loading, setLoading] = useState(false);
 
   const items = [

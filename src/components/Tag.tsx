@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Tag.scss";
 import "../const/variables.scss";
-interface TagProps {
+
+export type TagProps = {
   id: string;
   tagName: string;
   color?: string;
