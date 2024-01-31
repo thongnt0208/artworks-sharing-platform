@@ -13,7 +13,7 @@ type Props = {
   creatorFullName: string;
   collectionName: string;
   privacy: string;
-  numberOfArtworks: number;
+  items: number;
 };
 
 const CollectionScreen: React.FC = () => {
@@ -36,7 +36,7 @@ const CollectionScreen: React.FC = () => {
     };
 
     fetchServices();
-  }, []);
+  }, [accountId]);
 
   const CardContent = (
     <div className="card-content flex flex-column justify-content-center align-items-center">
@@ -67,7 +67,7 @@ const CollectionScreen: React.FC = () => {
                 creatorFullName={collection.creatorFullName}
                 collectionName={collection.collectionName}
                 privacy={collection.privacy}
-                numberOfArtworks={collection.numberOfArtworks}
+                numberOfArtworks={collection.items}
                 accountAvatar={accountAvatar}
               />
             </div>

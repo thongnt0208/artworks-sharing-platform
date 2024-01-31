@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import UserInformationCard from "../../components/UserInformationCard";
 import { GetProfileData } from "./ProfileService";
 import MenuTab from "./MenuTab/MenuTab";
-import { useNavigate, useParams } from "react-router-dom";
-import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+import { useParams } from "react-router-dom";
+// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 import { getAuthInfo } from "../../util/AuthUtil";
 
 type ProfileProps = {
@@ -22,7 +22,6 @@ type ProfileProps = {
 };
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
-  const navigate = useNavigate();
   const profileId = useParams()?.id;
 
   const [profile, setProfile] = useState<ProfileProps>({
@@ -40,25 +39,25 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     followingNum: 0,
   });
   const [isCreator, setIsCreator] = useState<boolean>(isLogin);
-  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
-  const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
-    {
-      id: "1",
-      title: "Đây là một collection/artwork",
-      description: "Miêu tả của collection",
-    },
-    {
-      id: "2",
-      title: "Đây là một collection/artwork",
-      description: "Miêu tả của collection",
-    },
-    {
-      id: "3",
-      title: "Đây là một collection/artwork",
-      description: "Miêu tả của collection",
-    },
-  ]);
-  const [isSetup, setIsSetup] = useState<boolean>(false);
+  // const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+  // const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
+  //   {
+  //     id: "1",
+  //     title: "Đây là một collection/artwork",
+  //     description: "Miêu tả của collection",
+  //   },
+  //   {
+  //     id: "2",
+  //     title: "Đây là một collection/artwork",
+  //     description: "Miêu tả của collection",
+  //   },
+  //   {
+  //     id: "3",
+  //     title: "Đây là một collection/artwork",
+  //     description: "Miêu tả của collection",
+  //   },
+  // ]);
+  // const [isSetup, setIsSetup] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
