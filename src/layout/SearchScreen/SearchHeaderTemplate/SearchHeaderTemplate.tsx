@@ -30,7 +30,6 @@ export default function SearchHeaderTemplate({ ...props }: Props) {
     setSelectedSort,
   } = props;
   const className = `${options.className} justify-content-space-between`;
-  console.log("options", options);
 
   return (
     <div className={className}>
