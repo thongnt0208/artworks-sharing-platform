@@ -1,0 +1,21 @@
+@import "./../../../const/variables.scss";
+
+.rounded-search-btn {
+  border-radius: $borderRadius-300;
+  border: solid 1px $strong-200;
+  background-color: $bg-100;
+
+  span {
+    color: $strong-200;
+    font-size: 14px;
+  }
+}
+
+.input-text-container {
+  .input-text {
+    border-radius: $borderRadius-300;
+    border: solid 1px $strong-200;
+    background-color: $bg-200;
+    width: 100%;
+  }
+}
