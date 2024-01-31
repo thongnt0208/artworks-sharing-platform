@@ -24,7 +24,6 @@ type ProfileProps = {
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const navigate = useNavigate();
   const profileId = useParams()?.id;
-  console.log(profileId);
 
   const [profile, setProfile] = useState<ProfileProps>({
     id: "",
@@ -73,8 +72,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     };
     fetchData();
   }, [profileId]);
-  console.log(profile);
 
+  console.log("Profile:", profile.id);
   return (
     <>
       {profile ? (
