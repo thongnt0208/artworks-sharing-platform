@@ -6,9 +6,10 @@ const accessToken = getAuthInfo()?.accessToken || "";
 const refreshToken = getAuthInfo()?.refreshToken || "";
 
 export async function GetCollectionsData(account_id: string) {
+  console.log("Fetching collection data", account_id);
   try {
     const response = await axios.get(
-      `${API_URL}/api/account/${account_id}/collections`,
+      `${API_URL}/account/${account_id}/collections`,
       {
         headers: {
           "Content-Type": "application/json",
