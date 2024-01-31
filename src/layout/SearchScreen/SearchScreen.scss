@@ -22,9 +22,7 @@
       }
     }
   }
-  .tags-container {
-    overflow: hidden;
-  }
+
   .rounded-dropdown-btn {
     border-radius: $borderRadius-300;
     border: solid 1px $strong-200;
@@ -33,5 +31,10 @@
       color: $strong-200;
       font-size: 14px;
     }
+  }
+}
+.tags-container {
+  .tags-list {
+    overflow: hidden;
   }
 }

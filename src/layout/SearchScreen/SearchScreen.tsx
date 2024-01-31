@@ -89,8 +89,8 @@ export default function SearchScreen({ ...props }: Props) {
     <div className="search-container">
       {/* Inputs */}
       <div className="inputs-container">
-        <Panel ref={panelRef} headerTemplate={searchHeaderTemplate} toggleable>
-          <div className="filters flex align-items-center justify-content-center gap-8">
+        <Panel ref={panelRef} headerTemplate={searchHeaderTemplate} toggleable collapsed>
+          <div className="filters flex flex-column md:flex-row align-items-center justify-content-center gap-3 md:gap-8">
             {/* type */}
             <div className="type flex gap-3">
               {types.map((type) => (
@@ -162,9 +162,6 @@ export default function SearchScreen({ ...props }: Props) {
             <Tag id={tag.id} tagName={tag.tagName} />
           ))}
         </div>
-        <Button className="show-more-button" id="showMoreButton">
-          Show More
-        </Button>
       </div>
 
       {/* Result */}
