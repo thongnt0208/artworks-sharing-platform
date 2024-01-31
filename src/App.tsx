@@ -36,6 +36,7 @@ import HireScreen from "./layout/HireScreen/HireScreen";
 
 import { getAuthInfo } from "./util/AuthUtil";
 import NotFoundPage from "./pages/404";
+import SearchScreen from "./layout/SearchScreen/SearchScreen";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -90,6 +91,7 @@ function App() {
           </Route>
           <Route path="/collection/:id" element={<CollectionDetailScreen />} />
           <Route path="/hire" element={<HireScreen />} />
+          <Route path="/search" element={<SearchScreen />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
 

@@ -6,7 +6,7 @@ import { Divider } from "primereact/divider";
 import "./ArtworkCard.scss";
 import { formatLargeNumber } from "../util/NumberHandler";
 
-type Props = {
+export type ArtworkProps = {
   id: string;
   title: string;
   thumbnail: string;
@@ -20,7 +20,7 @@ type Props = {
   saveHandler?: () => void;
 };
 
-const ArtworkCard: React.FC<Props> = ({ ...props }: Props) => {
+const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   let header = (
     <div className="header-container">
       <div className="thumbnail-container pt-0">
