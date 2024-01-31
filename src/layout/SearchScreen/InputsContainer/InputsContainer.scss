@@ -1,0 +1,35 @@
+@import "./../../../const/variables.scss";
+
+.inputs-container {
+  label {
+    height: fit-content;
+  }
+  .filters {
+    .type {
+      height: fit-content;
+    }
+  }
+  .subscribe-assets {
+    height: fit-content;
+    .subscribe-checkbox {
+      height: fit-content;
+    }
+    .assets-checkbox {
+      height: fit-content;
+      .asset,
+      .free {
+        height: fit-content;
+      }
+    }
+  }
+
+  .rounded-dropdown-btn {
+    border-radius: $borderRadius-300;
+    border: solid 1px $strong-200;
+    background-color: $bg-100;
+    span {
+      color: $strong-200;
+      font-size: 14px;
+    }
+  }
+}
