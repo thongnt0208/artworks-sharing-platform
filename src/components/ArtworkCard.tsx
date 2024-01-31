@@ -50,7 +50,7 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
       <Divider className="divider" layout="vertical" />
       <Button
         className="save-button"
-        icon="pi pi-download"
+        icon="pi pi-bookmark"
         onClick={props.saveHandler}
       />
     </div>
