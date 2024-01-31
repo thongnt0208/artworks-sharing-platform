@@ -1,11 +1,17 @@
 import axios from "axios";
+import { getAuthInfo } from "../../util/AuthUtil";
+const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
+
+const accessToken = getAuthInfo()?.accessToken || "";
+const refreshToken = getAuthInfo()?.refreshToken || "";
 
 export async function GetProfileData(accountId: string) {
     console.log("Fetching profile data...", accountId);
     try {
-        const response = await axios.get(`http://127.0.0.1:1880/account/${accountId}`, {
+        const response = await axios.get(`${API_URL}/accounts/${accountId}`, {
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken || refreshToken}`,
             },
         });
         if (response.status !== 200) {
