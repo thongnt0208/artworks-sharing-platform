@@ -6,7 +6,7 @@ import { ArtworkProps } from "../../components/ArtworkCard";
  * @param value keyword to search
  * @returns Promise<any> response from API
  * @author ThongNT
- * @version 1.0.1
+ * @version 1.0.2
  */
 async function searchAll(value: string): Promise<any>{
   const BASE_URL = process.env.REACT_APP_REAL_API_ELASTICSEARCH_URL || "https://dummyjson.com";
@@ -30,7 +30,6 @@ async function searchAll(value: string): Promise<any>{
         "Content-Type": "application/json",
       },
     });
-    console.log("Response:", response.data);
     return response;
   } catch (error: any) {
     console.error(`Error making search ${value}: `, error);
