@@ -75,10 +75,41 @@ export default function SearchScreen({ ...props }: Props) {
     }
   };
 
+  const refreshData = async () => {
+    setState({ ...state, isLoading: true });
+    try {
+      const artworks = await searchArtworksByKeyword(state.searchValue);
+      setState({
+        ...state,
+        artworks: artworks,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setState({ ...state, isLoading: false });
+    }
+  };
+
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.searchValue]);
+  }, []);
+
+  // Auto refresh data when searchValue changes
+  useEffect(() => {
+    let timeoutId: any;
+
+    if (state.searchValue !== '') {
+      // Clear the previous timeout if there's any
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => refreshData(), 1000);
+    }
+    return () => clearTimeout(timeoutId);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },  [state.searchValue]);
 
   return (
     <div className="search-container">
