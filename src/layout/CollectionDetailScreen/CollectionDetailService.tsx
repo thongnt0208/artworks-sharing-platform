@@ -1,29 +1,10 @@
 import axios from "axios";
-export async function GetArtworksData(collectionId: string) {
-  try {
-    const response = await axios.get(
-      `http://127.0.0.1:1880/collection/${collectionId}/artworks`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.status !== 200) {
-      console.log("Error fetching tags data");
-      return [];
-    }
-    return response.data;
-  } catch (error) {
-    console.log("Error fetching tags data:", error);
-    return [];
-  }
-}
+const API_URl = process.env.REACT_APP_REAL_API_BASE_URL;
 
 export async function GetCollectionData(collectionId: string) {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:1880/collection/${collectionId}`,
+      `${API_URl}/collections/${collectionId}`,
       {
         headers: {
           "Content-Type": "application/json",
