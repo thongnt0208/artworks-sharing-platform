@@ -60,8 +60,11 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
           console.log("Post err: ", err);
           toast.current.show({
             severity: "error",
-            summary: "Đã xảy ra lỗi",
-            detail: "Vui lòng thử lại sau ít phút.",
+            summary: err?.response?.status + " " + err?.code + " " + err?.response?.statusText,
+            detail: err?.message,
+            // if = 401 || 403 -> login again
+            // summary: "Đã xảy ra lỗi",
+            // detail: "Vui lòng thử lại sau ít phút.",
           });
         })
         .finally(() => {
@@ -88,6 +91,7 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
 
   return (
     <>
+    <p>Developing Beta Hetxagon Nobita Pokemon</p>
       <Toast ref={toast} />
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">
