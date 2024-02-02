@@ -16,10 +16,9 @@ export const axiosPrivate = (() => {
 
   const refresh = useRefreshToken();
 
-  const authenticationInfo = getAuthInfo();
-
   const requestInterceptor = instance.interceptors.request.use(
     (config) => {
+      const authenticationInfo = getAuthInfo();
       // Add Bearer token to requests if not present
       if (!config.headers["Authorization"]) {
         config.headers["Authorization"] = `Bearer ${authenticationInfo?.accessToken}`;
