@@ -1,63 +1,81 @@
 import React, { useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 import CollectionInformationSection from "./CollectionInformationSection/CollectionInformationSection";
 import CollectionGallery from "./CollectionGallery/CollectionGallery";
-import { GetArtworksData, GetCollectionData } from "./CollectionDetailService";
+import { GetCollectionData } from "./CollectionDetailService";
 
 type Artwork = {
-  id: string;
-  title: string;
-  createdBy: string;
-  creatorFullName: string;
-  thumbnail: string;
-  likeNum: number;
-  viewNum: number;
+  artwork: {
+    id: string;
+    title: string;
+    createdBy: {
+      id: string;
+      username: string;
+      avatar: string;
+    };
+    creatorFullName: string;
+    thumbnail: string;
+    likeNum: number;
+    viewNum: number;
+  }
 };
 
-type CollectionProps = {
+type CollectionDetail = {
   id: string;
-  creatorFullName: string;
   collectionName: string;
   privacy: string;
-  numberOfArtworks: number;
+  createdBy: {
+    id: string;
+    username: string;
+    avatar: string;
+  };
+  createdOn: string;
+  artworks: Artwork[];
 };
 
 const CollectionDetailScreen: React.FC = () => {
   let collectionId = useParams()?.id;
   const accountAvatar = localStorage.getItem("accountAvatar");
   const [artworks, setArtworks] = React.useState<Artwork[]>([]);
-  const [collection, setCollection] = React.useState<CollectionProps>({
+  const [collection, setCollection] = React.useState<CollectionDetail>({
     id: "",
-    creatorFullName: "",
     collectionName: "",
     privacy: "",
-    numberOfArtworks: 0,
+    createdBy: {
+      id: "",
+      username: "",
+      avatar: "",
+    },
+    createdOn: "",
+    artworks: [],
   });
+
+  const handlePrivacyType = (privacy: string) => {
+    if (privacy === "Private") {
+      return "Riêng tư";
+    } else {
+      return "Công khai";
+    }
+  };
 
   useEffect(() => {
     const fetchServices = async () => {
       const collectionData = await GetCollectionData(collectionId || "");
       setCollection(collectionData);
-      const artworksData = await GetArtworksData(collectionId || "");
-      if (Array.isArray(artworksData)) {
-        setArtworks(artworksData);
-        console.log(artworksData)
-      } else {
-        console.error("Response is not an array:", artworksData);
-      }
+      setArtworks(collectionData.artworks);
     };
     fetchServices();
   }, []);
+
   return (
     <>
       <CollectionInformationSection
         id={collection.id}
-        creatorFullName={collection.creatorFullName}
+        creatorFullName={collection.createdBy?.username}
         collectionName={collection.collectionName}
-        privacy={collection.privacy}
-        numberOfArtworks={collection.numberOfArtworks}
-        accountAvatar={accountAvatar ? accountAvatar : ""}
+        privacy={handlePrivacyType(collection.privacy)}
+        numberOfArtworks={collection.artworks?.length}
+        accountAvatar={collection.createdBy?.avatar}
       />
       <CollectionGallery artworks={artworks} />
     </>
