@@ -5,49 +5,37 @@ import CollectionGallery from "./CollectionGallery/CollectionGallery";
 import { GetCollectionData } from "./CollectionDetailService";
 
 type Artwork = {
-  artwork: {
-    id: string;
-    title: string;
-    createdBy: {
-      id: string;
-      username: string;
-      avatar: string;
-    };
-    creatorFullName: string;
-    thumbnail: string;
-    likeNum: number;
-    viewNum: number;
-  }
+  id: string;
+  title: string;
+  createdBy: string;
+  creatorFullName: string;
+  thumbnail: string;
+  likeCount: number;
+  viewCount: number;
 };
 
-type CollectionDetail = {
+type CollectionProps = {
   id: string;
+  creatorFullName: string;
   collectionName: string;
   privacy: string;
-  createdBy: {
-    id: string;
-    username: string;
-    avatar: string;
-  };
-  createdOn: string;
-  artworks: Artwork[];
+  numberOfArtworks: number;
+  artworks: Artwork[]; // Add the artworks property
+  accountAvatar?: string;
 };
 
 const CollectionDetailScreen: React.FC = () => {
   let collectionId = useParams()?.id;
   const accountAvatar = localStorage.getItem("accountAvatar");
   const [artworks, setArtworks] = React.useState<Artwork[]>([]);
-  const [collection, setCollection] = React.useState<CollectionDetail>({
+  const [collection, setCollection] = React.useState<CollectionProps>({
     id: "",
+    creatorFullName: "",
     collectionName: "",
     privacy: "",
-    createdBy: {
-      id: "",
-      username: "",
-      avatar: "",
-    },
-    createdOn: "",
+    numberOfArtworks: 0,
     artworks: [],
+    accountAvatar: accountAvatar || "",
   });
 
   const handlePrivacyType = (privacy: string) => {
@@ -60,24 +48,28 @@ const CollectionDetailScreen: React.FC = () => {
 
   useEffect(() => {
     const fetchServices = async () => {
-      const collectionData = await GetCollectionData(collectionId || "");
-      setCollection(collectionData);
-      setArtworks(collectionData.artworks);
+      const { collection: fetchedCollection, artworks: fetchedArtworks } =
+        await GetCollectionData(collectionId || "");
+      if (fetchedCollection) {
+        setCollection(fetchedCollection);
+        setArtworks(fetchedArtworks);
+      }
     };
     fetchServices();
-  }, []);
+  }, [collectionId]);
 
   return (
     <>
       <CollectionInformationSection
         id={collection.id}
-        creatorFullName={collection.createdBy?.username}
+        creatorFullName={collection.creatorFullName}
         collectionName={collection.collectionName}
         privacy={handlePrivacyType(collection.privacy)}
-        numberOfArtworks={collection.artworks?.length}
-        accountAvatar={collection.createdBy?.avatar}
+        numberOfArtworks={collection.numberOfArtworks}
+        accountAvatar={collection.accountAvatar?.toString() || ""} 
       />
-      <CollectionGallery artworks={artworks} />
+      {artworks && <CollectionGallery artworks={artworks} />} 
+      {!artworks && <p>Loading artworks...</p>} 
     </>
   );
 };
