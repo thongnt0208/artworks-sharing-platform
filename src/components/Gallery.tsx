@@ -3,7 +3,7 @@ import ArtworkCard from "./ArtworkCard";
 import "./Gallery.scss";
 import { useNavigate } from "react-router-dom";
 
-type Artwork = {
+export type Artwork = {
   id: string;
   title: string;
   thumbnail: string;
