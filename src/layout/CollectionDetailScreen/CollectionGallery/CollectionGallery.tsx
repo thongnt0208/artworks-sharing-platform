@@ -1,24 +1,23 @@
 import React from "react";
-import ArtworkCard from "../../../components/ArtworkCard";
+import Gallery from "../../../components/Gallery";
 import "./CollectionGallery.scss";
-import { useNavigate } from "react-router-dom";
+import ArtworkCard from "../../../components/ArtworkCard";
 
 type Artwork = {
-  id: string;
-  title: string;
-  createdBy: string;
-  creatorFullName: string;
-  thumbnail: string;
-  likeNum: number;
-  viewNum: number;
+    id: string;
+    title: string;
+    thumbnail: string;
+    viewCount: number;
+    likeCount: number;
+    createdBy: string;
+    creatorFullName: string;
 };
 
-type ArtworksProps = {
+type ArtworkProps = {
   artworks: Artwork[];
 };
 
-const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
-  const navigate = useNavigate();
+const CollectionGallery: React.FC<ArtworkProps> = ({ artworks }) => {
   console.log(artworks);
   return (
     <div className="collection-gallery">
@@ -26,15 +25,13 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
       <div className="gallery">
         {artworks.map((artwork) => (
           <ArtworkCard
-            key={artwork.id}
             id={artwork.id}
             title={artwork.title}
+            thumbnail={artwork.thumbnail}
+            viewCount={artwork.viewCount}
+            likeCount={artwork.likeCount}
             createdBy={artwork.createdBy}
             creatorFullName={artwork.creatorFullName}
-            thumbnail={artwork.thumbnail}
-            likeCount={artwork.likeNum}
-            viewCount={artwork.viewNum}
-            viewHandler={() => navigate(`/artwork/${artwork.id}`)}
           />
         ))}
       </div>
@@ -42,4 +39,4 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
   );
 };
 
-export default Gallery;
+export default CollectionGallery;

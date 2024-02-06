@@ -1,42 +1,60 @@
 import axios from "axios";
-export async function GetArtworksData(collectionId: string) {
-  try {
-    const response = await axios.get(
-      `http://127.0.0.1:1880/collection/${collectionId}/artworks`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.status !== 200) {
-      console.log("Error fetching tags data");
-      return [];
-    }
-    return response.data;
-  } catch (error) {
-    console.log("Error fetching tags data:", error);
-    return [];
-  }
-}
+const API_URl = process.env.REACT_APP_REAL_API_BASE_URL;
+const accessToken = localStorage.getItem("accessToken");
+const refreshToken = localStorage.getItem("refreshToken");
+
+type Artwork = {
+  id: string;
+  title: string;
+  createdBy: string;
+  creatorFullName: string;
+  thumbnail: string;
+  likeCount: number;
+  viewCount: number;
+};
+
+type CollectionProps = {
+  id: string;
+  creatorFullName: string;
+  collectionName: string;
+  privacy: string;
+  numberOfArtworks: number;
+  accountAvatar?: string;
+  artworks: Artwork[]; 
+};
 
 export async function GetCollectionData(collectionId: string) {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:1880/collection/${collectionId}`,
+      `${API_URl}/collections/${collectionId}`,
       {
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken || refreshToken}`,
         },
       }
     );
     if (response.status !== 200) {
-      console.log("Error fetching tags data");
-      return [];
+      console.log("Error fetching collection data");
+      return { artworks: [] };
     }
-    return response.data;
+
+    const artworks: Artwork[] = (response.data.artworks || []).map(
+      (artworkData: { artwork: Artwork }) => artworkData.artwork
+    );
+    const collection: CollectionProps = {
+      id: response.data.id,
+      creatorFullName: response.data.createdBy.username,
+      collectionName: response.data.collectionName,
+      privacy: response.data.privacy,
+      numberOfArtworks: response.data.artworks.length,
+      accountAvatar: response.data.createdBy.avatar,
+      artworks: artworks,
+    };
+
+    return { collection, artworks };
   } catch (error) {
-    console.log("Error fetching tags data:", error);
-    return [];
+    console.log("Error fetching collection data:", error);
+    return { artworks: [] };
   }
 }
