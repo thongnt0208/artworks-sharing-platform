@@ -2,10 +2,10 @@ import React from "react";
 import { Image } from "primereact/image";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-
-import "./CollectionInformationSection.scss";
 import { Button } from "primereact/button";
 import { InputSwitch } from "primereact/inputswitch";
+
+import "./CollectionInformationSection.scss";
 const background = require("../../../assets/defaultImage/default-card-blur-image.png");
 
 type CollectionProps = {
@@ -15,6 +15,8 @@ type CollectionProps = {
   privacy: string;
   numberOfArtworks: number;
   accountAvatar?: string;
+  onUpdate : (collectionName: string, privacy: boolean) => void;
+  onDelete : () => void;
 };
 
 const CollectionInformationSection: React.FC<CollectionProps> = (
@@ -24,8 +26,6 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
   const [editedCollectionName, setEditedCollectionName] = React.useState(
     props.collectionName
   );
-
-  //This Privacy Prop of Collection Information is for testing, will be api applying later
   let privacyProp;
   if (props.privacy === "Private") {
     privacyProp = true;
@@ -39,6 +39,7 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
   };
 
   const handleSaveClick = () => {
+    props.onUpdate(editedCollectionName, editedPrivacy);
     setShowEdit(false);
   };
 
@@ -47,7 +48,7 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
   };
 
   const handleDeleteClick = () => {
-    console.warn("Delete clicked");
+    props.onDelete();
   };
 
   const headerElement = (
