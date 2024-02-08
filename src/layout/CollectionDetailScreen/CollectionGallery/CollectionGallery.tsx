@@ -1,5 +1,4 @@
 import React from "react";
-import Gallery from "../../../components/Gallery";
 import "./CollectionGallery.scss";
 import ArtworkCard from "../../../components/ArtworkCard";
 
