@@ -20,12 +20,19 @@ export default function PostArtworkScreen({ ...props }: Props) {
 
   useEffect(() => {
     if (error !== 0) {
+      let _tmpMsg = "";
+      // if = 401 || 403 -> login again
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
+        _tmpMsg = "Vui lòng đăng nhập lại.";
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
       if (error !== null) {
         toast.current.show({
           severity: "error",
           summary: error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
-          detail: error?.message,
-          // if = 401 || 403 -> login again
+          detail: _tmpMsg === "" && error?.message,
           // summary: "Đã xảy ra lỗi",
           // detail: "Vui lòng thử lại sau ít phút.",
         });
