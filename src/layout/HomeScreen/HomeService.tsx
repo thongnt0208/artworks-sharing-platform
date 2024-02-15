@@ -37,9 +37,13 @@ export async function GetCategoriesData() {
   }
 }
 
-export async function GetNewArtworksData() {
+export async function GetNewArtworksData(pageNumber: number, pageSize: number) {
   try {
     const response = await axios.get(`${API_URL}/artworks`, {
+      params: {
+        pageNumber,
+        pageSize,
+      },
       headers: {
         "Content-Type": "application/json",
       },
@@ -55,9 +59,13 @@ export async function GetNewArtworksData() {
   }
 }
 
-export async function GetFollowingArtworksData() {
+export async function GetFollowingArtworksData(pageNumber: number, pageSize: number) {
   try {
     const response = await axios.get(`${API_URL}/artworks`, {
+      params: {
+        pageNumber,
+        pageSize,
+      },
       headers: {
         "Content-Type": "application/json",
       },
