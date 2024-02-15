@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
 import Gallery from "../../components/Gallery";
 import { TabMenu } from "primereact/tabmenu";
@@ -11,7 +11,6 @@ import {
 import "./HomeScreen.scss";
 import { TagProps } from "../../components/Tag";
 import { ArtworkProps } from "../../components/ArtworkCard";
-//----------------------------------------------
 
 export type CategoryProps = {
   id: string;
@@ -24,38 +23,77 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 5;
 
   const items = [
     { label: "Mới nhất", icon: "pi pi-fw pi-compass" },
     { label: "Theo dõi", icon: "pi pi-fw pi-users" },
   ];
 
-  const fetchData = useCallback(async () => {
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastArtworkRef = useRef<HTMLDivElement | null>(null);
+
+  const loadMoreData = () => {
+    setPageNumber((prevPageNumber) => prevPageNumber + 1);
+  };
+
+  const fetchData = async () => {
     setLoading(true);
     try {
+      let newArtworksData: any;
       if (activeTab === 0) {
-        const [newArtworksData, tagsData, categoriesData] = await Promise.all([
-          GetNewArtworksData(),
-          GetTagsData(),
-          GetCategoriesData(),
-        ]);
-        setArtworks(newArtworksData);
-        setTags(tagsData);
-        setCategories(categoriesData);
+        newArtworksData = await GetNewArtworksData(pageNumber, pageSize);
       } else if (activeTab === 1) {
-        const followingArtworksData = await GetFollowingArtworksData();
-        setArtworks(followingArtworksData);
+        newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
       }
+      const tagData = await GetTagsData();
+			const categoriesData = await GetCategoriesData();
+      setTags(tagData);
+      setCategories(categoriesData);
+      setArtworks((prevArtworks) => {
+        const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
+        const filteredArtworks = newArtworksData.items.filter(
+          (artwork: { id: string; }) => !uniqueArtworkIds.has(artwork.id)
+        );
+
+        return [...prevArtworks, ...filteredArtworks];
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
-  }, [activeTab]);
+  };
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [pageNumber, activeTab]);
+
+  useEffect(() => {
+    observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreData();
+        }
+      },
+      { threshold: 0.5 } 
+    );
+
+    if (lastArtworkRef.current && observer.current) {
+      observer.current.observe(lastArtworkRef.current);
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [lastArtworkRef.current, observer.current]);
+
+  const handleTabChange = (event: any) => {
+    setActiveTab(event.index);
+    setPageNumber(1); 
+  };
 
   return (
     <>
@@ -64,12 +102,16 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
         <TabMenu
           model={items}
           activeIndex={activeTab}
-          onTabChange={(e) => setActiveTab(e.index)}
+          onTabChange={handleTabChange}
           className="w-max mb-3 text-black-alpha-90 text-lg"
         />
       ) : null}
 
       {loading ? <p>Loading...</p> : <Gallery artworks={artworks} />}
+
+      <div ref={lastArtworkRef}>
+        {/* This is an invisible marker to observe */}
+      </div>
     </>
   );
 };
