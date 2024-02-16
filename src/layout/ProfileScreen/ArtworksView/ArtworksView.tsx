@@ -1,35 +1,30 @@
-import React from "react";
+import React, {useRef} from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router-dom";
-
 import { GetArtworksData } from "./ArtworksService";
-import "./ArtworksView.scss";
+import { Artwork } from "../../../components/Gallery";
+import { Toast } from "primereact/toast";
 import ArtworkCard from "../../../components/ArtworkCard";
-
-type ArtworksProps = {
-  id: string;
-  title: string;
-  createdBy: string;
-  creatorFullName: string;
-  thumbnail: string;
-  likeCount: number;
-  viewCount: number;
-};
+import "./ArtworksView.scss";
 
 const ArtworksView: React.FC = () => {
+  const toast = useRef<Toast>(null);
   let navigate = useNavigate();
   let [accountId, isCreator] = useOutletContext() as [string, boolean];
-
-  const [artworks, setArtworks] = React.useState<ArtworksProps[]>([]);
+  const [artworks, setArtworks] = React.useState<Artwork[]>([]);
+ 
+  const showError = () => {
+    toast.current?.show({severity:'error', summary: 'Lỗi', detail:'Hệ thống lỗi', life: 3000});
+}
   React.useEffect(() => {
     const fetchArtworks = async () => {
       const response = await GetArtworksData(accountId);
-      if (Array.isArray(response)) {
-        setArtworks(response);
+      if(Array.isArray(response.items)) {
+        setArtworks(response.items);
       } else {
-        console.error("Response is not an array:", response);
+        showError();
       }
     };
     fetchArtworks();
@@ -45,7 +40,7 @@ const ArtworksView: React.FC = () => {
               <Button
                 label="Tạo tác phẩm"
                 onClick={() => {
-                  navigate("/postAw");
+                  navigate("/artwork/post");
                 }}
               ></Button>
             </Card>
@@ -63,8 +58,8 @@ const ArtworksView: React.FC = () => {
                   createdBy={artwork.createdBy}
                   creatorFullName={artwork.creatorFullName}
                   thumbnail={artwork.thumbnail}
-                  likeCount={10}
-                  viewCount={12}
+                  likeCount={artwork.likeCount}
+                  viewCount={artwork.viewCount}
                 />
               </div>
             ))
