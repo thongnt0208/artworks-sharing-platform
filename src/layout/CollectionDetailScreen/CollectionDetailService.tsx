@@ -1,7 +1,8 @@
 import axios from "axios";
+import { getAuthInfo } from "../../util/AuthUtil";
 const API_URl = process.env.REACT_APP_REAL_API_BASE_URL;
-const accessToken = localStorage.getItem("accessToken");
-const refreshToken = localStorage.getItem("refreshToken");
+const accessToken = getAuthInfo().accessToken;
+const refreshToken = getAuthInfo().refreshToken;
 
 type Artwork = {
   id: string;
@@ -20,22 +21,18 @@ type CollectionProps = {
   privacy: string;
   numberOfArtworks: number;
   accountAvatar?: string;
-  artworks: Artwork[]; 
+  artworks: Artwork[];
 };
 
 export async function GetCollectionData(collectionId: string) {
   try {
-    const response = await axios.get(
-      `${API_URl}/collections/${collectionId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken || refreshToken}`,
-        },
-      }
-    );
+    const response = await axios.get(`${API_URl}/collections/${collectionId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken || refreshToken}`,
+      },
+    });
     if (response.status !== 200) {
-      console.log("Error fetching collection data");
       return { artworks: [] };
     }
 
@@ -54,7 +51,57 @@ export async function GetCollectionData(collectionId: string) {
 
     return { collection, artworks };
   } catch (error) {
-    console.log("Error fetching collection data:", error);
     return { artworks: [] };
+  }
+}
+
+export async function UpdateCollectionData({
+  collectionId,
+  collectionName,
+  privacy,
+}: {
+  collectionId: string;
+  collectionName: string;
+  privacy: boolean;
+}) {
+  let privacyType = privacy ? 1 : 0;
+  try {
+    const response = await axios.put(
+      `${API_URl}/collections/${collectionId}`,
+      JSON.stringify({
+        collectionName,
+        privacyType,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken || refreshToken}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+export async function DeleteCollectionData(collectionId: string) {
+  try {
+    const response = await axios.delete(
+      `${API_URl}/collections/${collectionId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken || refreshToken}`,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    return false;
   }
 }
