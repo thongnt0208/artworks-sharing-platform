@@ -22,7 +22,7 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
   const navigate = useNavigate();
   return (
     <div className="gallery w-full p-0 flex flex-wrap justify-content-center">
-      {/* {artworks
+      {artworks
         .map((artwork) => (
           <div className="gallery__item flex flex-row flex-wrap justify-content-center" key={artwork.id}>
             <ArtworkCard
@@ -37,7 +37,7 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
               viewHandler={() => navigate(`/artwork/${artwork.id}`)}
             />
           </div>
-        ))} */}
+        ))}
     </div>
   );
 };
