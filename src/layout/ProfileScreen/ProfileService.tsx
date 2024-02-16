@@ -6,7 +6,6 @@ const accessToken = getAuthInfo()?.accessToken || "";
 const refreshToken = getAuthInfo()?.refreshToken || "";
 
 export async function GetProfileData(accountId: string) {
-    console.log("Fetching profile data...", accountId);
     try {
         const response = await axios.get(`${API_URL}/accounts/${accountId}`, {
             headers: {
@@ -18,7 +17,6 @@ export async function GetProfileData(accountId: string) {
             console.log("Error fetching profile data");
             return [];
         }
-        console.log("Profile data:", response.data);
         return response.data;
     }
     catch (error) {
