@@ -72,7 +72,6 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     fetchData();
   }, [profileId]);
 
-  console.log("Profile:", profile.id);
   return (
     <>
       {profile ? (
