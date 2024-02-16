@@ -1,6 +1,7 @@
+import "./NewAssetSection.scss";
+
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Image } from "primereact/image";
 import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
@@ -53,50 +54,67 @@ export default function NewAssetSection({
     setIsVisible(false); // Close the dialog after submission
   };
 
+  let footerContent = (
+    <div>
+      <Button
+        className="m-3"
+        rounded
+        label="Lưu"
+        type="submit"
+        onClick={onSubmit}
+        severity="info"
+        autoFocus
+      />
+      <Button
+        className="m-3"
+        rounded
+        label="Hủy"
+        type="button"
+        onClick={() => setIsVisible(false)}
+      />
+    </div>
+  );
+
   return (
     <Dialog
+      className="new-asset-section-dialog"
       visible={isVisible}
       onHide={() => {
         setIsVisible(false);
       }}
+      header="Thông tin tài nguyên"
+      footer={footerContent}
       closable
     >
       <form onSubmit={onSubmit} style={{ textAlign: "center" }}>
-        <p className="text-cus-h2-bold">Thêm tài nguyên mới</p>
-        <div className="flex gap-1">
-          {files?.length > 0 && (
-            <Image
-              src={URL.createObjectURL(files[files.length - 1])}
-              alt={`Uploaded ${files[files.length - 1].name}`}
-              width="100px"
-            />
-          )}
-          <div className="asset-inputs flex flex-column">
-            <div className="flex">
+          <div className="asset-inputs w-full flex flex-column gap-3">
+            <div className="input-container">
               <label htmlFor="AssetTitle">Tên tài nguyên</label>
               <InputText
                 id="AssetTitle"
                 name="AssetTitle"
                 required
                 value={title}
+                placeholder="tên tài nguyên"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
               />
             </div>
-            <div className="">
+            <div className="input-container">
               <label htmlFor="Description">Mô tả tài nguyên</label>
               <InputText
                 id="Description"
                 name="Description"
                 required
                 value={description}
+                placeholder="tài nguyên gồm..."
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
               />
             </div>
-            <div className="">
+            <div className="input-container">
               <label htmlFor="Price">Giá (Xu)</label>
               <InputNumber
                 id="Price"
@@ -107,9 +125,7 @@ export default function NewAssetSection({
                 }}
               />
             </div>
-          </div>
         </div>
-        <Button label="Lưu" type="submit" onClick={onSubmit} />
       </form>
     </Dialog>
   );

@@ -1,25 +1,58 @@
-import { Link, useNavigate } from "react-router-dom";
 import "./PostArtworkScreen.scss";
-import { useEffect, useState } from "react";
-import InputForm from "./InputForm/InputForm";
-import { getAuthInfo } from "../../util/AuthUtil";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
+
+import InputForm from "./InputForm/InputForm";
+// --------------------------------------------------------
 
 type Props = {};
 
 export default function PostArtworkScreen({ ...props }: Props) {
   const navigate = useNavigate();
   const [data, setData] = useState({} as any);
-  const [error, setError] = useState({} as any);
+  const [error, setError] = useState(0 as any); //0: first compile; null: success; !=null: error
+  const [success, setSuccess] = useState(0 as any); //0: first compile; null: error; !=null: success
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const authenticationInfo = getAuthInfo();
+  const toast: any = useRef(null);
 
-  useEffect(() => {}, []);
-  console.log("uploadedFiles", uploadedFiles);
+  useEffect(() => {
+    if (error !== 0) {
+      let _tmpMsg = "";
+      // if = 401 || 403 -> login again
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
+        _tmpMsg = "Vui lòng đăng nhập lại.";
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
+      if (error !== null) {
+        toast.current.show({
+          severity: "error",
+          summary: error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
+          detail: _tmpMsg === "" && error?.message,
+          // summary: "Đã xảy ra lỗi",
+          // detail: "Vui lòng thử lại sau ít phút.",
+        });
+      } else {
+        toast.current.show({
+          severity: "success",
+          summary: "Đăng bài thành công",
+          detail: "Bài đăng đã được đăng tải lên hệ thống.",
+        });
+        setTimeout(() => {
+          navigate(`/artwork/${success?.data?.id}`);
+        }, 2000);
+      }
+    }
+  }, [error, navigate, success]);
+
   return (
     <>
       {/* <p>{JSON.stringify(data)}</p> */}
+      <Toast ref={toast} />
       <div className="artwork-detail-container">
         <div className="detail-container flex grid-nogutter">
           <div className="left-panel-container review-container col col-9">
@@ -62,8 +95,9 @@ export default function PostArtworkScreen({ ...props }: Props) {
             <InputForm
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
-              data={data}
               setData={setData}
+              setError={setError}
+              setSuccess={setSuccess}
             />
           </div>
         </div>
