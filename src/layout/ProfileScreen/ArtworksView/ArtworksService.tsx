@@ -1,12 +1,25 @@
 import axios from "axios";
+import { getAuthInfo } from "../../../util/AuthUtil";
+const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
+
+const accessToken = getAuthInfo()?.accessToken || "";
+const refreshToken = getAuthInfo()?.refreshToken || "";
 
 export async function GetArtworksData(accountId: string) {
+  console.log("accountId day ne: ", accountId);
+
   try {
     const response = await axios.get(
-      `http://127.0.0.1:1880/account/${accountId}/artworks`,
+      `${API_URL}/artworks/account/${accountId}`,
       {
+        params: {
+          sortColumn: "create",
+          pageNumber: 1,
+          pageSize: 10,
+        },
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken || refreshToken}`,
         },
       }
     );
