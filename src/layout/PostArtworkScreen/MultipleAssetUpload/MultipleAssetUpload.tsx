@@ -25,10 +25,10 @@ type Props = {
 // Logic flow:
 // 1. User select file
 // 2. Add infomation Dialog appear to add title, description, price of the asset at `NewAssetSection`
-// 3. User click "Lưu" button, generate an array then add this {title, description, price, file_url} object to that array
-// 4. After user click "Lưu" button, the array will be saved to the LocalStorage
-// 5. After user click "Đăng bài" button, the array will be uploaded to the server, the array will be removed from the LocalStorage
-// 4.1. If the user click "Xoá" button in the list on `MultipleAssetUpload`, check if the file is in the LocalStorage, if yes, remove it from the LocalStorage
+// 3. User click "Lưu" button, generate an array then add this {title, description, price, file_url} object to state by `setAssets`
+// 4. After user click "Lưu" button, the array will be saved to the `assets` state at `InputForm`
+// 5. After user click "Đăng bài" button, the array will be uploaded to the server
+// 4.1. If the user click "Xoá" button in the list on `MultipleAssetUpload`, check if the file is in the `assets` state, if yes, remove it throught `setAssets` function
 
 export default function MultipleAssetUpload({ assets, setAssets, onFormChange }: Props) {
   const [totalSize, setTotalSize] = useState(0);
@@ -48,8 +48,6 @@ export default function MultipleAssetUpload({ assets, setAssets, onFormChange }:
 
     setTotalSize(_totalSize);
     setCurrentFiles(e.files);
-    // setUploadedAssets(e.files);
-    // onFormChange(e.files);
     setIsDialogVisible(true);
   };
 

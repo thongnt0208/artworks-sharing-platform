@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCategoriesList, postArtwork } from "../Service";
 import "./InputForm.scss";
 import { maxNumberOfCategories, maxNumberOfTags } from "../../../const/bizConstants";
@@ -10,7 +10,6 @@ import {
   Button,
   MultiSelect,
   useFormik,
-  Toast,
 } from "../../index";
 import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
 import { initialValues, validationSchema } from "./FormikData";
@@ -19,14 +18,20 @@ import MultipleAssetUpload from "../MultipleAssetUpload/MultipleAssetUpload";
 type Props = {
   uploadedFiles: any;
   setUploadedFiles: (data: any) => void;
-  data: {};
   setData: (data: any) => void;
+  setError: (data: any) => void;
+  setSuccess: (data: any) => void;
 };
-export default function InputForm({ uploadedFiles, setUploadedFiles, data, setData }: Props) {
+export default function InputForm({
+  uploadedFiles,
+  setUploadedFiles,
+  setData,
+  setError,
+  setSuccess,
+}: Props) {
   const [categoriesOptions, setcategoriesOptions] = useState([] as any);
   const [assets, setAssets] = useState([] as any);
   const [isLoading, setisLoading] = useState(false);
-  const toast: any = useRef(null);
 
   const privacyOptions = [
     { label: "Công khai", value: 0 },
@@ -50,22 +55,13 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
           console.log(response);
           formik.resetForm();
           setUploadedFiles([]);
-          toast.current.show({
-            severity: "success",
-            summary: "Đăng bài thành công",
-            detail: "Bài đăng đã được đăng tải lên hệ thống.",
-          });
+          setError(null);
+          setSuccess(response);
         })
         .catch((err) => {
           console.log("Post err: ", err);
-          toast.current.show({
-            severity: "error",
-            summary: err?.response?.status + " " + err?.code + " " + err?.response?.statusText,
-            detail: err?.message,
-            // if = 401 || 403 -> login again
-            // summary: "Đã xảy ra lỗi",
-            // detail: "Vui lòng thử lại sau ít phút.",
-          });
+          setError(err);
+          setSuccess(null);
         })
         .finally(() => {
           setisLoading(false);
@@ -91,8 +87,7 @@ export default function InputForm({ uploadedFiles, setUploadedFiles, data, setDa
 
   return (
     <>
-    <p>Developing Beta Hetxagon Nobita Pokemon</p>
-      <Toast ref={toast} />
+      <p>Developing Beta Hetxagon Nobita Pokemon</p>
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">
           {/* images field */}
