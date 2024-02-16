@@ -7,7 +7,6 @@ import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
 import { CommentType } from "./content/ArtworkDetailType";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
@@ -61,11 +60,12 @@ export default function ArtworkDetail() {
         setError({ ...message });
         console.log(err);
       });
-  }, [id, isCommentChanged]);  
+  }, [id, isCommentChanged]);
 
   return (
     <Dialog {...dialogProperties}>
       <>
+        {error && <p>Đã xảy ra lỗi, vui lòng thử lại</p>}
         {!data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
         {data.images && (
           <div className="artwork-detail-container">

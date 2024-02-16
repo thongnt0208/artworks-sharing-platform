@@ -2,10 +2,10 @@ import { useState, useRef } from "react";
 import "./Comment.scss";
 import { Button } from "primereact/button";
 import { CommentType } from "../content/ArtworkDetailType";
-import { addCommentToArtwork } from "../Service";
 import { InputTextarea } from "primereact/inputtextarea";
 import { maxCommentCharacter } from "../../../const/bizConstants";
 import { Toast } from "primereact/toast";
+import addComment from "./Functions";
 
 interface PropsType {
   // Current user data
@@ -24,58 +24,20 @@ function CommentComponent({ ...props }: PropsType) {
   const [loading, setLoading] = useState<boolean>(false);
   const toast: any = useRef(null);
 
-  const addComment = () => {
-    let newComment = {
-      id: "somethingNew",
-      createdBy: {
-        id: props.userId,
-        fullname: props.fullName,
-        avatar: props.avatar,
-      },
-      content: commentValue,
-    };
-    const updatedCommentsList = [newComment, ...commentsList];
-    const oldCommentsList = commentsList;
-    // Change in UI
-    setCommentsList(updatedCommentsList);
-    setCommentValue(""); // Clear input after adding comment
-    // Change in Server
-    props.setIsCommentChanged(true);
-    if (commentValue !== "") {
-      setLoading(true);
-
-      // API call
-      addCommentToArtwork(props.artworkId, commentValue)
-        .then((response) => {
-          console.log(response.data);
-          setCommentValue(""); // Clear input after adding comment
-        })
-        .catch((error) => {
-          console.error("Error adding comment:", error);
-          setCommentsList(oldCommentsList);
-          toast.current.show({
-            severity: "error",
-            summary: "Đã xảy ra lỗi",
-            detail: "Vui lòng thử lại sau",
-            life: 3000,
-          });
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  };
-
   let handleInputChange = (e: any) => {
     if (e.target.value.length <= maxCommentCharacter) {
       setCommentValue(e.target.value);
     }
   };
 
+  let addNewComment = () => {
+    addComment(props, commentValue, setCommentValue, commentsList, setCommentsList, setLoading, toast);
+  };
+
   let handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      addComment();
+      addNewComment();
     }
   };
 
@@ -99,7 +61,7 @@ function CommentComponent({ ...props }: PropsType) {
             <Button
               className="max-w-max align-self-end"
               label="Đăng bình luận"
-              onClick={addComment}
+              onClick={addNewComment}
               disabled={loading || !commentValue}
             />
           </div>
