@@ -67,6 +67,7 @@ export default function ArtworkDetail() {
   return (
     <Dialog {...dialogProperties}>
       <>
+        {error && <p>Đã xảy ra lỗi, vui lòng thử lại</p>}
         {!data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
         {data.images && (
           <div className="artwork-detail-container">
