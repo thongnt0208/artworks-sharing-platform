@@ -24,7 +24,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
-  const pageSize = 5;
+  const pageSize = 10;
 
   const items = [
     { label: "Mới nhất", icon: "pi pi-fw pi-compass" },
@@ -38,37 +38,36 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      let newArtworksData: any;
-      if (activeTab === 0) {
-        newArtworksData = await GetNewArtworksData(pageNumber, pageSize);
-      } else if (activeTab === 1) {
-        newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
-      }
-      const tagData = await GetTagsData();
-			const categoriesData = await GetCategoriesData();
-      setTags(tagData);
-      setCategories(categoriesData);
-      setArtworks((prevArtworks) => {
-        const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
-        const filteredArtworks = newArtworksData.items.filter(
-          (artwork: { id: string; }) => !uniqueArtworkIds.has(artwork.id)
-        );
-
-        return [...prevArtworks, ...filteredArtworks];
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        let newArtworksData: any;
+        if (activeTab === 0) {
+          newArtworksData = await GetNewArtworksData(pageNumber, pageSize);
+        } else if (activeTab === 1) {
+          newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
+        }
+        const tagData = await GetTagsData();
+        const categoriesData = await GetCategoriesData();
+        setTags(tagData);
+        setCategories(categoriesData);
+        setArtworks((prevArtworks) => {
+          const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
+          const filteredArtworks = newArtworksData.items.filter(
+            (artwork: { id: string; }) => !uniqueArtworkIds.has(artwork.id)
+          );
+  
+          return [...prevArtworks, ...filteredArtworks];
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, [pageNumber, activeTab]);
+  }, [pageNumber, activeTab]); //warning
 
   useEffect(() => {
     observer.current = new IntersectionObserver((entries) => {
@@ -88,7 +87,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
         observer.current.disconnect();
       }
     };
-  }, [lastArtworkRef.current, observer.current]);
+  }, []);
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
@@ -106,8 +105,8 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           className="w-max mb-3 text-black-alpha-90 text-lg"
         />
       ) : null}
-
-      {loading ? <p>Loading...</p> : <Gallery artworks={artworks} />}
+      <Gallery artworks={artworks} />
+      {loading && <div className="lds-ring"><div></div><div></div><div></div><div></div></div>}
 
       <div ref={lastArtworkRef}>
         {/* This is an invisible marker to observe */}
