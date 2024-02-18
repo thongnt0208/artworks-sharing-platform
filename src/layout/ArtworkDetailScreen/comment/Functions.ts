@@ -32,7 +32,6 @@ export function addComment(
   setLoading: (loading: boolean) => void,
   toast: any
 ) {
-
   setCommentValue(""); // Clear input after adding comment
 
   // Change in Server

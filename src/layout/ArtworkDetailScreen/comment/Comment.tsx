@@ -93,8 +93,6 @@ function CommentComponent({ ...props }: PropsType) {
 
   useEffect(() => {
     renderComments();
-    console.log("props.comments changed", props.comments);
-  
   }, [props.comments]);
 
   return (
