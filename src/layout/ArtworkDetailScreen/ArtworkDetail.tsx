@@ -31,36 +31,37 @@ export default function ArtworkDetail() {
     draggable: false,
   };
 
-   // Get Artwork Detail Data
+  // Get Artwork Detail Data
   const fetchDetail = () => {
     fetchArtworkDetail(id)
-    .then((res) => {
-      setData(res.data);
-      setIsLiked(res.data.isLiked);
-      // console.log(res.data);
-      setError("");
-    })
-    .catch((err) => {
-      let message = err.message || "Something went wrong";
-      setError({ ...message });
-      console.log(err);
-    });
-  }
+      .then((res) => {
+        setData(res.data);
+        setIsLiked(res.data.isLiked);
+        // console.log(res.data);
+        setError("");
+      })
+      .catch((err) => {
+        let message = err.message || "Something went wrong";
+        setError({ ...message });
+        console.log(err);
+      });
+  };
 
   // Get Comments data
   const fetchComments = () => {
     fetchCommentsForArtwork(id)
-    .then((res) => {
-      setComments(res);
-      setError("");
-    })
-    .catch((err) => {
-      let message = err.message || "Something went wrong";
-      setError({ ...message });
-      console.log(err);
-    });
-  }
-  
+      .then((res) => {
+        console.log("fetchCommentsForArtwork", res);
+        setComments(res);
+        setError("");
+      })
+      .catch((err) => {
+        let message = err.message || "Something went wrong";
+        setError({ ...message });
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     fetchDetail();
     fetchComments();
