@@ -28,9 +28,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const blankPic = require("../../../assets/defaultImage/blank-100.png");
   const currentUserId = getAuthInfo()?.id || "";
 
-  const handleEditComment = () => {
-    console.log("Edit comment");
-  };
+  // const handleEditComment = () => {
+  //   console.log("Edit comment");
+  // };
 
   const handleDeleteComment = () => {
     setIsLoading(true);
@@ -94,13 +94,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
             {/* Edit and Delete icon button */}
             {currentUserId === profileData.id && (
               <div className="flex gap-1 justify-content-center">
-                <Button icon={"pi pi-pencil"} rounded onClick={handleEditComment} />
-                <Button
-                  icon={"pi pi-trash"}
-                  rounded
-                  onClick={confirmDelete}
-                  loading={isLoading}
-                />
+                {/* <Button icon={"pi pi-pencil"} rounded onClick={handleEditComment} /> */}
+                <Button icon={"pi pi-trash"} rounded onClick={confirmDelete} loading={isLoading} />
               </div>
             )}
           </div>

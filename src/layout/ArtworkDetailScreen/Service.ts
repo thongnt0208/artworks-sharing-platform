@@ -14,18 +14,16 @@ const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:18
  * console.log(artworkDetails);
  *
  * @author ThongNT
- * @version 2.0.0
+ * @version 2.0.1
  */
 export async function fetchArtworkDetail(id: string | undefined, accountId?: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${id}`);
-    console.log("response", response);
-    
 
     if (accountId && Array.isArray(response.data.likes)) {
       console.log("accountId", accountId);
       console.log("response.data.likes", response.data.likes);
-      
+
       // Check if the accountId is present in the likes array
       const isLiked = response.data.likes.includes(accountId);
 
@@ -132,12 +130,9 @@ export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
  * console.log(addedComment);
  *
  * @author ThongNT
- * @version 2.0.0
+ * @version 2.0.1
  */
-export async function addCommentToArtwork(
-  artworkId: string,
-  commentText: string
-): Promise<any> {
+export async function addCommentToArtwork(artworkId: string, commentText: string): Promise<any> {
   let body = {
     commentText: commentText,
   };
