@@ -23,10 +23,10 @@ import { CommentType } from "../content/ArtworkDetailType";
  * setLoading,
  * toast
  * );
- * @version 1.0.1
  * @author ThongNT
+ * @version 1.0.1
  */
-export default function addComment(
+export function addComment(
   props: any,
   commentValue: string,
   setCommentValue: (commentValue: string) => void,
@@ -56,7 +56,7 @@ export default function addComment(
     // API call
     addCommentToArtwork(props?.artworkId, commentValue)
       .then(() => {
-        // props?.setIsCommentChanged(true); //notify to reload comments
+        // props?.reloadComments();
       })
       .catch((error) => {
         console.log("Error adding comment:", error);

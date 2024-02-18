@@ -152,20 +152,17 @@ export async function addCommentToArtwork(
 
 /**
  * Removes a comment from an artwork.
- *
- * @param {string} artworkId - The ID of the artwork to remove the comment from.
  * @param {string} commentId - The ID of the comment to be removed.
  * @returns {Promise<any>}
- * @example
- * const removedComment = await removeCommentFromArtwork("artworkId123", "commentId789");
- * console.log(removedComment);
- *
+ * @example const removedComment = await removeCommentFromArtwork("artworkId123", "commentId789");
+console.log(removedComment);
+ * 
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.1.0
  */
-export async function removeCommentFromArtwork(artworkId: string, commentId: string): Promise<any> {
+export async function removeCommentFromArtwork(commentId: string): Promise<any> {
   try {
-    const response = await axios.delete(`${BASE_URL}/artworks/comments/${artworkId}/${commentId}`);
+    const response = await axiosPrivate.delete(`${BASE_URL}/api/comments/${commentId}`);
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
