@@ -5,7 +5,7 @@ import { CommentType } from "../content/ArtworkDetailType";
 import { InputTextarea } from "primereact/inputtextarea";
 import { maxCommentCharacter } from "../../../const/bizConstants";
 import { Toast } from "primereact/toast";
-import addComment from "./Functions";
+import { addComment } from "./Functions";
 import { GetProfileData } from "../../ProfileScreen/ProfileService";
 import CommentItem from "./CommentItem";
 
@@ -15,13 +15,14 @@ interface PropsType {
   userId: string;
   fullName: string;
   avatar: string;
+  // ------------------
   comments: CommentType[];
-  setIsCommentChanged: (isCommentChanged: boolean) => void;
+  reloadComments: () => void;
 }
 
 function CommentComponent({ ...props }: PropsType) {
   const [commentValue, setCommentValue] = useState<string>("");
-  const [commentsList, setCommentsList] = useState<CommentType[]>(props.comments);
+  const [comments, setComments] = useState<CommentType[]>(props.comments);
   const [commentsElement, setCommentsElement] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const toast: any = useRef(null);
@@ -37,8 +38,8 @@ function CommentComponent({ ...props }: PropsType) {
       props,
       commentValue,
       setCommentValue,
-      commentsList,
-      setCommentsList,
+      comments,
+      setComments,
       setLoading,
       toast
     );
@@ -61,10 +62,11 @@ function CommentComponent({ ...props }: PropsType) {
     onKeyDown: (e: any) => handleKeyDown(e),
   };
 
-  const fetchCommentsList = async () => {
-    if (commentsList?.length > 0) {
+  const renderComments = async () => {
+    if (comments?.length > 0) {
       let _commentsElement = await Promise.all(
-        commentsList.map(async (comment, index) => {
+        comments.map(async (comment, index) => {
+          // check if createdBy is a string or an object
           if (typeof comment.createdBy === "string") {
             const profileData = await GetProfileData(comment?.createdBy || "");
             return (
@@ -87,9 +89,9 @@ function CommentComponent({ ...props }: PropsType) {
   };
 
   useEffect(() => {
-    fetchCommentsList();
+    renderComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [comments]);
 
   return (
     <>
