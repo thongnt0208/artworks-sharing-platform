@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import "./ArtworkDetail.scss";
 import { fetchArtworkDetail, fetchCommentsForArtwork } from "./Service";
@@ -11,12 +12,10 @@ import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
 export default function ArtworkDetail() {
-  // const { id } = useParams();
   const id = useParams().id || "";
   const navigate = useNavigate();
   const [data, setData] = useState({} as any);
   const [comments, setComments] = useState([] as CommentType[]);
-  const [isCommentChanged, setIsCommentChanged] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [error, setError] = useState({} as any);
   const authenticationInfo = getAuthInfo();
@@ -32,37 +31,40 @@ export default function ArtworkDetail() {
     draggable: false,
   };
 
-  // Get Artwork Detail Data
-  useEffect(() => {
+   // Get Artwork Detail Data
+  const fetchDetail = () => {
     fetchArtworkDetail(id)
-      .then((res) => {
-        setData(res.data);
-        setIsLiked(res.data.isLiked);
-        // console.log(res.data);
-        setError("");
-      })
-      .catch((err) => {
-        let message = err.message || "Something went wrong";
-        setError({ ...message });
-        console.log(err);
-      });
-  }, [id]);
+    .then((res) => {
+      setData(res.data);
+      setIsLiked(res.data.isLiked);
+      // console.log(res.data);
+      setError("");
+    })
+    .catch((err) => {
+      let message = err.message || "Something went wrong";
+      setError({ ...message });
+      console.log(err);
+    });
+  }
 
   // Get Comments data
-  useEffect(() => {
+  const fetchComments = () => {
     fetchCommentsForArtwork(id)
-      .then((res) => {
-        setComments(res);
-        setError("");
-      })
-      .catch((err) => {
-        let message = err.message || "Something went wrong";
-        setError({ ...message });
-        console.log(err);
-        console.log(error);
-        
-      });
-  }, [error, id, isCommentChanged]);  
+    .then((res) => {
+      setComments(res);
+      setError("");
+    })
+    .catch((err) => {
+      let message = err.message || "Something went wrong";
+      setError({ ...message });
+      console.log(err);
+    });
+  }
+  
+  useEffect(() => {
+    fetchDetail();
+    fetchComments();
+  }, []);
 
   return (
     <Dialog {...dialogProperties}>
@@ -89,14 +91,21 @@ export default function ArtworkDetail() {
 
             <div className="interartion-container flex grid-nogutter">
               <div className="col col-5">
-                <CommentComponent
-                  artworkId={id ? id : ""}
-                  userId={authenticationInfo?.id}
-                  avatar={authenticationInfo?.avatar}
-                  fullName={authenticationInfo?.fullname}
-                  comments={comments}
-                  setIsCommentChanged={setIsCommentChanged}
-                />
+                {currentUserId === "unknown" ? (
+                  <>
+                    <p>Bạn cần đăng nhập để bình luận.</p>
+                    <Link to={"/login"} />
+                  </>
+                ) : (
+                  <CommentComponent
+                    artworkId={id ? id : ""}
+                    userId={authenticationInfo?.id}
+                    avatar={authenticationInfo?.avatar}
+                    fullName={authenticationInfo?.fullname}
+                    comments={comments}
+                    reloadComments={fetchComments}
+                  />
+                )}
               </div>
               <div className="creator-info-container col col-5">
                 {/* <UserInformationCard .. /> */}
