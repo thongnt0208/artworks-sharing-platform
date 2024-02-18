@@ -37,7 +37,6 @@ export default function ArtworkDetail() {
       .then((res) => {
         setData(res.data);
         setIsLiked(res.data.isLiked);
-        // console.log(res.data);
         setError("");
       })
       .catch((err) => {
@@ -51,7 +50,6 @@ export default function ArtworkDetail() {
   const fetchComments = () => {
     fetchCommentsForArtwork(id)
       .then((res) => {
-        console.log("fetchCommentsForArtwork", res);
         setComments(res);
         setError("");
       })
