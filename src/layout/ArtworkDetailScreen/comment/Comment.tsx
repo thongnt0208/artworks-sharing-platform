@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Comment.scss";
 import { Button } from "primereact/button";
 import { CommentType } from "../content/ArtworkDetailType";
@@ -6,6 +6,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { maxCommentCharacter } from "../../../const/bizConstants";
 import { Toast } from "primereact/toast";
 import addComment from "./Functions";
+import { GetProfileData } from "../../ProfileScreen/ProfileService";
+import CommentItem from "./CommentItem";
 
 interface PropsType {
   // Current user data
@@ -18,9 +20,9 @@ interface PropsType {
 }
 
 function CommentComponent({ ...props }: PropsType) {
-  const blankPic = require("../../../assets/defaultImage/blank-100.png");
   const [commentValue, setCommentValue] = useState<string>("");
   const [commentsList, setCommentsList] = useState<CommentType[]>(props.comments);
+  const [commentsElement, setCommentsElement] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const toast: any = useRef(null);
 
@@ -31,7 +33,15 @@ function CommentComponent({ ...props }: PropsType) {
   };
 
   let addNewComment = () => {
-    addComment(props, commentValue, setCommentValue, commentsList, setCommentsList, setLoading, toast);
+    addComment(
+      props,
+      commentValue,
+      setCommentValue,
+      commentsList,
+      setCommentsList,
+      setLoading,
+      toast
+    );
   };
 
   let handleKeyDown = (e: any) => {
@@ -41,7 +51,7 @@ function CommentComponent({ ...props }: PropsType) {
     }
   };
 
-  let textareaProperties = {
+  const textareaProperties = {
     autoResize: true,
     value: commentValue,
     placeholder: "Thêm bình luận...",
@@ -50,6 +60,36 @@ function CommentComponent({ ...props }: PropsType) {
     onChange: (e: any) => handleInputChange(e),
     onKeyDown: (e: any) => handleKeyDown(e),
   };
+
+  const fetchCommentsList = async () => {
+    if (commentsList?.length > 0) {
+      let _commentsElement = await Promise.all(
+        commentsList.map(async (comment, index) => {
+          if (typeof comment.createdBy === "string") {
+            const profileData = await GetProfileData(comment?.createdBy || "");
+            return (
+              <CommentItem key={index} index={index} comment={comment} profileData={profileData} />
+            );
+          }
+          else{
+            return (
+              <CommentItem key={index} index={index} comment={comment} profileData={comment.createdBy} />
+            );
+          }
+        })
+      );
+
+      // Set _commentsElement with the resolved JSX array
+      setCommentsElement(_commentsElement);
+    } else {
+      setCommentsElement(<p>Chưa có bình luận nào</p>);
+    }
+  };
+
+  useEffect(() => {
+    fetchCommentsList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -69,28 +109,7 @@ function CommentComponent({ ...props }: PropsType) {
         </div>
       )}
 
-      <div className="comment-list-container">
-        {commentsList?.length > 0 ? (
-          commentsList?.map((comment, index) => (
-            <div key={index} className="comment-card p-mb-2">
-              <div className="flex flex-column">
-                <div className="flex">
-                  <img
-                    src={comment.createdBy.avatar || blankPic}
-                    alt={comment.createdBy.fullname}
-                  />
-                  <div className="flex flex-column gap-1 justify-content-center">
-                    <span className="text-cus-normal-bold">{comment.createdBy.fullname}</span>
-                    <span className="content text-cus-normal">{comment.content}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div>Chưa có bình luận nào.</div>
-        )}
-      </div>
+      <div className="comment-list-container">{commentsElement}</div>
     </>
   );
 }
