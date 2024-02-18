@@ -109,12 +109,12 @@ export async function unlikeArtwork(artworkId: string, accountId: string): Promi
  * const comments = await fetchCommentsForArtwork("artworkId123");
  * console.log(comments);
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.0.1
  */
 export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${artworkId}/comments`);
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error fetching comments:", error);
     throw new Error(`Error fetching comments: ${error}`);

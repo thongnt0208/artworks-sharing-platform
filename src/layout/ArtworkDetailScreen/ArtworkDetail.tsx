@@ -52,7 +52,7 @@ export default function ArtworkDetail() {
   useEffect(() => {
     fetchCommentsForArtwork(id)
       .then((res) => {
-        setComments(res.data);
+        setComments(res);
         setError("");
       })
       .catch((err) => {
