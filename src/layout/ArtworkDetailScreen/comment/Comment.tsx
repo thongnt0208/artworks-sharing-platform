@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
 import "./Comment.scss";
 import { Button } from "primereact/button";
@@ -22,7 +23,6 @@ interface PropsType {
 
 function CommentComponent({ ...props }: PropsType) {
   const [commentValue, setCommentValue] = useState<string>("");
-  const [comments, setComments] = useState<CommentType[]>(props.comments);
   const [commentsElement, setCommentsElement] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const toast: any = useRef(null);
@@ -34,15 +34,7 @@ function CommentComponent({ ...props }: PropsType) {
   };
 
   let addNewComment = () => {
-    addComment(
-      props,
-      commentValue,
-      setCommentValue,
-      comments,
-      setComments,
-      setLoading,
-      toast
-    );
+    addComment(props, commentValue, setCommentValue, setLoading, toast);
   };
 
   let handleKeyDown = (e: any) => {
@@ -63,19 +55,30 @@ function CommentComponent({ ...props }: PropsType) {
   };
 
   const renderComments = async () => {
-    if (comments?.length > 0) {
+    if (props.comments?.length > 0) {
       let _commentsElement = await Promise.all(
-        comments.map(async (comment, index) => {
+        props.comments.map(async (comment, index) => {
           // check if createdBy is a string or an object
           if (typeof comment.createdBy === "string") {
             const profileData = await GetProfileData(comment?.createdBy || "");
             return (
-              <CommentItem key={index} index={index} comment={comment} profileData={profileData} />
+              <CommentItem
+                key={index}
+                index={index}
+                comment={comment}
+                profileData={profileData}
+                reloadComments={props.reloadComments}
+              />
             );
-          }
-          else{
+          } else {
             return (
-              <CommentItem key={index} index={index} comment={comment} profileData={comment.createdBy} />
+              <CommentItem
+                key={index}
+                index={index}
+                comment={comment}
+                profileData={comment.createdBy}
+                reloadComments={props.reloadComments}
+              />
             );
           }
         })
@@ -90,8 +93,9 @@ function CommentComponent({ ...props }: PropsType) {
 
   useEffect(() => {
     renderComments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comments]);
+    console.log("props.comments changed", props.comments);
+  
+  }, [props.comments]);
 
   return (
     <>

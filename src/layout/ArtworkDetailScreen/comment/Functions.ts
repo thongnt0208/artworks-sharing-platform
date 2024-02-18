@@ -1,5 +1,4 @@
 import { addCommentToArtwork } from "../Service";
-import { CommentType } from "../content/ArtworkDetailType";
 
 /**
  * This function to add a new comment to the artwork
@@ -30,24 +29,11 @@ export function addComment(
   props: any,
   commentValue: string,
   setCommentValue: (commentValue: string) => void,
-  commentsList: CommentType[],
-  setCommentsList: (commentsList: CommentType[]) => void,
   setLoading: (loading: boolean) => void,
   toast: any
 ) {
-  let newComment = {
-    id: "somethingNew",
-    createdBy: {
-      id: props.userId,
-      fullname: props.fullName,
-      avatar: props.avatar,
-    },
-    content: commentValue,
-  };
 
   setCommentValue(""); // Clear input after adding comment
-  // Change in UI
-  setCommentsList([...commentsList, newComment]);
 
   // Change in Server
   if (commentValue !== "") {
@@ -56,12 +42,11 @@ export function addComment(
     // API call
     addCommentToArtwork(props?.artworkId, commentValue)
       .then(() => {
-        // props?.reloadComments();
+        props?.reloadComments();
       })
       .catch((error) => {
         console.log("Error adding comment:", error);
 
-        setCommentsList(commentsList);
         toast.current.show({
           severity: "error",
           summary: "Đã xảy ra lỗi",

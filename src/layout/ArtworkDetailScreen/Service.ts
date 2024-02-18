@@ -162,7 +162,7 @@ console.log(removedComment);
  */
 export async function removeCommentFromArtwork(commentId: string): Promise<any> {
   try {
-    const response = await axiosPrivate.delete(`${BASE_URL}/api/comments/${commentId}`);
+    const response = await axiosPrivate.delete(`${BASE_URL}/comments/${commentId}`);
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
