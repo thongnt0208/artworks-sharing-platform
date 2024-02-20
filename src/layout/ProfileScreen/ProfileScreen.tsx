@@ -1,37 +1,26 @@
 import React, { useEffect, useState } from "react";
-import UserInformationCard from "../../components/UserInformationCard";
-import { GetProfileData } from "./ProfileService";
-import MenuTab from "./MenuTab/MenuTab";
 import { useParams } from "react-router-dom";
-// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+import { GetProfileData } from "./ProfileService";
 import { getAuthInfo } from "../../util/AuthUtil";
+import { useNavigate } from "react-router-dom";
+import UserInformationCard, { UserInformationProps } from "../../components/UserInformationCard";
+import MenuTab from "./MenuTab/MenuTab";
+// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
-type ProfileProps = {
-  id: string;
-  username: string;
-  fullname: string;
-  role: string;
-  job: string;
-  address: string;
-  bio: string;
-  avatar: string;
-  profileView: number;
-  artworksView: number;
-  followerNum: number;
-  followingNum: number;
-};
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const profileId = useParams()?.id;
-
-  const [profile, setProfile] = useState<ProfileProps>({
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<UserInformationProps>({
     id: "",
-    username: "n/a",
-    fullname: "N/A",
-    role: "",
+    fullname: "",
     avatar: "",
     job: "",
     address: "",
+    isCreator: false,
+    email: "",
+    username: "",
+    role: "",
     bio: "",
     profileView: 0,
     artworksView: 0,
@@ -59,6 +48,10 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   // ]);
   // const [isSetup, setIsSetup] = useState<boolean>(false);
 
+  const editProfileHandler = () => {
+    navigate(`/account/settings`, {state: {profile: profile}});
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await GetProfileData(profileId || "");
@@ -81,6 +74,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               id={profile.id}
               username={profile.username}
               fullname={profile.fullname}
+              email={profile.email}
               role={profile.role}
               isCreator={isCreator}
               job={profile.job}
@@ -91,6 +85,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               artworksView={profile.artworksView}
               followerNum={profile.followerNum}
               followingNum={profile.followingNum}
+              editHandler={() => {editProfileHandler()}}
             />
           </div>
           <div className="profile-menu-container col col-9 pl-6 ">
