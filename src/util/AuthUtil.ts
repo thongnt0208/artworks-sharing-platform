@@ -1,6 +1,6 @@
 import { getFromLS, saveToLS } from "./LocalStorageUtils";
 
-type authInfoDataType = {
+export type authInfoDataType = {
   id: string;
   username: string;
   email: string;
