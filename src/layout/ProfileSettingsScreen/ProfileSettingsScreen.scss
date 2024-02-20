@@ -1,0 +1,11 @@
+@import "/src/const/variables.scss";
+.profile-settings-container {
+  background-color: $bg-200;
+  .back-btn {
+    background-color: #ffff;
+    padding-bottom: 10px;
+  }
+  .update-form-container {
+    padding: 100px 50px 100px 50px;
+  }
+}
