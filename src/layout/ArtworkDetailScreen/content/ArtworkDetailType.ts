@@ -11,7 +11,7 @@ export type Creator = {
 
 export interface CommentType {
   id: string;
-  createdBy: {
+  createdBy: string | {
     id: string;
     fullname: string;
     avatar: string;
