@@ -212,6 +212,7 @@ export default function ChatScreen() {
   useEffect(() => {
     // Fetch the items list from API
     setSelectingId(itemsList[0]?.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

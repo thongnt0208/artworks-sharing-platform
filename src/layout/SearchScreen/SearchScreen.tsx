@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import "./SearchScreen.scss";
 import { useEffect, useState } from "react";
 import Tag, { TagProps } from "../../components/Tag";
@@ -92,7 +94,6 @@ export default function SearchScreen({ ...props }: Props) {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto refresh data when searchValue changes

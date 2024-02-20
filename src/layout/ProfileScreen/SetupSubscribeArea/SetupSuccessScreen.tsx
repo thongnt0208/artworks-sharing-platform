@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
-export default function SetupSuccessScreen({}: Props) {
+export default function SetupSuccessScreen({...props}: Props) {
   const navigate = useNavigate();
   const chooseAvailables = () => {};
 
