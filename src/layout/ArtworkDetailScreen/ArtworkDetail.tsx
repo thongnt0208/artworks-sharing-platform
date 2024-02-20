@@ -7,7 +7,7 @@ import { fetchArtworkDetail, fetchCommentsForArtwork } from "./Service";
 import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
-import { CommentType } from "./content/ArtworkDetailType";
+import { CommentType } from "./ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
