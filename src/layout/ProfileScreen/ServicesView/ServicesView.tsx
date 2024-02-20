@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { GetServicesData } from "./ServicesService";
-import { useOutletContext } from "react-router-dom";
 
 import "./ServicesView.scss";
 import ServiceCard from "../../../components/ServiceCard";

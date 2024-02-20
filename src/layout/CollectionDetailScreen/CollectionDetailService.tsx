@@ -91,7 +91,7 @@ export async function UpdateCollectionData({
 
 export async function DeleteCollectionData(collectionId: string) {
   try {
-    const response = await axios.delete(
+    await axios.delete(
       `${API_URl}/collections/${collectionId}`,
       {
         headers: {

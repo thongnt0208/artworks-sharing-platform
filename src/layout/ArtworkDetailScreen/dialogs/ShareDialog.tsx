@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { copyURLToClipboard } from "../../../util/ShareUtil";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 
 type Props = {

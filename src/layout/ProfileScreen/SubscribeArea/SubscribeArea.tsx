@@ -1,7 +1,7 @@
 import React from "react";
-import CollectionCard from "../../../components/CollectionCard";
+// import CollectionCard from "../../../components/CollectionCard";
 import "./SubscribeArea.scss";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../index";
 import SetupSuccessScreen from "../SetupSubscribeArea/SetupSuccessScreen";
 type Props = {};
@@ -15,10 +15,10 @@ export type subscribeDataType = {
 export default function SubscribeArea({ ...props }: Props) {
   let navigate = useNavigate();
 
-  let profileId = useParams().id;
+  // let profileId = useParams().id;
   let subscribeData = useLocation().state?.subscribeData;
   let isCreator = useLocation().state?.isCreator;
-  let isSubscribed = useLocation().state?.isSubscribed;
+  // let isSubscribed = useLocation().state?.isSubscribed;
   let isSetup = useLocation().state?.isSetup;
 
   const chooseAvailables = () => {};

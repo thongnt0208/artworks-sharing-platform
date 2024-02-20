@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import Tag from "./Tag";
 import { GenerateRandomColorCode } from "../util/TagColorHandler";
 import { Swiper, SwiperSlide } from "swiper/react";
