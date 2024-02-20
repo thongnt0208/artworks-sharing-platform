@@ -7,6 +7,7 @@ import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
 import { CommentType } from "./content/ArtworkDetailType";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
@@ -59,10 +60,8 @@ export default function ArtworkDetail() {
         let message = err.message || "Something went wrong";
         setError({ ...message });
         console.log(err);
-        console.log(error);
-        
       });
-  }, [error, id, isCommentChanged]);  
+  }, [id, isCommentChanged]);  
 
   return (
     <Dialog {...dialogProperties}>
