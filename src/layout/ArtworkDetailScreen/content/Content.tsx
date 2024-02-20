@@ -1,6 +1,6 @@
 import { Image } from "primereact/image";
 import { ArtworkDetailType } from "./ArtworkDetailType";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Content.scss";
 import { useState } from "react";
 import { Button } from "primereact/button";

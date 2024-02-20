@@ -12,7 +12,6 @@
  * @version 1.0.0
  */
 export const GenerateRandomColorCode = (): string => {
-  const letters = "0123456789ABCDEF";
   let color = "#";
   for (let i = 0; i < 3; i++) {
       const value = Math.floor(Math.random() * 128) + 128; // Generating values between 128 and 255 for a lighter shade
