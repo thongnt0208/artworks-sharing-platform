@@ -57,6 +57,8 @@ export default function ArtworkDetail() {
         let message = err.message || "Something went wrong";
         setError({ ...message });
         console.log(err);
+        console.log(error);
+        
       });
   };
 
