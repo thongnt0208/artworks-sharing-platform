@@ -30,6 +30,7 @@ import CollectionsView from "./layout/ProfileScreen/CollectionsView/CollectionsV
 import SubscribeArea from "./layout/ProfileScreen/SubscribeArea/SubscribeArea";
 import SetupSubscribeArea from "./layout/ProfileScreen/SetupSubscribeArea/SetupSubscribeArea";
 import WalletView from "./layout/ProfileScreen/WalletView/WalletView";
+import ProfileSettings from "./layout/ProfileSettingsScreen/ProfileSettingsScreen";
 import ChatScreen from "./layout/ChatScreen/ChatScreen";
 import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDetailScreen";
 import HireScreen from "./layout/HireScreen/HireScreen";
@@ -89,6 +90,7 @@ function App() {
             <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
             <Route path="/account/:id/wallet" element={<WalletView />} />
           </Route>
+          <Route path="/account/settings" element={<ProfileSettings />} />
           <Route path="/collection/:id" element={<CollectionDetailScreen />} />
           <Route path="/hire" element={<HireScreen />} />
           <Route path="/search" element={<SearchScreen />} />
