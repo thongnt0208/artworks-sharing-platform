@@ -4,14 +4,15 @@ import "./UserInformationCard.scss";
 
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
-type Props = {
+export type UserInformationProps = {
   id: string;
   fullname: string;
   avatar: string;
   job: string;
   address: string;
   isCreator: boolean;
-  username?: string;
+  email: string;
+  username: string;
   role?: string;
   bio?: string;
   profileView?: number;
@@ -24,7 +25,7 @@ type Props = {
   privacyEditHandler?: () => void;
 };
 
-const UserInformationCard: React.FC<Props> = (props: Props) => {
+const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformationProps) => {
   let footer = (
     <>
       {props.isCreator ? (
@@ -72,7 +73,7 @@ const UserInformationCard: React.FC<Props> = (props: Props) => {
         </div>
         <div className="information-container">
           <h1>{props.fullname}</h1>
-          <p>{props.job}</p>
+          <p>{props.email}</p>
           <p>{props.address}</p>
         </div>
       </Card>

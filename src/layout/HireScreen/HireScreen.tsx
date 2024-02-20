@@ -5,6 +5,7 @@ import BannerView from "./BannerView/BannerView";
 import FilterView from "./FilterView/FilterView";
 import RecommendArtworkView from "./RecommendArtworkView/RecommendArtworkView";
 import CreatorsView from "./CreatorsView/CreatorsView";
+import { UserInformationProps } from "../../components/UserInformationCard";
 
 type TagProps = {
   id: string;
@@ -21,21 +22,10 @@ type Artwork = {
   viewCount: number;
 };
 
-type CreatorProps = {
-    Id: string;
-    Fullname: string;
-    Avatar: string;
-    Job: string;
-    Address: string;
-    IsCreator: boolean;
-    followHandler?: () => void;
-    hireHandler?: () => void;
-  };
-
 const HireScreen: React.FC = () => {
   const [tags, setTags] = React.useState<TagProps[]>([]);
   const [artworks, setArtworks] = React.useState<Artwork[]>([]);
-  const [creators, setCreators] = React.useState<CreatorProps[]>([]);
+  const [creators, setCreators] = React.useState<UserInformationProps[]>([]);
 
   React.useEffect(() => {
     const fetchData = async () => {

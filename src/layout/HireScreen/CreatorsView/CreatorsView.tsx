@@ -1,21 +1,10 @@
 import React from "react";
-import UserInformationCard from "../../../components/UserInformationCard";
+import UserInformationCard, { UserInformationProps } from "../../../components/UserInformationCard";
 
 import "./CreatorsView.scss";
 
-type CreatorProps = {
-  Id: string;
-  Fullname: string;
-  Avatar: string;
-  Job: string;
-  Address: string;
-  IsCreator: boolean;
-  followHandler?: () => void;
-  hireHandler?: () => void;
-};
-
 type CreatorsProps = {
-  creators: CreatorProps[];
+  creators: UserInformationProps[];
 };
 
 const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
@@ -28,15 +17,8 @@ const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
         {Array.isArray(creators) &&
           creators.map((creator) => (
             <UserInformationCard
-              key={creator.Id}
-              id={creator.Id}
-              fullname={creator.Fullname}
-              avatar={creator.Avatar}
-              job={creator.Job}
-              address={creator.Address}
-              isCreator={creator.IsCreator}
-              followHandler={creator.followHandler}
-              hireHandler={creator.hireHandler}
+            key={creator.id}
+            {...creator}
             />
           ))}
       </div>
