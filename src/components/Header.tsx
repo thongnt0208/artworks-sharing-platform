@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
@@ -12,6 +12,7 @@ import { getAuthInfo, removeAuthInfo } from "../util/AuthUtil";
 import Notification from "./Notification";
 import ProfilePopup from "./ProfilePopup";
 import "./Header.scss";
+import { AuthContext } from "../auth/context/auth-provider";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
@@ -79,6 +80,9 @@ const Header = ({
   const [searchValue, setSearchValue] = useState<string>("");
   const [currentUrl, setCurrentUrl] = useState<string>(window.location.href || "");
 
+  const authContext = useContext(AuthContext);
+  console.log(authContext);
+
   const handleLogoutBtn = () => {
     let accessToken = getAuthInfo()?.accessToken;
     setIsLoading(true);
@@ -88,6 +92,7 @@ const Header = ({
       setIsLoading(false);
       setShowProfilePopup(false);
       removeAuthInfo();
+      authContext?.setAuthInfo?.({});
       navigate("/");
     }, 1500);
   };
