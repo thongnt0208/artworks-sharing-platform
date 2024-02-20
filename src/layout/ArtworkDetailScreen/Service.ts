@@ -14,18 +14,16 @@ const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:18
  * console.log(artworkDetails);
  *
  * @author ThongNT
- * @version 2.0.0
+ * @version 2.0.1
  */
 export async function fetchArtworkDetail(id: string | undefined, accountId?: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${id}`);
-    console.log("response", response);
-    
 
     if (accountId && Array.isArray(response.data.likes)) {
       console.log("accountId", accountId);
       console.log("response.data.likes", response.data.likes);
-      
+
       // Check if the accountId is present in the likes array
       const isLiked = response.data.likes.includes(accountId);
 
@@ -109,12 +107,12 @@ export async function unlikeArtwork(artworkId: string, accountId: string): Promi
  * const comments = await fetchCommentsForArtwork("artworkId123");
  * console.log(comments);
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.0.1
  */
 export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${artworkId}/comments`);
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error fetching comments:", error);
     throw new Error(`Error fetching comments: ${error}`);
@@ -132,12 +130,9 @@ export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
  * console.log(addedComment);
  *
  * @author ThongNT
- * @version 2.0.0
+ * @version 2.0.1
  */
-export async function addCommentToArtwork(
-  artworkId: string,
-  commentText: string
-): Promise<any> {
+export async function addCommentToArtwork(artworkId: string, commentText: string): Promise<any> {
   let body = {
     commentText: commentText,
   };
@@ -152,20 +147,17 @@ export async function addCommentToArtwork(
 
 /**
  * Removes a comment from an artwork.
- *
- * @param {string} artworkId - The ID of the artwork to remove the comment from.
  * @param {string} commentId - The ID of the comment to be removed.
  * @returns {Promise<any>}
- * @example
- * const removedComment = await removeCommentFromArtwork("artworkId123", "commentId789");
- * console.log(removedComment);
- *
+ * @example const removedComment = await removeCommentFromArtwork("artworkId123", "commentId789");
+console.log(removedComment);
+ * 
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.1.0
  */
-export async function removeCommentFromArtwork(artworkId: string, commentId: string): Promise<any> {
+export async function removeCommentFromArtwork(commentId: string): Promise<any> {
   try {
-    const response = await axios.delete(`${BASE_URL}/artworks/comments/${artworkId}/${commentId}`);
+    const response = await axiosPrivate.delete(`${BASE_URL}/comments/${commentId}`);
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
