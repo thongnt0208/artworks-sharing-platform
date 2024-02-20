@@ -1,5 +1,5 @@
 import { OverlayPanel } from "primereact/overlaypanel";
-import { RefObject, useState } from "react";
+import { RefObject } from "react";
 import AssetsCard from "../../../components/AssetsCard";
 
 type Props = {
@@ -9,7 +9,6 @@ type Props = {
 
 
 export default function AssetsDialog({ ...props }: Props) {
-  const [currentURL, setCurrentURL] = useState(window.location.href);
   const data = props.data;  
 
   const transformedData = data.map((item: any) => {

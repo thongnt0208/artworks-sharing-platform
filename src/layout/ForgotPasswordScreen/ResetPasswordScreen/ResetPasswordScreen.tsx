@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../../RegisterScreen/RegisterScreen.scss';
 import { Divider } from 'primereact/divider';
 import { Image } from 'primereact/image';
@@ -13,7 +13,6 @@ import * as Yup from 'yup';
 import { Password } from 'primereact/password';
 
 const ResetPassword = () => {
-  const navigate = useNavigate();
   const toast: any = useRef(null);
 
   const handleReset = (values: any) => {

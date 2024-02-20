@@ -1,6 +1,5 @@
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { useState } from "react";
 import "./UserInformationCard.scss";
 
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");

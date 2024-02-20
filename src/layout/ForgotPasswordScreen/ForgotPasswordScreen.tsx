@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {}
 
-export default function ForgotPasswordScreen({}: Props) {
+export default function ForgotPasswordScreen({...props}: Props) {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
