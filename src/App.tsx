@@ -37,6 +37,7 @@ import HireScreen from "./layout/HireScreen/HireScreen";
 import { getAuthInfo } from "./util/AuthUtil";
 import NotFoundPage from "./pages/404";
 import SearchScreen from "./layout/SearchScreen/SearchScreen";
+import { AuthProvider } from "./auth/context/auth-provider";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -51,53 +52,55 @@ function App() {
 
   return (
     <PrimeReactProvider value={primereactConfigValue}>
-      <BrowserRouter>
-        {/* {isHeaderVisible && <Header isLogin={isLogin} setIsLogin={setIsLogin} />} */}
-        <Header isLogin={isLogin} setIsLogin={setIsLogin} />
+      <AuthProvider>
+        <BrowserRouter>
+          {/* {isHeaderVisible && <Header isLogin={isLogin} setIsLogin={setIsLogin} />} */}
+          <Header isLogin={isLogin} setIsLogin={setIsLogin} />
 
-        <Routes>
-          <Route path="/" element={<HomeScreen isLogin={true} />} />
-          <Route
-            path="/login"
-            element={
-              <LoginScreen
-                isLogin={isLogin}
-                setIsLogin={setIsLogin}
-                setAuthInfoChanged={setAuthInfo}
-              />
-            }
-          />
-          <Route path="/register" element={<RegisterScreen />} />
-          <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-          <Route path="/reset-password" element={<ResetPasswordScreen />} />
-          <Route path="/change-pasword" element={<ChangePasswordScreen />} />
-          <Route path="/artwork/:id" element={<ArtworkDetail />} />
-          <Route element={<RequireAuth />}>
-            {/* Routes need to protect (must log in to access)*/}
-            <Route path="/editTest" element={<EditProfileTestPage />} />
-            <Route path="/artwork/post" element={<PostArtworkScreen />} />
-            <Route path="/chat" element={<ChatScreen />} />
-          </Route>
-          <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
-            <Route path="/account/:id/" element={<ArtworksView />} />
-            <Route path="/account/:id/artwork" element={<ArtworksView />} />
-            <Route path="/account/:id/assets" element={<AssetsView />} />
-            <Route path="/account/:id/service" element={<ServicesView />} />
-            <Route path="/account/:id/collection" element={<CollectionsView />} />
-            <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
-            <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
-            <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
-            <Route path="/account/:id/wallet" element={<WalletView />} />
-          </Route>
-          <Route path="/collection/:id" element={<CollectionDetailScreen />} />
-          <Route path="/hire" element={<HireScreen />} />
-          <Route path="/search" element={<SearchScreen />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<HomeScreen isLogin={true} />} />
+            <Route
+              path="/login"
+              element={
+                <LoginScreen
+                  isLogin={isLogin}
+                  setIsLogin={setIsLogin}
+                  setAuthInfoChanged={setAuthInfo}
+                />
+              }
+            />
+            <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+            <Route path="/reset-password" element={<ResetPasswordScreen />} />
+            <Route path="/change-pasword" element={<ChangePasswordScreen />} />
+            <Route path="/artwork/:id" element={<ArtworkDetail />} />
+            <Route element={<RequireAuth />}>
+              {/* Routes need to protect (must log in to access)*/}
+              <Route path="/editTest" element={<EditProfileTestPage />} />
+              <Route path="/artwork/post" element={<PostArtworkScreen />} />
+              <Route path="/chat" element={<ChatScreen />} />
+            </Route>
+            <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
+              <Route path="/account/:id/" element={<ArtworksView />} />
+              <Route path="/account/:id/artwork" element={<ArtworksView />} />
+              <Route path="/account/:id/assets" element={<AssetsView />} />
+              <Route path="/account/:id/service" element={<ServicesView />} />
+              <Route path="/account/:id/collection" element={<CollectionsView />} />
+              <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
+              <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
+              <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
+              <Route path="/account/:id/wallet" element={<WalletView />} />
+            </Route>
+            <Route path="/collection/:id" element={<CollectionDetailScreen />} />
+            <Route path="/hire" element={<HireScreen />} />
+            <Route path="/search" element={<SearchScreen />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
 
-        {/* {isFooterVisible && <Footer />} */}
-        <Footer />
-      </BrowserRouter>
+          {/* {isFooterVisible && <Footer />} */}
+          <Footer />
+        </BrowserRouter>
+      </AuthProvider>
     </PrimeReactProvider>
   );
 }
