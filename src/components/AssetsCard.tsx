@@ -12,7 +12,7 @@ type Item = {
   size: number;
   thumbnail?: string;
   editHandler?: () => void;
-  saveHandler?: () => void;
+  saveHandler?: (id: string) => void;
   removeHandler?: () => void;
 };
 
@@ -26,7 +26,6 @@ type AssetsProps = {
 
 const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   const totalItems = props.itemsList ? props.itemsList.length : 0;
-  console.log("AssetsCard props:", props);
 
   const thumbnailColumn = (image: string) => {
     return (
@@ -43,6 +42,12 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   };
 
   const detailsColumn = (item: Item) => {
+    const _saveHandler: any = () => {
+      if (item.saveHandler) {
+        item.saveHandler(item.id);
+      }
+    };
+
     return (
       <div className="detail-column">
         <div className="file-info flex flex-column justify-content-start align-items-start">
@@ -61,7 +66,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
             className="download-button"
             tooltip="Tải về"
             tooltipOptions={{ position: "top" }}
-            onClick={item.saveHandler}
+            onClick={_saveHandler}
           />
           {props.isCreator && (
             <>

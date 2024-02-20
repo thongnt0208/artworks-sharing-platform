@@ -3,7 +3,7 @@ import { getAuthInfo } from "../../../util/AuthUtil";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import { removeCommentFromArtwork } from "../Service";
-import { CommentType } from "../content/ArtworkDetailType";
+import { CommentType } from "../ArtworkDetailType";
 import { Toast } from "primereact/toast";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 
