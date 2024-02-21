@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getAuthInfo } from "../../util/AuthUtil";
 const API_URl = process.env.REACT_APP_REAL_API_BASE_URL;
-const accessToken = getAuthInfo().accessToken;
-const refreshToken = getAuthInfo().refreshToken;
+const accessToken = getAuthInfo()?.accessToken;
+const refreshToken = getAuthInfo()?.refreshToken;
 
 type Artwork = {
   id: string;
