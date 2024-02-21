@@ -18,8 +18,7 @@ export default function AssetsDialog({ assetsPanelOptions, data }: Props) {
         window.open(link, "_blank");
       })
       .catch((error) => {
-        
-        console.error("loi roi"+ error);
+        console.error("loi roi" + error);
       });
   };
 
