@@ -6,8 +6,6 @@ const accessToken = getAuthInfo()?.accessToken || "";
 const refreshToken = getAuthInfo()?.refreshToken || "";
 
 export async function GetArtworksData(accountId: string) {
-  console.log("accountId day ne: ", accountId);
-
   try {
     const response = await axios.get(
       `${API_URL}/artworks/account/${accountId}`,
@@ -31,5 +29,22 @@ export async function GetArtworksData(accountId: string) {
   } catch (error) {
     console.log("Error fetching artworks data:", error);
     return [];
+  }
+}
+
+export async function DeleteArtworkData(artworkId: string) {
+  try {
+    await axios.delete(
+      `${API_URL}/artworks/${artworkId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken || refreshToken}`,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    return false;
   }
 }
