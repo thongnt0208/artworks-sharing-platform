@@ -17,7 +17,6 @@ type ArtworkProps = {
 };
 
 const CollectionGallery: React.FC<ArtworkProps> = ({ artworks }) => {
-  console.log(artworks);
   return (
     <div className="collection-gallery">
       <p className="title">Các tác phẩm</p>
