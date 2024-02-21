@@ -39,6 +39,7 @@ import { getAuthInfo } from "./util/AuthUtil";
 import NotFoundPage from "./pages/404";
 import SearchScreen from "./layout/SearchScreen/SearchScreen";
 import { AuthProvider } from "./auth/context/auth-provider";
+import UnknownErrorPage from "./pages/unknown";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -97,6 +98,7 @@ function App() {
           <Route path="/hire" element={<HireScreen />} />
           <Route path="/search" element={<SearchScreen />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/error" element={<UnknownErrorPage />} />
         </Routes>
 
           {/* {isFooterVisible && <Footer />} */}
