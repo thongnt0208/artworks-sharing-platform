@@ -72,7 +72,7 @@ export default function ButtonList(data?: any) {
   return (
     <div className="flex flex-column gap-4" style={{ position: "fixed" }}>
       <ShareDialog visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
-      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={data?.data?.id} />
+      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={data?.data?.id} entityName="artwork"/>
       <AssetsDialog assetsPanelOptions={assetsPanelOptions} data={data?.data?.assets} />
       {buttonsList.map((button, index) => {
         return (

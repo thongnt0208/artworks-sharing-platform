@@ -10,6 +10,7 @@ type Props = {
   visible: boolean;
   setVisibility: (value: boolean) => void;
   targetId: string;
+  entityName: string;
 };
 
 export type ReportType = {
@@ -17,7 +18,7 @@ export type ReportType = {
   name: string;
 };
 
-export default function ReportDialog({ visible, setVisibility, targetId }: Props) {
+export default function ReportDialog({ visible, setVisibility, targetId, entityName }: Props) {
   const [reportTypes, setReportTypes] = useState<ReportType[]>([]);
   const [selectedType, setSelectedType] = useState(0);
   const [description, setDescription] = useState("");
@@ -28,7 +29,7 @@ export default function ReportDialog({ visible, setVisibility, targetId }: Props
   }, [visible]);
 
   const onSubmit = () => {
-    MakeReport("ARTWORK", targetId, selectedType, description)
+    MakeReport(entityName.toUpperCase(), targetId, selectedType, description)
       .then(() => {
         toast.current.show({
           severity: "success",
