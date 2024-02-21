@@ -9,7 +9,6 @@ const MenuTab: React.FC<{accountId: string, isCreator: boolean, accountAvatar: s
     navigate(tabId);
   };
   let currentTabId = window.location.pathname.split("/")[3];
-  console.log("current account: ", accountId);
   return (
     <div className="menu-tab">
       <div>

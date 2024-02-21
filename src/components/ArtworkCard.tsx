@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
+import { OverlayPanel } from "primereact/overlaypanel";
 
 import "./ArtworkCard.scss";
 import { formatLargeNumber } from "../util/NumberHandler";
@@ -12,15 +13,19 @@ export type ArtworkProps = {
   thumbnail: string;
   viewCount: number;
   likeCount: number;
-
+  isCreator?: boolean | undefined;
   createdBy: string;
   creatorFullName: string;
   likeHandler?: () => void;
   viewHandler?: () => void;
   saveHandler?: () => void;
+  updateHandler?: () => void;
+  deleteHandler?: () => void;
 };
 
 const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
+  const op = useRef<OverlayPanel>(null);
+
   let header = (
     <div className="header-container">
       <div className="thumbnail-container pt-0">
@@ -28,11 +33,12 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
           alt={`Hình thu nhỏ của tác phẩm tên ${props.title}`}
           src={props.thumbnail}
           className="thumbnail border-round"
+          onClick={props.viewHandler}
         />
       </div>
 
       <Button
-        label={props.viewCount? formatLargeNumber(props.viewCount) : "0"}
+        label={props.viewCount ? formatLargeNumber(props.viewCount) : "0"}
         icon="pi pi-eye"
         onClick={props.viewHandler}
         className="view-button"
@@ -48,11 +54,46 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
         onClick={props.likeHandler}
       />
       <Divider className="divider" layout="vertical" />
-      <Button
-        className="save-button"
-        icon="pi pi-bookmark"
-        onClick={props.saveHandler}
-      />
+      {props.isCreator ? (
+        <Button
+          className="save-button"
+          icon="pi pi-cog"
+          onClick={(e) => {
+            console.log("Clicked", e, op);
+            op.current?.toggle(e);
+          }}
+        />
+      ) : (
+        <Button
+          className="save-button"
+          icon="pi pi-bookmark"
+          onClick={props.saveHandler}
+        />
+      )}
+      <OverlayPanel ref={op} showCloseIcon={false}>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <Button
+                  className="option-btn"
+                  label="Chỉnh sửa"
+                  onClick={props.updateHandler}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Button
+                  className="option-btn"
+                  label="Xóa"
+                  onClick={props.deleteHandler}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </OverlayPanel>
     </div>
   );
   return (
@@ -63,7 +104,7 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
       header={header}
       footer={footer}
       className="artwork-card cursor-pointer"
-      onClick={props.viewHandler}
+      // onClick={props.viewHandler}
     ></Card>
   );
 };
