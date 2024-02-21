@@ -1,6 +1,8 @@
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import "./UserInformationCard.scss";
+import { useState } from "react";
+import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
 
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
@@ -25,7 +27,9 @@ export type UserInformationProps = {
   privacyEditHandler?: () => void;
 };
 
-const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformationProps) => {
+const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformationProps) => {  
+  let [isShowReportDialog, setIsShowReportDialog] = useState(false);
+  
   let footer = (
     <>
       {props.isCreator ? (
@@ -57,12 +61,19 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
             label="Thuê"
             onClick={props.hireHandler}
           />
+          <Button
+            rounded
+            className="bot-button"
+            label="Báo cáo"
+            onClick={() => setIsShowReportDialog(true)}
+          />
         </>
       )}
     </>
   );
   return (
     <div className="user-information-card-container">
+      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={props.id} entityName="Account"/>
       <Card footer={footer ? footer : ""} className="user-information-card">
         <div className="avatar-container">
           <img
