@@ -1,6 +1,7 @@
 import { Button } from "primereact/button";
 import "./SquareButton.scss";
 import { Avatar } from "primereact/avatar";
+import { ToggleButton } from "primereact/togglebutton";
 
 type Props = {
   id?: string;
@@ -8,9 +9,19 @@ type Props = {
   thumbnailImg?: string;
   thumbnailAlt?: string;
   onClick: () => void;
+  isFollowed?: boolean;
+  setIsFollowed?: (isFollowed: boolean) => void;
 };
 
-export default function SquareButton({ id, title, thumbnailImg, thumbnailAlt, onClick }: Props) {
+export default function SquareButton({
+  id,
+  title,
+  thumbnailImg,
+  thumbnailAlt,
+  onClick,
+  isFollowed,
+  setIsFollowed,
+}: Props) {
   return (
     <>
       {title !== "Theo dõi" && (
@@ -34,8 +45,15 @@ export default function SquareButton({ id, title, thumbnailImg, thumbnailAlt, on
             shape="circle"
             className="avatar"
           />
-          <div className="square-button-title text-cus-small">{title}</div>
-        </div>
+          <ToggleButton
+            onLabel="Bỏ theo dõi"
+            offLabel="Theo dõi"
+            checked={isFollowed}
+            onChange={() => {
+              setIsFollowed && setIsFollowed(!isFollowed);
+            }}
+            className="follow-btn"
+          /></div>
       )}
     </>
   );
