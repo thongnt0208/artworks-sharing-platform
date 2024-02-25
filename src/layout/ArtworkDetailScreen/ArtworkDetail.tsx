@@ -84,7 +84,7 @@ export default function ArtworkDetail() {
                 />
               </div>
               <div className="side-buttons-container col col-1 pt-7">
-                <ButtonList data={data} />
+                <ButtonList {...data} />
               </div>
             </div>
 

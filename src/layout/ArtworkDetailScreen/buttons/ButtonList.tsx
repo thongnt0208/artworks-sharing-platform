@@ -10,8 +10,9 @@ import SquareButton from "./SquareButton";
 import AssetsDialog from "../dialogs/AssetsDialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import ReportDialog from "../dialogs/ReportDialog";
+import { ArtworkDetailType } from "../ArtworkDetailType";
 
-export default function ButtonList(data?: any) {
+export default function ButtonList(data?: ArtworkDetailType) {
   let [isShowShareDialog, setIsShowShareDialog] = useState(false);
   let [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const assetsPanelOptions = useRef<OverlayPanel>(null);
@@ -21,7 +22,7 @@ export default function ButtonList(data?: any) {
   const buttonsList = [
     {
       title: "Theo dõi",
-      thumbnailImg: data?.data?.account?.avatar || blankPic,
+      thumbnailImg: data?.account?.avatar || blankPic,
       thumbnailAlt: "",
       onclick: () => {
         navigate("");
@@ -72,8 +73,8 @@ export default function ButtonList(data?: any) {
   return (
     <div className="flex flex-column gap-4" style={{ position: "fixed" }}>
       <ShareDialog visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
-      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={data?.data?.id} entityName="artwork"/>
-      <AssetsDialog assetsPanelOptions={assetsPanelOptions} data={data?.data?.assets} />
+      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={data?.id || ''} entityName="artwork"/>
+      <AssetsDialog assetsPanelOptions={assetsPanelOptions} data={data?.assets || []} />
       {buttonsList.map((button, index) => {
         return (
           <SquareButton
