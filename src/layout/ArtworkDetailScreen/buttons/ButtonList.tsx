@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import hireIcon from "../../../assets/icons/aw-deatail-01-hire-icon.svg";
 import assetsIcon from "../../../assets/icons/aw-deatail-02-assets-icon.svg";
 import saveIcon from "../../../assets/icons/aw-deatail-03-save-icon.svg";
@@ -11,12 +11,15 @@ import AssetsDialog from "../dialogs/AssetsDialog";
 import { OverlayPanel } from "primereact/overlaypanel";
 import ReportDialog from "../dialogs/ReportDialog";
 import { ArtworkDetailType } from "../ArtworkDetailType";
+import { addFollow } from "../Service";
+import { getAuthInfo } from "../../../util/AuthUtil";
 
 export default function ButtonList(data?: ArtworkDetailType) {
-  let [isShowShareDialog, setIsShowShareDialog] = useState(false);
-  let [isShowReportDialog, setIsShowReportDialog] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [isShowShareDialog, setIsShowShareDialog] = useState(false);
+  const [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const assetsPanelOptions = useRef<OverlayPanel>(null);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const blankPic = require("../../../assets/defaultImage/blank-100.png");
 
   const buttonsList = [
@@ -25,8 +28,10 @@ export default function ButtonList(data?: ArtworkDetailType) {
       thumbnailImg: data?.account?.avatar || blankPic,
       thumbnailAlt: "",
       onclick: () => {
-        navigate("");
+        isFollowed ? unFollowUser() : followUser();
       },
+      isFollowed: isFollowed,
+      setIsFollowed: setIsFollowed,
     },
     {
       title: "Thuê",
@@ -69,6 +74,35 @@ export default function ButtonList(data?: ArtworkDetailType) {
       },
     },
   ];
+
+  const followUser = () => {
+    console.log("followUser: " + data?.account?.id);
+    const _currentUserId = getAuthInfo()?.id || "";
+    addFollow(_currentUserId, data?.account?.id || "")
+      .then((res) => {
+        console.log("followUser: " + res + "Success");
+      })
+      .catch((err) => {
+        console.log("followUser: " + err);
+      });
+  }
+
+  const unFollowUser = () => {
+    console.log("unFollowUser: " + data?.account?.id);
+    const _currentUserId = getAuthInfo()?.id || "";
+    addFollow(_currentUserId, data?.account?.id || "")
+      .then((res) => {
+        console.log("unFollowUser: " + res + "Success");
+      })
+      .catch((err) => {
+        console.log("unFollowUser: " + err);
+      });
+  }
+
+  useEffect(() => {
+    // Call API to check if the user is followed, then setIsFollowed
+  }, [])
+  
 
   return (
     <div className="flex flex-column gap-4" style={{ position: "fixed" }}>
