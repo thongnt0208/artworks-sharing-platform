@@ -1,9 +1,6 @@
-import React from 'react'
+type Props = {};
 
-type Props = {}
-
-export default function InternalServerErrPage({}: Props) {
-  return (
-    <div>500</div>
-  )
+// eslint-disable-next-line no-empty-pattern
+export default function InternalServerErrPage({ }: Props) {
+  return <div>500</div>;
 }

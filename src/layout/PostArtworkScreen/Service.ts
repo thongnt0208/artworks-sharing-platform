@@ -1,5 +1,5 @@
+import { CategoryProps } from './../HomeScreen/HomeScreen';
 import useAxios, { axiosPrivate } from "../../hooks/useAxios";
-import { Category } from "../ArtworkDetailScreen/content/ArtworkDetailType";
 // ----------------------------------------------------------------------
 
 /**
@@ -42,20 +42,20 @@ export async function postArtwork(formValue: any): Promise<any> {
  * Get Category list
  *
  * @description This function to get category list from database
- * @returns {Promise<Category[]>}
+ * @returns {Promise<CategoryProps[]>}
  * @example
  * getCategoryList().then((categories) => {console.log(categories)})
  * @author ThongNT
  * @version 1.0.1
  */
-export async function getCategoriesList(): Promise<Category[]> {
+export async function getCategoriesList(): Promise<CategoryProps[]> {
   try {
     const response = await useAxios.get("/categories");
 
     const categories = response.data;
 
     // Transform categories into the desired format
-    const transformedCategories = categories?.map((category: Category) => ({
+    const transformedCategories = categories?.map((category: CategoryProps) => ({
       label: category.categoryName,
       value: category.id,
     }));

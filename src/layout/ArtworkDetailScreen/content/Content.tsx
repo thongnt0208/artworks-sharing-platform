@@ -1,5 +1,5 @@
 import { Image } from "primereact/image";
-import { ArtworkDetailType } from "./ArtworkDetailType";
+import { ArtworkDetailType } from "../ArtworkDetailType";
 import { Link } from "react-router-dom";
 import "./Content.scss";
 import { useState } from "react";
