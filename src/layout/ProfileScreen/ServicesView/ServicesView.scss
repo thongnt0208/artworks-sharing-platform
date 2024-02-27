@@ -29,3 +29,28 @@
         }
     }
 }
+
+.dialog {
+    width: fit-content;
+    // .form-container {
+    //     .thumbnail-container {
+    //         display: flex;
+    //         flex-direction: column;
+    //         justify-content: center;
+    //         align-items: center;
+    //         .thumbnail {
+    //             width: 300px;
+    //             height: 300px;
+    //             border-radius: 50%;
+    //             object-fit: cover;
+    //         }
+    //     }
+    // }
+    .service-dialog-header {
+        display: none;
+    }
+    .service-dialog-content {
+        border-radius: 12px;
+        padding: 20px;
+    }
+}
