@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 import SquareButton from "./SquareButton";
 import AssetsDialog from "../dialogs/AssetsDialog";
 import { OverlayPanel } from "primereact/overlaypanel";
+import ReportDialog from "../dialogs/ReportDialog";
 
 export default function ButtonList(data?: any) {
   let [isShowShareDialog, setIsShowShareDialog] = useState(false);
+  let [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const assetsPanelOptions = useRef<OverlayPanel>(null);
   let navigate = useNavigate();
   const blankPic = require("../../../assets/defaultImage/blank-100.png");
@@ -62,7 +64,7 @@ export default function ButtonList(data?: any) {
       thumbnailImg: reportIcon || blankPic,
       thumbnailAlt: "",
       onclick: () => {
-        navigate("");
+        setIsShowReportDialog(true);
       },
     },
   ];
@@ -70,6 +72,7 @@ export default function ButtonList(data?: any) {
   return (
     <div className="flex flex-column gap-4" style={{ position: "fixed" }}>
       <ShareDialog visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
+      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={data?.data?.id} />
       <AssetsDialog assetsPanelOptions={assetsPanelOptions} data={data?.data?.assets} />
       {buttonsList.map((button, index) => {
         return (
