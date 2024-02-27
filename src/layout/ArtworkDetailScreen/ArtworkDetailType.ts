@@ -1,4 +1,7 @@
-export type Creator = {
+import { TagProps } from "../../components/Tag";
+import { CategoryProps } from "../HomeScreen/HomeScreen";
+
+type Creator = {
   id: string;
   username?: string;
   email: string;
@@ -9,44 +12,42 @@ export type Creator = {
   Address?: string;
 };
 
-export interface CommentType {
+export type CommentType = {
   id: string;
-  createdBy: string | {
-    id: string;
-    fullname: string;
-    avatar: string;
-  };
-  content: string;
+  createdBy:
+    | string
+    | {
+        id: string;
+        fullname: string;
+        avatar: string;
+      };
+  content: string
 }
 
-export type Asset = {
+export type AssetType = {
   id: string;
   assetName: string;
-  assetType?: string;
   price: number;
   lastModificatedOn?: string | Date;
+  assetType?: string;
 };
-
-export type Category = {
-  id: string;
-  categoryName: string;
-  parent?:string;
-}
 
 export type ArtworkDetailType = {
   id: string;
   account: Creator; //created account
   title: string;
-  images: {location: string}[];
+  images: { location: string; order: number }[];
+  tagList: TagProps[];
   description: string | null;
   privacy: string | number;
   createdOn: string | Date;
+  lastModificatedBy?: string;
   lastModificatedOn?: string | Date;
   tagDetails: string[] | any[];
-  categoryArtworkDetails: Category[] | any[];
+  categoryArtworkDetails: CategoryProps[] | any[];
   likes?: string[];
   views?: number;
   comments?: CommentType[];
-  assets?: Asset[];
+  assets?: AssetType[];
   isLiked: boolean;
 };

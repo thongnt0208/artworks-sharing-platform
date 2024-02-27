@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./Comment.scss";
 import { Button } from "primereact/button";
-import { CommentType } from "../content/ArtworkDetailType";
+import { CommentType } from "../ArtworkDetailType";
 import { InputTextarea } from "primereact/inputtextarea";
 import { maxCommentCharacter } from "../../../const/bizConstants";
 import { Toast } from "primereact/toast";
