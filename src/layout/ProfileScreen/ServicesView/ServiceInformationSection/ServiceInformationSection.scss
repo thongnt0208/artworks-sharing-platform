@@ -1,0 +1,16 @@
+@import "/src/const/variables.scss";
+
+.form-container {
+  width: 1000px;
+  border: solid 1px $bg-300;
+  border-radius: 12px;
+  padding: 10px;
+  .thumbnail-container {
+    .thumbnail {
+      border-radius: $borderRadius-100 !important;
+      width: 270px;
+      height: 311px;
+      object-fit: cover;
+    }
+  }
+}
