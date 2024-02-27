@@ -7,14 +7,14 @@ import { fetchArtworkDetail, fetchCommentsForArtwork } from "./Service";
 import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
-import { CommentType } from "./ArtworkDetailType";
+import { ArtworkDetailType, CommentType } from "./ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
 // import UserInformationCard from "../../components/UserInformationCard";
 
 export default function ArtworkDetail() {
   const id = useParams().id || "";
   const navigate = useNavigate();
-  const [data, setData] = useState({} as any);
+  const [data, setData] = useState({} as ArtworkDetailType);
   const [comments, setComments] = useState([] as CommentType[]);
   const [isLiked, setIsLiked] = useState(false);
   const [error, setError] = useState({} as any);
@@ -35,8 +35,8 @@ export default function ArtworkDetail() {
   const fetchDetail = () => {
     fetchArtworkDetail(id)
       .then((res) => {
-        setData(res.data);
-        setIsLiked(res.data.isLiked);
+        setData(res);
+        setIsLiked(res.isLiked);
         setError("");
       })
       .catch((err) => {
@@ -84,7 +84,7 @@ export default function ArtworkDetail() {
                 />
               </div>
               <div className="side-buttons-container col col-1 pt-7">
-                <ButtonList data={data} />
+                <ButtonList {...data} />
               </div>
             </div>
 

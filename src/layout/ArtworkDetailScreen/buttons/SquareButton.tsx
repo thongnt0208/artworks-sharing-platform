@@ -1,5 +1,7 @@
 import { Button } from "primereact/button";
 import "./SquareButton.scss";
+import { Avatar } from "primereact/avatar";
+import { ToggleButton } from "primereact/togglebutton";
 
 type Props = {
   id?: string;
@@ -7,21 +9,52 @@ type Props = {
   thumbnailImg?: string;
   thumbnailAlt?: string;
   onClick: () => void;
+  isFollowed?: boolean;
+  setIsFollowed?: (isFollowed: boolean) => void;
 };
 
-export default function SquareButton({ ...props }: Props) {
+export default function SquareButton({
+  id,
+  title,
+  thumbnailImg,
+  thumbnailAlt,
+  onClick,
+  isFollowed,
+  setIsFollowed,
+}: Props) {
   return (
     <>
-      <div id={props.id} className="square-button-container" onClick={props.onClick}>
-        <Button rounded className="square-button-thumbnail-container">
-          <img
-            className="square-button-thumbnail"
-            src={props.thumbnailImg || "https://placehold.in/600"}
-            alt={props.thumbnailAlt || "Hình minh hoạ cho nút bấm"}
+      {title !== "Theo dõi" && (
+        <div id={id} className="square-button-container" onClick={onClick}>
+          <Button rounded className="square-button-thumbnail-container">
+            <img
+              className="square-button-thumbnail"
+              src={thumbnailImg || "https://placehold.in/600"}
+              alt={thumbnailAlt || "Hình minh hoạ cho nút bấm"}
+            />
+          </Button>
+          <div className="square-button-title text-cus-small">{title}</div>
+        </div>
+      )}
+
+      {title === "Theo dõi" && (
+        <div id={id} className="square-button-container avatar-btn-ctn" onClick={onClick}>
+          <Avatar
+            image={thumbnailImg || "https://placehold.in/600"}
+            size="xlarge"
+            shape="circle"
+            className="avatar"
           />
-        </Button>
-        <div className="square-button-title text-cus-small">{props.title}</div>
-      </div>
+          <ToggleButton
+            onLabel="Bỏ theo dõi"
+            offLabel="Theo dõi"
+            checked={isFollowed}
+            onChange={() => {
+              setIsFollowed && setIsFollowed(!isFollowed);
+            }}
+            className="follow-btn"
+          /></div>
+      )}
     </>
   );
 }

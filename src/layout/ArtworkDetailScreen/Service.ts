@@ -1,5 +1,6 @@
 import axios from "axios";
 import { axiosPrivate } from "../../hooks/useAxios";
+import { ArtworkDetailType } from "./ArtworkDetailType";
 // import axios from "../../api/axios";
 const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
 
@@ -8,15 +9,18 @@ const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:18
  *
  * @param {string | undefined} id - The unique identifier of the artwork.
  * @param {string } accountId - (not required) The identifier of the current user.
- * @returns {Promise<any>}
+ * @returns {Promise<ArtworkDetailType>}
  * @example
  * const artworkDetails = await fetchArtworkDetail("thongnt");
  * console.log(artworkDetails);
  *
  * @author ThongNT
- * @version 2.0.1
+ * @version 2.0.2
  */
-export async function fetchArtworkDetail(id: string | undefined, accountId?: string): Promise<any> {
+export async function fetchArtworkDetail(
+  id: string | undefined,
+  accountId?: string
+): Promise<ArtworkDetailType> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${id}`);
 
@@ -29,10 +33,10 @@ export async function fetchArtworkDetail(id: string | undefined, accountId?: str
 
       // Inject the isLiked field into the response.data
       response.data.isLiked = isLiked;
-      return response;
+      return response.data;
     } else {
       response.data.isLiked = false;
-      return response;
+      return response.data;
     }
   } catch (error) {
     console.error("Error fetching artwork:", error);
@@ -192,5 +196,99 @@ export async function editCommentOnArtwork(
   } catch (error) {
     console.error("Error editing comment:", error);
     throw new Error(`Error editing comment: ${error}`);
+  }
+}
+
+/**
+ * This function follows a user.
+ *
+ * @param currentUserId - The ID of the current user
+ * @param followUserId - The ID of the user to be followed
+ * @returns Promise<any>
+ * @example
+ * const followedUser = await addFollow("currentUserId", "followUserId");
+ * console.log(followedUser);
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function addFollow(currentUserId: string, followUserId: string): Promise<any> {
+  try {
+    let body = {
+      accountId: currentUserId,
+      followerId: followUserId,
+    };
+    const response = await axiosPrivate.post(`${BASE_URL}/follows`, body);
+    return response;
+  } catch (error) {
+    console.error("Error following user:", error);
+    throw error;
+  }
+}
+
+/**
+ * This function unfollows a user.
+ *
+ * @param currentUserId - The ID of the current user
+ * @param followUserId - The ID of the user to be unfollowed
+ * @returns Promise<any>
+ * @example
+ * const unfollowedUser = await removeFollow("currentUserId", "followUserId");
+ * console.log(unfollowedUser);
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function removeFollow(currentUserId: string, followUserId: string): Promise<any> {
+  try {
+    let body = {
+      accountId: currentUserId,
+      followerId: followUserId,
+    };
+    const response = await axiosPrivate.delete(`${BASE_URL}/follows`, { data: body });
+    return response;
+  } catch (error) {
+    console.error("Error unfollowing user:", error);
+    throw error;
+  }
+}
+
+/**
+ * This function fetches the followers of a user.
+ *
+ * @param userId - The ID of the user
+ * @returns Promise<any>
+ * @example
+ * const followers = await fetchFollowers("userId");
+ * console.log(followers);
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function fetchFollowers(userId: string): Promise<any> {
+  try {
+    const response = await axios.get(`${BASE_URL}/follows/${userId}/followers`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching followers:", error);
+    throw error;
+  }
+}
+
+/**
+ * This function fetches the following users of a user.
+ *
+ * @param userId - The ID of the user
+ * @returns Promise<any>
+ * @example
+ * const following = await fetchFollowing("userId");
+ * console.log(following);
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function fetchFollowing(userId: string): Promise<any> {
+  try {
+    const response = await axios.get(`${BASE_URL}/follows/${userId}/following`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching following:", error);
+    throw error;
   }
 }
