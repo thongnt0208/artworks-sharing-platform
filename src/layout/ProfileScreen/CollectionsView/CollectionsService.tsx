@@ -20,7 +20,6 @@ export async function GetCollectionsData(account_id: string) {
       console.log("Error fetching artworks data");
       return [];
     }
-    console.log("Success fetching collection data", response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching artworks data:", error);
