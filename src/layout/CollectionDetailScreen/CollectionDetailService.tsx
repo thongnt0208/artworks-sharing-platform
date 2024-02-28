@@ -24,6 +24,15 @@ type CollectionProps = {
   artworks: Artwork[];
 };
 
+/**
+ * Get Collection Detail Data
+ *
+ * @description This function to get Collection Detail from database
+ * @returns {collection<CollectionProps>, artworks<Artwork>[]} - Collection Detail and Artwork list
+ * @example
+ * @author AnhDH
+ * @version 1.0.0
+ */
 export async function GetCollectionData(collectionId: string) {
   try {
     const response = await axios.get(`${API_URl}/collections/${collectionId}`, {
@@ -55,6 +64,59 @@ export async function GetCollectionData(collectionId: string) {
   }
 }
 
+/**
+ * Create a new Collection 
+ *
+ * @description This function to create a new Collection 
+ * @returns Update status (True: Successfully | False: Failed)
+ * @example
+ * @author AnhDH
+ * @version 1.0.0
+ */
+export async function CreateCollectionData({
+  collectionName,
+  privacy,
+  artworkId,
+}: {
+  collectionName: string;
+  privacy: boolean;
+  artworkId: string;
+}) {
+  let privacyType = privacy ? 1 : 0;
+  try {
+    const response = await axios.post(
+      `${API_URl}/collections`,
+      JSON.stringify({
+        collectionName,
+        privacyType,
+        artworkId,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken || refreshToken}`,
+        },
+      }
+    );
+    if (response.status === 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Update Collection Detail Data
+ *
+ * @description This function to update Collection Detail
+ * @returns Update status (True: Successfully | False: Failed)
+ * @example
+ * @author AnhDH
+ * @version 1.0.0
+ */
 export async function UpdateCollectionData({
   collectionId,
   collectionName,
@@ -82,17 +144,60 @@ export async function UpdateCollectionData({
     if (response.status === 200) {
       return true;
     } else {
+      console.log(response);
       return false;
     }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+/**
+ * Delete a Collection
+ *
+ * @description This function to delete a Collection Detail from database
+ * @returns Delete status (True: Successfully | False: Failed)
+ * @example
+ * @author AnhDh
+ * @version 1.0.0
+ */
+export async function DeleteCollectionData(collectionId: string) {
+  try {
+    await axios.delete(`${API_URl}/collections/${collectionId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken || refreshToken}`,
+      },
+    });
+    return true;
   } catch (error) {
     return false;
   }
 }
 
-export async function DeleteCollectionData(collectionId: string) {
+/**
+ * Add an Artwork to Collection
+ *
+ * @description This function to Add an Artwork to Collection
+ * @returns Adding status (True: Successfully | False: Failed)
+ * @example
+ * @author AnhDh
+ * @version 1.0.0
+ */
+export async function AddArtworkToCollection({
+  collectionId,
+  artworkId,
+}: {
+  collectionId: string;
+  artworkId: string;
+}) {
   try {
-    await axios.delete(
-      `${API_URl}/collections/${collectionId}`,
+    await axios.post(
+      `${API_URl}/collections/${collectionId}/artwork`,
+      JSON.stringify({
+        artworkId
+      }),
       {
         headers: {
           "Content-Type": "application/json",
