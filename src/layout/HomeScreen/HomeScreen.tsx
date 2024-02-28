@@ -17,6 +17,16 @@ export type CategoryProps = {
   categoryName: string;
 };
 
+type HomeScreenProps = {
+  currentPage: number;
+  hasNext: boolean; 
+  hasPrevious: boolean;
+  items: ArtworkProps[];
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+}
+
 const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [tags, setTags] = useState<TagProps[]>([]);
@@ -42,12 +52,13 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        let newArtworksData: any;
+        let newArtworksData: HomeScreenProps;
         if (activeTab === 0) {
           newArtworksData = await GetNewArtworksData(pageNumber, pageSize);
         } else if (activeTab === 1) {
           newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
         }
+
         const tagData = await GetTagsData();
         const categoriesData = await GetCategoriesData();
         setTags(tagData);
@@ -105,6 +116,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           className="w-max mb-3 text-black-alpha-90 text-lg"
         />
       ) : null}
+  
       <Gallery artworks={artworks} />
       {loading && <div className="lds-ring"><div></div><div></div><div></div><div></div></div>}
 

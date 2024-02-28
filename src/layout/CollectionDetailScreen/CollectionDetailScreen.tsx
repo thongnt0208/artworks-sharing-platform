@@ -17,7 +17,7 @@ type Artwork = {
   viewCount: number;
 };
 
-type CollectionProps = {
+export type CollectionProps = {
   id: string;
   creatorFullName: string;
   collectionName: string;

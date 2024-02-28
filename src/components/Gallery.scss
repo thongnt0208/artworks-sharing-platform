@@ -1,10 +1,33 @@
+@import "/src/const/variables.scss";
+
 .gallery {
-    width: 100%;
-    padding: 5%;
-    padding-top: 1rem;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+  width: 100%;
+  padding: 5%;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.save-popup-dialog {
+  .save-popup-dialog {
+    border-radius: 12px;
+    padding: 20px;
+    .btn {
+      .save-btn {
+        padding: 15px 24px;
+        border-radius: 50px;
+        background-color: $strong-100;
+        color: $bg-100;
+      }
+      .cancel-btn {
+        padding: 15px 24px;
+        border-radius: 50px;
+        background-color: $primary-100;
+        color: $strong-200;
+      }
+    }
+  }
 }
