@@ -15,8 +15,8 @@ type CollectionProps = {
   privacy: string;
   numberOfArtworks: number;
   accountAvatar?: string;
-  onUpdate : (collectionName: string, privacy: boolean) => void;
-  onDelete : () => void;
+  onUpdate: (collectionName: string, privacy: boolean) => void;
+  onDelete: () => void;
 };
 
 const CollectionInformationSection: React.FC<CollectionProps> = (
@@ -60,14 +60,28 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
   const footerElement = (
     <div className="footer-container">
       <div className="edit-buttons">
-        <Button className="save-btn" rounded onClick={handleSaveClick} label="Lưu" />
-        <Button className="cancel-btn" rounded onClick={handleCancelClick} label="Hủy" />
+        <Button
+          className="save-btn"
+          rounded
+          onClick={handleSaveClick}
+          label="Lưu"
+        />
+        <Button
+          className="cancel-btn"
+          rounded
+          onClick={handleCancelClick}
+          label="Hủy"
+        />
       </div>
       <div className="delete-button">
-        <Button className="delete-btn" rounded onClick={handleDeleteClick} label="Xóa bộ sưu tập" />
+        <Button
+          className="delete-btn"
+          rounded
+          onClick={handleDeleteClick}
+          label="Xóa bộ sưu tập"
+        />
       </div>
     </div>
-   
   );
 
   return (
@@ -78,16 +92,22 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
           className="account-avatar"
           alt="Logo"
         />
-        <p className="collection-title">{props.collectionName}</p>
-        <p className="collection-creator">
+        <p className="collection-title text-6xl">{props.collectionName}</p>
+
+        <p className="collection-creator text-xl">
           Một bộ sưu tập bởi <strong>{props.creatorFullName}</strong>{" "}
         </p>
-        <p className="collection-privacy">
-          Chia sẻ <strong>{props.privacy}</strong>{" "}
-        </p>
-        <p className="collection-artwork-num">
-          {props.numberOfArtworks} tac pham
-        </p>
+
+        <div className="flex flex-row justify-content-center">
+          <p className="collection-privacy">
+            Chia sẻ <strong>{props.privacy}</strong>{" "}
+          </p>
+          <p className="ml-2 mr-2 mt-0 mb-0">•</p>
+          <p className="collection-artwork-num">
+            {props.numberOfArtworks} tac pham
+          </p>
+        </div>
+
         <Button
           className="edit-btn"
           onClick={handleEditClick}
@@ -104,7 +124,9 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
           footer={footerElement}
         >
           <div className="edit-form-container flex flex-column align-items-start justify-content-center">
-            <label htmlFor="name" className="name-input-lable">Tên bộ sưu tập:</label>
+            <label htmlFor="name" className="name-input-lable">
+              Tên bộ sưu tập:
+            </label>
             <InputText
               id="collectionName"
               className="name-input w-full"
@@ -112,7 +134,9 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
               onChange={(e) => setEditedCollectionName(e.target.value)}
             />
 
-            <label htmlFor="privacy" className="privacy-input-lable">Chia sẻ công khai:</label>
+            <label htmlFor="privacy" className="privacy-input-lable">
+              Chia sẻ công khai:
+            </label>
             <InputSwitch
               id="privacy"
               checked={editedPrivacy}
