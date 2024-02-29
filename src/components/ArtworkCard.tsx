@@ -4,8 +4,9 @@ import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 import { OverlayPanel } from "primereact/overlaypanel";
 
-import "./ArtworkCard.scss";
 import { formatLargeNumber } from "../util/NumberHandler";
+import "./ArtworkCard.scss";
+const unsavedIcon = require("../assets/icons/collection-detail-01-unsaved-icon.png");
 
 export type ArtworkProps = {
   id: string;
@@ -16,6 +17,7 @@ export type ArtworkProps = {
   isCreator?: boolean | undefined;
   createdBy: string;
   creatorFullName: string;
+  onRemoveFromCollection?: boolean;
   likeHandler?: () => void;
   viewHandler?: () => void;
   saveHandler?: () => void;
@@ -63,6 +65,10 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
             op.current?.toggle(e);
           }}
         />
+      ) : props.onRemoveFromCollection ? (
+        <Button className="save-button" onClick={props.saveHandler}>
+          <img src={unsavedIcon} alt="icon" />
+        </Button>
       ) : (
         <Button
           className="save-button"
@@ -70,6 +76,7 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
           onClick={props.saveHandler}
         />
       )}
+
       <OverlayPanel ref={op} showCloseIcon={false}>
         <table>
           <tbody>
@@ -104,7 +111,6 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
       header={header}
       footer={footer}
       className="artwork-card cursor-pointer"
-      // onClick={props.viewHandler}
     ></Card>
   );
 };
