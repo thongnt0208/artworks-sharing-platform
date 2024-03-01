@@ -4,7 +4,9 @@ import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
 import { FileUpload } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
+import { useFormik } from "formik";
 
+import { validationSchema } from "./FormikData";
 import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
 import { ServiceProps } from "../../../../components/ServiceCard";
 import "./ServiceInformationSection.scss";
@@ -14,24 +16,34 @@ interface ServiceInformationProps {
   setClose: (close: boolean) => void;
   handleDelete: (serviceId: string) => void;
 }
-const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, setClose, handleDelete}) => {
+const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
+  props,
+  setClose,
+  handleDelete,
+}) => {
   const [id, setId] = useState(props?.id || "");
-  const [serviceName, setServiceName] = useState(props?.serviceName || "");
-  const [description, setDescription] = useState(props?.description || "");
-  const [deliveryTime, setDeliveryTime] = useState(props?.deliveryTime || "");
-  const [numberOfConcept, setNumberOfConcept] = useState(props?.numberOfConcept);
-  const [numberOfRevision, setNumberOfRevision] = useState(props?.numberOfRevision);
-  const [startingPrice, setStartingPrice] = useState(props?.startingPrice);
-  const [thumbnail, setThumbnail] = useState<File | string>(props?.coverLocation);
+  // const [serviceName, setServiceName] = useState(props?.serviceName || "");
+  // const [description, setDescription] = useState(props?.description || "");
+  // const [deliveryTime, setDeliveryTime] = useState(props?.deliveryTime || "");
+  // const [numberOfConcept, setNumberOfConcept] = useState(
+  //   props?.numberOfConcept
+  // );
+  // const [numberOfRevision, setNumberOfRevision] = useState(
+  //   props?.numberOfRevision
+  // );
+  // const [startingPrice, setStartingPrice] = useState(props?.startingPrice);
+  const [thumbnail, setThumbnail] = useState<File | string>(
+    props?.coverLocation
+  );
 
   useEffect(() => {
     setId(props?.id || "");
-    setServiceName(props?.serviceName || "");
-    setDescription(props?.description || "");
-    setDeliveryTime(props?.deliveryTime || "");
-    setNumberOfConcept(props?.numberOfConcept);
-    setNumberOfRevision(props?.numberOfRevision);
-    setStartingPrice(props?.startingPrice);
+    // setServiceName(props?.serviceName || "");
+    // setDescription(props?.description || "");
+    // setDeliveryTime(props?.deliveryTime || "");
+    // setNumberOfConcept(props?.numberOfConcept);
+    // setNumberOfRevision(props?.numberOfRevision);
+    // setStartingPrice(props?.startingPrice);
     setThumbnail(props?.coverLocation);
   }, [props]);
 
@@ -39,13 +51,29 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
     setThumbnail(event.files[0]);
   };
 
-  const handleSubmit = () => {
-    if (thumbnail) {
-      console.log("new cover image:", thumbnail);
+  const handleSubmit = (values: any) => {
+    if (id) {
+      console.log("Update service: ", values);
+    } else {
+      console.log("Create new service", values);
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      serviceName: props?.serviceName || "",
+      description: props?.description || "",
+      deliveryTime: props?.deliveryTime || "",
+      numberOfConcept: props?.numberOfConcept || 0,
+      numberOfRevision: props?.numberOfRevision || 0,
+      startingPrice: props?.startingPrice || 0,
+    },
+    validationSchema,
+    onSubmit: (values) => handleSubmit(values),
+  });
+
   return (
-    <>
+    <form onSubmit={formik.handleSubmit}>
       <div className="header-container m-4">
         {id ? (
           <>
@@ -84,7 +112,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
         </div>
 
         <div className="profile-info-container col-8 h-fit mt-3 flex flex-column justify-content-center">
-          <form
+          <div
             className="profile-info-form w-full h-fit flex flex-column justify-content-start align-items-start"
             onSubmit={handleSubmit}
           >
@@ -96,11 +124,22 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
                 <InputText
                   type="text"
                   id="service-name"
-                  className="text-base w-full"
-                  name="service-name"
-                  placeholder={serviceName || ""}
-                  value={serviceName}
+                  className={`text-base w-full ${
+                    formik.errors.serviceName &&
+                    formik.touched.serviceName &&
+                    "error"
+                  }`}
+                  name="serviceName"
+                  placeholder={formik.values.serviceName || ""}
+                  value={formik.values.serviceName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.serviceName && formik.touched.serviceName && (
+                  <div className="error-message">
+                    {formik.errors.serviceName}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -111,11 +150,22 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
                 </label>
                 <InputTextarea
                   id="description"
-                  className="text-base w-full"
+                  className={`text-base w-full ${
+                    formik.errors.description &&
+                    formik.touched.description &&
+                    "error"
+                  }`}
                   name="description"
-                  placeholder={description || ""}
-                  value={description}
+                  placeholder={formik.values.description || ""}
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.description && formik.touched.description && (
+                  <div className="error-message">
+                    {formik.errors.description}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -125,12 +175,23 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
                   Thời gian hoàn thành
                 </label>
                 <InputText
-                  id="service-name"
-                  className="text-base w-full"
-                  name="service-name"
-                  placeholder={deliveryTime || ""}
-                  value={deliveryTime}
+                  id="deliveryTime"
+                  className={`text-base w-full ${
+                    formik.errors.deliveryTime &&
+                    formik.touched.deliveryTime &&
+                    "error"
+                  }`}
+                  name="deliveryTime"
+                  placeholder={formik.values.deliveryTime || ""}
+                  value={formik.values.deliveryTime}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.deliveryTime && formik.touched.deliveryTime && (
+                  <div className="error-message">
+                    {formik.errors.deliveryTime}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -141,10 +202,24 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
                 </label>
                 <InputNumber
                   id="concept"
-                  className="text-base w-full"
-                  name="concept"
-                  value={numberOfConcept}
+                  className={`text-base w-full ${
+                    formik.errors.numberOfConcept &&
+                    formik.touched.numberOfConcept &&
+                    "error"
+                  }`}
+                  name="numberOfConcept"
+                  value={formik.values.numberOfConcept}
+                  onValueChange={(e) =>
+                    formik.setFieldValue("numberOfConcept", e.value)
+                  }
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.numberOfConcept &&
+                  formik.touched.numberOfConcept && (
+                    <div className="error-message">
+                      {formik.errors.numberOfConcept}
+                    </div>
+                  )}
               </div>
             </div>
 
@@ -155,10 +230,24 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
                 </label>
                 <InputNumber
                   id="revision"
-                  className="text-base w-full"
-                  name="revision"
-                  value={numberOfRevision}
+                  className={`text-base w-full ${
+                    formik.errors.numberOfRevision &&
+                    formik.touched.numberOfRevision &&
+                    "error"
+                  }`}
+                  name="numberOfRevision"
+                  value={formik.values.numberOfRevision}
+                  onValueChange={(e) =>
+                    formik.setFieldValue("numberOfRevision", e.value)
+                  }
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.numberOfRevision &&
+                  formik.touched.numberOfRevision && (
+                    <div className="error-message">
+                      {formik.errors.numberOfRevision}
+                    </div>
+                  )}
               </div>
             </div>
 
@@ -169,31 +258,55 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({props, se
                 </label>
                 <InputNumber
                   id="price"
-                  className="text-base w-full"
-                  name="price"
-                  value={startingPrice}
+                  className={`text-base w-full ${
+                    formik.errors.startingPrice &&
+                    formik.touched.startingPrice &&
+                    "error"
+                  }`}
+                  name="startingPrice"
+                  value={formik.values.startingPrice}
+                  onValueChange={(e) =>
+                    formik.setFieldValue("startingPrice", e.value)
+                  }
+                  onBlur={formik.handleBlur}
                 />
+                {formik.errors.startingPrice &&
+                  formik.touched.startingPrice && (
+                    <div className="error-message">
+                      {formik.errors.startingPrice}
+                    </div>
+                  )}
               </div>
             </div>
-          </form>
+          </div>
 
           <div className="btn-container w-full h-fit flex flex-row justify-content-between align-items-start">
             <div className="submission-container w-full h-fit flex flex-row justify-content-start align-items-center">
               <div className="submit-btn w-fit h-fit mr-2 flex flex-row justify-content-center text-300">
-                <Button label="Cập nhật" className="p-button" type="submit" />
+                <Button label={id ? "Cập nhật" : "Tạo"} className="p-button" type="submit" />
               </div>
               <div className="cancel-btn w-fit h-fit flex flex-row justify-content-center">
-                <Button label="Hủy" className="p-button" onClick={() => setClose(false)} />
+                <Button
+                  label="Hủy"
+                  className="p-button"
+                  onClick={() => setClose(false)}
+                />
               </div>
             </div>
 
             <div className="delete-account-btn w-full h-fit flex flex-row justify-content-center">
-              <Button label="Xóa dịch vụ" className="p-button" onClick={() => {handleDelete(id)}}/>
+              <Button
+                label="Xóa dịch vụ"
+                className="p-button"
+                onClick={() => {
+                  handleDelete(id);
+                }}
+              />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </form>
   );
 };
 
