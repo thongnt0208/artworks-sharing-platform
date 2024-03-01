@@ -23,11 +23,11 @@ type ArtworksProps = {
 const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
   const navigate = useNavigate();
   const [isShowDialog, setIsShowDialog] = React.useState<boolean>(false);
-  const [selectedArtwork, setSelectedArtwork] = React.useState<string>("");
+  const [selectedArtworks, setSelectedArtworks] = React.useState<string>("");
 
   const openDialog = (artworkId: string) => {
     setIsShowDialog(true);
-    setSelectedArtwork(artworkId);
+    setSelectedArtworks(artworkId);
   };
 
   const closeDialog = () => {
@@ -68,7 +68,7 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
         onHide={closeDialog}
       >
         <>
-          <SavePopup artworkId={selectedArtwork} closeDialog={closeDialog} />
+          <SavePopup artworkId={selectedArtworks} closeDialog={closeDialog} />
         </>
       </Dialog>
     </div>
