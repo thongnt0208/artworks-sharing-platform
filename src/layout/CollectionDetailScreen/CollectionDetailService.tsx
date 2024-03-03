@@ -193,6 +193,8 @@ export async function AddArtworkToCollection({
   artworkId: string;
 }) {
   try {
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
     await axios.post(
       `${API_URl}/collections/${collectionId}/artwork`,
       JSON.stringify({
@@ -228,18 +230,17 @@ export async function RemoveArtworkFromCollection({
   artworkId: string;
 }) {
   try {
-    await axios.delete(
-      `${API_URl}/collections/${collectionId}/artwork`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken || refreshToken}`,
-        },
-        data: JSON.stringify({
-          artworkId,
-        }),
-      }
-    );
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
+    await axios.delete(`${API_URl}/collections/${collectionId}/artwork`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken || refreshToken}`,
+      },
+      data: JSON.stringify({
+        artworkId,
+      }),
+    });
     return true;
   } catch (error) {
     return false;
