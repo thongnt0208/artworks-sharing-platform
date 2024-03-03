@@ -22,17 +22,17 @@ type ArtworksProps = {
 
 const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
   const navigate = useNavigate();
-  const [visibleDialogs, setVisibleDialogs] = React.useState<
-    Record<string, boolean>
-  >({});
+  const [isShowDialog, setIsShowDialog] = React.useState<boolean>(false);
+  const [selectedArtwork, setSelectedArtwork] = React.useState<string>("");
 
   const openDialog = (artworkId: string) => {
-    setVisibleDialogs((prev) => ({ ...prev, [artworkId]: true }));
+    setIsShowDialog(true);
+    setSelectedArtwork(artworkId);
   };
 
-  const closeDialog = (artworkId: string) => {
-    setInterval(() => {
-      setVisibleDialogs((prev) => ({ ...prev, [artworkId]: false }));
+  const closeDialog = () => {
+    setTimeout(() => {
+      setIsShowDialog(false);
     }, 2000);
   };
 
@@ -55,26 +55,22 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
             viewHandler={() => navigate(`/artwork/${artwork.id}`)}
             saveHandler={() => openDialog(artwork.id)}
           />
-
-          <Dialog
-            className="save-popup-dialog"
-            visible={visibleDialogs[artwork.id] || false}
-            showHeader={false}
-            dismissableMask={true}
-            contentClassName="save-popup-dialog"
-            modal
-            closable={false}
-            onHide={() => closeDialog(artwork.id)}
-          >
-            <>
-              <SavePopup
-                artworkId={artwork.id}
-                closeDialog={() => closeDialog(artwork.id)}
-              />
-            </>
-          </Dialog>
         </div>
       ))}
+      <Dialog
+        className="save-popup-dialog"
+        visible={isShowDialog}
+        showHeader={false}
+        dismissableMask={true}
+        contentClassName="save-popup-dialog"
+        modal
+        closable={false}
+        onHide={closeDialog}
+      >
+        <>
+          <SavePopup artworkId={selectedArtwork} closeDialog={closeDialog} />
+        </>
+      </Dialog>
     </div>
   );
 };
