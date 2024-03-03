@@ -9,13 +9,19 @@ import { Button } from "primereact/button";
 import { logout } from "../auth/AuthService";
 import { getAuthInfo, removeAuthInfo } from "../util/AuthUtil";
 
-import Notification from "./Notification";
+import Notification, { notificationItemType } from "./Notification";
 import ProfilePopup from "./ProfilePopup";
 import "./Header.scss";
 import { AuthContext } from "../auth/context/auth-provider";
 
 const logo = require("../assets/logo/logo-small.png");
 const avatar = require("../assets/defaultImage/default-avatar.png");
+
+type Props = {
+  isLogin: boolean;
+  setIsLogin: (value: boolean) => void;
+  messagesData: notificationItemType[];
+};
 
 let sampleNotificationData = [
   {
@@ -41,37 +47,11 @@ let sampleNotificationData = [
   },
 ];
 
-let sampleMessageData = [
-  {
-    notificationId: "1",
-    content: "đã gửi cho bạn một tin nhắn.",
-    notifyType: "",
-    isSeen: true,
-    creationDate: "26/12/2023",
-  },
-  {
-    notificationId: "2",
-    content: "đã gửi cho bạn một yêu cầu.",
-    notifyType: "Tương tác",
-    isSeen: false,
-    creationDate: "27/12/2023",
-  },
-  {
-    notificationId: "3",
-    content: "đã gửi cho bạn một tin nhắn.",
-    notifyType: "Theo dõi",
-    isSeen: false,
-    creationDate: "28/12/2023",
-  },
-];
-
 const Header = ({
   isLogin,
   setIsLogin,
-}: {
-  isLogin: boolean;
-  setIsLogin: (value: boolean) => void;
-}) => {
+  messagesData,
+}: Props) => {
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
@@ -224,7 +204,7 @@ const Header = ({
         {...dialogModelFields}
       >
         <Notification
-          notifications={sampleMessageData}
+          notifications={messagesData}
           account={{
             accountId: "1",
             name: "Trung Thông",

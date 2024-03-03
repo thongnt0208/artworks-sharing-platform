@@ -1,11 +1,5 @@
-import React from "react";
-// ------------------------------------------
+type Props = { selectingId: string };
 
-export default function ChatRightNav() {
-  return (
-    <>
-      {/* <UserInformationCard /> */}
-      <h1>Right pannel</h1>
-    </>
-  );
+export default function ChatRightNav({ selectingId }: Props) {
+  return <div>ChatRightNav {selectingId}</div>;
 }
