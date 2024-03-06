@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import "./ArtworkDetail.scss";
-import { fetchArtworkDetail, fetchCommentsForArtwork } from "./Service";
+import {
+  addFollow,
+  fetchArtworkDetail,
+  fetchCommentsForArtwork,
+  fetchIsFollow,
+  removeFollow,
+} from "./Service";
 import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
@@ -17,6 +23,7 @@ export default function ArtworkDetail() {
   const [data, setData] = useState({} as ArtworkDetailType);
   const [comments, setComments] = useState([] as CommentType[]);
   const [isLiked, setIsLiked] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(false);
   const [error, setError] = useState({} as any);
   const authenticationInfo = getAuthInfo();
 
@@ -31,12 +38,26 @@ export default function ArtworkDetail() {
     draggable: false,
   };
 
+  const fetchIsFollowed = (id: string) => {
+    fetchIsFollow(id)
+      .then((res) => {
+        console.log("fetchIsFollowed: " + res);
+
+        setIsFollowed(res);
+      })
+      .catch((err) => {
+        console.log("fetchIsFollowed: " + err);
+        setIsFollowed(false);
+      });
+  };
+
   // Get Artwork Detail Data
   const fetchDetail = () => {
     fetchArtworkDetail(id)
       .then((res) => {
         setData(res);
         setIsLiked(res.isLiked);
+        fetchIsFollowed(res.account.id);
         setError("");
       })
       .catch((err) => {
@@ -57,6 +78,30 @@ export default function ArtworkDetail() {
         let message = err.message || "Something went wrong";
         setError({ ...message });
         console.log(err);
+      });
+  };
+
+  const followUser = () => {
+    console.log("followUser: " + data?.account?.id);
+    addFollow(data?.account?.id || "")
+      .then((res) => {
+        console.log("followUser: " + res + "Success");
+        setIsFollowed(true);
+      })
+      .catch((err) => {
+        console.log("followUser: " + err);
+      });
+  };
+
+  const unFollowUser = () => {
+    console.log("unFollowUser: " + data?.account?.id);
+    removeFollow(data?.account?.id || "")
+      .then((res) => {
+        console.log("unFollowUser: " + res + "Success");
+        setIsFollowed(false);
+      })
+      .catch((err) => {
+        console.log("unFollowUser: " + err);
       });
   };
 
@@ -84,7 +129,12 @@ export default function ArtworkDetail() {
                 />
               </div>
               <div className="side-buttons-container col col-1 pt-7">
-                <ButtonList {...data} />
+                <ButtonList
+                  data={data}
+                  isFollowed={isFollowed}
+                  makeFollow={followUser}
+                  makeUnFollow={unFollowUser}
+                />
               </div>
             </div>
 
