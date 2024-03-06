@@ -33,7 +33,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
   const [collections, setCollections] = useState<CollectionProps[]>([]);
   // const [newCollectionName, setNewCollectionName] = useState<string>("");
   const [privacy, setPrivacy] = useState<boolean>(true);
-  let accountId = getAuthInfo().id;
+  let accountId = getAuthInfo()?.id;
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +41,6 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log("Submit: ", values);
       handleCreateCollection(values.newCollectionName, artworkId);
       closeDialog();
     },
@@ -65,6 +64,15 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
     });
   };
 
+  const showSaved = () => {
+    toast.current?.show({
+      severity: "warn",
+      summary: "Đã lưu",
+      detail: "Bạn đã lưu tác phẩm này vào bộ sưu tập của mình",
+      life: 2000,
+    });
+  };
+
   const handleAddArtworkToCollection = async (
     collectionId: string,
     artworkId: string
@@ -77,7 +85,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
       if (response) {
         showSuccess();
       } else {
-        showError();
+        showSaved();
       }
     } catch (error) {
       console.error(error);

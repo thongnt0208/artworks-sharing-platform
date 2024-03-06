@@ -3,6 +3,10 @@
 .collection-gallery {
   width: 100%;
   padding: 0 4.375rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .title {
     font-size: $h1-bold;
     font-weight: bold;
@@ -16,4 +20,10 @@
     justify-content: flex-start;
     align-items: center;
   }
+}
+.confirm-dialog-header {
+  border: 0;
+}
+.p-dialog-footer {
+  border: 0;
 }

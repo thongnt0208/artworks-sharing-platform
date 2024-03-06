@@ -95,8 +95,15 @@ const CollectionDetailScreen: React.FC = () => {
     }
   };
 
+  const updateArtworks = (artworkId: string) => {
+    const updatedArtworks = artworks.filter(
+      (artwork) => artwork.id !== artworkId
+    );
+    setArtworks(updatedArtworks);
+  }
+
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchArtworks = async () => {
       const { collection: fetchedCollection, artworks: fetchedArtworks } =
         await GetCollectionData(collectionId || "");
       if (fetchedCollection) {
@@ -104,8 +111,8 @@ const CollectionDetailScreen: React.FC = () => {
         setArtworks(fetchedArtworks);
       }
     };
-    fetchServices();
-  }, [collectionId]);
+    fetchArtworks();
+  }, [collectionId, artworks]);
 
   return (
     <>
@@ -120,7 +127,7 @@ const CollectionDetailScreen: React.FC = () => {
         onDelete={() => {handleDeleteCollection()}}
       />
       <Toast ref={toast} />
-      {artworks && <CollectionGallery artworks={artworks} />} 
+      {artworks && <CollectionGallery collectionId={collection.id} artworks={artworks} updateArtworks={updateArtworks}/>} 
       {!artworks && <p>Loading artworks...</p>} 
     </>
   );

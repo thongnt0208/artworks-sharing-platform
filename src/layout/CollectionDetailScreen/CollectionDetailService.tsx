@@ -65,9 +65,9 @@ export async function GetCollectionData(collectionId: string) {
 }
 
 /**
- * Create a new Collection 
+ * Create a new Collection
  *
- * @description This function to create a new Collection 
+ * @description This function to create a new Collection
  * @returns Update status (True: Successfully | False: Failed)
  * @example
  * @author AnhDH
@@ -193,10 +193,12 @@ export async function AddArtworkToCollection({
   artworkId: string;
 }) {
   try {
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
     await axios.post(
       `${API_URl}/collections/${collectionId}/artwork`,
       JSON.stringify({
-        artworkId
+        artworkId,
       }),
       {
         headers: {
@@ -205,6 +207,40 @@ export async function AddArtworkToCollection({
         },
       }
     );
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Remove an Artwork from Collection
+ *
+ * @description This function to Remove an Artwork from Collection
+ * @returns Adding status (True: Successfully | False: Failed)
+ * @example
+ * @author AnhDh
+ * @version 1.0.0
+ */
+export async function RemoveArtworkFromCollection({
+  collectionId,
+  artworkId,
+}: {
+  collectionId: string;
+  artworkId: string;
+}) {
+  try {
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
+    await axios.delete(`${API_URl}/collections/${collectionId}/artwork`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken || refreshToken}`,
+      },
+      data: JSON.stringify({
+        artworkId,
+      }),
+    });
     return true;
   } catch (error) {
     return false;
