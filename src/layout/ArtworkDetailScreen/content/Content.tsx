@@ -122,7 +122,7 @@ export default function Content({
             title={isLiked ? "Bỏ thích" : "Thích"}
             thumbnailImg={isLiked ? likedIcon : likeIcon}
             thumbnailAlt=""
-            onClick={likeButtonHandle}
+            onclick={likeButtonHandle}
           />
         </div>
       </div>
