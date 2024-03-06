@@ -229,10 +229,10 @@ export default function ChatScreen() {
         />
       </div>
       <div className="col-6">
-        <ChatContent />
+        <ChatContent selectingId={selectingId} />
       </div>
       <div className="col-3">
-        <ChatRightNav />
+        <ChatRightNav selectingId={selectingId} />
       </div>
     </div>
   );
