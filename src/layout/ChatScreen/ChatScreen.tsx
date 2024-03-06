@@ -1,239 +1,89 @@
-import React, { useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 
 import ChatLeftNav from "./components/ChatLeftNav";
 import ChatContent from "./components/ChatContent";
 import ChatRightNav from "./components/ChatRightNav";
+import { GetChatboxs } from "./services/ChatServices";
+import { useNavigate } from "react-router-dom";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { GetRequestById, RequestItemType } from "./services/ProposalServices";
+
+export type ChatboxItemType = {
+  id: string;
+  avatar: string;
+  text?: string;
+  author: string;
+  time: string;
+  isSeen?: boolean;
+};
 
 export default function ChatScreen() {
-  const [selectingId, setSelectingId] = React.useState("");
-  const itemsList = [
-    {
-      id: "123",
-      avatar: "https://picsum.photos/200",
-      text: "This is a messrrwrrrrrr wrrrrrr rwwfffffff",
-      author: "Author",
-      time: "12:00",
-      isSeen: false,
-    },
-    {
-      id: "1v24",
-      avatar: "https://picsum.photos/400",
-      text: "This is ue porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 2",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12df6",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12cd6",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12zzxc6",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "1ss26",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12re6",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "1c26",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "1w26",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12e6",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-    {
-      id: "12a",
-      avatar: "https://picsum.photos/400",
-      text: "Ddolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
-      author: "Author 3",
-      time: "13:00",
-      isSeen: false,
-    },
-  ];
+  const [chatboxs, setChatboxs] = useState<ChatboxItemType[]>([]);
+  // const [chatContent, setChatContent] = useState<ChatContentType[]>([]);
+  const [selectingId, setSelectingId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [requestDetail, setRequestDetail] = useState<RequestItemType>({} as RequestItemType);
+
+  const navigate = useNavigate();
+
+  const GetRequestDetail = (id: string) => {
+    GetRequestById(selectingId)
+      .then((res) => {
+        setRequestDetail(res);
+      })
+      .catch((error) => {
+        console.error("Error fetching chatboxs:", error);
+        setRequestDetail({} as RequestItemType);
+      });
+  };
+
+  const GetTheChatboxs = () => {
+    GetChatboxs()
+      .then((res) => {
+        setChatboxs(res);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error("Error fetching chatboxs:", error);
+        setChatboxs([]);
+        if (error.response?.status === 401) {
+          navigate("/login");
+        }
+      });
+  }
 
   useEffect(() => {
-    // Fetch the items list from API
-    setSelectingId(itemsList[0]?.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    GetTheChatboxs();
   }, []);
 
   useEffect(() => {
-    console.log(selectingId);
+    setSelectingId(chatboxs[0]?.id);
+  }, [chatboxs]);
+
+  useEffect(() => {
+    GetRequestDetail(selectingId);
   }, [selectingId]);
 
   return (
-    <div className="grid grid-nogutter" style={{ maxHeight: "80vh" }}>
-      <div className="col-3 max-h-full">
-        <ChatLeftNav
-          itemsList={itemsList}
-          selectingId={selectingId}
-          setSelectingId={setSelectingId}
-        />
+    <>
+      {isLoading && <ProgressSpinner />}
+      <div className="grid grid-nogutter" style={{ maxHeight: "80vh" }}>
+        <div className="col-3 max-h-full">
+          <ChatLeftNav
+            itemsList={chatboxs}
+            selectingId={selectingId}
+            setSelectingId={setSelectingId}
+          />
+        </div>
+        <div className="col-6">
+          <ChatContent selectingId={selectingId} content={null} requestDetail={requestDetail}/>
+        </div>
+        <div className="col-3">
+          <ChatRightNav selectingId={selectingId} />
+        </div>
       </div>
-      <div className="col-6">
-        <ChatContent selectingId={selectingId} />
-      </div>
-      <div className="col-3">
-        <ChatRightNav selectingId={selectingId} />
-      </div>
-    </div>
+    </>
   );
 }

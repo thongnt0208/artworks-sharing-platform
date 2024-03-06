@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "./App.scss";
 
 import { useEffect, useState } from "react";
@@ -56,11 +57,19 @@ function App() {
   // const isFooterVisible = useFooterVisibility();
 
   useEffect(() => {
-    GetMessagesCurrentAccount().then((messages) => {
-      console.log(messages);
-      setMessages(messages);
-    });
-  }, []);
+    GetMessagesCurrentAccount()
+      .then((messages) => {
+        console.log(messages);
+        setMessages(messages);
+      })
+      .catch((error) => {
+        console.error("Error fetching messages:", error);
+        setMessages([]);
+        if (error.response?.status === 401) {
+          setIsLogin(false);
+        }
+      });
+  }, [isLogin]);
 
   return (
     <PrimeReactProvider value={primereactConfigValue}>
@@ -90,8 +99,8 @@ function App() {
               {/* Routes need to protect (must log in to access)*/}
               <Route path="/editTest" element={<EditProfileTestPage />} />
               <Route path="/artwork/post" element={<PostArtworkScreen />} />
-              <Route path="/chat" element={<ChatScreen />} /> 
-              <Route path="/chat/:id" element={<ChatScreen />} /> 
+              <Route path="/chat" element={<ChatScreen />} />
+              <Route path="/chat/:id" element={<ChatScreen />} />
             </Route>
             <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
               <Route path="/account/:id/" element={<ArtworksView />} />
