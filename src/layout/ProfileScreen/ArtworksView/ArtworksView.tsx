@@ -35,7 +35,7 @@ const ArtworksView: React.FC = () => {
 
   React.useEffect(() => {
     const fetchArtworks = async () => {
-      const response = await GetArtworksData(accountId);
+      const response = await GetArtworksData(10, 1, accountId);
       if (Array.isArray(response.items)) {
         setArtworks(response.items);
       } else {
