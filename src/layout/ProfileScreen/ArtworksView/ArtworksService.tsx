@@ -5,15 +5,15 @@ const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 const accessToken = getAuthInfo()?.accessToken || "";
 const refreshToken = getAuthInfo()?.refreshToken || "";
 
-export async function GetArtworksData(accountId: string) {
+export async function GetArtworksData(pageSize: number, pageNumber: number, accountId: string) {
   try {
     const response = await axios.get(
-      `${API_URL}/artworks/account/${accountId}`,
+      `${API_URL}/accounts/${accountId}/artworks`,
       {
         params: {
           sortColumn: "create",
-          pageNumber: 1,
-          pageSize: 10,
+          pageNumber: pageNumber,
+          pageSize: pageSize,
         },
         headers: {
           "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export async function GetArtworksData(accountId: string) {
     }
     return response.data;
   } catch (error) {
-    console.log("Error fetching artworks data:", error);
+    console.log("Error fetching artworks data:", accountId);
     return [];
   }
 }
