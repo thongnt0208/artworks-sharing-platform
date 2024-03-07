@@ -202,20 +202,18 @@ export async function editCommentOnArtwork(
 /**
  * This function follows a user.
  *
- * @param currentUserId - The ID of the current user
  * @param followUserId - The ID of the user to be followed
  * @returns Promise<any>
  * @example
- * const followedUser = await addFollow("currentUserId", "followUserId");
+ * const followedUser = await addFollow("followUserId");
  * console.log(followedUser);
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.2.0
  */
-export async function addFollow(currentUserId: string, followUserId: string): Promise<any> {
+export async function addFollow(followUserId: string): Promise<any> {
   try {
     let body = {
-      accountId: currentUserId,
-      followerId: followUserId,
+      accountId: followUserId,
     };
     const response = await axiosPrivate.post(`${BASE_URL}/follows`, body);
     return response;
@@ -228,20 +226,18 @@ export async function addFollow(currentUserId: string, followUserId: string): Pr
 /**
  * This function unfollows a user.
  *
- * @param currentUserId - The ID of the current user
  * @param followUserId - The ID of the user to be unfollowed
  * @returns Promise<any>
  * @example
- * const unfollowedUser = await removeFollow("currentUserId", "followUserId");
+ * const unfollowedUser = await removeFollow("followUserId");
  * console.log(unfollowedUser);
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.2.0
  */
-export async function removeFollow(currentUserId: string, followUserId: string): Promise<any> {
+export async function removeFollow(followUserId: string): Promise<any> {
   try {
     let body = {
-      accountId: currentUserId,
-      followerId: followUserId,
+      accountId: followUserId,
     };
     const response = await axiosPrivate.delete(`${BASE_URL}/follows`, { data: body });
     return response;
@@ -286,6 +282,22 @@ export async function fetchFollowers(userId: string): Promise<any> {
 export async function fetchFollowing(userId: string): Promise<any> {
   try {
     const response = await axios.get(`${BASE_URL}/follows/${userId}/following`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching following:", error);
+    throw error;
+  }
+}
+
+/**
+ * This function checks if the current user is following a user.
+ *
+ * @param userId - The ID of the user
+ * @returns Promise<boolean> - true if the current user is following the user, false otherwise
+ */
+export async function fetchIsFollow(userId: string): Promise<boolean> {
+  try {
+    const response = await axiosPrivate.get(`${BASE_URL}/follows/is-existed/${userId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching following:", error);

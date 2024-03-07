@@ -8,9 +8,10 @@ type Props = {
   title: string;
   thumbnailImg?: string;
   thumbnailAlt?: string;
-  onClick: () => void;
+  onclick: () => void;
   isFollowed?: boolean;
-  setIsFollowed?: (isFollowed: boolean) => void;
+  makeFollow?: () => void;
+  makeUnFollow?: () => void;
 };
 
 export default function SquareButton({
@@ -18,14 +19,16 @@ export default function SquareButton({
   title,
   thumbnailImg,
   thumbnailAlt,
-  onClick,
+  onclick,
   isFollowed,
-  setIsFollowed,
+  makeFollow,
+  makeUnFollow,
 }: Props) {
+
   return (
     <>
       {title !== "Theo dõi" && (
-        <div id={id} className="square-button-container" onClick={onClick}>
+        <div id={id} className="square-button-container" onClick={onclick}>
           <Button rounded className="square-button-thumbnail-container">
             <img
               className="square-button-thumbnail"
@@ -38,22 +41,25 @@ export default function SquareButton({
       )}
 
       {title === "Theo dõi" && (
-        <div id={id} className="square-button-container avatar-btn-ctn" onClick={onClick}>
+        <div id={id} className="square-button-container avatar-btn-ctn">
           <Avatar
             image={thumbnailImg || "https://placehold.in/600"}
             size="xlarge"
             shape="circle"
             className="avatar"
+            onClick={onclick}
           />
           <ToggleButton
             onLabel="Bỏ theo dõi"
             offLabel="Theo dõi"
             checked={isFollowed}
+            disabled={isFollowed === undefined}
             onChange={() => {
-              setIsFollowed && setIsFollowed(!isFollowed);
+              isFollowed ? makeUnFollow?.() : makeFollow?.();
             }}
             className="follow-btn"
-          /></div>
+          />
+        </div>
       )}
     </>
   );
