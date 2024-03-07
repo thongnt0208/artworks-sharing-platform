@@ -3,13 +3,24 @@ import SystemNotificationItem from "./SystemNotificationCard/SystemNotificationC
 
 import "./ChatContent.scss";
 
-type Props = { selectingId: string; content: any; requestDetail: RequestItemType };
+export type requestStateToolsType = {
+  requestDetail: RequestItemType;
+  setRequestDetail: (detail: any) => void;
+  acceptRequest: () => void;
+  denyRequest: () => void;
+};
 
-export default function ChatContent({ selectingId, content, requestDetail }: Props) {
+type Props = {
+  selectingId: string;
+  content: any;
+  requestStateTools: requestStateToolsType;
+};
+
+export default function ChatContent({ selectingId, content, requestStateTools }: Props) {
   return (
     <div className="chat-content">
       ChatContent: {selectingId}
-      <SystemNotificationItem data={requestDetail} />
+      <SystemNotificationItem requestStateTools={requestStateTools} />
     </div>
   );
 }
