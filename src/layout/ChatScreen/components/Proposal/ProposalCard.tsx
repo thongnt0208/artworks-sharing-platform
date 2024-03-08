@@ -1,5 +1,5 @@
 import React from 'react'
-import './ProposalCard.scss'
+import './styles/ProposalCard.scss'
 
 // type Props = {}
 

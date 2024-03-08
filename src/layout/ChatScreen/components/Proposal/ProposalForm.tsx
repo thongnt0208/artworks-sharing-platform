@@ -1,0 +1,164 @@
+import { useFormik } from "formik";
+import { Button } from "primereact/button";
+import { Calendar } from "primereact/calendar";
+import { Dropdown } from "primereact/dropdown";
+import { InputNumber } from "primereact/inputnumber";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Slider } from "primereact/slider";
+import * as Yup from "yup";
+
+const initialValues = {
+  title: "",
+  category: "",
+  description: "",
+  targetDelivery: new Date(),
+  numberOfConcept: 0,
+  numberOfRevision: 0,
+  depositPercent: 0.1,
+  totalPrice: 0,
+};
+
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required(" không được bỏ trống"),
+  category: Yup.string().required(" không được bỏ trống"),
+  description: Yup.string().required(" không được bỏ trống"),
+  targetDelivery: Yup.date()
+    .required(" không được bỏ trống")
+    .min(new Date(), "Ngày giao hàng phải là trong tương lai"),
+  numberOfConcept: Yup.number()
+    .min(0, "Số lượng không được âm")
+    .integer("Số lượng phải là số nguyên")
+    .required(" không được bỏ trống"),
+  numberOfRevision: Yup.number()
+    .min(0, "Số lượng không được âm")
+    .integer("Số lượng phải là số nguyên")
+    .required(" không được bỏ trống"),
+  depositPercent: Yup.number()
+    .min(0, "Phần trăm không được âm")
+    .max(1, "Phần trăm không thể lớn hơn 100%")
+    .required(" không được bỏ trống"),
+  totalPrice: Yup.number().min(0, "Giá không được âm").required(" không được bỏ trống"),
+});
+
+export default function ProposalForm() {
+  let today = new Date();
+  // Added type annotation for Proposal component
+  const formik: any = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+      // Handle form submission logic here
+    },
+  });
+
+  const renderError = (field: any) => {
+    return formik.touched[field] && formik.errors[field] ? (
+      <small className="p-error">{formik.errors[field]}</small>
+    ) : null;
+  };
+
+  const categories = [
+    { label: "Category 1", value: "category1" },
+    { label: "Category 2", value: "category2" },
+    // Add more categories as needed
+  ];
+
+  return (
+    <form onSubmit={formik.handleSubmit} className="flex flex-column gap-3">
+      {/* title field */}
+      <div className="p-field">
+        <label htmlFor="title">Tên dự án</label>
+        {renderError("title")}
+        <br />
+        <InputText id="title" {...formik.getFieldProps("title")} className="w-full" />
+      </div>
+
+      {/* category field */}
+      <div className="p-field">
+        <label htmlFor="category">Thể loại</label>
+        {renderError("category")}
+        <br />
+        <Dropdown
+          id="category"
+          {...formik.getFieldProps("category")}
+          options={categories}
+          optionLabel="label"
+          placeholder="Chọn một thể loại"
+          className="w-full"
+        />
+      </div>
+
+      {/* targetDelivery field */}
+      <div className="p-field">
+        <label htmlFor="targetDelivery">Thời gian nhận</label>
+        <Calendar
+          id="targetDelivery"
+          {...formik.getFieldProps("targetDelivery")}
+          showIcon
+          className="w-full"
+          maxDate={today}
+        />
+      </div>
+
+      {/* totalPrice field */}
+      <div className="p-field">
+        <label htmlFor="totalPrice">Chi phí</label>
+        {renderError("totalPrice")}
+        <br />
+        <InputNumber
+          id="totalPrice"
+          value={formik.values.totalPrice}
+          onChange={(e: any) => {
+            formik.setFieldValue("totalPrice", e.value);
+          }}
+          className="w-full"
+        />
+      </div>
+
+      {/* depositPercent field */}
+      <div className="p-field">
+        <label htmlFor="depositPercent">Đặt cọc</label>
+        {renderError("depositPercent")}
+        <br />
+        <InputNumber
+          id="depositPercent"
+          value={formik.values.depositPercent * 100}
+          onChange={(e: any) => {
+            formik.setFieldValue("depositPercent", e.value / 100);
+          }}
+          min={10}
+          max={100}
+          className="w-full"
+        />
+        <Slider
+          id="depositPercent"
+          value={formik.values.depositPercent * 100}
+          onChange={(e: any) => {
+            formik.setFieldValue("depositPercent", e.value / 100);
+          }}
+          min={10}
+          max={100}
+          className="w-full"
+        />
+      </div>
+
+      {/* description field */}
+      <div className="p-field">
+        <label htmlFor="description">Mô tả dự án</label>
+        {renderError("description")}
+        <br />
+        <InputTextarea
+          id="description"
+          {...formik.getFieldProps("description")}
+          className="w-full"
+        />
+      </div>
+
+      <div className="p-field flex justify-content-center">
+        <Button type="submit" label="Submit" disabled={!formik.isValid} className="w-4" rounded />
+      </div>
+    </form>
+  );
+}

@@ -24,6 +24,7 @@ export default function ChatScreen() {
   const [selectingId, setSelectingId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [requestDetail, setRequestDetail] = useState<RequestItemType>({} as RequestItemType);
+  const [proposalFormData, setProposalFormData] = useState({} as any);
 
   const navigate = useNavigate();
   function catchError(error: any) {
@@ -67,6 +68,15 @@ export default function ChatScreen() {
   };
   // REQUESTS STATE TOOLS section end
 
+  function CreateProposal() {
+    // CreateProposal()
+    //   .then((res) => {
+    //     setProposalFormData(res);
+    //   })
+    //   .catch((error) => {
+    //     catchError(error);
+    //   });
+  }
 
   const GetTheChatboxs = () => {
     GetChatboxs()
@@ -112,6 +122,7 @@ export default function ChatScreen() {
             selectingId={selectingId}
             content={null}
             requestStateTools={{ requestDetail, setRequestDetail, acceptRequest, denyRequest }}
+            setProposalFormData={setProposalFormData}
           />
         </div>
         <div className="col-3">
