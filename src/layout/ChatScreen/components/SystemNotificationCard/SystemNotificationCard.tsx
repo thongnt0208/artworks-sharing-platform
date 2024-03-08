@@ -7,10 +7,10 @@ import { getAuthInfo } from "../../../../util/AuthUtil";
 import { translate2Vietnamese } from "../../../../util/TextHandle";
 import { requestStateToolsType } from "../ChatContent";
 
-type Props = { requestStateTools: requestStateToolsType };
+type Props = { normalContent?: any; requestStateTools?: requestStateToolsType };
 
-export default function SystemNotificationItem({ requestStateTools }: Props) {
-  const { requestDetail, acceptRequest, denyRequest } = requestStateTools;
+export default function SystemNotificationItem({normalContent, requestStateTools }: Props) {
+  const { requestDetail, acceptRequest, denyRequest } = requestStateTools || {};
   const [tmpStatus, setTmpStatus] = useState("");
   const currentUserInfo = getAuthInfo();
 
@@ -20,7 +20,7 @@ export default function SystemNotificationItem({ requestStateTools }: Props) {
    * @returns boolean
    */
   function isOfRequest(variable: any): variable is RequestItemType {
-    return variable.id !== undefined;
+    return variable?.id !== undefined;
   }
 
   const render = () => {
@@ -50,10 +50,15 @@ export default function SystemNotificationItem({ requestStateTools }: Props) {
         </div>
       );
     }
+    // if (isOfProposal(content)) {}
+    else {
+      // Render normal system notification
+      return <div>{normalContent}</div>;
+    }
   };
 
   useEffect(() => {
-    translate2Vietnamese(requestDetail.requestStatus).then((res) => {
+    translate2Vietnamese(requestDetail?.requestStatus || "").then((res) => {
       return setTmpStatus(res || "");
     });
   }, [requestDetail]);
