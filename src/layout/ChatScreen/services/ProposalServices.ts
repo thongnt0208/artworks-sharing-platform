@@ -140,3 +140,37 @@ export async function UpdateRequestStatus(
       throw error;
     });
 }
+
+/**
+ * This function is used to create a proposal for a request
+ *
+ * @param createdByRequest - the id of the user who creates the request
+ * @param serviceId - the id of the service
+ * @param proposalInfo - the information of the proposal (e.g. price, timeline, message)
+ * @returns {Promise<any>}
+ * @throws {Error} an error from the API request
+ * @example
+ * const proposal = await CreateProposal("123", "456", { message: "I can do it", price: "1000", timeline: "1 week" });
+ * console.log(proposal);
+ * @author ThongNT
+ * @version 1.0.0
+ */
+export async function CreateProposal(
+  createdByRequest: string,
+  serviceId: string,
+  proposalInfo: any
+): Promise<any> {
+  return axiosPrivate
+    .post(`/proposals`, {
+      createdByRequest,
+      serviceId,
+      ...proposalInfo,
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error creating proposal:", error);
+      throw error;
+    });
+}
