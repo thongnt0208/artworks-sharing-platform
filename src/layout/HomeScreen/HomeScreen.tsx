@@ -65,7 +65,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
         setCategories(categoriesData);
         setArtworks((prevArtworks) => {
           const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
-          const filteredArtworks = newArtworksData.items.filter(
+          const filteredArtworks = newArtworksData.items?.filter(
             (artwork: { id: string; }) => !uniqueArtworkIds.has(artwork.id)
           );
   

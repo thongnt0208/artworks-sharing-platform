@@ -9,12 +9,15 @@ import { Toast } from "primereact/toast";
 
 import ArtworkCard from "../../../components/ArtworkCard";
 import "./ArtworksView.scss";
+import { Dialog } from "primereact/dialog";
 
 const ArtworksView: React.FC = () => {
   const toast = useRef<Toast>(null);
   let navigate = useNavigate();
   let [accountId, isCreator] = useOutletContext() as [string, boolean];
   const [artworks, setArtworks] = React.useState<Artwork[]>([]);
+  const [selectedArtworkId, setSelectedArtworkId] = React.useState<string>("");
+  const [visibleDialogs, setVisibleDialogs] = React.useState<boolean>(false);
   const showError = () => {
     toast.current?.show({
       severity: "error",
@@ -25,11 +28,17 @@ const ArtworksView: React.FC = () => {
   };
 
   const deleteArtworkHandler = async (artworkId: string) => {
-    const response = await DeleteArtworkData(artworkId);
-    if (response) {
-      setArtworks(artworks.filter((artwork) => artwork.id !== artworkId));
-    } else {
+    try {
+      const response = await DeleteArtworkData(artworkId);
+      if (response) {
+        setArtworks(artworks.filter((artwork) => artwork.id !== artworkId));
+      } else {
+        showError();
+      }
+    } catch (error) {
       showError();
+    } finally {
+      setVisibleDialogs(false);
     }
   };
 
@@ -76,13 +85,33 @@ const ArtworksView: React.FC = () => {
                 thumbnail={artwork.thumbnail}
                 likeCount={artwork.likeCount}
                 viewCount={artwork.viewCount}
-                deleteHandler={() => deleteArtworkHandler(artwork.id)}
+                deleteHandler={() => {
+                  setVisibleDialogs(true);
+                  setSelectedArtworkId(artwork.id);
+                }}
                 updateHandler={() => navigate("/artwork/post")}
                 viewHandler={() => navigate(`/artwork/${artwork.id}`)}
               />
             </div>
           ))
         )}
+        <Dialog
+          visible={visibleDialogs}
+          headerClassName="confirm-dialog-header"
+          header="Xác nhận xóa"
+          closable={false}
+          onHide={() => setVisibleDialogs(false)}
+          footer={
+            <div>
+              <Button onClick={() => deleteArtworkHandler(selectedArtworkId)}>
+                Xác nhận
+              </Button>
+              <Button onClick={() => setVisibleDialogs(false)}>Hủy</Button>
+            </div>
+          }
+        >
+          <h3>Bạn có chắc muốn xóa tác phẩm này?</h3>
+        </Dialog>
       </div>
     </>
   );
