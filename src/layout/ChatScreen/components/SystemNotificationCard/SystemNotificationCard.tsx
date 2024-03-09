@@ -1,55 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import "./SystemNotificationCard.scss";
-import { RequestItemType, UpdateRequestStatus } from "../../services/ProposalServices";
+import { RequestItemType } from "../../services/ProposalServices";
 import { Button } from "primereact/button";
 import { getAuthInfo } from "../../../../util/AuthUtil";
-import { useNavigate } from "react-router-dom";
 import { translate2Vietnamese } from "../../../../util/TextHandle";
+import { requestStateToolsType } from "../ChatContent";
 
-type Props = { data: any };
+type Props = { normalContent?: any; requestStateTools?: requestStateToolsType };
 
-export default function SystemNotificationItem({ data }: Props) {
-  const navigate = useNavigate();
-
-  const [requestDetail, setRequestDetail] = useState<RequestItemType>({} as RequestItemType);
+export default function SystemNotificationItem({normalContent, requestStateTools }: Props) {
+  const { requestDetail, acceptRequest, denyRequest } = requestStateTools || {};
   const [tmpStatus, setTmpStatus] = useState("");
   const currentUserInfo = getAuthInfo();
 
-  function catchError(error: any) {
-    if (error.response?.status === 401) {
-      navigate("/login");
-    } else {
-      console.log(error);
-    }
-  }
+  /**
+   * This function is used to check if the variable is of RequestItemType
+   * @param variable
+   * @returns boolean
+   */
   function isOfRequest(variable: any): variable is RequestItemType {
-    return variable.id !== undefined;
-  }
-
-  function acceptRequest() {
-    UpdateRequestStatus(requestDetail.id, 1)
-      .then((response) => {
-        console.log(response);
-        setRequestDetail(response);
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-  }
-  function denyRequest() {
-    UpdateRequestStatus(requestDetail.id, 2)
-      .then((response) => {
-        console.log(response);
-        setRequestDetail(response);
-      })
-      .catch((error) => {
-        catchError(error);
-      });
+    return variable?.id !== undefined;
   }
 
   const render = () => {
-    if (isOfRequest(data)) {
+    if (isOfRequest(requestDetail)) {
       // Render request system notification
       // Vì data hiện là gộp từ GetRequestsByCreator và GetRequestsByAudience
       // nên phân biệt Creator và Audience bằng trường createdBy trong response của GetRequestsById.
@@ -75,16 +50,15 @@ export default function SystemNotificationItem({ data }: Props) {
         </div>
       );
     }
+    // if (isOfProposal(content)) {}
+    else {
+      // Render normal system notification
+      return <div>{normalContent}</div>;
+    }
   };
 
   useEffect(() => {
-    if (isOfRequest(data)) {
-      setRequestDetail(data);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    translate2Vietnamese(requestDetail.requestStatus).then((res) => {
+    translate2Vietnamese(requestDetail?.requestStatus || "").then((res) => {
       return setTmpStatus(res || "");
     });
   }, [requestDetail]);
