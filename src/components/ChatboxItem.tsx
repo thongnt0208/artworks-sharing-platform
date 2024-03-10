@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./styles/MessageItem.scss";
+import "./styles/ChatboxItem.scss";
 import { Avatar } from "primereact/avatar";
 
-type MessageItem = {
+type ChatboxItem = {
   id: string;
   avatar: string;
   text: string;
@@ -11,13 +11,13 @@ type MessageItem = {
   isSeen: boolean;
 };
 
-type MessageItemTemplateProps = {
-  item: MessageItem;
+type ChatboxItemTemplateProps = {
+  item: ChatboxItem;
   selectingId: string;
   setSelectingId: (id: string) => void;
 };
 
-const MessageItemTemplate: React.FC<MessageItemTemplateProps> = (props) => {
+const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
   const { item, selectingId, setSelectingId } = props;
   const { id, avatar, text, author, time, isSeen } = item;
   const [isSeenLocal, setIsSeenLocal] = useState<boolean>(isSeen);
@@ -36,8 +36,8 @@ const MessageItemTemplate: React.FC<MessageItemTemplateProps> = (props) => {
   const flexAddition = "flex gap-3 align-items-center";
   const messageItemClass =
     selectingId !== id
-      ? `message-item ${flexAddition}`
-      : `message-item message-item-selecting ${flexAddition}`;
+      ? `chatbox-item ${flexAddition}`
+      : `chatbox-item chatbox-item-selecting ${flexAddition}`;
 
   const itemClickHandler = () => {
     // Call a function that calls an API to setIsSeen to false
@@ -48,29 +48,29 @@ const MessageItemTemplate: React.FC<MessageItemTemplateProps> = (props) => {
 
   return (
     <div className={messageItemClass} onClick={itemClickHandler}>
-      <div className="message-item-avatar flex">
+      <div className="chatbox-item-avatar flex">
         <Avatar image={avatar} size="large" shape="circle" />
       </div>
-      <div className="message-item-content">
-        <div className="message-item-header">
-          <div className="message-item-author text-cus-normal-bold">{author}</div>
+      <div className="chatbox-item-content">
+        <div className="chatbox-item-header">
+          <div className="chatbox-item-author text-cus-normal-bold">{author}</div>
         </div>
         <div
           className={
             !isSeenLocal
-              ? "message-item-text text-cus-normal-bold text-limit"
-              : "message-item-text text-cus-normal text-limit"
+              ? "chatbox-item-text text-cus-normal-bold text-limit"
+              : "chatbox-item-text text-cus-normal text-limit"
           }
         >
           {text}
         </div>
       </div>
       <div className="message-status-content">
-        <div className="message-item-time text-cus-small">{time}</div>
-        {!isSeenLocal && <div className="message-item-seen" />}
+        <div className="chatbox-item-time text-cus-small">{time}</div>
+        {!isSeenLocal && <div className="chatbox-item-seen" />}
       </div>
     </div>
   );
 };
 
-export default MessageItemTemplate;
+export default ChatboxItemTemplate;
