@@ -68,7 +68,7 @@ export default function ChatScreen() {
   };
   // REQUESTS STATE TOOLS section end
 
-  function CreateProposal() {
+  // function CreateProposal() {
     // CreateProposal()
     //   .then((res) => {
     //     setProposalFormData(res);
@@ -76,7 +76,7 @@ export default function ChatScreen() {
     //   .catch((error) => {
     //     catchError(error);
     //   });
-  }
+  // }
 
   const GetTheChatboxs = () => {
     GetChatboxs()
@@ -109,6 +109,7 @@ export default function ChatScreen() {
   return (
     <>
       {isLoading && <ProgressSpinner />}
+      {JSON.stringify(proposalFormData)}
       <div className="grid grid-nogutter" style={{ maxHeight: "80vh" }}>
         <div className="col-3 max-h-full">
           <ChatLeftNav

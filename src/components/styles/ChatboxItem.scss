@@ -1,19 +1,19 @@
 @import "../../const/variables.scss";
 
-.message-item,
-message-item-selecting {
+.chatbox-item,
+chatbox-item-selecting {
   padding: 10px;
   min-width: 315px;
   border-radius: $borderRadius-100;
   position: relative;
-  //   .message-item-avatar {
+  //   .chatbox-item-avatar {
   //   }
 
-  //   .message-item-content {
-  //     .message-item-header {
+  //   .chatbox-item-content {
+  //     .chatbox-item-header {
   //     }
 
-  //     .message-item-text {
+  //     .chatbox-item-text {
   //     }
   //   }
 
@@ -26,10 +26,10 @@ message-item-selecting {
 
   .message-status-content {
     text-align: end;
-    .message-item-time {
+    .chatbox-item-time {
       color: $bg-300;
     }
-    .message-item-seen {
+    .chatbox-item-seen {
       display: inline-block;
       width: 10px;
       height: 10px;
@@ -39,19 +39,19 @@ message-item-selecting {
   }
 }
 
-.message-item-selecting {
+.chatbox-item-selecting {
   background-color: $bg-200;
 }
-.message-item:hover {
+.chatbox-item:hover {
   background-color: $bg-200;
   cursor: pointer;
 }
 
-.message-item:active {
+.chatbox-item:active {
   background-color: $bg-300;
 }
 
-.message-item::after {
+.chatbox-item::after {
   content: "";
   position: absolute;
   bottom: 0px;
