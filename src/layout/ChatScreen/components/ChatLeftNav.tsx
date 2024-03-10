@@ -4,12 +4,12 @@ import { DataScroller } from 'primereact/datascroller';
 
 type ChatLeftNavProps = {
   itemsList: any[]; // Update the type of itemsList with the actual type of your data
-  selectingId: string;
-  setSelectingId: (id: string) => void;
+  selectingChatboxId: string;
+  setSelectingChatboxId: (id: string) => void;
 };
 
 const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
-  const { itemsList, selectingId, setSelectingId } = props;
+  const { itemsList, selectingChatboxId, setSelectingChatboxId } = props;
 
   return (
     <div className='max-h-full'>
@@ -26,8 +26,8 @@ const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
           <ChatboxItemTemplate
             key={item.id}
             item={item}
-            selectingId={selectingId}
-            setSelectingId={setSelectingId}
+            selectingChatboxId={selectingChatboxId}
+            setSelectingChatboxId={setSelectingChatboxId}
           />
         )}
       />
