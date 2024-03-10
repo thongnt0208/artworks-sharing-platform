@@ -13,12 +13,12 @@ type ChatboxItem = {
 
 type ChatboxItemTemplateProps = {
   item: ChatboxItem;
-  selectingId: string;
-  setSelectingId: (id: string) => void;
+  selectingChatboxId: string;
+  setSelectingChatboxId: (id: string) => void;
 };
 
 const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
-  const { item, selectingId, setSelectingId } = props;
+  const { item, selectingChatboxId, setSelectingChatboxId } = props;
   const { id, avatar, text, author, time, isSeen } = item;
   const [isSeenLocal, setIsSeenLocal] = useState<boolean>(isSeen);
 
@@ -35,14 +35,14 @@ const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
 
   const flexAddition = "flex gap-3 align-items-center";
   const messageItemClass =
-    selectingId !== id
+    selectingChatboxId !== id
       ? `chatbox-item ${flexAddition}`
       : `chatbox-item chatbox-item-selecting ${flexAddition}`;
 
   const itemClickHandler = () => {
     // Call a function that calls an API to setIsSeen to false
     // setIsSeenLocal(true);
-    setSelectingId(id);
+    setSelectingChatboxId(id);
     setIsSeenLocal(true);
   };
 

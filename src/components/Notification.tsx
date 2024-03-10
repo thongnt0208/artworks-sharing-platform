@@ -4,7 +4,7 @@ import "./Notification.scss";
 import { Avatar } from "primereact/avatar";
 import { Link } from "react-router-dom";
 
-const avatar = require("../assets/defaultImage/default-avatar.png");
+const blankPic = require("../assets/defaultImage/blank-100.png");
 
 export type notificationItemType = {
   notificationId: string;
@@ -13,6 +13,7 @@ export type notificationItemType = {
   isSeen: boolean;
   creationDate: string;
   createdBy?: string | any;
+  avatar?: string;
 };
 
 type Props = {
@@ -28,9 +29,9 @@ const Notification: React.FC<Props> = ({ notifications, account }) => {
   const itemTemplate = (data: notificationItemType) => {
     return (
       <div className="notification">
-        <Link to={`/chat/`}>
+        <Link to={`/chat/${data.notificationId}`}>
           <div className="avatar">
-            <Avatar image={avatar} size="xlarge" />
+            <Avatar image={data.avatar || blankPic} size="xlarge" shape="circle" />
           </div>
           {data.isSeen ? (
             <div className="notification-content">
