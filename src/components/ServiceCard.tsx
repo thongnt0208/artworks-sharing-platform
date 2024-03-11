@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "primereact/button";
-import { useOutletContext } from "react-router-dom";
 
 import "./ServiceCard.scss";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
@@ -14,11 +13,11 @@ export type ServiceProps = {
   numberOfRevision: number;
   startingPrice: number;
   coverLocation: string;
+  isCreator?: boolean;
   editHandler?: () => void;
   hireHandler?: () => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
-  const [isCreator] = useOutletContext() as [boolean];
 
   return (
     <div
@@ -46,7 +45,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
             {props.numberOfRevision} lần chỉnh sửa
           </p>
         </div>
-        {isCreator ? (
+        {props.isCreator ? (
           <div className="hire-button-container w-full flex justify-content-center mt-3 mb-3 ">
             <Button
               label="Chỉnh sửa"

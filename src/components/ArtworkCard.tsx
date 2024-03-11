@@ -18,6 +18,7 @@ export type ArtworkProps = {
   createdBy: string;
   creatorFullName: string;
   onRemoveFromCollection?: boolean;
+  onSelection?: boolean;
   likeHandler?: () => void;
   viewHandler?: () => void;
   saveHandler?: () => void;
@@ -29,7 +30,7 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   const op = useRef<OverlayPanel>(null);
 
   let header = (
-    <div className="header-container">
+    <div className={`header-container ${props.onSelection ? "mb-3" : "" }`}>
       <div className="thumbnail-container pt-0">
         <img
           alt={`Hình thu nhỏ của tác phẩm tên ${props.title}`}
@@ -38,13 +39,14 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
           onClick={props.viewHandler}
         />
       </div>
-
-      <Button
-        label={props.viewCount ? formatLargeNumber(props.viewCount) : "0"}
-        icon="pi pi-eye"
-        onClick={props.viewHandler}
-        className="view-button"
-      />
+      {!props.onSelection && (
+        <Button
+          label={props.viewCount ? formatLargeNumber(props.viewCount) : "0"}
+          icon="pi pi-eye"
+          onClick={props.viewHandler}
+          className="view-button"
+        />
+      )}  
     </div>
   );
   let footer = (
@@ -107,9 +109,9 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
     <Card
       id={props.id}
       title={props.title}
-      subTitle={`bởi ${props.creatorFullName}`}
+      subTitle={!props.onSelection && `bởi ${props.creatorFullName}`}
       header={header}
-      footer={footer}
+      footer={!props.onSelection && footer}
       className="artwork-card cursor-pointer"
     ></Card>
   );
