@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
@@ -8,90 +8,99 @@ import { FileUpload } from "primereact/fileupload";
 
 import { useFormik } from "formik";
 import { validationSchema } from "./FormikData";
-import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
 import { ServiceProps } from "../../../../components/ServiceCard";
-import "./ServiceInformationSection.scss";
-import ReferenceArtworksSection from "../ReferenceArtworksSection/ReferenceArtworksSection";
-import { CarouselPageChangeEvent } from "primereact/carousel";
 import { ArtworkProps } from "../../../../components/ArtworkCard";
 import { getAuthInfo } from "../../../../util/AuthUtil";
 import { GetArtworksData } from "../../ArtworksView/ArtworksService";
+
+import ReferenceArtworksSection from "../ReferenceArtworksSection/ReferenceArtworksSection";
+import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
+import "./ServiceInformationSection.scss";
+import { CreateServiceData } from "../ServicesService";
+import { Toast } from "primereact/toast";
 
 interface ServiceInformationProps {
   props: ServiceProps;
   setClose: (close: boolean) => void;
   handleDelete: (serviceId: string) => void;
+  fetchServiceData: () => void;
 }
 const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   props,
   setClose,
   handleDelete,
+  fetchServiceData,
 }) => {
   let id = props?.id;
+  const toast = useRef<Toast>(null);
   const accountId = getAuthInfo()?.id;
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [totalPageNumber, setTotalPageNumber] = useState(1);
   const [thumbnail, setThumbnail] = useState<File | string>(
     props?.coverLocation
   );
-  // const [selectedArtworkIds, setSelectedArtworkIds] = useState<string[]>([]);
   const [isShow, setShow] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
+    const handleGetArtworks = async () => {
       try {
-        const response = await GetArtworksData(6, 1, accountId);
-        setTotalPageNumber(response.totalPages);
+        const response = await GetArtworksData(4, pageNumber, accountId);
         if (Array.isArray(response.items)) {
-          setArtworks(response.items);
+          setArtworks((prevArtworks) => {
+            const uniqueArtworkIds = new Set(
+              prevArtworks.map((artwork) => artwork.id)
+            );
+            const newArtworks = response.items.filter(
+              (artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id)
+            );
+            return [...prevArtworks, ...newArtworks];
+          });
         }
       } catch (error) {
         console.log("Error fetching artworks data:", accountId);
       }
-    }
-    fetchData();
-  }, [accountId]);
-
-  const handleGetArtworks = async () => {
-    try {
-      const response = await GetArtworksData(3, pageNumber, accountId);
-      setTotalPageNumber(response.totalPages);
-      console.log("Artworks fetched: ", response.items);
-
-      if (Array.isArray(response.items) && pageNumber <= totalPageNumber) {
-        setArtworks((prevArtworks) => {
-          const uniqueArtworkIds = new Set(
-            prevArtworks.map((artwork) => artwork.id)
-          );
-          const newArtworks = response.items.filter(
-            (artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id)
-          );
-          console.log("Artworks", artworks);
-          return [...prevArtworks, ...newArtworks];
-        });
-      }
-    } catch (error) {
-      console.log("Error fetching artworks data:", accountId);
-    }
-  };
-
-  const handlePageChange = (event: CarouselPageChangeEvent) => {
-    console.log("Current ", event.page);
-    console.log("Page number", event.page + 1);
-    setPageNumber(event.page + 1);
+    };
     handleGetArtworks();
+  }, [accountId, pageNumber]);
+
+  const loadMoreData = () => {
+    setPageNumber((prevPageNumber) => prevPageNumber + 1);
   };
 
   const handleThumbnailChange = (event: any) => {
+    formik.setValues({
+      ...formik.values,
+      thumbnail: event.files[0] || defaultCoverImage,
+    });
     setThumbnail(event.files[0]);
+    console.log("Event: ", event);
+    console.log("Thumbnail: ", event.files);
+  };
+
+  const handleSelectArtwork = (selectedArtworkList: string[]) => {
+    formik.setValues({
+      ...formik.values,
+      referenceArtworks: selectedArtworkList[0],
+    });
+    setShow(false);
   };
 
   const handleSubmit = (values: any) => {
     if (id) {
       console.log("Update service: ", values);
     } else {
-      console.log("Create new service", values);
+      CreateServiceData(values)
+        .then((response) => {
+          console.log(response);
+          formik.resetForm();
+          showSuccess();
+          fetchServiceData()
+          setClose(false);
+        })
+        .catch((err) => {
+          console.log("Post err: ", err);
+          showError();
+        })
     }
   };
 
@@ -104,13 +113,33 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
       numberOfRevision: props?.numberOfRevision || 0,
       startingPrice: props?.startingPrice || 0,
       thumbnail: thumbnail || defaultCoverImage,
+      referenceArtworks: "",
     },
     validationSchema,
     onSubmit: (values) => handleSubmit(values),
   });
 
+  const showSuccess = () => {
+    toast.current?.show({
+      severity: "success",
+      summary: "Success",
+      detail: "Message Content",
+      life: 3000,
+    });
+  };
+
+  const showError = () => {
+    toast.current?.show({
+      severity: "error",
+      summary: "Error",
+      detail: "Message Content",
+      life: 3000,
+    });
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
+      <Toast ref={toast} />
       {artworks.length === 0 ? (
         <>
           <div className="w-full">
@@ -145,14 +174,14 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     ? URL.createObjectURL(thumbnail)
                     : thumbnail) || defaultCoverImage
                 }
-                alt="avatar"
+                alt="thumbnail"
               />
               <div className="w-full upload-file flex flex-row justify-content-center mt-3">
                 <FileUpload
                   mode="basic"
                   name="demo[]"
                   accept="image/*"
-                  maxFileSize={1000000}
+                  maxFileSize={10000000}
                   onSelect={handleThumbnailChange}
                 />
               </div>
@@ -160,17 +189,25 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 <Button
                   label="Thêm tác phẩm minh họa"
                   className="p-button-rounded"
+                  type="button"
                   onClick={() => setShow(true)}
                 />
               </div>
               <Dialog
+                showHeader={false}
                 className="w-10"
                 visible={isShow}
-                onHide={() => setShow(false)}
+                contentStyle={{ padding: "0px", borderRadius: "12px" }}
+                dismissableMask={true}
+                modal
+                closable={false}
+                onHide={()=>{}}
               >
                 <ReferenceArtworksSection
                   artworks={artworks}
-                  onPageChange={handlePageChange}
+                  loadData={() => loadMoreData()}
+                  setShow={setShow}
+                  selectArtworks={handleSelectArtwork}
                 />
               </Dialog>
             </div>
@@ -380,6 +417,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     className="p-button"
                     onClick={() => {
                       handleDelete(id);
+                      formik.resetForm();
                     }}
                   />
                 </div>
