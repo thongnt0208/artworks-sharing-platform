@@ -11,6 +11,7 @@ import {
 import "./HomeScreen.scss";
 import { TagProps } from "../../components/Tag";
 import { ArtworkProps } from "../../components/ArtworkCard";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 export type CategoryProps = {
   id: string;
@@ -19,20 +20,20 @@ export type CategoryProps = {
 
 type HomeScreenProps = {
   currentPage: number;
-  hasNext: boolean; 
+  hasNext: boolean;
   hasPrevious: boolean;
   items: ArtworkProps[];
   pageSize: number;
   totalCount: number;
   totalPages: number;
-}
+};
 
 const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [tags, setTags] = useState<TagProps[]>([]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 10;
 
@@ -50,7 +51,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         let newArtworksData: HomeScreenProps;
         if (activeTab === 0) {
@@ -68,25 +69,26 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           const filteredArtworks = newArtworksData.items?.filter(
             (artwork: { id: string; }) => !uniqueArtworkIds.has(artwork.id)
           );
-  
+
           return [...prevArtworks, ...filteredArtworks];
         });
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchData();
   }, [pageNumber, activeTab]); //warning
 
   useEffect(() => {
-    observer.current = new IntersectionObserver((entries) => {
+    observer.current = new IntersectionObserver(
+      (entries) => {
         if (entries[0].isIntersecting) {
           loadMoreData();
         }
       },
-      { threshold: 0.5 } 
+      { threshold: 0.5 }
     );
 
     if (lastArtworkRef.current && observer.current) {
@@ -102,7 +104,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
-    setPageNumber(1); 
+    setPageNumber(1);
   };
 
   return (
@@ -116,13 +118,13 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           className="w-max mb-3 text-black-alpha-90 text-lg"
         />
       ) : null}
-  
-      <Gallery artworks={artworks} />
-      {loading && <div className="lds-ring"><div></div><div></div><div></div><div></div></div>}
 
-      <div ref={lastArtworkRef}>
-        {/* This is an invisible marker to observe */}
-      </div>
+      {isLoading && <ProgressSpinner />}
+      {!isLoading && artworks.length === 0 && (
+        <div className="text-center text-2xl">Không có dữ liệu</div>
+      )}
+      {artworks.length > 0 && <Gallery artworks={artworks} />}
+      <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
   );
 };
