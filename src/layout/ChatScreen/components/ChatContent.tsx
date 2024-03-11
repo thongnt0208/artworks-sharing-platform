@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import ProposalForm from "./Proposal/ProposalForm";
+import MessageItem from "./MessageItem/MessageItem";
 
 export type requestStateToolsType = {
   requestDetail: RequestItemType;
@@ -20,6 +21,8 @@ type Props = {
   requestStateTools: requestStateToolsType;
   setProposalFormData: (data: any) => void;
 };
+
+const tmpAvt = require("../../../assets/defaultImage/default-avatar.png");
 
 export default function ChatContent({ selectingId, content, requestStateTools }: Props) {
   const { requestDetail } = requestStateTools;
@@ -46,7 +49,7 @@ export default function ChatContent({ selectingId, content, requestStateTools }:
           setIsShowProposalForm(false);
         }}
         dismissableMask
-        headerStyle={{padding: "3px 6px 0 0", border: 0}}
+        headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
       >
         <ProposalForm />
       </Dialog>
@@ -57,6 +60,20 @@ export default function ChatContent({ selectingId, content, requestStateTools }:
           <SystemNotificationItem normalContent={renderNormalContent} />
         </>
       )}
+      <MessageItem
+        isMyMessage={false}
+        avatar={tmpAvt}
+        createdOn="1/1/2024"
+        text="Tôi có ấn tượng về phong cách thiết kế của bạn.
+Tôi đang có nhu cầu tìm họa sĩ để thiết kế PitchDeck cho dự án hệ thống bán sen đá cho phép tuỳ chỉnh chậu cây."
+      />
+      <MessageItem
+        isMyMessage={true}
+        avatar=""
+        createdOn="1/1/2024"
+        text="Tôi có ấn tượng về phong cách thiết kế của bạn.
+Tôi đang có nhu cầu tìm họa sĩ để thiết kế PitchDeck cho dự án hệ thống bán sen đá cho phép tuỳ chỉnh chậu cây."
+      />
     </div>
   );
 }

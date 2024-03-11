@@ -1,5 +1,5 @@
 import React from 'react';
-import MessageItemTemplate from '../../../components/MessageItem';
+import ChatboxItemTemplate from '../../../components/ChatboxItem';
 import { DataScroller } from 'primereact/datascroller';
 
 type ChatLeftNavProps = {
@@ -23,7 +23,7 @@ const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
         lazy={true}
         scrollHeight='80vh'
         itemTemplate={(item) => (
-          <MessageItemTemplate
+          <ChatboxItemTemplate
             key={item.id}
             item={item}
             selectingId={selectingId}
