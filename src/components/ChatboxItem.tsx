@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./styles/ChatboxItem.scss";
 import { Avatar } from "primereact/avatar";
-
-type ChatboxItem = {
-  id: string;
-  avatar: string;
-  text: string;
-  author: string;
-  time: string;
-  isSeen: boolean;
-};
+import { ChatboxItemType } from "../layout/ChatScreen/ChatScreen";
 
 type ChatboxItemTemplateProps = {
-  item: ChatboxItem;
-  selectingId: string;
-  setSelectingId: (id: string) => void;
+  item: ChatboxItemType;
+  selectingChatbox: ChatboxItemType;
+  setSelectingChatbox: (chatbox: ChatboxItemType) => void;
 };
 
 const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
-  const { item, selectingId, setSelectingId } = props;
+  const { item, selectingChatbox, setSelectingChatbox } = props;
   const { id, avatar, text, author, time, isSeen } = item;
   const [isSeenLocal, setIsSeenLocal] = useState<boolean>(isSeen);
 
@@ -35,14 +27,14 @@ const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
 
   const flexAddition = "flex gap-3 align-items-center";
   const messageItemClass =
-    selectingId !== id
+    selectingChatbox?.id !== id
       ? `chatbox-item ${flexAddition}`
       : `chatbox-item chatbox-item-selecting ${flexAddition}`;
 
   const itemClickHandler = () => {
     // Call a function that calls an API to setIsSeen to false
     // setIsSeenLocal(true);
-    setSelectingId(id);
+    setSelectingChatbox(item);
     setIsSeenLocal(true);
   };
 
@@ -53,7 +45,7 @@ const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
       </div>
       <div className="chatbox-item-content">
         <div className="chatbox-item-header">
-          <div className="chatbox-item-author text-cus-normal-bold">{author}</div>
+          <div className="chatbox-item-author text-cus-normal-bold">{author?.fullname}</div>
         </div>
         <div
           className={

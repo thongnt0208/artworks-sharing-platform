@@ -41,8 +41,8 @@ import NotFoundPage from "./pages/404";
 import SearchScreen from "./layout/SearchScreen/SearchScreen";
 import { AuthProvider } from "./auth/context/auth-provider";
 import UnknownErrorPage from "./pages/unknown";
-import { GetMessagesCurrentAccount } from "./components/services/HeaderServices";
 import { notificationItemType } from "./components/Notification";
+import { GetChatboxesNoti } from "./layout/ChatScreen/services/ChatServices";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -52,19 +52,19 @@ function App() {
   const primereactConfigValue = {};
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
-  const [messages, setMessages] = useState<notificationItemType[]>([]);
+  const [chatboxes, setChatboxes] = useState<notificationItemType[]>([]);
   // const isHeaderVisible = useHeaderVisibility();
   // const isFooterVisible = useFooterVisibility();
 
   useEffect(() => {
-    GetMessagesCurrentAccount()
-      .then((messages) => {
-        console.log(messages);
-        setMessages(messages);
+    GetChatboxesNoti()
+      .then((chatboxes) => {
+        console.log(chatboxes);
+        setChatboxes(chatboxes);
       })
       .catch((error) => {
-        console.error("Error fetching messages:", error);
-        setMessages([]);
+        console.error("Error fetching chatboxes:", error);
+        setChatboxes([]);
         if (error.response?.status === 401) {
           setIsLogin(false);
         }
@@ -76,7 +76,7 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           {/* {isHeaderVisible && <Header isLogin={isLogin} setIsLogin={setIsLogin} />} */}
-          <Header isLogin={isLogin} setIsLogin={setIsLogin} messagesData={messages} />
+          <Header isLogin={isLogin} setIsLogin={setIsLogin} chatboxesData={chatboxes} />
 
           <Routes>
             <Route path="/" element={<HomeScreen isLogin={true} />} />

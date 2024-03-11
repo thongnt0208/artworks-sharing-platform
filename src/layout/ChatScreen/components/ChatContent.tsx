@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import ProposalForm from "./Proposal/ProposalForm";
 import MessageItem from "./MessageItem/MessageItem";
+import { getAuthInfo } from "../../../util/AuthUtil";
 
 export type requestStateToolsType = {
   requestDetail: RequestItemType;
@@ -16,7 +17,7 @@ export type requestStateToolsType = {
 };
 
 type Props = {
-  selectingId: string;
+  selectingChatboxId: string;
   content: any;
   requestStateTools: requestStateToolsType;
   setProposalFormData: (data: any) => void;
@@ -24,7 +25,7 @@ type Props = {
 
 const tmpAvt = require("../../../assets/defaultImage/default-avatar.png");
 
-export default function ChatContent({ selectingId, content, requestStateTools }: Props) {
+export default function ChatContent({ selectingChatboxId, content, requestStateTools }: Props) {
   const { requestDetail } = requestStateTools;
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const renderNormalContent = (
@@ -41,6 +42,9 @@ export default function ChatContent({ selectingId, content, requestStateTools }:
       <Button label="Huỷ dự án" rounded severity="danger" />
     </>
   );
+  const authenticationInfo = getAuthInfo();
+  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
+
   return (
     <div className="chat-content">
       <Dialog
@@ -53,27 +57,27 @@ export default function ChatContent({ selectingId, content, requestStateTools }:
       >
         <ProposalForm />
       </Dialog>
-      ChatContent: {selectingId}
-      <SystemNotificationItem requestStateTools={requestStateTools} />
-      {requestDetail?.requestStatus?.toUpperCase() === "ACCEPTED" && (
-        <>
-          <SystemNotificationItem normalContent={renderNormalContent} />
-        </>
-      )}
-      <MessageItem
-        isMyMessage={false}
-        avatar={tmpAvt}
-        createdOn="1/1/2024"
-        text="Tôi có ấn tượng về phong cách thiết kế của bạn.
-Tôi đang có nhu cầu tìm họa sĩ để thiết kế PitchDeck cho dự án hệ thống bán sen đá cho phép tuỳ chỉnh chậu cây."
-      />
-      <MessageItem
-        isMyMessage={true}
-        avatar=""
-        createdOn="1/1/2024"
-        text="Tôi có ấn tượng về phong cách thiết kế của bạn.
-Tôi đang có nhu cầu tìm họa sĩ để thiết kế PitchDeck cho dự án hệ thống bán sen đá cho phép tuỳ chỉnh chậu cây."
-      />
+      ChatContent: {selectingChatboxId}
+      
+      <div className="chat-scroll-area">
+        <SystemNotificationItem requestStateTools={requestStateTools} />
+        {requestDetail?.requestStatus?.toUpperCase() === "ACCEPTED" && (
+          <>
+            <SystemNotificationItem normalContent={renderNormalContent} />
+          </>
+        )}
+
+        {content.map((item: any) => {
+          return (
+            <MessageItem
+              isMyMessage={item.createdBy === currentUserId}
+              avatar={tmpAvt}
+              createdOn={item.createdOn}
+              text={item.text}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
