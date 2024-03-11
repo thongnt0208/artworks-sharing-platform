@@ -2,5 +2,11 @@
 
 .chat-content {
   border: solid 1px pink;
-  height: 90vh;
+  height: 80vh;
+
+  .chat-scroll-area{
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 20px;
+  }
 }
