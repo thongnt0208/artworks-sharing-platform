@@ -28,7 +28,10 @@ export async function GetChatboxesCurrentAccount(): Promise<ChatboxItemType[]> {
         const _content = `Bạn có tin nhắn mới từ ${
           _acc1.id === currentUserId ? _acc2?.fullname : _acc1.fullname
         }`;
-        const _author = _acc1.id === currentUserId ? _acc2?.fullname : _acc1.fullname;
+        const _author =
+          _acc1.id === currentUserId
+            ? { id: _acc2?.id, fullname: _acc2?.fullname }
+            : { id: _acc1?.id, fullname: _acc1?.fullname };
 
         return {
           id: item.id || "",
@@ -60,14 +63,14 @@ export type ChatMessageType = {
  * @example
  * const messages = await GetMessagesByChatboxId("chatboxId");
  * console.log(messages);
- * @version 1.0.0
+ * @version 1.0.1
  * @author ThongNT
  */
 export async function GetMessagesByChatboxId(chatboxId: string): Promise<ChatMessageType[]> {
   return axiosPrivate
     .get(`/chatbox/${chatboxId}/messages`)
     .then((response) =>
-      response?.data?.map((item: any) => {
+      response?.data?.reverse().map((item: any) => {
         return {
           chatBoxId: item.chatBoxId || "",
           text: item.text || "",
@@ -83,18 +86,18 @@ export async function GetMessagesByChatboxId(chatboxId: string): Promise<ChatMes
 }
 
 /**
- * This function is used to send a message to a user.
+ * This function is used to send a message to an account.
  * @param accountId - The ID of the recieved user.
  * @param text - The content of the message.
  * @returns A promise that resolves to the message sent.
  * @throws An error from the API request.
  * @example
- * const message = await SendMessageToChatbox("Id", "Hello");
+ * const message = await SendMessageToAccount("Id", "Hello");
  * console.log(message);
- * @version 1.0.0
+ * @version 1.0.1
  * @author ThongNT
  */
-export async function SendMessageToChatbox(
+export async function SendMessageToAccount(
   accountId: string,
   text: string
 ): Promise<ChatMessageType> {
@@ -136,7 +139,7 @@ export async function GetChatboxesNoti(): Promise<notificationItemType[]> {
   return chatboxes?.map((chatbox) => {
     return {
       notificationId: chatbox.id || "",
-      content: `Bạn có tin nhắn mới từ ${chatbox.author}`,
+      content: `Bạn có tin nhắn mới từ ${chatbox.author.fullname}`,
       notifyType: "request",
       isSeen: chatbox.isSeen || false,
       creationDate: chatbox.time || "",

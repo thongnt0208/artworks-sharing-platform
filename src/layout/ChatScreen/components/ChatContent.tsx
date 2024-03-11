@@ -58,23 +58,26 @@ export default function ChatContent({ selectingChatboxId, content, requestStateT
         <ProposalForm />
       </Dialog>
       ChatContent: {selectingChatboxId}
-      <SystemNotificationItem requestStateTools={requestStateTools} />
-      {requestDetail?.requestStatus?.toUpperCase() === "ACCEPTED" && (
-        <>
-          <SystemNotificationItem normalContent={renderNormalContent} />
-        </>
-      )}
+      
+      <div className="chat-scroll-area">
+        <SystemNotificationItem requestStateTools={requestStateTools} />
+        {requestDetail?.requestStatus?.toUpperCase() === "ACCEPTED" && (
+          <>
+            <SystemNotificationItem normalContent={renderNormalContent} />
+          </>
+        )}
 
-      {content.map((item: any) => {
-        return (
-          <MessageItem
-            isMyMessage={item.createdBy === currentUserId}
-            avatar={tmpAvt}
-            createdOn={item.createdOn}
-            text={item.text}
-          />
-        );
-      })}
+        {content.map((item: any) => {
+          return (
+            <MessageItem
+              isMyMessage={item.createdBy === currentUserId}
+              avatar={tmpAvt}
+              createdOn={item.createdOn}
+              text={item.text}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

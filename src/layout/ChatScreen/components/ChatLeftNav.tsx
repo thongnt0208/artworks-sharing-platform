@@ -1,15 +1,16 @@
 import React from 'react';
 import ChatboxItemTemplate from '../../../components/ChatboxItem';
 import { DataScroller } from 'primereact/datascroller';
+import { ChatboxItemType } from '../ChatScreen';
 
 type ChatLeftNavProps = {
   itemsList: any[]; // Update the type of itemsList with the actual type of your data
-  selectingChatboxId: string;
-  setSelectingChatboxId: (id: string) => void;
+  selectingChatbox: ChatboxItemType;
+  setSelectingChatbox: (chatbox: ChatboxItemType) => void;
 };
 
 const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
-  const { itemsList, selectingChatboxId, setSelectingChatboxId } = props;
+  const { itemsList, selectingChatbox, setSelectingChatbox } = props;
 
   return (
     <div className='max-h-full'>
@@ -26,8 +27,8 @@ const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
           <ChatboxItemTemplate
             key={item.id}
             item={item}
-            selectingChatboxId={selectingChatboxId}
-            setSelectingChatboxId={setSelectingChatboxId}
+            selectingChatbox={selectingChatbox}
+            setSelectingChatbox={setSelectingChatbox}
           />
         )}
       />

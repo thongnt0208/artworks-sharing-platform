@@ -8,25 +8,31 @@ import {
   ChatMessageType,
   GetChatboxesCurrentAccount,
   GetMessagesByChatboxId,
+  SendMessageToAccount,
 } from "./services/ChatServices";
 import { useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { GetRequestById, RequestItemType, UpdateRequestStatus } from "./services/ProposalServices";
+import ChatInput from "./components/ChatInput/ChatInput";
 
 export type ChatboxItemType = {
   id: string;
   avatar: string;
   text?: string;
-  author: string;
+  author: {
+    id: string;
+    fullname: string;
+  };
   time: string;
-  isSeen?: boolean;
+  isSeen: boolean;
 };
 
 export default function ChatScreen() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
+  const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
+  const [newChatMessage, setNewChatMessage] = useState("");
   const [selectingRequestId, setSelectingRequestId] = useState("");
-  const [selectingChatboxId, setSelectingChatboxId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [requestDetail, setRequestDetail] = useState<RequestItemType>({} as RequestItemType);
   const [proposalFormData, setProposalFormData] = useState({} as any);
@@ -98,12 +104,23 @@ export default function ChatScreen() {
   };
 
   const GetChatMessages = () => {
-    GetMessagesByChatboxId(selectingChatboxId)
+    GetMessagesByChatboxId(selectingChatbox?.id)
       .then((res) => {
         setChatMessages(res);
       })
       .catch((error) => {
         setChatMessages([]);
+        catchError(error);
+      });
+  };
+
+  const SendChatMessage = () => {
+    SendMessageToAccount(selectingChatbox?.author?.id, newChatMessage)
+      .then(() => {
+        GetChatMessages();
+        setNewChatMessage(""); // Clear input after sending message
+      })
+      .catch((error) => {
         catchError(error);
       });
   };
@@ -114,7 +131,7 @@ export default function ChatScreen() {
 
   useEffect(() => {
     setSelectingRequestId(chatboxes[0]?.id);
-    setSelectingChatboxId(chatboxes[0]?.id);
+    setSelectingChatbox(chatboxes[0]);
   }, [chatboxes]);
 
   useEffect(() => {
@@ -123,7 +140,7 @@ export default function ChatScreen() {
 
   useEffect(() => {
     GetChatMessages();
-  }, [selectingChatboxId]);
+  }, [selectingChatbox]);
 
   return (
     <>
@@ -133,16 +150,22 @@ export default function ChatScreen() {
         <div className="col-3 max-h-full">
           <ChatLeftNav
             itemsList={chatboxes}
-            selectingChatboxId={selectingChatboxId}
-            setSelectingChatboxId={setSelectingChatboxId}
+            selectingChatbox={selectingChatbox}
+            setSelectingChatbox={setSelectingChatbox}
           />
         </div>
         <div className="col-6">
           <ChatContent
-            selectingChatboxId={selectingChatboxId}
+            selectingChatboxId={selectingChatbox?.id}
             content={chatMessages}
             requestStateTools={{ requestDetail, setRequestDetail, acceptRequest, denyRequest }}
             setProposalFormData={setProposalFormData}
+          />
+          <ChatInput
+            newChatMessage={newChatMessage}
+            setNewChatMessage={setNewChatMessage}
+            SendChatMessage={SendChatMessage}
+            isLoading={isLoading}
           />
         </div>
         <div className="col-3">
