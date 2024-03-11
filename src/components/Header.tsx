@@ -20,7 +20,7 @@ const avatar = require("../assets/defaultImage/default-avatar.png");
 type Props = {
   isLogin: boolean;
   setIsLogin: (value: boolean) => void;
-  messagesData: notificationItemType[];
+  chatboxesData: notificationItemType[];
 };
 
 let sampleNotificationData = [
@@ -50,7 +50,7 @@ let sampleNotificationData = [
 const Header = ({
   isLogin,
   setIsLogin,
-  messagesData,
+  chatboxesData,
 }: Props) => {
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState<boolean>(false);
@@ -204,7 +204,7 @@ const Header = ({
         {...dialogModelFields}
       >
         <Notification
-          notifications={messagesData}
+          notifications={chatboxesData}
           account={{
             accountId: "1",
             name: "Trung Thông",
