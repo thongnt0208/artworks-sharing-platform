@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
@@ -47,6 +47,15 @@ const ServicesView: React.FC = () => {
     setVisible(true);
   };
 
+  const fetchServices = useCallback(async () => {
+    const response = await GetServicesData(accountId);
+    if (Array.isArray(response.items)) {
+      setServices(response.items);
+    } else {
+      console.error("Response is not an array:", response);
+    }
+  }, [accountId]);
+
   const handleDeleteService = async (serviceId: string) => {
     try {
       const response = await DeleteServiceData(serviceId);
@@ -58,37 +67,40 @@ const ServicesView: React.FC = () => {
     } catch (error) {
       showError();
     } finally {
-      const fetchServices = async () => {
-        const response = await GetServicesData(accountId);
-        if (Array.isArray(response.items)) {
-          setServices(response.items);
-        } else {
-          console.error("Response is not an array:", response);
-        }
-      };
       fetchServices();
+      setSelectedService({} as ServiceProps);
     }
   };
 
   useEffect(() => {
-    const fetchServices = async () => {
-      const response = await GetServicesData(accountId);
-      if (Array.isArray(response.items)) {
-        setServices(response.items);
-      } else {
-        console.error("Response is not an array:", response);
-      }
-    };
     fetchServices();
-  }, [accountId]);
+  }, [fetchServices]);
 
   return (
     <>
       <h1>Các dịch vụ</h1>
       <div className="gallery p-0">
-        {services.length === 0 ? (
-          isCreator ? (
-            <>
+        {isCreator || services.length > 0 ? (
+          <>
+            <div className="gallery__item flex flex-wrap flex-row justify-content-start align-items-start">
+              {services.map((service) => (
+                <ServiceCard
+                  key={service.id}
+                  id={service.id}
+                  serviceName={service.serviceName}
+                  description={service.description}
+                  deliveryTime={service.deliveryTime}
+                  numberOfConcept={service.numberOfConcept}
+                  numberOfRevision={service.numberOfRevision}
+                  startingPrice={service.startingPrice}
+                  coverLocation={service.coverLocation}
+                  isCreator={isCreator}
+                  editHandler={() => {
+                    setSelectedService(service);
+                    handleEditService();
+                  }}
+                />
+              ))}
               <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
                 <i className="pi pi-plus-circle icon m-3" />
                 <Button
@@ -98,30 +110,10 @@ const ServicesView: React.FC = () => {
                   }}
                 ></Button>
               </Card>
-            </>
-          ) : (
-            <div> Tác giả chưa có dịch vụ nào </div>
-          )
-        ) : (
-          services.map((service) => (
-            <div className="gallery__item col col-6" key={service.id}>
-              <ServiceCard
-                key={service.id}
-                id={service.id}
-                serviceName={service.serviceName}
-                description={service.description}
-                deliveryTime={service.deliveryTime}
-                numberOfConcept={service.numberOfConcept}
-                numberOfRevision={service.numberOfRevision}
-                startingPrice={service.startingPrice}
-                coverLocation={service.coverLocation}
-                editHandler={() => {
-                  setSelectedService(service);
-                  handleEditService();
-                }}
-              />
             </div>
-          ))
+          </>
+        ) : (
+          <div> Tác giả chưa có dịch vụ nào </div>
         )}
       </div>
       <Dialog
@@ -132,7 +124,9 @@ const ServicesView: React.FC = () => {
         modal
         dismissableMask={true}
         closable={false}
-        onHide={() => setVisible(false)}
+        onHide={() => {
+          setVisible(false);
+        }}
       >
         <>
           {selectedService && (
@@ -140,6 +134,10 @@ const ServicesView: React.FC = () => {
               props={selectedService}
               setClose={setVisible}
               handleDelete={() => handleDeleteService(selectedService.id)}
+              fetchServiceData={() => {
+                localStorage.removeItem("selectedArtworkIds");
+                fetchServices();
+              }}
             />
           )}
         </>
