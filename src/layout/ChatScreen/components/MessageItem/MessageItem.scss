@@ -1,0 +1,49 @@
+@import "/src/const/variables.scss";
+
+.message-item {
+  display: flex;
+  margin-bottom: 10px;
+
+  .avatar-container {
+    margin-right: 10px;
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  }
+
+  .message-content {
+    max-width: 70%;
+    padding: 25px;
+
+    .message-text {
+      word-wrap: break-word;
+    }
+
+    .message-timestamp {
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+  }
+}
+
+.my-message {
+  flex-direction: row-reverse;
+
+  .message-content {
+    background-color: $primary-100;
+    align-self: flex-end;
+    border-radius: $borderRadius-300 $borderRadius-300 0 $borderRadius-300;
+  }
+}
+
+.other-message {
+  .message-content {
+    margin-top: 25px;
+    background-color: #f1f0f0;
+    border-radius: 0 $borderRadius-300 $borderRadius-300 $borderRadius-300;
+  }
+}
