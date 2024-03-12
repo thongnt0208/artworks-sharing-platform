@@ -1,9 +1,6 @@
 @import "/src/const/variables.scss";
 
 .chat-content {
-  border: solid 1px pink;
-  height: 80vh;
-
   .chat-scroll-area{
     height: 100%;
     overflow-y: auto;

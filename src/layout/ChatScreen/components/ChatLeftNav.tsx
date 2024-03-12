@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatboxItemTemplate from '../../../components/ChatboxItem';
 import { DataScroller } from 'primereact/datascroller';
-import { ChatboxItemType } from '../ChatScreen';
+import { ChatboxItemType } from '../ChatRelatedTypes';
 
 type ChatLeftNavProps = {
   itemsList: any[]; // Update the type of itemsList with the actual type of your data

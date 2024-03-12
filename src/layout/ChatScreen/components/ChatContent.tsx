@@ -8,7 +8,7 @@ import { Dialog } from "primereact/dialog";
 import ProposalForm from "./Proposal/ProposalForm";
 import MessageItem from "./MessageItem/MessageItem";
 import { getAuthInfo } from "../../../util/AuthUtil";
-import { ChatboxItemType } from "../ChatScreen";
+import { ChatboxItemType } from "../ChatRelatedTypes";
 
 export type requestStateToolsType = {
   requestDetail: RequestItemType;
@@ -58,7 +58,7 @@ export default function ChatContent({ selectingChatbox, content, requestStateToo
       >
         <ProposalForm />
       </Dialog>
-      ChatContent: {JSON.stringify(selectingChatbox)}
+      {/* <p style={{wordWrap: "break-word"}}>ChatContent: {JSON.stringify(selectingChatbox)}</p> */}
       {/* Chat scroller area */}
       <div className="chat-scroll-area">
         <SystemNotificationItem requestStateTools={requestStateTools} />

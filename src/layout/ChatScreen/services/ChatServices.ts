@@ -1,4 +1,4 @@
-import { ChatboxItemType } from "./../ChatScreen";
+import { ChatboxItemType } from "../ChatRelatedTypes"; 
 import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
@@ -139,7 +139,7 @@ export async function GetChatboxesNoti(): Promise<notificationItemType[]> {
   return chatboxes?.map((chatbox) => {
     return {
       notificationId: chatbox.id || "",
-      content: `Bạn có tin nhắn mới từ ${chatbox.author.fullname}`,
+      content: `Hộp tin với ${chatbox.author.fullname}`,
       notifyType: "request",
       isSeen: chatbox.isSeen || false,
       creationDate: chatbox.time || "",

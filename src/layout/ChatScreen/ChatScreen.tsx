@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import "./ChatScreen.scss";
 
 import ChatLeftNav from "./components/ChatLeftNav";
 import ChatContent from "./components/ChatContent";
@@ -14,18 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { GetRequestById, RequestItemType, UpdateRequestStatus } from "./services/ProposalServices";
 import ChatInput from "./components/ChatInput/ChatInput";
-
-export type ChatboxItemType = {
-  id: string;
-  avatar: string;
-  text?: string;
-  author: {
-    id: string;
-    fullname: string;
-  };
-  time: string;
-  isSeen: boolean;
-};
+import { ChatboxItemType } from "./ChatRelatedTypes";
+import { Avatar } from "primereact/avatar";
 
 export default function ChatScreen() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
@@ -140,35 +132,44 @@ export default function ChatScreen() {
 
   useEffect(() => {
     GetChatMessages();
+    console.log(proposalFormData);
   }, [selectingChatbox]);
 
   return (
     <>
       {isLoading && <ProgressSpinner />}
-      {JSON.stringify(proposalFormData)}
-      <div className="grid grid-nogutter" style={{ maxHeight: "80vh" }}>
-        <div className="col-3 max-h-full">
+      <div className="chat-screen-container">
+        <div className="first-col">
           <ChatLeftNav
             itemsList={chatboxes}
             selectingChatbox={selectingChatbox}
             setSelectingChatbox={setSelectingChatbox}
           />
         </div>
-        <div className="col-6">
-          <ChatContent
-            selectingChatbox={selectingChatbox}
-            content={chatMessages}
-            requestStateTools={{ requestDetail, setRequestDetail, acceptRequest, denyRequest }}
-            setProposalFormData={setProposalFormData}
-          />
-          <ChatInput
-            newChatMessage={newChatMessage}
-            setNewChatMessage={setNewChatMessage}
-            SendChatMessage={SendChatMessage}
-            isLoading={isLoading}
-          />
+        <div className="middle-col">
+          <div className="reciever-name-container">
+            <Avatar image={selectingChatbox?.avatar} size="normal" shape="circle" />
+            <p className="text-cus-normal-bold">{selectingChatbox?.author?.fullname}</p>
+          </div>
+          <div className="chat-content-container">
+            <ChatContent
+              selectingChatbox={selectingChatbox}
+              content={chatMessages}
+              requestStateTools={{ requestDetail, setRequestDetail, acceptRequest, denyRequest }}
+              setProposalFormData={setProposalFormData}
+            />
+          </div>
+
+          <div className="chat-input-container">
+            <ChatInput
+              newChatMessage={newChatMessage}
+              setNewChatMessage={setNewChatMessage}
+              SendChatMessage={SendChatMessage}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
-        <div className="col-3">
+        <div className="last-col">
           <ChatRightNav selectingRequestId={selectingRequestId} />
         </div>
       </div>

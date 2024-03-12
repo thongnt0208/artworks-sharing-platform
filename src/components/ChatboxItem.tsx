@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./styles/ChatboxItem.scss";
 import { Avatar } from "primereact/avatar";
-import { ChatboxItemType } from "../layout/ChatScreen/ChatScreen";
+import { ChatboxItemType } from "../layout/ChatScreen/ChatRelatedTypes";
 
 type ChatboxItemTemplateProps = {
   item: ChatboxItemType;
@@ -41,7 +41,7 @@ const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
   return (
     <div className={messageItemClass} onClick={itemClickHandler}>
       <div className="chatbox-item-avatar flex">
-        <Avatar image={avatar} size="large" shape="circle" />
+        <Avatar image={avatar} size="normal" shape="circle" />
       </div>
       <div className="chatbox-item-content">
         <div className="chatbox-item-header">
