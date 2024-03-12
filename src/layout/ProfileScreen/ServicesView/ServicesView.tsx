@@ -23,7 +23,7 @@ const ServicesView: React.FC = () => {
     numberOfConcept: 0,
     numberOfRevision: 0,
     startingPrice: 0,
-    coverLocation: "",
+    thumbnail: "",
   });
 
   const showSuccess = () => {
@@ -52,14 +52,13 @@ const ServicesView: React.FC = () => {
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
-      console.error("Response is not an array:", response);
+      showError();
     }
   }, [accountId]);
 
   const handleDeleteService = async (serviceId: string) => {
     try {
       const response = await DeleteServiceData(serviceId);
-      console.log("Hello", response);
       if (response) {
         showSuccess();
         setVisible(false);
@@ -93,7 +92,7 @@ const ServicesView: React.FC = () => {
                   numberOfConcept={service.numberOfConcept}
                   numberOfRevision={service.numberOfRevision}
                   startingPrice={service.startingPrice}
-                  coverLocation={service.coverLocation}
+                  thumbnail={service.thumbnail}
                   isCreator={isCreator}
                   editHandler={() => {
                     setSelectedService(service);
@@ -132,7 +131,10 @@ const ServicesView: React.FC = () => {
           {selectedService && (
             <ServiceInformationSection
               props={selectedService}
-              setClose={setVisible}
+              setClose={() => {
+                setVisible(false);
+                setSelectedService({} as ServiceProps);
+              }}
               handleDelete={() => handleDeleteService(selectedService.id)}
               fetchServiceData={() => {
                 localStorage.removeItem("selectedArtworkIds");
