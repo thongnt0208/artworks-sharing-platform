@@ -11,9 +11,10 @@ import { getAuthInfo, removeAuthInfo } from "../util/AuthUtil";
 
 import Notification, { notificationItemType } from "./Notification";
 import ProfilePopup from "./ProfilePopup";
-import "./Header.scss";
 import { AuthContext } from "../auth/context/auth-provider";
 import { hideHeaderRoutes } from "../const/uiConstants";
+
+import "./Header.scss";
 
 const logo = require("../assets/logo/logo-small.png");
 const tmpAvt = require("../assets/defaultImage/blank-100.png");
