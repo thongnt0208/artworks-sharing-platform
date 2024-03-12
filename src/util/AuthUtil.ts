@@ -5,6 +5,7 @@ export type authInfoDataType = {
   username: string;
   email: string;
   fullname: string;
+  avatar: string;
   accessToken: string;
   refreshToken: string;
   role: string[] | string;
@@ -22,7 +23,7 @@ export type authInfoDataType = {
  * @author ThongNT
  * @version 1.0.0
  */
-const setAuthInfo = (data: any): boolean => {
+const setAuthInfo = (data: authInfoDataType): boolean => {
   return saveToLS("authData", data);
 };
 
