@@ -5,6 +5,8 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { FileUpload } from "primereact/fileupload";
+import { Toast } from "primereact/toast";
+import { Dropdown } from "primereact/dropdown";
 
 import { useFormik } from "formik";
 import { validationSchema } from "./FormikData";
@@ -12,12 +14,12 @@ import { ServiceProps } from "../../../../components/ServiceCard";
 import { ArtworkProps } from "../../../../components/ArtworkCard";
 import { getAuthInfo } from "../../../../util/AuthUtil";
 import { GetArtworksData } from "../../ArtworksView/ArtworksService";
+import { deliveryTime } from "../../../../const/bizConstants";
+import { CreateServiceData, UpdateServiceData } from "../ServicesService";
 
 import ReferenceArtworksSection from "../ReferenceArtworksSection/ReferenceArtworksSection";
 import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
 import "./ServiceInformationSection.scss";
-import { CreateServiceData } from "../ServicesService";
-import { Toast } from "primereact/toast";
 
 interface ServiceInformationProps {
   props: ServiceProps;
@@ -37,7 +39,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [thumbnail, setThumbnail] = useState<File | string>(
-    props?.coverLocation
+    props?.thumbnail
   );
   const [isShow, setShow] = useState(false);
 
@@ -73,8 +75,6 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
       thumbnail: event.files[0] || defaultCoverImage,
     });
     setThumbnail(event.files[0]);
-    console.log("Event: ", event);
-    console.log("Thumbnail: ", event.files);
   };
 
   const handleSelectArtwork = (selectedArtworkList: string[]) => {
@@ -87,20 +87,26 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
 
   const handleSubmit = (values: any) => {
     if (id) {
-      console.log("Update service: ", values);
-    } else {
-      CreateServiceData(values)
+      UpdateServiceData(values, id)
         .then((response) => {
-          console.log(response);
-          formik.resetForm();
           showSuccess();
-          fetchServiceData()
+          fetchServiceData();
           setClose(false);
         })
         .catch((err) => {
-          console.log("Post err: ", err);
           showError();
+        });
+    } else {
+      CreateServiceData(values)
+        .then((response) => {
+          formik.resetForm();
+          showSuccess();
+          fetchServiceData();
+          setClose(false);
         })
+        .catch((err) => {
+          showError();
+        });
     }
   };
 
@@ -122,8 +128,8 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   const showSuccess = () => {
     toast.current?.show({
       severity: "success",
-      summary: "Success",
-      detail: "Message Content",
+      summary: "Thành công",
+      detail: "Cập nhật thành công",
       life: 3000,
     });
   };
@@ -131,8 +137,8 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   const showError = () => {
     toast.current?.show({
       severity: "error",
-      summary: "Error",
-      detail: "Message Content",
+      summary: "Lỗi",
+      detail: "Cập nhật lỗi",
       life: 3000,
     });
   };
@@ -172,7 +178,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 src={
                   (thumbnail instanceof File
                     ? URL.createObjectURL(thumbnail)
-                    : thumbnail) || defaultCoverImage
+                    : thumbnail) 
                 }
                 alt="thumbnail"
               />
@@ -201,7 +207,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 dismissableMask={true}
                 modal
                 closable={false}
-                onHide={()=>{}}
+                onHide={() => {}}
               >
                 <ReferenceArtworksSection
                   artworks={artworks}
@@ -213,10 +219,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
             </div>
 
             <div className="profile-info-container col-8 h-fit mt-3 flex flex-column justify-content-center">
-              <div
-                className="profile-info-form w-full h-fit flex flex-column justify-content-start align-items-start"
-                onSubmit={handleSubmit}
-              >
+              <div className="profile-info-form w-full h-fit flex flex-column justify-content-start align-items-start" onSubmit={handleSubmit}>
                 <div className="service-name-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="service-name-label w-full h-fit flex flex-column justify-content-start align-items-start">
                     <label
@@ -286,7 +289,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     >
                       Thời gian hoàn thành
                     </label>
-                    <InputText
+                    <Dropdown
                       id="deliveryTime"
                       className={`text-base w-full ${
                         formik.errors.deliveryTime &&
@@ -296,6 +299,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                       name="deliveryTime"
                       placeholder={formik.values.deliveryTime || ""}
                       value={formik.values.deliveryTime}
+                      options={deliveryTime}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
@@ -404,9 +408,13 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                   </div>
                   <div className="cancel-btn w-fit h-fit flex flex-row justify-content-center">
                     <Button
+                      type="button"
                       label="Hủy"
                       className="p-button"
-                      onClick={() => setClose(false)}
+                      onClick={() => {
+                        formik.resetForm();
+                        setClose(false);
+                      }}
                     />
                   </div>
                 </div>
@@ -415,6 +423,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                   <Button
                     label="Xóa dịch vụ"
                     className="p-button"
+                    type="button"
                     onClick={() => {
                       handleDelete(id);
                       formik.resetForm();
