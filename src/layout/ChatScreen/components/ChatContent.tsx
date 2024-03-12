@@ -8,6 +8,7 @@ import { Dialog } from "primereact/dialog";
 import ProposalForm from "./Proposal/ProposalForm";
 import MessageItem from "./MessageItem/MessageItem";
 import { getAuthInfo } from "../../../util/AuthUtil";
+import { ChatboxItemType } from "../ChatScreen";
 
 export type requestStateToolsType = {
   requestDetail: RequestItemType;
@@ -17,7 +18,7 @@ export type requestStateToolsType = {
 };
 
 type Props = {
-  selectingChatboxId: string;
+  selectingChatbox: ChatboxItemType;
   content: any;
   requestStateTools: requestStateToolsType;
   setProposalFormData: (data: any) => void;
@@ -25,7 +26,7 @@ type Props = {
 
 const tmpAvt = require("../../../assets/defaultImage/default-avatar.png");
 
-export default function ChatContent({ selectingChatboxId, content, requestStateTools }: Props) {
+export default function ChatContent({ selectingChatbox, content, requestStateTools }: Props) {
   const { requestDetail } = requestStateTools;
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const renderNormalContent = (
@@ -57,8 +58,8 @@ export default function ChatContent({ selectingChatboxId, content, requestStateT
       >
         <ProposalForm />
       </Dialog>
-      ChatContent: {selectingChatboxId}
-      
+      ChatContent: {JSON.stringify(selectingChatbox)}
+      {/* Chat scroller area */}
       <div className="chat-scroll-area">
         <SystemNotificationItem requestStateTools={requestStateTools} />
         {requestDetail?.requestStatus?.toUpperCase() === "ACCEPTED" && (
@@ -71,7 +72,7 @@ export default function ChatContent({ selectingChatboxId, content, requestStateT
           return (
             <MessageItem
               isMyMessage={item.createdBy === currentUserId}
-              avatar={tmpAvt}
+              avatar={selectingChatbox?.avatar || tmpAvt}
               createdOn={item.createdOn}
               text={item.text}
             />

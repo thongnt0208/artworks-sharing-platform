@@ -1,14 +1,16 @@
-@import "../const/variables.scss";
+@import "/src/const/variables.scss";
 
 .notification-container {
   width: fit-content;
   height: fit-content;
   .user-information-bar {
+    cursor: pointer;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: $borderRadius-100;
     h3 {
       margin: 0.2rem;
       color: $text-100;
@@ -19,6 +21,35 @@
       font-size: $normal;
     }
   }
+  .user-information-bar:hover, .list-box .p-listbox:hover {
+    background-color: $bg-200;
+    animation: growUp 0.5s ease-out forwards;
+    @keyframes growUp {
+      0% {
+        transform: scale(1);
+        padding: 0;
+      }
+      100% {
+        transform: scale(1.1);
+        padding: 1rem 0;
+      }
+    }
+  }
+  .user-information-bar:not(:hover), .list-box .p-listbox:not(:hover) {
+    animation: shrinkDown 0.3s ease-out forwards;
+    @keyframes shrinkDown {
+      0% {
+        transform: scale(1.1);
+        padding: 0.8rem 0;
+      }
+      100% {
+        transform: scale(1);
+        padding: 0;
+      }
+    }
+    transition-delay: 0.5s;
+  }
+  
   .list-box {
     margin-bottom: 1rem;
     background-color: $bg-100;

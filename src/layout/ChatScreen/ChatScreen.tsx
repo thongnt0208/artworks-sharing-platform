@@ -156,7 +156,7 @@ export default function ChatScreen() {
         </div>
         <div className="col-6">
           <ChatContent
-            selectingChatboxId={selectingChatbox?.id}
+            selectingChatbox={selectingChatbox}
             content={chatMessages}
             requestStateTools={{ requestDetail, setRequestDetail, acceptRequest, denyRequest }}
             setProposalFormData={setProposalFormData}

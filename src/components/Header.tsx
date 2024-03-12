@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
 import { InputText } from "primereact/inputtext";
@@ -13,9 +13,10 @@ import Notification, { notificationItemType } from "./Notification";
 import ProfilePopup from "./ProfilePopup";
 import "./Header.scss";
 import { AuthContext } from "../auth/context/auth-provider";
+import { hideHeaderRoutes } from "../const/uiConstants";
 
 const logo = require("../assets/logo/logo-small.png");
-const avatar = require("../assets/defaultImage/default-avatar.png");
+const tmpAvt = require("../assets/defaultImage/blank-100.png");
 
 type Props = {
   isLogin: boolean;
@@ -47,18 +48,16 @@ let sampleNotificationData = [
   },
 ];
 
-const Header = ({
-  isLogin,
-  setIsLogin,
-  chatboxesData,
-}: Props) => {
+const Header = ({ isLogin, setIsLogin, chatboxesData }: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentUrl = location.pathname + location.search + location.hash;
+
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [showMessageNotification, setShowMessageNotification] = useState<boolean>(false);
   const [showProfilePopup, setShowProfilePopup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [currentUrl, setCurrentUrl] = useState<string>(window.location.href || "");
 
   const authContext = useContext(AuthContext);
   console.log(authContext);
@@ -75,10 +74,6 @@ const Header = ({
       authContext?.setAuthInfo?.({});
       navigate("/");
     }, 1500);
-  };
-
-  const handleCheckLogin = () => {
-    !isLogin && navigate("/login");
   };
 
   const startItems = [
@@ -110,13 +105,14 @@ const Header = ({
     }
   };
 
-  useEffect(() => {
-    setCurrentUrl(window.location.href);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.location.href]);
+  const authInfo = getAuthInfo();
 
   return (
-    <div className="header">
+    <div
+      className={`header ${
+        hideHeaderRoutes.some((route) => currentUrl.includes(`/${route}`)) ? "hidden" : ""
+      }`}
+    >
       <Menubar
         className="menubar"
         start={() => startItems}
@@ -169,20 +165,18 @@ const Header = ({
                       setShowProfilePopup(true);
                     }}
                   >
-                    <Avatar image={avatar} size="normal" />
+                    <Avatar image={authInfo?.avatar || tmpAvt} size="normal" shape="circle" />
                   </div>
                 </>
               ) : (
                 <>
                   <Button
-                    icon=""
                     label="Đăng nhập"
                     onClick={() => {
-                      handleCheckLogin();
+                      navigate("/login");
                     }}
                   />
                   <Button
-                    icon=""
                     label="Đăng ký"
                     onClick={() => {
                       navigate("/register");
@@ -236,7 +230,11 @@ const Header = ({
         }}
         {...dialogModelFields}
       >
-        <ProfilePopup fullname={getAuthInfo()?.fullname} email={getAuthInfo()?.email} />
+        <ProfilePopup
+          fullname={authInfo?.fullname}
+          email={authInfo?.email}
+          avatar={authInfo?.avatar || tmpAvt}
+        />
         <div className="flex w-full justify-content-center p-2">
           <Button
             icon=""
