@@ -1,18 +1,28 @@
 import axios from "axios";
+// import { getAuthInfo } from "../../../util/AuthUtil";
+import { axiosPrivate } from "../../../hooks/useAxios";
+const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 
+// const accessToken = getAuthInfo()?.accessToken || "";
+// const refreshToken = getAuthInfo()?.refreshToken || "";
+
+/**
+ *
+ * Retrieves wallet data for a given account ID.
+ *
+ * @param accountId - The ID of the account.
+ * @returns A promise that resolves to the wallet data.
+ * @author AnhDH
+ * @version 1.0.0
+ */
 export async function GetWalletData(accountId: string) {
   try {
-    const response = await axios.get(
-      `http://127.0.0.1:1880/account/${accountId}/wallet`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+    const response = await axiosPrivate.get(
+      `${API_URL}/account/${accountId}/wallets`
     );
     if (response.status !== 200) {
       console.log("Error fetching profile data");
-      return [];
+      return {};
     }
     console.log("Success fetching wallet data", response.data);
     return response.data;
