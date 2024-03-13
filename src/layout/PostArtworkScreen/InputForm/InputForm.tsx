@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
+// ---------------------------------------------------------------
 import { getCategoriesList, postArtwork } from "../Service";
-import "./InputForm.scss";
 import { maxNumberOfCategories, maxNumberOfTags } from "../../../const/bizConstants";
-import {
-  InputText,
-  InputTextarea,
-  Dropdown,
-  Chips,
-  Button,
-  MultiSelect,
-  useFormik,
-} from "../../index";
-import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
 import { initialValues, validationSchema } from "./FormikData";
+import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
 import MultipleAssetUpload from "../MultipleAssetUpload/MultipleAssetUpload";
+// ---------------------------------------------------------------
+import { useFormik, InputText,  InputTextarea,  Dropdown,  Chips,  Button,  MultiSelect,} from "../../index";
+// ---------------------------------------------------------------
+import "./InputForm.scss";
+// ---------------------------------------------------------------
 
 type Props = {
   uploadedFiles: any;
