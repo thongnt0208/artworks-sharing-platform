@@ -12,13 +12,13 @@ import { getAuthInfo } from "../../../util/AuthUtil";
 import DepositCoin from "./DepositCoin/DepositCoin";
 import WithdrawCoin from "./WithdrawCoin/WithdrawCoin";
 
-type WalletProps = {
+export type WalletProps = {
   balance: number;
   withdrawMethod: string;
   withdrawInformation: string;
 };
 
-type WalletHistoryProps = {
+export type WalletHistoryProps = {
   id: string;
   amount: number;
   type: string;
@@ -27,7 +27,7 @@ type WalletHistoryProps = {
   createdOn: string;
 };
 
-type TransactionHistoryProps = {
+export type TransactionHistoryProps = {
   id: string;
   accountId: string;
   assetId: string;
@@ -161,7 +161,7 @@ const WalletView: React.FC = () => {
   return (
     <div className="wallet-view">
       <h1>Số dư</h1>
-      <h1 className="balance-info w-full text-center">{wallet?.balance} Xu</h1>
+      <h1 className="balance-info w-full text-center">{wallet?.balance?.toLocaleString()} Xu</h1>
       <div className="action-section">
         <Button
           label="Nạp tiền"
