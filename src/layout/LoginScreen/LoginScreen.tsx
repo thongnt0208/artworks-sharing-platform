@@ -9,7 +9,7 @@ import logo from "../../assets/logo/logo_notext.svg";
 import logotext from "../../assets/logo/logo.png";
 
 import { jwtDecode } from "jwt-decode";
-import { setAuthInfo } from "../../util/AuthUtil";
+import { authInfoDataType, setAuthInfo } from "../../util/AuthUtil";
 
 type Props = {
   isLogin: boolean;
@@ -34,13 +34,13 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
         console.log(response);
 
         const { data } = response || {};
-        const { userId: id, email, fullname, accessToken, refreshToken } = data || {};
+        const { userId: id, email, fullname, avatar, accessToken, refreshToken } = data || {};
         const decodedAToken = jwtDecode(accessToken) as any;
         console.log(decodedAToken);
         const role = decodedAToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         const exp = decodedAToken.exp;
 
-        let currentUserData = { id, email, fullname, accessToken, refreshToken, role, aTExp: exp };
+        let currentUserData: authInfoDataType = { id, email, fullname, username, avatar, accessToken, refreshToken, role, aTExp: exp };
 
         setAuthInfo(currentUserData); //set Auth info to LocalStorage
         setAuthInfoChanged(currentUserData); //notify to state at App.tsx that the user has logged in

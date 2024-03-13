@@ -1,6 +1,7 @@
 import React from 'react';
 import "./MessageItem.scss";
 import { Tooltip } from 'primereact/tooltip';
+import { Avatar } from 'primereact/avatar';
 
 type Props = {
   isMyMessage: boolean;
@@ -15,7 +16,7 @@ export default function MessageItem({ avatar, text, fileUrl, createdOn, isMyMess
     <div className={`message-item ${isMyMessage ? "my-message" : "other-message"}`}>
       {!isMyMessage && (
         <div className="avatar-container">
-          <img src={avatar} alt="Avatar" className="avatar" />
+          <Avatar image={avatar} size="normal" shape="circle" />
         </div>
       )}
       <div className="message-content">

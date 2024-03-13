@@ -46,7 +46,7 @@ const Notification: React.FC<Props> = ({ notifications, account }) => {
           ) : (
             <div className="notification-content" style={{ color: "grey" }}>
               <p className="notification-message">
-                {account.name} {data.content}
+                {data.content}
               </p>
               <p className="notification-date">{data.creationDate}</p>
             </div>
