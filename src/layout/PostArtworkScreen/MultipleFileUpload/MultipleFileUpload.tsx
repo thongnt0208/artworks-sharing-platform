@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // ---------------------------------------------------------------
 import {
   FileUpload,
@@ -8,26 +8,27 @@ import {
 import { Button, ProgressBar, Tooltip, Tag, Toast } from "../../index";
 import * as nsfwjs from "nsfwjs";
 // ---------------------------------------------------------------
-import { maxSizeAssetsUpload, maxSizeImagesUpload } from "../../../const/bizConstants";
+import { maxSizeImagesUpload } from "../../../const/bizConstants";
 import { getFileExtension } from "../../../util/FileNameUtil";
 
 import "./MultipleFileUpload.scss";
+import { chooseOptions, emptyTemplate } from "./Templates";
 // ---------------------------------------------------------------
 type Props = {
-  isImagesOnly: boolean;
   uploadedFiles: any;
   setUploadedFiles: (data: any) => void;
   onFormChange: (data: any) => void;
+  sendValidationResults: (data: any) => void;
 };
 
 export default function MultipleFileUpload({
-  isImagesOnly,
   uploadedFiles,
   setUploadedFiles,
   onFormChange,
+  sendValidationResults
 }: Props) {
   const toast = useRef<Toast>(null);
-  const maxSize = isImagesOnly ? maxSizeImagesUpload : maxSizeAssetsUpload;
+  const maxSize = maxSizeImagesUpload;
   const [totalSize, setTotalSize] = useState(0);
   const [validationProgress, setValidationProgress] = useState<{ [key: string]: number }>({});
   const [validationResults, setValidationResults] = useState<{ [key: string]: boolean }>({});
@@ -36,14 +37,8 @@ export default function MultipleFileUpload({
   const validateImage = async (file: File) => {
     const _img = new Image();
     _img.src = URL.createObjectURL(file);
-    console.log(_img);
-
     const model = await nsfwjs.load();
-    console.log("model loaded", model);
-
     const predictions = await model.classify(_img);
-    console.log(predictions);
-
     const isNSFW = predictions.some(
       (prediction) =>
         (prediction.className === "Porn" ||
@@ -78,12 +73,11 @@ export default function MultipleFileUpload({
         });
       } finally {
         setValidationProgress((prevProgress) => ({ ...prevProgress, [file.name]: 100 }));
+        setUploadedFiles(validatedFiles);
       }
     }
 
     setTotalSize(_totalSize);
-    setUploadedFiles(validatedFiles);
-    onFormChange(validatedFiles);
   };
 
   const onTemplateRemove = (file: File, callback: Function) => {
@@ -94,8 +88,12 @@ export default function MultipleFileUpload({
   const onRemove = (event: any) => {
     const removedFile = event.file; // Get the file being removed
     const updatedFiles = uploadedFiles.filter((file: any) => file !== removedFile); // Filter out the removed file
+    setValidationResults((prevResults) => {
+      const updatedResults = { ...prevResults };
+      delete updatedResults[removedFile.name];
+      return updatedResults;
+    });
     setUploadedFiles(updatedFiles); // Update the uploadedFiles state
-    onFormChange(updatedFiles);
   };
 
   const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
@@ -131,19 +129,14 @@ export default function MultipleFileUpload({
 
     return (
       <div className="item-container flex align-items-center flex-wrap">
-        <div
-          className="item-name-conatiner flex flex-column flex-wrap align-content-start"
-          style={{ width: "50%" }}
-        >
-          {isImagesOnly && (
-            <img
-              id={`img-item-${file.name}`}
-              alt={file.name}
-              role="presentation"
-              src={URL.createObjectURL(file)}
-              width={100}
-            />
-          )}
+        <div className="item-name-conatiner flex flex-column flex-wrap align-content-start">
+          <img
+            id={`img-item-${file.name}`}
+            alt={file.name}
+            role="presentation"
+            src={URL.createObjectURL(file)}
+            width={100}
+          />
           <p className="text-cus-normal-bold m-0"> {file.name} </p>
           <span className="max-w-max text-cus-normal">{props.formatSize}</span>
           {validationProgress !== undefined && (
@@ -155,7 +148,7 @@ export default function MultipleFileUpload({
               />
               {_validationProgress === 100 && (
                 <span className={`validation-result ${isValid ? "valid" : "invalid"}`}>
-                  {isValid ? "Safe" : "NSFW"}
+                  {isValid ? "Đạt chuẩn" : "Không phù hợp"}
                 </span>
               )}
             </div>
@@ -171,26 +164,18 @@ export default function MultipleFileUpload({
           icon="pi pi-times"
           className="p-button-outlined p-button-rounded p-button-danger ml-auto"
           onClick={() => onTemplateRemove(file, props.onRemove)}
-          disabled={!isValid}
         />
       </div>
     );
   };
 
-  const emptyTemplate = () => {
-    return (
-      <div className="empty-template-container flex align-items-center flex-column">
-        <i className="pi pi-image mt-3 p-5"></i>
-        <p className="m-0">Kéo thả file vào đây để tải lên.</p>
-      </div>
-    );
-  };
-
-  const chooseOptions = {
-    icon: "pi pi-fw pi-images",
-    className: "custom-choose-btn p-button-rounded w-8",
-    label: "Thêm file",
-  };
+  useEffect(() => {
+    console.log("validatedFiles", uploadedFiles);
+    console.log("validationResults", validationResults);
+    sendValidationResults(validationResults);
+    onFormChange(uploadedFiles);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uploadedFiles, validationResults]);
 
   return (
     <div>
@@ -200,7 +185,7 @@ export default function MultipleFileUpload({
         ref={fileUploadRef}
         name="demo"
         multiple
-        accept={isImagesOnly ? "image/*" : "*"}
+        accept="image/*"
         maxFileSize={maxSize}
         invalidFileSizeMessageDetail={`Kích thước file không được vượt quá ${maxSize / 1000000} MB`}
         invalidFileSizeMessageSummary={"Kích thước tệp không hợp lệ"}
