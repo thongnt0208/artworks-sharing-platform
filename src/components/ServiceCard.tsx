@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import "./ServiceCard.scss";
 import { ArtworkProps } from "./ArtworkCard";
 import RequestPopup, { RequestProps } from "./RequestPopup";
+import { ArtworkProps } from "./ArtworkCard";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
 export type ServiceProps = {
