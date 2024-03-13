@@ -66,6 +66,35 @@ export async function CreateServiceData(formValue: any): Promise<any> {
 }
 
 /**
+ * 
+ * Updates the service data with the provided form values.
+ * 
+ * @param formValue - The form values containing the updated service data.
+ * @param serviceId - The ID of the service to be updated.
+ * @returns A promise that resolves to the updated service data, or rejects with an error message.
+ * @author AnhDH 
+ * @version 1.0.0
+ */
+export async function UpdateServiceData(formValue: any, serviceId: string): Promise<any> {
+  try {
+    const formData = new FormData();
+    formData.append("serviceName", formValue.serviceName);
+    formData.append("description", formValue.description);
+    formData.append("deliveryTime", formValue.deliveryTime);
+    formData.append("numberOfConcept", formValue.numberOfConcept);
+    formData.append("numberOfRevision", formValue.numberOfRevision);
+    formData.append("startingPrice", formValue.startingPrice);
+    formData.append("thumbnail", formValue.thumbnail);
+    return axiosPrivate.put(
+      `/services/${serviceId}`,
+      formData
+    );
+  } catch (error) {
+    return Promise.reject("Error updating service");
+  }
+}
+
+/**
  * Delete a Service
  *
  * @description This function delete a Service

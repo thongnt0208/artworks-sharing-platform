@@ -12,18 +12,17 @@ export type ServiceProps = {
   numberOfConcept: number;
   numberOfRevision: number;
   startingPrice: number;
-  coverLocation: string;
+  thumbnail: string;
   isCreator?: boolean;
   editHandler?: () => void;
   hireHandler?: () => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
-
   return (
     <div
       className="service-card-container "
       style={{
-        backgroundImage: `url(${background})`,
+        backgroundImage: `url(${props.thumbnail || background})`,
       }}
     >
       <div className="information">
@@ -32,18 +31,13 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
             {props.serviceName}
           </h2>
           <p className="starting-price mt-0 mb-0 ml-3">
-            Từ {props.startingPrice} Xu
+            Từ {props.startingPrice.toLocaleString()} Xu
           </p>
-          <p className="cover-location mt-0 mb-0 ml-3">{props.coverLocation}</p>
+          {/* <p className="cover-location mt-0 mb-0 ml-3">{props.coverLocation}</p> */}
         </div>
         <div className="service-card-details-bottom mt-2 ml-3">
-          <p className="mt-1 mb-0">
-            <i className="pi pi-clock" /> Trong khoảng {props.deliveryTime} tuần
-          </p>
-          <p className="mt-1 mb-0">
-            <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}
-            {props.numberOfRevision} lần chỉnh sửa
-          </p>
+          <p className="mt-1 mb-0"> <i className="pi pi-clock" /> {props.deliveryTime} </p>
+          <p className="mt-1 mb-0"> <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}{props.numberOfRevision} lần chỉnh sửa </p>
         </div>
         {props.isCreator ? (
           <div className="hire-button-container w-full flex justify-content-center mt-3 mb-3 ">
