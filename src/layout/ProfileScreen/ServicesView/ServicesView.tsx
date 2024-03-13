@@ -24,6 +24,7 @@ const ServicesView: React.FC = () => {
     numberOfRevision: 0,
     startingPrice: 0,
     thumbnail: "",
+    artworkReferences: []
   });
 
   const showSuccess = () => {
@@ -93,6 +94,7 @@ const ServicesView: React.FC = () => {
                   numberOfRevision={service.numberOfRevision}
                   startingPrice={service.startingPrice}
                   thumbnail={service.thumbnail}
+                  artworkReferences={service.artworkReferences}
                   isCreator={isCreator}
                   editHandler={() => {
                     setSelectedService(service);

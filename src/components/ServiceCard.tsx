@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "primereact/button";
 
 import "./ServiceCard.scss";
+import { ArtworkProps } from "./ArtworkCard";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
 export type ServiceProps = {
@@ -13,6 +14,7 @@ export type ServiceProps = {
   numberOfRevision: number;
   startingPrice: number;
   thumbnail: string;
+  artworkReferences: ArtworkProps[];
   isCreator?: boolean;
   editHandler?: () => void;
   hireHandler?: () => void;

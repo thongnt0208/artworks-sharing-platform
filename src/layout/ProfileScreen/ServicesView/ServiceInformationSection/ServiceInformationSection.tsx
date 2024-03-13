@@ -36,7 +36,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   let id = props?.id;
   const toast = useRef<Toast>(null);
   const accountId = getAuthInfo()?.id;
-  const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
+  const [artworks, setArtworks] = useState<ArtworkProps[]>(props.artworkReferences);
   const [pageNumber, setPageNumber] = useState(1);
   const [thumbnail, setThumbnail] = useState<File | string>(
     props?.thumbnail
@@ -86,6 +86,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   };
 
   const handleSubmit = (values: any) => {
+    console.log("Submit form: ", values);
     if (id) {
       UpdateServiceData(values, id)
         .then((response) => {
@@ -94,6 +95,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
           setClose(false);
         })
         .catch((err) => {
+          console.log(err);
           showError();
         });
     } else {
@@ -178,7 +180,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 src={
                   (thumbnail instanceof File
                     ? URL.createObjectURL(thumbnail)
-                    : thumbnail) 
+                    : thumbnail) || defaultCoverImage
                 }
                 alt="thumbnail"
               />

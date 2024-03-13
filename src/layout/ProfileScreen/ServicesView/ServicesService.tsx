@@ -30,7 +30,6 @@ export async function GetServicesData(accountId: string) {
       console.log("Error fetching artworks data");
       return [];
     }
-    console.log("Success fetching collection data", response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching artworks data:", error);
@@ -85,6 +84,7 @@ export async function UpdateServiceData(formValue: any, serviceId: string): Prom
     formData.append("numberOfRevision", formValue.numberOfRevision);
     formData.append("startingPrice", formValue.startingPrice);
     formData.append("thumbnail", formValue.thumbnail);
+    formData.append("ArtworkReference", formValue.referenceArtworks);
     return axiosPrivate.put(
       `/services/${serviceId}`,
       formData
