@@ -74,3 +74,30 @@ export async function GetTransactionHistoryData(accountId: string) {
     return [];
   }
 }
+
+/**
+ * Deposits coins into the user's wallet.
+ * 
+ * @param amount - The amount of coins to deposit.
+ * @param redirectUrl - The URL to redirect to after the deposit is completed.
+ * @returns A boolean indicating whether the deposit was successful.
+ * @param AnhDH
+ * @version 1.0.0
+ */
+export async function DepositCoins(amount: number, redirectUrl: string) {
+  try {
+    const response: any = await axiosPrivate.post(`${API_URL}/payments`, {
+      amount: amount,
+      item: "[{}]",
+      embedData: `{"preferred_payment_method": [], "redirecturl": "${redirectUrl}"}`,
+    });
+    if (response.status !== 200) {
+      console.log("Error fetching profile data");
+      return {};
+    }
+    return response.data;
+  } catch (error) {
+    console.log("Error fetching profile data:", error);
+    return error;
+  }
+}
