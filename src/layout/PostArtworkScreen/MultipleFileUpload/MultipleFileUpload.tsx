@@ -1,15 +1,18 @@
 import { useRef, useState } from "react";
-import "./MultipleFileUpload.scss";
-import { Toast } from "primereact/toast";
+// ---------------------------------------------------------------
 import {
   FileUpload,
   FileUploadHeaderTemplateOptions,
   ItemTemplateOptions,
 } from "primereact/fileupload";
-import { Button, ProgressBar, Tooltip, Tag } from "../../index";
+import { Button, ProgressBar, Tooltip, Tag, Toast } from "../../index";
+import * as nsfwjs from "nsfwjs";
+// ---------------------------------------------------------------
 import { maxSizeAssetsUpload, maxSizeImagesUpload } from "../../../const/bizConstants";
 import { getFileExtension } from "../../../util/FileNameUtil";
 
+import "./MultipleFileUpload.scss";
+// ---------------------------------------------------------------
 type Props = {
   isImagesOnly: boolean;
   uploadedFiles: any;
@@ -26,18 +29,61 @@ export default function MultipleFileUpload({
   const toast = useRef<Toast>(null);
   const maxSize = isImagesOnly ? maxSizeImagesUpload : maxSizeAssetsUpload;
   const [totalSize, setTotalSize] = useState(0);
+  const [validationProgress, setValidationProgress] = useState<{ [key: string]: number }>({});
+  const [validationResults, setValidationResults] = useState<{ [key: string]: boolean }>({});
   const fileUploadRef = useRef<FileUpload>(null);
 
-  const onTemplateSelect = (e: { files: any; originalEvent: any }) => {
+  const validateImage = async (file: File) => {
+    const _img = new Image();
+    _img.src = URL.createObjectURL(file);
+    console.log(_img);
+
+    const model = await nsfwjs.load();
+    console.log("model loaded", model);
+
+    const predictions = await model.classify(_img);
+    console.log(predictions);
+
+    const isNSFW = predictions.some(
+      (prediction) =>
+        (prediction.className === "Porn" ||
+          prediction.className === "Sexy" ||
+          prediction.className === "Hentai") &&
+        prediction.probability > 0.3
+    );
+    setValidationResults((prevResults) => ({ ...prevResults, [file.name]: !isNSFW }));
+  };
+
+  const onTemplateSelect = async (e: { files: File[]; originalEvent: any }) => {
     let _totalSize = totalSize;
     let files = e.files;
+    const validatedFiles = [];
+
     for (let i = 0; i < files.length; i++) {
-      _totalSize += files[i].size || 0;
+      const file = files[i];
+      _totalSize += file.size || 0;
+      setValidationProgress((prevProgress) => ({ ...prevProgress, [file.name]: 0 }));
+
+      try {
+        await validateImage(file);
+        validatedFiles.push(file);
+      } catch (error) {
+        console.error(`Error validating ${file.name}:`, error);
+        console.log(error);
+
+        toast.current?.show({
+          severity: "error",
+          summary: `Error validating ${file.name}`,
+          detail: "An error occurred while validating the image.",
+        });
+      } finally {
+        setValidationProgress((prevProgress) => ({ ...prevProgress, [file.name]: 100 }));
+      }
     }
 
     setTotalSize(_totalSize);
-    setUploadedFiles(e.files);
-    onFormChange(e.files);
+    setUploadedFiles(validatedFiles);
+    onFormChange(validatedFiles);
   };
 
   const onTemplateRemove = (file: File, callback: Function) => {
@@ -80,6 +126,8 @@ export default function MultipleFileUpload({
 
   const itemTemplate = (inFile: object, props: ItemTemplateOptions) => {
     const file = inFile as File;
+    const isValid = validationResults[file.name];
+    const _validationProgress = validationProgress[file.name];
 
     return (
       <div className="item-container flex align-items-center flex-wrap">
@@ -88,10 +136,30 @@ export default function MultipleFileUpload({
           style={{ width: "50%" }}
         >
           {isImagesOnly && (
-            <img alt={file.name} role="presentation" src={URL.createObjectURL(file)} width={100} />
+            <img
+              id={`img-item-${file.name}`}
+              alt={file.name}
+              role="presentation"
+              src={URL.createObjectURL(file)}
+              width={100}
+            />
           )}
           <p className="text-cus-normal-bold m-0"> {file.name} </p>
           <span className="max-w-max text-cus-normal">{props.formatSize}</span>
+          {validationProgress !== undefined && (
+            <div className="validation-progress">
+              <ProgressBar
+                value={_validationProgress}
+                showValue={false}
+                style={{ width: "10rem", height: "12px" }}
+              />
+              {_validationProgress === 100 && (
+                <span className={`validation-result ${isValid ? "valid" : "invalid"}`}>
+                  {isValid ? "Safe" : "NSFW"}
+                </span>
+              )}
+            </div>
+          )}
         </div>
         <Tag
           rounded
@@ -103,6 +171,7 @@ export default function MultipleFileUpload({
           icon="pi pi-times"
           className="p-button-outlined p-button-rounded p-button-danger ml-auto"
           onClick={() => onTemplateRemove(file, props.onRemove)}
+          disabled={!isValid}
         />
       </div>
     );

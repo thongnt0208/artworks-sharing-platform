@@ -1,13 +1,15 @@
-import "./PostArtworkScreen.scss";
-import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Image } from "primereact/image";
+import { Link, useNavigate } from "react-router-dom";
+// --------------------------------------------------------
 import { Button } from "primereact/button";
+import { Image } from "primereact/image";
 import { Toast } from "primereact/toast";
-
+// --------------------------------------------------------
 import InputForm from "./InputForm/InputForm";
 // --------------------------------------------------------
 
+import "./PostArtworkScreen.scss";
+// --------------------------------------------------------
 type Props = {};
 
 export default function PostArtworkScreen({ ...props }: Props) {
