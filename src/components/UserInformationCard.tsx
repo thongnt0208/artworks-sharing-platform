@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import "./UserInformationCard.scss";
-import { useState } from "react";
-import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
 
+import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
+import RequestPopup, { RequestProps } from "./RequestPopup";
+import "./UserInformationCard.scss";
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
 export type UserInformationProps = {
@@ -22,14 +23,18 @@ export type UserInformationProps = {
   followerNum?: number;
   followingNum?: number;
   followHandler?: () => void;
-  hireHandler?: () => void;
+  messageHandler: (request: RequestProps) => void;
   editHandler?: () => void;
   privacyEditHandler?: () => void;
 };
 
-const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformationProps) => {  
+const UserInformationCard: React.FC<UserInformationProps> = (
+  props: UserInformationProps
+) => {
   let [isShowReportDialog, setIsShowReportDialog] = useState(false);
-  
+  const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
+  const [isHire, setIsHire] = useState(false);
+
   let footer = (
     <>
       {props.isCreator ? (
@@ -58,14 +63,10 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
           <Button
             rounded
             className="bot-button"
-            label="Thuê"
-            onClick={props.hireHandler}
-          />
-          <Button
-            rounded
-            className="bot-button"
-            label="Báo cáo"
-            onClick={() => setIsShowReportDialog(true)}
+            label="Nhắn tin"
+            onClick={() => {
+              setIsShowRequestPopup(true);
+            }}
           />
         </>
       )}
@@ -73,7 +74,23 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
   );
   return (
     <div className="user-information-card-container">
-      <ReportDialog visible={isShowReportDialog} setVisibility={setIsShowReportDialog} targetId={props.id} entityName="Account"/>
+      <RequestPopup
+        visible={isShowRequestPopup}
+        onHide={() => {
+          setIsShowRequestPopup(false);
+          setIsHire(false);
+        }}
+        accountAvatar={props.avatar}
+        accountName={props.fullname}
+        isHire={isHire}
+        onSubmit={props.messageHandler}
+      />
+      <ReportDialog
+        visible={isShowReportDialog}
+        setVisibility={setIsShowReportDialog}
+        targetId={props.id}
+        entityName="Account"
+      />
       <Card footer={footer ? footer : ""} className="user-information-card">
         <div className="avatar-container">
           <img
@@ -84,12 +101,24 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
         </div>
         <div className="information-container">
           <h1>{props.fullname}</h1>
-          <p>{props.email}</p>
+          <h3>{props.email}</h3>
           <p>{props.address}</p>
         </div>
       </Card>
 
-      {props.profileView && props.artworksView && props.followerNum && props.followingNum ? (
+      {props.bio ? (
+        <div className="bio-container w-full pl-4 pr-4">
+          <h3>Về tôi</h3>
+          <p className="text-justify">{props.bio}</p>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {props.profileView &&
+      props.artworksView &&
+      props.followerNum &&
+      props.followingNum ? (
         <div className="views-container w-full flex flex-row justify-content-between align-items-center">
           {/* Column for labels */}
           <div className="pl-4 text-left">
@@ -126,14 +155,38 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
       ) : (
         <></>
       )}
-
-      {props.bio ? (
-        <div className="bio-container w-full pl-4 pr-4">
-          <h3>Về tôi</h3>
-          <p className="text-justify">{props.bio}</p>
+      {!props.isCreator && (
+        <div
+          className="w-full mt-5 grid"
+          style={{
+            height: "fit-content",
+            padding: "10px 10px",
+            cursor: "pointer",
+          }}
+        >
+          <div
+            className="col-6 text-right"
+            style={{
+              height: "fit-content",
+              borderRight: "1px solid grey",
+              padding: "0 5px",
+            }}
+            onClick={() => setIsShowReportDialog(true)}
+          >
+            Báo cáo
+          </div>
+          <div
+            className="col-6 text-left"
+            style={{
+              height: "fit-content",
+              borderLeft: "1px solid grey",
+              padding: "0 5px",
+            }}
+            onClick={() => {}}
+          >
+            Chặn
+          </div>
         </div>
-      ) : (
-        <></>
       )}
     </div>
   );

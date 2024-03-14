@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { GetProfileData } from "./ProfileService";
-import { getAuthInfo } from "../../util/AuthUtil";
-import { useNavigate } from "react-router-dom";
-import UserInformationCard, { UserInformationProps } from "../../components/UserInformationCard";
-import MenuTab from "./MenuTab/MenuTab";
-// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+import React, { useEffect, useState, useRef } from "react";
+import { Toast } from "primereact/toast";
+import { useParams, useNavigate } from "react-router-dom";
 
+import { getAuthInfo } from "../../util/AuthUtil";
+import { GetProfileData, SendRequestMessage } from "./ProfileService";
+import UserInformationCard, {
+  UserInformationProps,
+} from "../../components/UserInformationCard";
+import MenuTab from "./MenuTab/MenuTab";
+import { RequestProps } from "../../components/RequestPopup";
+// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const profileId = useParams()?.id;
   const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
+
   const [profile, setProfile] = useState<UserInformationProps>({
     id: "",
     fullname: "",
@@ -26,6 +31,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     artworksView: 0,
     followerNum: 0,
     followingNum: 0,
+    messageHandler: () => {}, // Add the missing messageHandler property
   });
   const [isCreator, setIsCreator] = useState<boolean>(isLogin);
   // const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
@@ -48,8 +54,37 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   // ]);
   // const [isSetup, setIsSetup] = useState<boolean>(false);
 
+  const showSuccess = () => {
+    toast.current?.show({
+      severity: "success",
+      summary: "Thành công",
+      detail: "Gửi tin nhắn thành công",
+      life: 3000,
+    });
+  };
+
+  const showError = () => {
+    toast.current?.show({
+      severity: "error",
+      summary: "Thất bại",
+      detail: "Gửi tin nhắn thất bại",
+      life: 3000,
+    });
+  };
+
+  const requestMessageHandler = async (request: RequestProps) => {
+    try {
+      const response = await SendRequestMessage(profile.id, request.message);
+      if (response) {
+        showSuccess();
+      }
+    } catch (error) {
+      showError();
+    }
+  };
+
   const editProfileHandler = () => {
-    navigate(`/account/settings`, {state: {profile: profile}});
+    navigate(`/account/settings`, { state: { profile: profile } });
   };
 
   useEffect(() => {
@@ -67,6 +102,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   return (
     <>
+      <Toast ref={toast} />
       {profile ? (
         <div className="profile-screen-container grid grid-nogutter mt-3">
           <div className="profile-information-container col col-3">
@@ -85,7 +121,10 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               artworksView={profile.artworksView}
               followerNum={profile.followerNum}
               followingNum={profile.followingNum}
-              editHandler={() => {editProfileHandler()}}
+              editHandler={() => {
+                editProfileHandler();
+              }}
+              messageHandler={requestMessageHandler}
             />
           </div>
           <div className="profile-menu-container col col-9 pl-6 ">
@@ -93,6 +132,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               accountId={profile.id}
               isCreator={isCreator}
               accountAvatar={profile.avatar}
+              accountFullname={profile.fullname}
             />
           </div>
         </div>

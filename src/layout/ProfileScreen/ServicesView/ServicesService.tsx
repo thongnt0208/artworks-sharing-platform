@@ -66,16 +66,19 @@ export async function CreateServiceData(formValue: any): Promise<any> {
 }
 
 /**
- * 
+ *
  * Updates the service data with the provided form values.
- * 
+ *
  * @param formValue - The form values containing the updated service data.
  * @param serviceId - The ID of the service to be updated.
  * @returns A promise that resolves to the updated service data, or rejects with an error message.
- * @author AnhDH 
+ * @author AnhDH
  * @version 1.0.0
  */
-export async function UpdateServiceData(formValue: any, serviceId: string): Promise<any> {
+export async function UpdateServiceData(
+  formValue: any,
+  serviceId: string
+): Promise<any> {
   try {
     const formData = new FormData();
     formData.append("serviceName", formValue.serviceName);
@@ -85,10 +88,7 @@ export async function UpdateServiceData(formValue: any, serviceId: string): Prom
     formData.append("numberOfRevision", formValue.numberOfRevision);
     formData.append("startingPrice", formValue.startingPrice);
     formData.append("thumbnail", formValue.thumbnail);
-    return axiosPrivate.put(
-      `/services/${serviceId}`,
-      formData
-    );
+    return axiosPrivate.put(`/services/${serviceId}`, formData);
   } catch (error) {
     return Promise.reject("Error updating service");
   }
@@ -114,6 +114,33 @@ export async function DeleteServiceData(serviceId: string) {
     });
     return true;
   } catch (error) {
+    return false;
+  }
+}
+
+export async function CreateNewRequestData(
+  serviceId: string,
+  message: string,
+  timeline: string,
+  budget: number
+) {
+  try {
+    const response = await axiosPrivate.post(
+      `${API_URL}/requests`,
+      {
+        serviceId,
+        message,
+        timeline,
+        budget,
+      }
+    );
+    if (response.status !== 200) {
+      console.log("Error sending request message");
+      return {};
+    }
+    return true;
+  } catch (error) {
+    console.log("Error sending request message:", error);
     return false;
   }
 }
