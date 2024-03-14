@@ -1,19 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+// ---------------------------------------------------------------
 import { getCategoriesList, postArtwork } from "../Service";
-import "./InputForm.scss";
 import { maxNumberOfCategories, maxNumberOfTags } from "../../../const/bizConstants";
+import { initialValues, validationSchema } from "./FormikData";
+import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
+import MultipleAssetUpload from "../MultipleAssetUpload/MultipleAssetUpload";
+// ---------------------------------------------------------------
 import {
+  useFormik,
   InputText,
   InputTextarea,
   Dropdown,
   Chips,
   Button,
   MultiSelect,
-  useFormik,
 } from "../../index";
-import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
-import { initialValues, validationSchema } from "./FormikData";
-import MultipleAssetUpload from "../MultipleAssetUpload/MultipleAssetUpload";
+// ---------------------------------------------------------------
+import "./InputForm.scss";
+// ---------------------------------------------------------------
 
 type Props = {
   uploadedFiles: any;
@@ -22,6 +27,7 @@ type Props = {
   setError: (data: any) => void;
   setSuccess: (data: any) => void;
 };
+
 export default function InputForm({
   uploadedFiles,
   setUploadedFiles,
@@ -32,6 +38,8 @@ export default function InputForm({
   const [categoriesOptions, setcategoriesOptions] = useState([] as any);
   const [assets, setAssets] = useState([] as any);
   const [isLoading, setisLoading] = useState(false);
+  const [hasNSFWImage, setHasNSFWImage] = useState(false);
+  const [validationResults, setValidationResults] = useState({} as any);
 
   const privacyOptions = [
     { label: "Công khai", value: 0 },
@@ -80,6 +88,19 @@ export default function InputForm({
   }, [formik.values, setData]);
 
   useEffect(() => {
+    console.log("validationResults", validationResults);
+
+    if (Object.values(validationResults).includes(false)) {
+      formik.setFieldError("images", "Hình ảnh không được chứa nội dung không phù hợp.");
+      setHasNSFWImage(true);
+      console.log("hasNSFWFFFFF", true);
+    } else {
+      setHasNSFWImage(false);
+      console.log("hasNSFWFFFFF", false);
+    }
+  }, [validationResults]);
+
+  useEffect(() => {
     getCategoriesList().then((res) => {
       setcategoriesOptions(res);
     });
@@ -87,7 +108,7 @@ export default function InputForm({
 
   return (
     <>
-      <p>Developing Beta Hetxagon Nobita Pokemon</p>
+      {hasNSFWImage && <p style={{color: "red"}}> Có hình ảnh không phù hợp </p>}
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">
           {/* images field */}
@@ -95,9 +116,9 @@ export default function InputForm({
             {renderError("images")}
             <br />
             <MultipleFileUpload
-              isImagesOnly={true}
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
+              sendValidationResults={setValidationResults}
               onFormChange={(file: any) => formik.setFieldValue("images", file)}
             />
           </div>
@@ -189,7 +210,7 @@ export default function InputForm({
             <Button
               type="submit"
               label="Lưu"
-              disabled={!formik.isValid}
+              disabled={hasNSFWImage || !formik.isValid}
               loading={isLoading}
               className="w-4"
               rounded

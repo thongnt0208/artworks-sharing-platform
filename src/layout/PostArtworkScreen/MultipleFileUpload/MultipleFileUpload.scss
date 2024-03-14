@@ -1,4 +1,4 @@
-@import "../../../const/variables.scss";
+@import "/src/const/variables.scss";
 
 .empty-template-container {
   color: $gray-default;
@@ -6,10 +6,29 @@
 
 .item-container {
   .item-name-conatiner {
+    width: 50%;
     p {
       width: 100%;
       overflow-wrap: break-word;
       text-align: start;
+    }
+    .validation-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    
+      .validation-result {
+        font-weight: bold;
+    
+        &.valid {
+          color: green;
+        }
+    
+        &.invalid {
+          color: red;
+        }
+      }
     }
   }
 }
