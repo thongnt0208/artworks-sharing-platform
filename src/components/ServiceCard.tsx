@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "primereact/button";
 
 import "./ServiceCard.scss";
 import { ArtworkProps } from "./ArtworkCard";
+import RequestPopup, { RequestProps } from "./RequestPopup";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
 export type ServiceProps = {
@@ -14,12 +15,16 @@ export type ServiceProps = {
   numberOfRevision: number;
   startingPrice: number;
   thumbnail: string;
+  accountFullname: string;
+  accountAvatar: string;
   artworkReferences: ArtworkProps[];
   isCreator?: boolean;
   editHandler?: () => void;
-  hireHandler?: () => void;
+  hireHandler: (request: RequestProps) => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
+  const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
+
   return (
     <div
       className="service-card-container "
@@ -38,8 +43,15 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
           {/* <p className="cover-location mt-0 mb-0 ml-3">{props.coverLocation}</p> */}
         </div>
         <div className="service-card-details-bottom mt-2 ml-3">
-          <p className="mt-1 mb-0"> <i className="pi pi-clock" /> {props.deliveryTime} </p>
-          <p className="mt-1 mb-0"> <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}{props.numberOfRevision} lần chỉnh sửa </p>
+          <p className="mt-1 mb-0">
+            {" "}
+            <i className="pi pi-clock" /> {props.deliveryTime}{" "}
+          </p>
+          <p className="mt-1 mb-0">
+            {" "}
+            <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}
+            {props.numberOfRevision} lần chỉnh sửa{" "}
+          </p>
         </div>
         {props.isCreator ? (
           <div className="hire-button-container w-full flex justify-content-center mt-3 mb-3 ">
@@ -56,6 +68,17 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
               label="Thuê"
               rounded
               className="hire-button border-none pl-5 pr-5"
+              onClick={() => setIsShowRequestPopup(true)}
+            />
+            <RequestPopup
+              visible={isShowRequestPopup}
+              onHide={() => {
+                setIsShowRequestPopup(false);
+              }}
+              accountAvatar={props.accountAvatar}
+              accountName={props.accountFullname}
+              isHire={true}
+              onSubmit={props.hireHandler}
             />
           </div>
         )}

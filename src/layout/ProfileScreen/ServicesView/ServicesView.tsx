@@ -2,17 +2,19 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { DeleteServiceData, GetServicesData } from "./ServicesService";
+import { CreateNewRequestData, DeleteServiceData, GetServicesData } from "./ServicesService";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 
 import "./ServicesView.scss";
 import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
 import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
+import { RequestProps } from "../../../components/RequestPopup";
 
 const ServicesView: React.FC = () => {
   const toast = useRef<Toast>(null);
-  let [accountId, isCreator] = useOutletContext() as [string, boolean];
+  let [accountId, isCreator, accountAvatar, accountFullname] =
+    useOutletContext() as [string, boolean, string, string];
   const [services, setServices] = useState<ServiceProps[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<ServiceProps>({
@@ -24,24 +26,46 @@ const ServicesView: React.FC = () => {
     numberOfRevision: 0,
     startingPrice: 0,
     thumbnail: "",
+    accountFullname: "",
+    accountAvatar: "",
+    hireHandler: () => {},
     artworkReferences: []
   });
 
-  const showSuccess = () => {
+  const showSuccess = (
+    summary: string,
+    detail: string
+  ) => {
     toast.current?.show({
       severity: "success",
-      summary: "Success",
-      detail: "Cập nhật thành công",
+      summary: summary,
+      detail: detail,
       life: 3000,
     });
   };
-  const showError = () => {
+
+  const showError = (
+    summary: string,
+    detail: string
+  ) => {
     toast.current?.show({
       severity: "error",
-      summary: "Lỗi",
-      detail: "Cập nhật lỗi",
+      summary: summary,
+      detail: detail,
       life: 3000,
     });
+  };
+
+  const handleHireRequest = async (request: RequestProps, service: ServiceProps) => {
+    try {
+      const response  = await CreateNewRequestData(service.id, request.message, request.timeline || "", request.budget || 0);
+      console.log(response);
+      if (response === true) {
+        showSuccess("Thành công", "Gửi yêu cầu thành công");
+      }
+    } catch (error) {
+      showError("Lỗi", "Gửi yêu cầu thất bại");
+    }
   };
 
   const handleEditService = () => {
@@ -53,7 +77,7 @@ const ServicesView: React.FC = () => {
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
-      showError();
+      showError("Lỗi", "Lấy dữ liệu dịch vụ thất bại");
     }
   }, [accountId]);
 
@@ -61,11 +85,11 @@ const ServicesView: React.FC = () => {
     try {
       const response = await DeleteServiceData(serviceId);
       if (response) {
-        showSuccess();
+        showSuccess("Thành công", "Xóa dịch vụ thành công");
         setVisible(false);
       }
     } catch (error) {
-      showError();
+      showError("Lỗi", "Xóa dịch vụ thất bại");
     } finally {
       fetchServices();
       setSelectedService({} as ServiceProps);
@@ -94,12 +118,15 @@ const ServicesView: React.FC = () => {
                   numberOfRevision={service.numberOfRevision}
                   startingPrice={service.startingPrice}
                   thumbnail={service.thumbnail}
+                  accountFullname={accountFullname}
+                  accountAvatar={accountAvatar}
                   artworkReferences={service.artworkReferences}
                   isCreator={isCreator}
                   editHandler={() => {
                     setSelectedService(service);
                     handleEditService();
                   }}
+                  hireHandler={(request) => handleHireRequest(request, service)}
                 />
               ))}
               <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
