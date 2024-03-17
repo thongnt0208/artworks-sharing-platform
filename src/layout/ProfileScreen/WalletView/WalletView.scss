@@ -1,5 +1,7 @@
 @import "/src/const/variables.scss";
-.wallet-view {
+.wallet-view { 
+  height: 100vh;
+  padding: 20px;
   .action-section {
     width: 100%;
     display: flex;

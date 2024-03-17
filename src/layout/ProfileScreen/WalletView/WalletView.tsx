@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { TabMenu } from "primereact/tabmenu";
 
-import "./WalletView.scss";
 import {
   GetTransactionHistoryData,
   GetWalletData,
   GetWalletHistoryData,
 } from "./WalletService";
+import { formatTime } from "../../../util/TimeHandle";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import DepositCoin from "./DepositCoin/DepositCoin";
 import WithdrawCoin from "./WithdrawCoin/WithdrawCoin";
+import "./WalletView.scss";
 
 export type WalletProps = {
   balance: number;
@@ -57,24 +58,24 @@ const WalletView: React.FC = () => {
         <div className="wallet-history-section">
           <i
             className={`wallet-icon ${
-              walletHistory.type === "deposit"
+              walletHistory.type === "Deposit"
                 ? "pi pi-arrow-up"
                 : "pi pi-arrow-down"
             }`}
             style={{
-              color: walletHistory.type === "deposit" ? "#F12B2B" : "#00668C",
+              color: walletHistory.type === "Deposit" ? "#F12B2B" : "#00668C",
             }}
           />
           <div className="wallet-info">
             <p
               className="m-0"
               style={{
-                color: walletHistory.type === "deposit" ? "#F12B2B" : "#00668C",
+                color: walletHistory.type === "Deposit" ? "#F12B2B" : "#00668C",
               }}
             >
-              {walletHistory.type === "deposit"
-                ? "+" + walletHistory.amount + " Xu"
-                : "-" + walletHistory.amount + " Xu"}
+              {walletHistory.type === "Deposit"
+                ? "+" + walletHistory.amount.toLocaleString() + " Xu"
+                : "-" + walletHistory.amount.toLocaleString() + " Xu"}
             </p>
             <p className="m-0">{walletHistory.id}</p>
           </div>
@@ -82,7 +83,10 @@ const WalletView: React.FC = () => {
           <p className="method">
             <strong>Phương thức:</strong> {walletHistory.paymentMethod}
           </p>
-          <p>{walletHistory.createdOn}</p>
+          <p>{formatTime(walletHistory.createdOn)}</p>
+          <p className="status">
+            <strong>Trạng thái:</strong> {walletHistory.transactionStatus}
+          </p>
         </div>
       </>
     );
@@ -161,7 +165,9 @@ const WalletView: React.FC = () => {
   return (
     <div className="wallet-view">
       <h1>Số dư</h1>
-      <h1 className="balance-info w-full text-center">{wallet?.balance?.toLocaleString()} Xu</h1>
+      <h1 className="balance-info w-full text-center">
+        {wallet?.balance?.toLocaleString()} Xu
+      </h1>
       <div className="action-section">
         <Button
           label="Nạp tiền"
@@ -191,11 +197,17 @@ const WalletView: React.FC = () => {
         className="w-max mb-3 text-black-alpha-90"
       />
 
-      {activeTab === 0
-        ? walletHistory.map((historyRow) => walletHistoryRow(historyRow))
-        : transactionHistory.map((historyRow) =>
-            transactionHistoryRow(historyRow)
-          )}
+      {activeTab === 0 ? (
+        walletHistory.length !== 0 ? (
+          walletHistory.map((historyRow) => walletHistoryRow(historyRow))
+        ) : (
+          <div className="empty-section w-full h-full flex justify-content-center align-items-start p-5">
+            <h1>Hãy nạp thêm Xu để trải nghiệm các dịch vụ của Artworkia nhé!</h1>
+          </div>
+        )
+      ) : (
+        transactionHistory.map((historyRow) => transactionHistoryRow(historyRow))
+      )}
     </div>
   );
 };
