@@ -1,29 +1,18 @@
 import { notificationItemType } from "../../../components/Notification";
 import useAxios, { axiosPrivate } from "../../../hooks/useAxios";
-
-export type RequestItemType = {
-  id: string;
-  serviceId: string;
-  message: string;
-  timeline: string;
-  price: string;
-  requestStatus: string;
-  createdBy: string;
-  createdOn: string;
-  service?: string;
-};
+import { RequestItemType } from "../ChatRelatedTypes";
 
 function mapRequestData(response: any): RequestItemType {
   return {
-    id: response?.data?.id,
-    serviceId: response?.data?.serviceId,
-    message: response?.data?.message,
-    timeline: response?.data?.timeline,
-    price: response?.data?.price,
-    requestStatus: response?.data?.requestStatus,
-    createdBy: response?.data?.createdBy,
-    createdOn: response?.data?.createdOn,
-    service: response?.data?.service,
+    id: response?.id,
+    serviceId: response?.serviceId,
+    message: response?.message,
+    timeline: response?.timeline,
+    price: response?.price || response?.budget,
+    requestStatus: response?.requestStatus,
+    createdBy: response?.createdBy,
+    createdOn: response?.createdOn,
+    service: response?.service,
   };
 }
 
@@ -42,13 +31,7 @@ export async function GetRequestsByCreator(): Promise<notificationItemType[]> {
   return axiosPrivate
     .get(`/requests/creator`)
     .then((response) => {
-      return response.data.map((item: any) => ({
-        notificationId: item.id || "",
-        content: item.message || "",
-        notifyType: "request",
-        isSeen: false,
-        creationDate: item.createdOn || "",
-      }));
+      return response.data.map((item: any) => mapRequestData(item));
     })
     .catch((error) => {
       console.error("Error fetching messages:", error);
@@ -71,13 +54,7 @@ export async function GetRequestsByAudience(): Promise<notificationItemType[]> {
   return axiosPrivate
     .get(`/requests/audience`)
     .then((response) => {
-      return response.data.map((item: any) => ({
-        notificationId: item.id || "",
-        content: item.message || "",
-        notifyType: "request",
-        isSeen: false,
-        creationDate: item.createdOn || "",
-      }));
+      return response.data.map((item: any) => (mapRequestData(item)));
     })
     .catch((error) => {
       console.error("Error fetching messages:", error);
@@ -100,11 +77,37 @@ export async function GetRequestsByAudience(): Promise<notificationItemType[]> {
 export async function GetRequestById(requestId: string): Promise<RequestItemType> {
   return useAxios
     .get(`/requests/${requestId}`)
-    .then((response) => {
-      return mapRequestData(response);
-    })
+    .then((response) => response?.data?.mapRequestData(response))
     .catch((error) => {
       console.error("Error fetching request:", error);
+      throw error;
+    });
+}
+
+/**
+ * This function is used to get all requests of a chatbox
+ * 
+ * @param chatboxId - the id of the chatbox
+ * @returns {Promise<RequestItemType[]>} - an array of requests
+ * @throws {Error} an error from the API request
+ * @example
+ * const requests = await GetRequestsByChatboxId("123");
+ * console.log(requests);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function GetRequestsByChatboxId(chatboxId: string): Promise<RequestItemType[]> {
+  return axiosPrivate
+    .get(`/chatboxs/${chatboxId}/requests`)
+    .then((response) => {
+      if (Array.isArray(response?.data)) {
+        return response.data.map((item: any) => mapRequestData(item));
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching requests:", error);
       throw error;
     });
 }

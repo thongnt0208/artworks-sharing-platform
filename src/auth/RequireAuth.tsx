@@ -8,7 +8,6 @@ type Props = {
 
 export default function RequireAuth({ children }: Props) {
   const  authenticationInfo  = getAuthInfo();
-  console.log(authenticationInfo);
 
   const location = useLocation();
   //   if the user is logged in, render the child components

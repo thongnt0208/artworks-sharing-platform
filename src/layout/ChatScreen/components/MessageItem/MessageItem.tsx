@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import "./MessageItem.scss";
 import { Tooltip } from 'primereact/tooltip';
 import { Avatar } from 'primereact/avatar';
@@ -11,7 +11,7 @@ type Props = {
   createdOn: string;
 };
 
-export default function MessageItem({ avatar, text, fileUrl, createdOn, isMyMessage }: Props) {
+function MessageItem({ avatar, text, fileUrl, createdOn, isMyMessage }: Props) {
   return (
     <div className={`message-item ${isMyMessage ? "my-message" : "other-message"}`}>
       {!isMyMessage && (
@@ -31,3 +31,7 @@ export default function MessageItem({ avatar, text, fileUrl, createdOn, isMyMess
     </div>
   );
 }
+
+const MemoizedMessageItem = memo(MessageItem);
+
+export default MemoizedMessageItem;

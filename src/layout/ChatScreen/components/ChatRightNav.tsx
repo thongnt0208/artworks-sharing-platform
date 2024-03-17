@@ -1,7 +1,7 @@
-import './ChatRightNav.scss';
+import "./ChatRightNav.scss";
 
-type Props = { selectingRequestId: string };
+type Props = {};
 
-export default function ChatRightNav({ selectingRequestId }: Props) {
-  return <div className='chat-right-nav'>ChatRightNav {selectingRequestId}</div>;
+export default function ChatRightNav({}: Props) {
+  return <div className="chat-right-nav">ChatRightNav </div>;
 }
