@@ -1,4 +1,4 @@
-import { ChatboxItemType } from "../ChatRelatedTypes"; 
+import { ChatboxItemType } from "../ChatRelatedTypes";
 import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
@@ -105,6 +105,42 @@ export async function SendMessageToAccount(
     .post(`/messages`, {
       receiverId: accountId,
       text: text,
+      fileLocation: null,
+    })
+    .then((response) => {
+      return {
+        chatBoxId: response.data.chatBoxId || "",
+        text: response.data.text || "",
+        fileLocation: response.data.fileLocation,
+        createdOn: response.data.createdOn || "",
+        createdBy: response.data.createdBy || "",
+      };
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
+
+/**
+ * Sends an image to a specified account.
+ * CHƯA CÓ REAL API
+ * @param accountId - The ID of the account to send the image to.
+ * @param file - The image file to send.
+ * @returns A Promise that resolves to a ChatMessageType object representing the sent message.
+ * @throws An error if the request fails.
+ * @example
+ * const message = await SendImageToAccount("accountId", file);
+ * console.log(message);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function SendImageToAccount(accountId: string, file: File[]): Promise<ChatMessageType> {
+  const formData = new FormData();
+  file.map((f) => formData.append("file", f));
+  return axiosPrivate
+    .post(`/messages`, {
+      receiverId: accountId,
+      text: "",
       fileLocation: null,
     })
     .then((response) => {

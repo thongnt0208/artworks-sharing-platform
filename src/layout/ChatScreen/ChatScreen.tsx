@@ -1,73 +1,62 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { Avatar } from "primereact/avatar";
 
 import "./ChatScreen.scss";
 
 import ChatLeftNav from "./components/ChatLeftNav";
 import ChatContent from "./components/ChatContent";
 import ChatRightNav from "./components/ChatRightNav";
+import ChatInput from "./components/ChatInput/ChatInput";
 import {
   ChatMessageType,
   GetChatboxesCurrentAccount,
   GetMessagesByChatboxId,
+  SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
-import { useNavigate } from "react-router-dom";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { GetRequestById, RequestItemType, UpdateRequestStatus } from "./services/ProposalServices";
-import ChatInput from "./components/ChatInput/ChatInput";
-import { ChatboxItemType } from "./ChatRelatedTypes";
-import { Avatar } from "primereact/avatar";
+import { GetRequestsByChatboxId, UpdateRequestStatus } from "./services/ProposalServices";
+import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
+import { CatchAPICallingError } from "..";
+// ---------------------------------------------------------
 
 export default function ChatScreen() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
   const [newChatMessage, setNewChatMessage] = useState("");
-  const [selectingRequestId, setSelectingRequestId] = useState("");
+  const [newChatImages, setNewChatImages] = useState([] as File[]);
+  const [requestsList, setRequestsList] = useState<RequestItemType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [requestDetail, setRequestDetail] = useState<RequestItemType>({} as RequestItemType);
+  const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const [proposalFormData, setProposalFormData] = useState({} as any);
+  const location = useLocation();
 
   const navigate = useNavigate();
-  function catchError(error: any) {
-    if (error.response?.status === 401) {
-      navigate("/login");
-    } else {
-      console.log(error);
-    }
-  }
 
   // REQUESTS STATE TOOLS section start
-  // Cần phải có 1 Get All requests giữa 1 user và current user
-
-  const GetRequestDetail = () => {
-    GetRequestById(selectingRequestId)
-      .then((res) => {
-        setRequestDetail(res);
-      })
+  const GetAllRequests = () => {
+    console.log("selectingChatbox?.id: ", selectingChatbox?.id);
+    
+    selectingChatbox?.id && GetRequestsByChatboxId(selectingChatbox?.id)
+      .then((res) => {setRequestsList(res); console.log("RequestsList: ", res);})
       .catch((error) => {
-        console.error("Error fetching chatboxes:", error);
-        setRequestDetail({} as RequestItemType);
-      });
-  };
-  function acceptRequest() {
-    UpdateRequestStatus(requestDetail.id, 1)
-      .then((response) => {
-        setRequestDetail(response);
-      })
-      .catch((error) => {
-        catchError(error);
+        setRequestsList([]);
+        CatchAPICallingError(error, navigate);
       });
   }
-  function denyRequest() {
-    UpdateRequestStatus(requestDetail.id, 2)
-      .then((response) => {
-        setRequestDetail(response);
-      })
-      .catch((error) => {
-        catchError(error);
-      });
+
+  function acceptRequest(id: string) {
+    UpdateRequestStatus(id, 1)
+      .then(() => GetAllRequests())
+      .catch((error) => CatchAPICallingError(error, navigate));
+  }
+  function denyRequest(id: string) {
+    UpdateRequestStatus(id, 2)
+      .then(() => GetAllRequests())
+      .catch((error) => CatchAPICallingError(error, navigate));
   }
   // REQUESTS STATE TOOLS section end
 
@@ -89,20 +78,17 @@ export default function ChatScreen() {
       })
       .catch((error) => {
         setIsLoading(false);
-        console.error("Error fetching chatboxes:", error);
         setChatboxes([]);
-        catchError(error);
+        CatchAPICallingError(error, navigate);
       });
   };
 
   const GetChatMessages = () => {
-    GetMessagesByChatboxId(selectingChatbox?.id)
-      .then((res) => {
-        setChatMessages(res);
-      })
+    selectingChatbox?.id && GetMessagesByChatboxId(selectingChatbox?.id)
+      .then((res) => setChatMessages(res))
       .catch((error) => {
         setChatMessages([]);
-        catchError(error);
+        CatchAPICallingError(error, navigate);
       });
   };
 
@@ -112,27 +98,41 @@ export default function ChatScreen() {
         GetChatMessages();
         setNewChatMessage(""); // Clear input after sending message
       })
-      .catch((error) => {
-        catchError(error);
-      });
+      .catch((error) => CatchAPICallingError(error, navigate));
+  };
+
+  const SendChatImages = () => {
+    SendImageToAccount(selectingChatbox?.author?.id, newChatImages)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => CatchAPICallingError(error, navigate));
+  };
+
+  const currentUrl = location.pathname;
+  const _currentChatboxId = currentUrl.replace("/chat/", "");
+
+  const SetCurrentChatbox = () => {
+    if (_currentChatboxId && chatboxes.length > 0) {
+      const _tmpChatbox = chatboxes.find((chatbox) => chatbox.id === _currentChatboxId);
+      if (_tmpChatbox) {
+        setSelectingChatbox(_tmpChatbox);
+      }
+    }
   };
 
   useEffect(() => {
     GetChatboxes();
+    SetCurrentChatbox();
   }, []);
 
   useEffect(() => {
-    setSelectingRequestId(chatboxes[0]?.id);
-    setSelectingChatbox(chatboxes[0]);
-  }, [chatboxes]);
-
-  useEffect(() => {
-    GetRequestDetail();
-  }, [selectingRequestId]);
+    SetCurrentChatbox();
+  }, [currentUrl, chatboxes]);
 
   useEffect(() => {
     GetChatMessages();
-    console.log(proposalFormData);
+    GetAllRequests();
   }, [selectingChatbox]);
 
   return (
@@ -140,11 +140,7 @@ export default function ChatScreen() {
       {isLoading && <ProgressSpinner />}
       <div className="chat-screen-container">
         <div className="first-col">
-          <ChatLeftNav
-            itemsList={chatboxes}
-            selectingChatbox={selectingChatbox}
-            setSelectingChatbox={setSelectingChatbox}
-          />
+          <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
         </div>
         <div className="middle-col">
           <div className="reciever-name-container">
@@ -155,7 +151,9 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{ requestDetail, setRequestDetail, acceptRequest, denyRequest }}
+              requestStateTools={{ requestsList, acceptRequest, denyRequest }}
+              isShowProposalForm={isShowProposalForm}
+              setIsShowProposalForm={setIsShowProposalForm}
               setProposalFormData={setProposalFormData}
             />
           </div>
@@ -165,12 +163,16 @@ export default function ChatScreen() {
               newChatMessage={newChatMessage}
               setNewChatMessage={setNewChatMessage}
               SendChatMessage={SendChatMessage}
+              newChatImages={newChatImages}
+              setNewChatImages={setNewChatImages}
+              setIsShowProposalForm={setIsShowProposalForm}
+              SendChatImages={SendChatImages}
               isLoading={isLoading}
             />
           </div>
         </div>
         <div className="last-col">
-          <ChatRightNav selectingRequestId={selectingRequestId} />
+          <ChatRightNav />
         </div>
       </div>
     </>
