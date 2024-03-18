@@ -13,8 +13,8 @@ import ChatInput from "./components/ChatInput/ChatInput";
 import {
   ChatMessageType,
   GetChatboxesCurrentAccount,
-  GetMessagesByChatboxId,
   GetMessagesByChatboxIdPagin,
+  GetMessagesByChatboxIdRealTime,
   SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
@@ -35,19 +35,18 @@ export default function ChatScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const [proposalFormData, setProposalFormData] = useState({} as any);
+  const [closeSocket, setCloseSocket] = useState<() => void | null>();
+
   const location = useLocation();
 
   const navigate = useNavigate();
 
   // REQUESTS STATE TOOLS section start
   const GetAllRequests = () => {
-    console.log("selectingChatbox?.id: ", selectingChatbox?.id);
-
     selectingChatbox?.id &&
       GetRequestsByChatboxId(selectingChatbox?.id)
         .then((res) => {
           setRequestsList(res);
-          console.log("RequestsList: ", res);
         })
         .catch((error) => {
           setRequestsList([]);
@@ -91,20 +90,21 @@ export default function ChatScreen() {
   };
 
   const GetChatMessages = () => {
-    setChatMessages([]);
-    selectingChatbox?.id &&
-      GetMessagesByChatboxId(selectingChatbox?.id)
-        .then((res) => setChatMessages(res))
-        .catch((error) => {
-          setChatMessages([]);
-          CatchAPICallingError(error, navigate);
-        });
+    if (selectingChatbox?.id) {
+      if (!closeSocket) {
+        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
+        setCloseSocket(() => cleanup);
+      } else {
+        closeSocket();
+        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
+        setCloseSocket(() => cleanup);
+      }
+    }
   };
 
   const SendChatMessage = () => {
     SendMessageToAccount(selectingChatbox?.author?.id, newChatMessage)
       .then(() => {
-        GetChatMessages();
         setNewChatMessage(""); // Clear input after sending message
       })
       .catch((error) => CatchAPICallingError(error, navigate));
@@ -130,14 +130,7 @@ export default function ChatScreen() {
     }
   };
 
-  const fetchNextPage = () => {
-    console.log("currentPage: " + currentPage + "totalPagesSt: " + totalPagesSt);
-
-    // alert("currentPage: " + currentPage + "totalPages: " + totalPagesSt);
-    setCurrentPage(currentPage + 1);
-    console.log("dhjdjwdwjhekweh");
-    
-  };
+  const fetchNextPage = () => setCurrentPage(currentPage + 1);
 
   useEffect(() => {
     GetChatboxes();
@@ -149,36 +142,16 @@ export default function ChatScreen() {
   }, [currentUrl, chatboxes]);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        // alert("currentPage: " + currentPage);
-
-        const { items, totalPages } = await GetMessagesByChatboxIdPagin(
-          selectingChatbox?.id,
-          currentPage,
-          15
-        );
-        console.log("totalPages: ", totalPages);
-
-        setChatMessages((prevMessages) => [...prevMessages, ...items]);
-        setTotalPagesSt(totalPages);
-        console.log("totalPagesSt: ", totalPagesSt);
-      } catch (error) {
-        setChatMessages([]);
-        CatchAPICallingError(error, navigate);
-      }
-    };
-
-    if (selectingChatbox?.id) {
-      fetchMessages();
-    }
-  }, [selectingChatbox, currentPage]);
-
-  useEffect(() => {
     setChatMessages([]);
     setCurrentPage(1);
     setTotalPagesSt(1);
     GetAllRequests();
+    GetChatMessages();
+    return () => {
+      if (closeSocket) {
+        closeSocket();
+      }
+    };
   }, [selectingChatbox]);
 
   return (

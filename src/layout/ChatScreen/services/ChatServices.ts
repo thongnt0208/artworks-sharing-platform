@@ -2,6 +2,8 @@ import { ChatboxItemType } from "../ChatRelatedTypes";
 import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
+import { Dispatch, SetStateAction } from "react";
+const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 /**
  * This function is used to get all chatboxes of current account
@@ -141,6 +143,63 @@ export async function GetMessagesByChatboxIdPagin(
     .catch((error) => {
       throw error;
     });
+}
+
+/**
+ * This function is used to retrieve real-time messages by chatbox ID.
+ * @param chatboxId - The ID of the chatbox.
+ * @returns A promise that resolves to an array of chat messages.
+ * @throws An error if the API request fails.
+ * @example
+ * GetMessagesByChatboxIdRealTime("chatboxId")
+ *   .then((messages) => {
+ *     console.log(messages);
+ *   })
+ *   .catch((error) => {
+ *     console.error(error);
+ *   });
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export function GetMessagesByChatboxIdRealTime(
+  chatboxId: string,
+  setState: Dispatch<SetStateAction<ChatMessageType[]>>
+): () => void {
+  const url = `${WS_URL}/chatbox/${chatboxId}/messages/ws`;
+  const socket = new WebSocket(url);
+
+  socket.onopen = () => {
+    console.log("WebSocket connection established");
+  };
+
+  socket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    console.log("WebSocket message received:", message);
+
+    Array.isArray(message) && setState(
+      message?.reverse().map((item: any) => {
+        return {
+          chatBoxId: item.ChatBoxId || "",
+          text: item.Text || "",
+          fileLocation: item.FileLocation,
+          createdOn: item.CreatedOn || "",
+          createdBy: item.CreatedBy || "",
+        };
+      })
+    );
+  };
+
+  socket.onclose = () => {
+    console.log("WebSocket connection closed");
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  return () => {
+    socket.close();
+  };
 }
 
 /**

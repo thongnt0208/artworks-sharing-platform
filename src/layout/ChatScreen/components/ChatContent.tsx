@@ -64,7 +64,7 @@ export default function ChatContent({
     observer.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          fetchNextPage();
+          // fetchNextPage();
           // alert("fetch next page");
         }
       },
@@ -163,7 +163,7 @@ export default function ChatContent({
         {content.map((item: any, index: number) => {
           return (
             <MemoizedMessageItem
-              key={item?.chatBoxId || index}
+              key={`msg-item-${index}`}
               isMyMessage={item.createdBy === currentUserId}
               avatar={selectingChatbox?.avatar || tmpAvt}
               createdOn={item.createdOn}
