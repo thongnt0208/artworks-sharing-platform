@@ -85,6 +85,64 @@ export async function GetMessagesByChatboxId(chatboxId: string): Promise<ChatMes
     });
 }
 
+interface PaginatedChatMessages {
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  totalCount: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  items: ChatMessageType[];
+}
+
+/**
+ * This function is used to retrieve messages by chatbox ID with pagination.
+ * @param chatboxId - The ID of the chatbox.
+ * @param pageNumber - The page number to retrieve.
+ * @param pageSize - The number of items per page.
+ * @returns A promise that resolves to an object containing the paginated chat messages.
+ * @throws An error from the API request.
+ * @example
+ * const { items, totalPages } = await GetMessagesByChatboxId("chatboxId", 1, 10);
+ * console.log(items);
+ * console.log(totalPages);
+ * @version 2.0.0
+ * @author ThongNT
+ */
+export async function GetMessagesByChatboxIdPagin(
+  chatboxId: string,
+  pageNumber: number = 1,
+  pageSize: number = 10
+): Promise<PaginatedChatMessages> {
+  return axiosPrivate
+    .get(`/v2/chatbox/${chatboxId}/messages?pageNumber=${pageNumber}&pageSize=${pageSize}`)
+    .then((response) => {
+      const data = response.data;
+      const items = data.items.map((item: any) => {
+        return {
+          chatBoxId: item.chatBoxId || "",
+          text: item.text || "",
+          fileLocation: item.fileLocation,
+          createdOn: item.createdOn || "",
+          createdBy: item.createdBy || "",
+        };
+      });
+
+      return {
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        pageSize: data.pageSize,
+        totalCount: data.totalCount,
+        hasPrevious: data.hasPrevious,
+        hasNext: data.hasNext,
+        items,
+      };
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
+
 /**
  * This function is used to send a message to an account.
  * @param accountId - The ID of the recieved user.
@@ -134,7 +192,10 @@ export async function SendMessageToAccount(
  * @version 1.0.0
  * @author ThongNT
  */
-export async function SendImageToAccount(accountId: string, file: File[]): Promise<ChatMessageType> {
+export async function SendImageToAccount(
+  accountId: string,
+  file: File[]
+): Promise<ChatMessageType> {
   const formData = new FormData();
   file.map((f) => formData.append("file", f));
   return axiosPrivate
