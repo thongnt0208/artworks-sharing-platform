@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Dialog } from "./../../index";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import { ChatboxItemType, requestStateToolsType } from "../ChatRelatedTypes";
 
 import "./ChatContent.scss";
 import MemoizedMessageItem from "./MessageItem/MessageItem";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import LazyProposalForm from "./Proposal/LazyProposalForm";
 import { translate2Vietnamese } from "../../../util/TextHandle";
 // ---------------------------------------------------------
@@ -16,6 +17,7 @@ type Props = {
   isShowProposalForm: boolean;
   setIsShowProposalForm: (value: boolean) => void;
   setProposalFormData: (data: any) => void;
+  fetchNextPage: () => void;
 };
 
 const tmpAvt = require("../../../assets/defaultImage/default-avatar.png");
@@ -26,8 +28,14 @@ export default function ChatContent({
   requestStateTools,
   isShowProposalForm,
   setIsShowProposalForm,
+  fetchNextPage,
 }: Props) {
   const [tmpStatus, setTmpStatus] = useState<{ [key: string]: any }>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
+  
+  const observer = useRef<IntersectionObserver | null>(null);
+  const topMessageRef = useRef<HTMLDivElement>(null);
+  const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
   const { acceptRequest, denyRequest, requestsList } = requestStateTools;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
@@ -41,6 +49,46 @@ export default function ChatContent({
       });
     }
   }, [requestsList, acceptRequest, denyRequest]);
+
+  useEffect(() => {
+    const scrollArea = scrollRef.current;
+    if (scrollArea) {
+      const lastChild = scrollArea.lastElementChild;
+      if (lastChild) {
+        lastChild.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [content]);
+
+  useEffect(() => {
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+          // alert("fetch next page");
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (topMessageRef.current && observer.current) {
+      observer.current.observe(topMessageRef.current);
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [topMessageRef]);
+
+  useEffect(() => {
+    if (shouldFetchNextPage) {
+      setTimeout(() => {
+        setShouldFetchNextPage(false);
+      }, 1000);
+    }
+  }, [shouldFetchNextPage]);
 
   return (
     <div className="chat-content">
@@ -57,8 +105,7 @@ export default function ChatContent({
         </Suspense>
       </Dialog>
 
-      <div className="chat-scroll-area">
-        {/* <SystemNotificationItem requestStateTools={requestStateTools} /> */}
+      <div className="chat-scroll-area" ref={scrollRef}>
         {requestsList?.length !== 0 && (
           <div className="system-noti-card">
             <h3>Thông báo hệ thống</h3>
@@ -112,6 +159,7 @@ export default function ChatContent({
             ))}
           </div>
         )}
+        <div ref={topMessageRef}></div>
         {content.map((item: any, index: number) => {
           return (
             <MemoizedMessageItem

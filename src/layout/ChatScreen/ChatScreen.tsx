@@ -14,6 +14,7 @@ import {
   ChatMessageType,
   GetChatboxesCurrentAccount,
   GetMessagesByChatboxId,
+  GetMessagesByChatboxIdPagin,
   SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
@@ -25,6 +26,8 @@ import { CatchAPICallingError } from "..";
 export default function ChatScreen() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPagesSt, setTotalPagesSt] = useState(1);
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
   const [newChatMessage, setNewChatMessage] = useState("");
   const [newChatImages, setNewChatImages] = useState([] as File[]);
@@ -39,14 +42,18 @@ export default function ChatScreen() {
   // REQUESTS STATE TOOLS section start
   const GetAllRequests = () => {
     console.log("selectingChatbox?.id: ", selectingChatbox?.id);
-    
-    selectingChatbox?.id && GetRequestsByChatboxId(selectingChatbox?.id)
-      .then((res) => {setRequestsList(res); console.log("RequestsList: ", res);})
-      .catch((error) => {
-        setRequestsList([]);
-        CatchAPICallingError(error, navigate);
-      });
-  }
+
+    selectingChatbox?.id &&
+      GetRequestsByChatboxId(selectingChatbox?.id)
+        .then((res) => {
+          setRequestsList(res);
+          console.log("RequestsList: ", res);
+        })
+        .catch((error) => {
+          setRequestsList([]);
+          CatchAPICallingError(error, navigate);
+        });
+  };
 
   function acceptRequest(id: string) {
     UpdateRequestStatus(id, 1)
@@ -84,12 +91,14 @@ export default function ChatScreen() {
   };
 
   const GetChatMessages = () => {
-    selectingChatbox?.id && GetMessagesByChatboxId(selectingChatbox?.id)
-      .then((res) => setChatMessages(res))
-      .catch((error) => {
-        setChatMessages([]);
-        CatchAPICallingError(error, navigate);
-      });
+    setChatMessages([]);
+    selectingChatbox?.id &&
+      GetMessagesByChatboxId(selectingChatbox?.id)
+        .then((res) => setChatMessages(res))
+        .catch((error) => {
+          setChatMessages([]);
+          CatchAPICallingError(error, navigate);
+        });
   };
 
   const SendChatMessage = () => {
@@ -121,6 +130,15 @@ export default function ChatScreen() {
     }
   };
 
+  const fetchNextPage = () => {
+    console.log("currentPage: " + currentPage + "totalPagesSt: " + totalPagesSt);
+
+    // alert("currentPage: " + currentPage + "totalPages: " + totalPagesSt);
+    setCurrentPage(currentPage + 1);
+    console.log("dhjdjwdwjhekweh");
+    
+  };
+
   useEffect(() => {
     GetChatboxes();
     SetCurrentChatbox();
@@ -131,7 +149,35 @@ export default function ChatScreen() {
   }, [currentUrl, chatboxes]);
 
   useEffect(() => {
-    GetChatMessages();
+    const fetchMessages = async () => {
+      try {
+        // alert("currentPage: " + currentPage);
+
+        const { items, totalPages } = await GetMessagesByChatboxIdPagin(
+          selectingChatbox?.id,
+          currentPage,
+          15
+        );
+        console.log("totalPages: ", totalPages);
+
+        setChatMessages((prevMessages) => [...prevMessages, ...items]);
+        setTotalPagesSt(totalPages);
+        console.log("totalPagesSt: ", totalPagesSt);
+      } catch (error) {
+        setChatMessages([]);
+        CatchAPICallingError(error, navigate);
+      }
+    };
+
+    if (selectingChatbox?.id) {
+      fetchMessages();
+    }
+  }, [selectingChatbox, currentPage]);
+
+  useEffect(() => {
+    setChatMessages([]);
+    setCurrentPage(1);
+    setTotalPagesSt(1);
     GetAllRequests();
   }, [selectingChatbox]);
 
@@ -155,6 +201,7 @@ export default function ChatScreen() {
               isShowProposalForm={isShowProposalForm}
               setIsShowProposalForm={setIsShowProposalForm}
               setProposalFormData={setProposalFormData}
+              fetchNextPage={fetchNextPage}
             />
           </div>
 
