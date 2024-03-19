@@ -79,7 +79,7 @@ function App() {
           <Header isLogin={isLogin} setIsLogin={setIsLogin} chatboxesData={chatboxes} />
 
           <Routes>
-            <Route path="/" element={<HomeScreen isLogin={true} />} />
+            <Route path="/" element={<HomeScreen isLogin={isLogin} />} />
             <Route
               path="/login"
               element={
