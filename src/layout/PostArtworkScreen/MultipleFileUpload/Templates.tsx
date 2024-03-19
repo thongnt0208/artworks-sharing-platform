@@ -1,4 +1,4 @@
-export const emptyTemplate = () => {
+export const emptyFileTemplate = () => {
   return (
     <div className="empty-template-container flex align-items-center flex-column">
       <i className="pi pi-image mt-3 p-5"></i>

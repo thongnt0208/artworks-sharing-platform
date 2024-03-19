@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import "./styles/ChatboxItem.scss";
 import { Avatar } from "primereact/avatar";
 import { ChatboxItemType } from "../layout/ChatScreen/ChatRelatedTypes";
+import { useNavigate } from "react-router-dom";
 
 type ChatboxItemTemplateProps = {
   item: ChatboxItemType;
   selectingChatbox: ChatboxItemType;
-  setSelectingChatbox: (chatbox: ChatboxItemType) => void;
 };
 
 const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
-  const { item, selectingChatbox, setSelectingChatbox } = props;
+  const { item, selectingChatbox } = props;
   const { id, avatar, text, author, time, isSeen } = item;
   const [isSeenLocal, setIsSeenLocal] = useState<boolean>(isSeen);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const textElements = document.querySelectorAll(".text-limit");
@@ -34,8 +35,10 @@ const ChatboxItemTemplate: React.FC<ChatboxItemTemplateProps> = (props) => {
   const itemClickHandler = () => {
     // Call a function that calls an API to setIsSeen to false
     // setIsSeenLocal(true);
-    setSelectingChatbox(item);
     setIsSeenLocal(true);
+    navigate(`/chat/${id}`);
+    console.log("ClickedId: ", id);
+    
   };
 
   return (
