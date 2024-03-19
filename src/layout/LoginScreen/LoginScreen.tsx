@@ -76,62 +76,72 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
   return (
     <>
       <Toast ref={toast} />
-      <div className="login-container flex w-100">
+      <div className="login-container">
         <div className="background-overlay"></div>
-        <div className="logo-container p-4 hidden lg:block">
-          <Image alt="logo" src={logotext} height="100" />
-        </div>
-        <Card className="login-card">
-          <div className="header-container pb-4">
-            <div className="logo flex justify-content-start lg:hidden">
-              <Image alt="logo" src={logo} height="40" />
-              <h3 className="m-0">Artworkia</h3>
-            </div>
-            <h1>Đăng nhập</h1>
-            <span>Người dùng mới?</span> <Link to={"/register"}>Tạo tài khoản</Link>
-          </div>
-          <div className="normal-login">
-            <div className="username-container">
-              <InputText
-                id="username"
-                value={username}
-                placeholder="Tên đăng nhập"
-                onChange={(e) => setUsername(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleLogin();
-                  }
-                }}
-                required
-              />
-            </div>
-            <div className="password-container">
-              <InputText
-                id="password"
-                type="password"
-                value={password}
-                placeholder="Mật khẩu"
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleLogin();
-                  }
-                }}
-                required
-              />
-            </div>
-            <Button
-              label="Tiếp tục"
-              onClick={handleLogin}
-              disabled={username && password ? false : true}
-              loading={isLoading}
-            />
-          </div>
 
-          <Divider />
-          <div className="3party-login">
-            <div className="google-login"></div>
-            <div className="facebook-login"></div>
+        <Card className="bg-white max-h-full overflow-y-auto">
+          <div className="flex justify-content-center align-content-center">
+            <div className="logo-container flex justify-content-center align-items-center">
+              <div className="p-8 hidden lg:block">
+                <Image alt="logo" src={logotext} height="100" />
+              </div>
+            </div>
+            <div className="hidden lg:block">
+              <Divider layout="vertical" />
+            </div>
+            <div className="login-card">
+              <div className="header-container pb-4">
+                <div className="logo flex justify-content-start align-items-center lg:hidden">
+                  <Image alt="logo" src={logo} height="40" />
+                  <h3 className="m-0">Artworkia</h3>
+                </div>
+                <h1>Đăng nhập</h1>
+                <span>Người dùng mới?</span> <Link to={"/register"}>Tạo tài khoản</Link>
+              </div>
+              <div className="normal-login">
+                <div className="username-container">
+                  <InputText
+                    id="username"
+                    value={username}
+                    placeholder="Tên đăng nhập"
+                    onChange={(e) => setUsername(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleLogin();
+                      }
+                    }}
+                    required
+                  />
+                </div>
+                <div className="password-container">
+                  <InputText
+                    id="password"
+                    type="password"
+                    value={password}
+                    placeholder="Mật khẩu"
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleLogin();
+                      }
+                    }}
+                    required
+                  />
+                </div>
+                <Button
+                  label="Tiếp tục"
+                  onClick={handleLogin}
+                  disabled={username && password ? false : true}
+                  loading={isLoading}
+                />
+              </div>
+
+              <Divider />
+              <div className="3party-login">
+                <div className="google-login"></div>
+                <div className="facebook-login"></div>
+              </div>
+            </div>
           </div>
         </Card>
       </div>
