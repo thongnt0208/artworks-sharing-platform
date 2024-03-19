@@ -213,7 +213,7 @@ export async function editCommentOnArtwork(
 export async function addFollow(followUserId: string): Promise<any> {
   try {
     let body = {
-      accountId: followUserId,
+      followedId: followUserId,
     };
     const response = await axiosPrivate.post(`${BASE_URL}/follows`, body);
     return response;

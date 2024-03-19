@@ -14,6 +14,7 @@ export type ArtworkProps = {
   thumbnail: string;
   viewCount: number;
   likeCount: number;
+  privacy?: string;
   isCreator?: boolean | undefined;
   createdBy: string;
   creatorFullName: string;
