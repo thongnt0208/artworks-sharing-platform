@@ -58,7 +58,9 @@ export async function CreateServiceData(formValue: any): Promise<any> {
     formData.append("numberOfRevision", formValue.numberOfRevision);
     formData.append("startingPrice", formValue.startingPrice);
     formData.append("thumbnail", formValue.thumbnail);
-    formData.append("ArtworkReference", formValue.referenceArtworks);
+    formValue.referenceArtworks.map((id: string) =>
+      formData.append("ArtworkReference", id)
+    );
     return axiosPrivate.post("/services", formData);
   } catch {
     return Promise.reject("Error fetching categories");
@@ -88,6 +90,9 @@ export async function UpdateServiceData(
     formData.append("numberOfRevision", formValue.numberOfRevision);
     formData.append("startingPrice", formValue.startingPrice);
     formData.append("thumbnail", formValue.thumbnail);
+    formValue.referenceArtworks.map((id: string) =>
+      formData.append("ArtworkReference", id)
+    );
     return axiosPrivate.put(`/services/${serviceId}`, formData);
   } catch (error) {
     return Promise.reject("Error updating service");
@@ -118,6 +123,18 @@ export async function DeleteServiceData(serviceId: string) {
   }
 }
 
+/**
+ *
+ * Creates a new request data.
+ *
+ * @param serviceId - The ID of the service.
+ * @param message - The message for the request.
+ * @param timeline - The timeline for the request.
+ * @param budget - The budget for the request.
+ * @returns A boolean indicating whether the request was successfully sent.
+ * @author AnhDH
+ * @version 1.0.0
+ */
 export async function CreateNewRequestData(
   serviceId: string,
   message: string,
@@ -125,15 +142,12 @@ export async function CreateNewRequestData(
   budget: number
 ) {
   try {
-    const response = await axiosPrivate.post(
-      `${API_URL}/requests`,
-      {
-        serviceId,
-        message,
-        timeline,
-        budget,
-      }
-    );
+    const response = await axiosPrivate.post(`${API_URL}/requests`, {
+      serviceId,
+      message,
+      timeline,
+      budget,
+    });
     if (response.status !== 200) {
       console.log("Error sending request message");
       return {};
