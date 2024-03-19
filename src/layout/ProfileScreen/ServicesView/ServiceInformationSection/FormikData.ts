@@ -7,4 +7,6 @@ export const validationSchema = Yup.object().shape({
   numberOfConcept: Yup.number().required("Số lượng thể loại là bắt buộc"),
   numberOfRevision: Yup.number().required("Số lần chỉnh sửa là bắt buộc"),
   startingPrice: Yup.number().required("Giá khởi điểm là bắt buộc"),
+  thumbnail: Yup.string().required("Ảnh đại diện là bắt buộc"),
+  referenceArtworks: Yup.array().required("Tác phẩm tham khảo là bắt buộc"),
 });
