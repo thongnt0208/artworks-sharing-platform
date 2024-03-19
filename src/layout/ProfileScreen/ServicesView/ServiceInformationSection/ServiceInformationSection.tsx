@@ -23,12 +23,14 @@ import "./ServiceInformationSection.scss";
 
 interface ServiceInformationProps {
   props: ServiceProps;
+  isNew?: boolean;
   setClose: (close: boolean) => void;
   handleDelete: (serviceId: string) => void;
   fetchServiceData: () => void;
 }
 const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   props,
+  isNew,
   setClose,
   handleDelete,
   fetchServiceData,
@@ -36,11 +38,11 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   let id = props?.id;
   const toast = useRef<Toast>(null);
   const accountId = getAuthInfo()?.id;
-  const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [thumbnail, setThumbnail] = useState<File | string>(
-    props?.thumbnail
+  const [artworks, setArtworks] = useState<ArtworkProps[]>(
+    props?.artworkReferences || []
   );
+  const [pageNumber, setPageNumber] = useState(1);
+  const [thumbnail, setThumbnail] = useState<File | string>(props?.thumbnail);
   const [isShow, setShow] = useState(false);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   const handleSelectArtwork = (selectedArtworkList: string[]) => {
     formik.setValues({
       ...formik.values,
-      referenceArtworks: selectedArtworkList[0],
+      referenceArtworks: selectedArtworkList || [],
     });
     setShow(false);
   };
@@ -119,7 +121,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
       numberOfRevision: props?.numberOfRevision || 0,
       startingPrice: props?.startingPrice || 0,
       thumbnail: thumbnail || defaultCoverImage,
-      referenceArtworks: "",
+      referenceArtworks: localStorage.getItem("artworksRefIds") || [""],
     },
     validationSchema,
     onSubmit: (values) => handleSubmit(values),
@@ -178,10 +180,16 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 src={
                   (thumbnail instanceof File
                     ? URL.createObjectURL(thumbnail)
-                    : thumbnail) 
+                    : thumbnail) || defaultCoverImage
                 }
                 alt="thumbnail"
               />
+              {formik.errors.thumbnail &&
+                      formik.touched.thumbnail && (
+                        <div className="error-message text-red-500">
+                          {formik.errors.thumbnail}
+                        </div>
+                      )}
               <div className="w-full upload-file flex flex-row justify-content-center mt-3">
                 <FileUpload
                   mode="basic"
@@ -219,7 +227,10 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
             </div>
 
             <div className="profile-info-container col-8 h-fit mt-3 flex flex-column justify-content-center">
-              <div className="profile-info-form w-full h-fit flex flex-column justify-content-start align-items-start" onSubmit={handleSubmit}>
+              <div
+                className="profile-info-form w-full h-fit flex flex-column justify-content-start align-items-start"
+                onSubmit={handleSubmit}
+              >
                 <div className="service-name-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="service-name-label w-full h-fit flex flex-column justify-content-start align-items-start">
                     <label
@@ -244,7 +255,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     />
                     {formik.errors.serviceName &&
                       formik.touched.serviceName && (
-                        <div className="error-message">
+                        <div className="error-message text-red-500">
                           {formik.errors.serviceName}
                         </div>
                       )}
