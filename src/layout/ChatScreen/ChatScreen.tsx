@@ -13,7 +13,6 @@ import ChatInput from "./components/ChatInput/ChatInput";
 import {
   ChatMessageType,
   GetChatboxesCurrentAccount,
-  GetMessagesByChatboxIdPagin,
   GetMessagesByChatboxIdRealTime,
   SendImageToAccount,
   SendMessageToAccount,
@@ -92,11 +91,11 @@ export default function ChatScreen() {
   const GetChatMessages = () => {
     if (selectingChatbox?.id) {
       if (!closeSocket) {
-        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
+        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, chatMessages , setChatMessages);
         setCloseSocket(() => cleanup);
       } else {
         closeSocket();
-        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
+        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, chatMessages, setChatMessages);
         setCloseSocket(() => cleanup);
       }
     }
@@ -142,7 +141,6 @@ export default function ChatScreen() {
   }, [currentUrl, chatboxes]);
 
   useEffect(() => {
-    setChatMessages([]);
     setCurrentPage(1);
     setTotalPagesSt(1);
     GetAllRequests();
