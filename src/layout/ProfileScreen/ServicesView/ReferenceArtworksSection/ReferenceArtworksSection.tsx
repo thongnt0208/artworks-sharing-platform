@@ -10,7 +10,7 @@ import "./ReferenceArtworksSection.scss";
 interface ReferenceArtworksSectionProps {
   artworks: ArtworkProps[];
   selectArtworks: (artworkIds: string[]) => void;
-  setShow: (close: boolean) => void,
+  setShow: (close: boolean) => void;
   loadData: () => void;
 }
 
@@ -23,9 +23,24 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
   const toast = useRef<Toast | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
   const lastArtworkRef = useRef<HTMLDivElement | null>(null);
-  const [selectedArtworkIds, setSelectedArtworkIds] = useState<Record<string, boolean>>(
-    JSON.parse(localStorage.getItem("selectedArtworkIds") || "{}")
-  );
+  const [selectedArtworkIds, setSelectedArtworkIds] = useState<
+    Record<string, boolean>
+  >({});
+
+  useEffect(() => {
+    const storedArtworkIds = JSON.parse(
+      localStorage.getItem("artworksRefIds") || "[]"
+    );
+    const defaultSelectedIds: Record<string, boolean> = {};
+    if (Array.isArray(storedArtworkIds)) {
+      for (const id of storedArtworkIds) {
+        defaultSelectedIds[id] = true;
+      }
+    } else {
+      console.error("Invalid data in localStorage");
+    }
+    setSelectedArtworkIds(defaultSelectedIds);
+  }, []);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(
@@ -70,12 +85,18 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
   };
 
   const handleSaveClick = () => {
-    const selectedIds = Object.keys(selectedArtworkIds).filter((id) => selectedArtworkIds[id]);
+    const selectedIds = Object.keys(selectedArtworkIds).filter(
+      (id) => selectedArtworkIds[id]
+    );
     if (selectedIds.length === 0) {
       showError();
     } else {
+      localStorage.setItem(
+        "artworksRefIds",
+        JSON.stringify(selectedArtworkIds)
+      );
       selectArtworks(selectedIds);
-      setShow(false)
+      setShow(false);
     }
   };
 
@@ -88,9 +109,11 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
     });
   };
 
-  // Save selectedArtworkIds to local storage whenever it changes
   useEffect(() => {
-    localStorage.setItem("selectedArtworkIds", JSON.stringify(selectedArtworkIds));
+    localStorage.setItem(
+      "selectedArtworkIds",
+      JSON.stringify(selectedArtworkIds)
+    );
   }, [selectedArtworkIds]);
 
   return (
@@ -100,12 +123,17 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
         <div className="title">
           <h2>Chọn các tác phẩm</h2>
           <h4>
-            Thêm tác phẩm để cho khách hàng tiềm năng biết bạn sẵn sàng làm gì và giúp họ dễ
-            dàng thuê bạn.
+            Thêm tác phẩm để cho khách hàng tiềm năng biết bạn sẵn sàng làm gì
+            và giúp họ dễ dàng thuê bạn.
           </h4>
         </div>
         <div className="action">
           <Button label="Lưu" className="p-button" onClick={handleSaveClick} />
+          <Button
+            label="Quay lại"
+            className="p-button ml-2"
+            onClick={() => setShow(false)}
+          />
         </div>
       </div>
 

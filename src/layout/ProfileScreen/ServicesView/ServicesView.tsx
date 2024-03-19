@@ -2,7 +2,11 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { CreateNewRequestData, DeleteServiceData, GetServicesData } from "./ServicesService";
+import {
+  CreateNewRequestData,
+  DeleteServiceData,
+  GetServicesData,
+} from "./ServicesService";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 
@@ -17,6 +21,7 @@ const ServicesView: React.FC = () => {
     useOutletContext() as [string, boolean, string, string];
   const [services, setServices] = useState<ServiceProps[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
+  const [isNew, setIsNew] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<ServiceProps>({
     id: "",
     serviceName: "",
@@ -31,10 +36,7 @@ const ServicesView: React.FC = () => {
     hireHandler: () => {},
   });
 
-  const showSuccess = (
-    summary: string,
-    detail: string
-  ) => {
+  const showSuccess = (summary: string, detail: string) => {
     toast.current?.show({
       severity: "success",
       summary: summary,
@@ -43,10 +45,7 @@ const ServicesView: React.FC = () => {
     });
   };
 
-  const showError = (
-    summary: string,
-    detail: string
-  ) => {
+  const showError = (summary: string, detail: string) => {
     toast.current?.show({
       severity: "error",
       summary: summary,
@@ -55,10 +54,17 @@ const ServicesView: React.FC = () => {
     });
   };
 
-  const handleHireRequest = async (request: RequestProps, service: ServiceProps) => {
+  const handleHireRequest = async (
+    request: RequestProps,
+    service: ServiceProps
+  ) => {
     try {
-      const response  = await CreateNewRequestData(service.id, request.message, request.timeline || "", request.budget || 0);
-      console.log(response);
+      const response = await CreateNewRequestData(
+        service.id,
+        request.message,
+        request.timeline || "",
+        request.budget || 0
+      );
       if (response === true) {
         showSuccess("Thành công", "Gửi yêu cầu thành công");
       }
@@ -69,6 +75,16 @@ const ServicesView: React.FC = () => {
 
   const handleEditService = () => {
     setVisible(true);
+  };
+
+  const handleArtworkReferences = (artworkReferences: any) => {
+    const artworkReferencesIds = artworkReferences.map(
+      (artwork: any) => artwork.id
+    );
+    localStorage.setItem(
+      "artworksRefIds",
+      JSON.stringify(artworkReferencesIds)
+    );
   };
 
   const fetchServices = useCallback(async () => {
@@ -122,6 +138,7 @@ const ServicesView: React.FC = () => {
                   isCreator={isCreator}
                   editHandler={() => {
                     setSelectedService(service);
+                    handleArtworkReferences(service.artworkReferences);
                     handleEditService();
                   }}
                   hireHandler={(request) => handleHireRequest(request, service)}
@@ -133,6 +150,7 @@ const ServicesView: React.FC = () => {
                   label="Tạo dịch vụ"
                   onClick={() => {
                     setVisible(true);
+                    setIsNew(true);
                   }}
                 ></Button>
               </Card>
@@ -148,10 +166,13 @@ const ServicesView: React.FC = () => {
         contentClassName="service-dialog-content"
         visible={visible}
         modal
-        dismissableMask={true}
+        dismissableMask={false}
         closable={false}
         onHide={() => {
+          localStorage.removeItem("artworksRef");
+          localStorage.removeItem("selectedArtworkIds");
           setVisible(false);
+          setIsNew(false);
         }}
       >
         <>
@@ -160,13 +181,16 @@ const ServicesView: React.FC = () => {
               props={selectedService}
               setClose={() => {
                 setVisible(false);
+                setIsNew(false);
                 setSelectedService({} as ServiceProps);
               }}
               handleDelete={() => handleDeleteService(selectedService.id)}
               fetchServiceData={() => {
+                localStorage.removeItem("artworksRef");
                 localStorage.removeItem("selectedArtworkIds");
                 fetchServices();
               }}
+              isNew={isNew}
             />
           )}
         </>

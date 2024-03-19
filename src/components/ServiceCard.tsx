@@ -3,6 +3,7 @@ import { Button } from "primereact/button";
 
 import "./ServiceCard.scss";
 import RequestPopup, { RequestProps } from "./RequestPopup";
+import { ArtworkProps } from "./ArtworkCard";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
 export type ServiceProps = {
@@ -17,6 +18,7 @@ export type ServiceProps = {
   accountFullname: string;
   accountAvatar: string;
   isCreator?: boolean;
+  artworkReferences?: ArtworkProps[];
   editHandler?: () => void;
   hireHandler: (request: RequestProps) => void;
 };
