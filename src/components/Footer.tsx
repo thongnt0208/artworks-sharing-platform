@@ -13,10 +13,10 @@ const Footer: React.FC = () => {
   const currentUrl = location.pathname + location.search + location.hash;
 
   const items = [
-    <DefaultButton text="Artworkia" icon="" onClick={() => {}} />,
-    <DefaultButton text="Điều khoản" icon="" onClick={() => {}} />,
-    <DefaultButton text="Quyền riêng tư" icon="" onClick={() => {}} />,
-    <DefaultButton text="Trợ giúp" icon="" onClick={() => {}} />,
+    <DefaultButton text="Artworkia" icon="" onClick={() => {}} key="logo"/>,
+    <DefaultButton text="Điều khoản" icon="" onClick={() => {}} key="dieu-khoan" />,
+    <DefaultButton text="Quyền riêng tư" icon="" onClick={() => {}} key="quyen-rieng-tu"/>,
+    <DefaultButton text="Trợ giúp" icon="" onClick={() => {}} key="tro-giup"/>,
   ];
 
   const endItems = [[<Image src={logo} alt="Logo" />]];

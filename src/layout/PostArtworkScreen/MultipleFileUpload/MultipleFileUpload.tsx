@@ -12,7 +12,7 @@ import { maxSizeImagesUpload } from "../../../const/bizConstants";
 import { getFileExtension } from "../../../util/FileNameUtil";
 
 import "./MultipleFileUpload.scss";
-import { chooseOptions, emptyTemplate } from "./Templates";
+import { chooseOptions, emptyFileTemplate } from "./Templates";
 // ---------------------------------------------------------------
 type Props = {
   uploadedFiles: any;
@@ -193,7 +193,7 @@ export default function MultipleFileUpload({
         onRemove={onRemove}
         headerTemplate={headerTemplate}
         itemTemplate={itemTemplate}
-        emptyTemplate={emptyTemplate}
+        emptyTemplate={emptyFileTemplate}
         chooseOptions={chooseOptions}
       />
     </div>

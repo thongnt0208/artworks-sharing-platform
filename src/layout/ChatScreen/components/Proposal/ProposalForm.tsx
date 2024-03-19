@@ -1,11 +1,4 @@
-import { useFormik } from "formik";
-import { Button } from "primereact/button";
-import { Calendar } from "primereact/calendar";
-import { Dropdown } from "primereact/dropdown";
-import { InputNumber } from "primereact/inputnumber";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Slider } from "primereact/slider";
+import { useFormik, Button, Calendar, Dropdown, InputNumber, InputText, InputTextarea, Slider } from "../../../index";
 import * as Yup from "yup";
 
 const initialValues = {
@@ -43,6 +36,7 @@ const validationSchema = Yup.object().shape({
 
 export default function ProposalForm() {
   let today = new Date();
+  today.setDate(today.getDate() + 1);
   // Added type annotation for Proposal component
   const formik: any = useFormik({
     initialValues,
@@ -98,7 +92,7 @@ export default function ProposalForm() {
           {...formik.getFieldProps("targetDelivery")}
           showIcon
           className="w-full"
-          maxDate={today}
+          minDate={today}
         />
       </div>
 
@@ -119,7 +113,7 @@ export default function ProposalForm() {
 
       {/* depositPercent field */}
       <div className="p-field">
-        <label htmlFor="depositPercent">Đặt cọc</label>
+        <label htmlFor="depositPercent">Phần trăm đặt cọc</label>
         {renderError("depositPercent")}
         <br />
         <InputNumber

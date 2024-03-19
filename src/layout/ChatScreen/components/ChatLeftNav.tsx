@@ -6,11 +6,10 @@ import { ChatboxItemType } from '../ChatRelatedTypes';
 type ChatLeftNavProps = {
   itemsList: any[]; // Update the type of itemsList with the actual type of your data
   selectingChatbox: ChatboxItemType;
-  setSelectingChatbox: (chatbox: ChatboxItemType) => void;
 };
 
 const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
-  const { itemsList, selectingChatbox, setSelectingChatbox } = props;
+  const { itemsList, selectingChatbox } = props;
 
   return (
     <div className='max-h-full'>
@@ -28,7 +27,6 @@ const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
             key={item.id}
             item={item}
             selectingChatbox={selectingChatbox}
-            setSelectingChatbox={setSelectingChatbox}
           />
         )}
       />
