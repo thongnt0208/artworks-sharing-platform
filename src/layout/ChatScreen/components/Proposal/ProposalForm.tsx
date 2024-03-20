@@ -1,10 +1,20 @@
 import { Checkbox } from "primereact/checkbox";
-import { useFormik, Button, Calendar, Dropdown, InputNumber, InputText, InputTextarea, Slider } from "../../../index";
+import {
+  useFormik,
+  Button,
+  Calendar,
+  Dropdown,
+  InputNumber,
+  InputText,
+  InputTextarea,
+  Slider,
+} from "../../../index";
 import * as Yup from "yup";
+import { ProposalFormProps } from "../../ChatRelatedTypes";
 
 const initialValues = {
   title: "",
-  category: "",
+  category: "string",
   description: "",
   targetDelivery: new Date(),
   numberOfConcept: 0,
@@ -37,9 +47,10 @@ const validationSchema = Yup.object().shape({
   acceptRules: Yup.boolean().oneOf([true], "Bạn phải đồng ý với quy định của nền tảng"),
 });
 
-export default function ProposalForm() {
+export default function ProposalForm({ createProposalCallback }: ProposalFormProps) {
   let today = new Date();
   today.setDate(today.getDate() + 1);
+  const serviceId = localStorage.getItem("serviceId");
   // Added type annotation for Proposal component
   const formik: any = useFormik({
     initialValues,
@@ -47,6 +58,7 @@ export default function ProposalForm() {
     onSubmit: (values) => {
       console.log(values);
       // Handle form submission logic here
+      createProposalCallback({ ...values, serviceId });
     },
   });
 
@@ -158,7 +170,7 @@ export default function ProposalForm() {
         <Checkbox
           inputId="acceptRules"
           checked={formik.values.acceptRules}
-          onChange={formik.handleChange}
+          onChange={() => formik.setFieldValue("acceptRules", !formik.values.acceptRules)}
           className="w-full"
         />
         <label htmlFor="acceptRules">

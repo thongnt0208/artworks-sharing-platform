@@ -19,24 +19,24 @@ export type RequestItemType = {
   requestStatus: string;
   createdBy: string;
   createdOn: string;
-  service?: string;
+  service?: any;
 };
 
-export type requestStateToolsType = {
+export type RequestStateToolsType = {
   requestsList: RequestItemType[];
   acceptRequest: (id: string) => void;
   denyRequest: (id: string) => void;
 };
 
-export type proposalStateToolsType = {
-  proposalsList: ProposalType[];
-  acceptProposal: (id: string) => void;
-  denyProposal: (id: string) => void;
+export type RequestCardProps = RequestItemType & {
+  acceptCallback?: (id: string) => void;
+  denyCallback?: (id: string) => void;
+  showFormCallback?: (data: boolean) => void;
 };
 
 export type ProposalType = {
   id: string;
-  chatBoxId: string;
+  chatBoxId?: string;
   serviceId: string;
   projectTitle: string;
   category: string;
@@ -45,13 +45,40 @@ export type ProposalType = {
   initialPrice: number;
   totalPrice: number;
   status: string;
-  createdBy: string;
-  createdOn: string;
+  numberOfConcept?: number;
+  numberOfRevision?: number;
+  createdBy?: string;
+  createdOn?: string;
 };
 
-export type ProposalCardType = ProposalType & {
+export type ProposalStateToolsType = {
+  proposalsList: ProposalType[];
+  acceptProposal: (id: string) => void;
+  denyProposal: (id: string) => void;
+  editCallback?: (id: string) => void;
+  cancelCallback?: (id: string) => void;
+};
+
+export type ProposalCardProps = ProposalType & {
   acceptCallback?: (id: string) => void;
   denyCallback?: (id: string) => void;
   editCallback?: (id: string) => void;
   cancelCallback?: (id: string) => void;
+};
+
+export type ProposalFormProps = {
+  createProposalCallback: (data: any) => void;
+};
+
+export type ProposalFormType = {
+  ordererId: string;
+  serviceId: string;
+  projectTitle: string;
+  category: string;
+  description: string;
+  targetDelivery: string;
+  numberOfConcept: number;
+  numberOfRevision: number;
+  initialPrice: number;
+  total: number;
 };

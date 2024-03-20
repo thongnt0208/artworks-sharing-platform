@@ -1,15 +1,15 @@
 import "./styles/ProposalCard.scss";
 import { Button } from "primereact/button";
 import { getAuthInfo } from "../../../../util/AuthUtil";
-import { ProposalCardType } from "../../ChatRelatedTypes";
+import { ProposalCardProps } from "../../ChatRelatedTypes";
 
-export default function ProposalCard({ ...props }: ProposalCardType) {
+export default function ProposalCard({ ...props }: ProposalCardProps) {
   const { id, projectTitle, description, targetDelivery, initialPrice, totalPrice, status, createdBy, acceptCallback, denyCallback, editCallback, cancelCallback } = props;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   return (
-    <div className="proposal-card-container">
+    <div className="system-noti-card">
       <p className="text-cus-h1-bold">ProposalCard</p>
       <p>Tên dự án: {projectTitle}</p>
       <p>Mô tả dự án: {description}</p>
