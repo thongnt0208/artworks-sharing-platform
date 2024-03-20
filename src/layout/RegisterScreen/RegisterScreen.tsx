@@ -93,29 +93,22 @@ const RegisterScreen = () => {
       <div className="register-container">
         <div className="background-overlay"></div>
 
-        <Card className="bg-white max-h-full overflow-y-auto">
-          <div className="flex justify-content-center align-content-center">
-            <div className="logo-container flex justify-content-center align-items-center">
-              <div className="p-8 hidden lg:block">
-                <Image alt="logo" src={logotext} height="100" />
-              </div>
+        <div className="register-card-container">
+          <Image alt="logo" src={logotext} height="50" />
+          <div className="register-card">
+            <div className="register-left">
+              <h1 className="m-0">Đăng ký</h1>
+              <h3 className="">Nhập thông tin để đăng ký tài khoản</h3>
             </div>
             <div className="hidden lg:block">
               <Divider layout="vertical" />
             </div>
-            <div className="register-card">
-              <div className="header-container pb-4">
-                <div className="logo flex justify-content-start align-items-center lg:hidden">
-                  <Image alt="logo" src={logo} height="40" />
-                  <h3 className="m-0">Artworkia</h3>
-                </div>
-                <h1>Đăng ký</h1>
-                <span>Người dùng cũ?</span> <Link to={"/login"}>Đăng nhập</Link>
-              </div>
+            <div className="register-right">
+
               <div className="normal-register">
                 {/* Form begin */}
                 <form onSubmit={formik.handleSubmit}>
-                  <div className="username-container">
+                  <div className="username-container -mt-3">
                     {renderError("username")}
                     <InputText
                       id="username"
@@ -171,6 +164,9 @@ const RegisterScreen = () => {
                       maxDate={today}
                     />
                   </div>
+                  <div className="mt-3">
+                    <span>Người dùng cũ?</span> <Link to={"/login"}>Đăng nhập</Link>
+                  </div>
                   <Button label="Tiếp tục" type="submit" className="mt-3" disabled={!formik.isValid} />
                 </form>
                 {/* Form end */}
@@ -183,7 +179,7 @@ const RegisterScreen = () => {
               </div>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
     </>
   );

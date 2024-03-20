@@ -182,6 +182,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: Props) => {
                     onClick={() => {
                       navigate("/register");
                     }}
+                    className="ml-2"
                   />
                 </>
               )}
