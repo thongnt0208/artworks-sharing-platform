@@ -2,7 +2,6 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Avatar } from "primereact/avatar";
 
 import "./ChatScreen.scss";
 
@@ -17,20 +16,11 @@ import {
   SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
-import {
-  CreateProposal,
-  GetProposalsByChatboxId,
-  GetRequestsByChatboxId,
-  UpdateRequestStatus,
-} from "./services/ProposalServices";
-import {
-  ChatboxItemType,
-  ProposalFormType,
-  ProposalType,
-  RequestItemType,
-} from "./ChatRelatedTypes";
-import { CatchAPICallingError, Dialog, Toast } from "..";
+import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
+import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
 import LazyProposalForm from "./components/Proposal/LazyProposalForm";
+import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
+import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
@@ -50,89 +40,29 @@ export default function ChatScreen() {
 
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const [proposalsList, setProposalsList] = useState([] as any);
-  const [proposalFormData, setProposalFormData] = useState({} as any);
 
   const location = useLocation();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
 
   // REQUESTS STATE TOOLS section start
-  const GetAllRequests = () => {
-    selectingChatbox?.id &&
-      GetRequestsByChatboxId(selectingChatbox?.id)
-        .then((res) => {
-          setRequestsList(res);
-        })
-        .catch((error) => {
-          setRequestsList([]);
-          CatchAPICallingError(error, navigate);
-        });
-  };
-
-  function acceptRequest(id: string) {
-    UpdateRequestStatus(id, 1)
-      .then(() => GetAllRequests())
-      .catch((error) => CatchAPICallingError(error, navigate));
-  }
-  function denyRequest(id: string) {
-    UpdateRequestStatus(id, 2)
-      .then(() => GetAllRequests())
-      .catch((error) => CatchAPICallingError(error, navigate));
-  }
+  const handleGetAllRequests = () => GetAllRequests(selectingChatbox, setRequestsList, navigate);
+  const handleAcceptRequest = (id: string) => acceptRequest(id, handleGetAllRequests, navigate);
+  const handleDenyRequest = (id: string) => denyRequest(id, handleGetAllRequests, navigate);
   // REQUESTS STATE TOOLS section end
   // ---------------------------------------------------------
 
   // PROPOSALS STATE TOOLS section start
-  const GetAllProposals = () => {
-    GetProposalsByChatboxId(selectingChatbox?.id)
-      .then((res) => {
-        setProposalsList(res);
-      })
-      .catch((error) => {
-        setProposalsList([]);
-        CatchAPICallingError(error, navigate);
-      });
-  };
-  function CreateAProposal(values: any) {
-    console.log(values);
-
-    const formattedData: ProposalFormType = {
-      ordererId: selectingChatbox?.author?.id || "",
-      serviceId: values.serviceId || "",
-      projectTitle: values.title || "",
-      category: values.category || "",
-      description: values.description || "",
-      targetDelivery: values.targetDelivery || "",
-      numberOfConcept: values.numberOfConcept || 0,
-      numberOfRevision: values.numberOfRevision || 0,
-      initialPrice: values.depositPercent || 0,
-      total: values.totalPrice || 0,
-    };
-
-    console.log("formattedData: ", formattedData);
-    
-
-    CreateProposal(formattedData)
-      .then(() => {
-        setIsShowProposalForm(false);
-        toast.current?.show({
-          severity: "success",
-          summary: "Tạo thành công",
-          detail: "Đã tạo thỏa thuận thành công.",
-          life: 3000,
-        });
-        GetAllProposals();
-      })
-      .catch((error) => {
-        CatchAPICallingError(error, navigate);
-        toast.current?.show({
-          severity: "error",
-          summary: "Tạo thất bại",
-          detail: error?.message,
-          life: 3000,
-        });
-      });
-  }
+  const handleGetAllProposals = () => GetAllProposals(selectingChatbox, setProposalsList, navigate);
+  const handleCreateAProposal = (values: any) =>
+    CreateAProposal(
+      values,
+      selectingChatbox,
+      setIsShowProposalForm,
+      toast,
+      handleGetAllProposals,
+      navigate
+    );
   function acceptProposal(id: string) {}
   function denyProposal(id: string) {}
   // PROPOSALS STATE TOOLS section end
@@ -214,8 +144,8 @@ export default function ChatScreen() {
   useEffect(() => {
     setCurrentPage(1);
     setTotalPagesSt(1);
-    GetAllRequests();
-    GetAllProposals();
+    handleGetAllRequests();
+    handleGetAllProposals();
     GetChatMessages();
     return () => {
       if (closeSocket) {
@@ -237,9 +167,10 @@ export default function ChatScreen() {
         headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
       >
         <Suspense fallback={<div>Đang tải...</div>}>
-          <LazyProposalForm createProposalCallback={CreateAProposal} />
+          <LazyProposalForm createProposalCallback={handleCreateAProposal} />
         </Suspense>
       </Dialog>
+
       <div className="chat-screen-container">
         <div className="first-col">
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
@@ -253,7 +184,7 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{ requestsList, acceptRequest, denyRequest }}
+              requestStateTools={{ requestsList, handleAcceptRequest, handleDenyRequest }}
               proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
               fetchNextPage={fetchNextPage}

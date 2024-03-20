@@ -18,8 +18,9 @@ import { Button } from "primereact/button";
 import { MultiSelect } from 'primereact/multiselect';
 import { useFormik } from 'formik';
 import { Slider } from "primereact/slider";
+import { Avatar } from 'primereact/avatar';
 
-export { Tooltip, Tag, ProgressBar, Password, Calendar, Image, Divider, Toast, Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik, Slider };
+export { Tooltip, Tag, ProgressBar, Password, Calendar, Image, Divider, Toast, Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik, Slider, Avatar };
 
 /**
  * A utility function for handling errors when calling APIs.

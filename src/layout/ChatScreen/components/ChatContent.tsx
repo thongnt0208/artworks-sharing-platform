@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Button } from "./../../index";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import {
   ChatboxItemType,
@@ -10,7 +8,6 @@ import {
 import "./ChatContent.scss";
 import MemoizedMessageItem from "./MessageItem/MessageItem";
 import { useEffect, useRef, useState } from "react";
-import { translate2Vietnamese } from "../../../util/TextHandle";
 import ProposalCard from "./Proposal/ProposalCard";
 import RequestCard from "./Request/RequestCard";
 // ---------------------------------------------------------
@@ -34,10 +31,9 @@ export default function ChatContent({
   setIsShowProposalForm,
   fetchNextPage,
 }: Props) {
-  const { requestsList, acceptRequest, denyRequest } = requestStateTools;
+  const { requestsList, handleAcceptRequest, handleDenyRequest } = requestStateTools;
   const { proposalsList, acceptProposal, denyProposal } = proposalStateTools;
 
-  const [tmpStatus, setTmpStatus] = useState<{ [key: string]: any }>({});
   const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -45,16 +41,6 @@ export default function ChatContent({
 
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
-
-  useEffect(() => {
-    if (requestsList?.length !== 0) {
-      requestsList.forEach((request) => {
-        translate2Vietnamese(request.requestStatus || "").then((res) => {
-          setTmpStatus((prevStatus) => ({ ...prevStatus, [request.id]: res }));
-        });
-      });
-    }
-  }, [requestsList, acceptRequest, denyRequest]);
 
   useEffect(() => {
     const scrollArea = scrollRef.current;
@@ -104,8 +90,8 @@ export default function ChatContent({
             <RequestCard
               key={request.id}
               {...request}
-              acceptCallback={acceptRequest}
-              denyCallback={denyRequest}
+              acceptCallback={handleAcceptRequest}
+              denyCallback={handleDenyRequest}
               showFormCallback={setIsShowProposalForm}
             />
           ))}

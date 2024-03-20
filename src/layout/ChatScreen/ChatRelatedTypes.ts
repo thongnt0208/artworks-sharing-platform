@@ -24,8 +24,8 @@ export type RequestItemType = {
 
 export type RequestStateToolsType = {
   requestsList: RequestItemType[];
-  acceptRequest: (id: string) => void;
-  denyRequest: (id: string) => void;
+  handleAcceptRequest: (id: string) => void;
+  handleDenyRequest: (id: string) => void;
 };
 
 export type RequestCardProps = RequestItemType & {
