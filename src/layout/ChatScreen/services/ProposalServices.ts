@@ -1,6 +1,6 @@
 import { notificationItemType } from "../../../components/Notification";
 import useAxios, { axiosPrivate } from "../../../hooks/useAxios";
-import { RequestItemType } from "../ChatRelatedTypes";
+import { ProposalType, RequestItemType } from "../ChatRelatedTypes";
 
 function mapRequestData(response: any): RequestItemType {
   return {
@@ -111,6 +111,38 @@ export async function GetRequestsByChatboxId(chatboxId: string): Promise<Request
       throw error;
     });
 }
+
+export async function GetProposalsByChatboxId(chatboxId: string): Promise<ProposalType[]> {
+  return axiosPrivate
+    .get(`/chats/${chatboxId}/proposals`)
+    .then((response) => {
+      if (Array.isArray(response?.data)) {
+        return response.data.map((item: any) => {
+          return {
+            id: item.id,
+            chatBoxId: item.chatBoxId,
+            serviceId: item.serviceId,
+            projectTitle: item.projectTitle,
+            category: item.category,
+            description: item.description,
+            targetDelivery: item.targetDelivery,
+            initialPrice: item.initialPrice,
+            totalPrice: item.total,
+            status: item.proposalStatus,
+            createdBy: item.createdBy,
+            createdOn: item.createdOn,
+          };
+        });
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching proposals:", error);
+      throw error;
+    });
+}
+
 
 /**
  * This function is used to update the status of a request
