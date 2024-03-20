@@ -3,18 +3,7 @@ import { Button } from "primereact/button";
 import { getAuthInfo } from "../../../../util/AuthUtil";
 
 export default function RequestCard({ ...props }: RequestCardProps) {
-  const {
-    id,
-    serviceId,
-    message,
-    timeline,
-    price,
-    requestStatus,
-    createdBy,
-    acceptCallback,
-    denyCallback,
-    showFormCallback,
-  } = props;
+  const { id, serviceId, message, timeline, price, requestStatus, createdBy, acceptCallback, denyCallback, showFormCallback } = props;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
