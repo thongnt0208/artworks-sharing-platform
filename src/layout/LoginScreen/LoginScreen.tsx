@@ -2,10 +2,9 @@ import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./LoginScreen.scss";
 
-import { InputText, Button, Toast, Divider, Image, Card } from "../index";
+import { InputText, Button, Toast, Divider, Image } from "../index";
 
 import { login } from "../../auth/AuthService";
-import logo from "../../assets/logo/logo_notext.svg";
 import logotext from "../../assets/logo/logo.png";
 
 import { jwtDecode } from "jwt-decode";
