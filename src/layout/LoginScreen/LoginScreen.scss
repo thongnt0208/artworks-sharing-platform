@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+
   .background-overlay {
     z-index: -1;
     position: absolute;
@@ -18,6 +19,7 @@
     background-size: cover;
     background-position: center;
   }
+
   .background-overlay::before {
     content: "";
     display: block;
@@ -25,36 +27,69 @@
     height: 100%;
     background: rgba(0, 0, 0, .5) 100%;
   }
-  .login-card {
-    min-width: 30vw;
-    max-width: 510px;
 
-    .normal-login {
-      text-align: end;
-      div {
-        margin-bottom: 1rem;
+  .login-card-container {
+    background-color: white;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 2rem;
+    border-radius: 10px;
+
+    .login-card {
+      display: flex;
+      justify-content: center;
+      flex-direction: row;  
+      margin-top: 0.25rem;
+
+      .login-left {
+        width: 20rem;
       }
-      input {
-        width: 100%;
+
+      .login-right {
+        min-width: 30vw;
+        max-width: 510px;
+
+        .normal-login {
+          text-align: end;
+
+          div {
+            margin-bottom: 1rem;
+          }
+
+          input {
+            width: 100%;
+          }
+        }
       }
     }
   }
+
 }
 
 @media screen and (max-width: 576px) {
   .login-container {
-    .login-card {
-      width: 100%;
-      max-width: 100%;
+    .login-card-container {
+      .login-card {
+        .login-right {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
     }
   }
 }
 
 @media screen and (max-width: 992px) {
   .login-container {
-    .login-card {
-      min-width: 50vw;
-      max-width: 510px;
+    .login-card-container {
+      .login-card {
+        flex-direction: column;
+  
+        .login-right {
+          min-width: 50vw;
+          max-width: 510px;
+        }
+      }
     }
   }
 }

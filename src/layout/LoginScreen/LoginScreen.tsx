@@ -79,25 +79,17 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
       <div className="login-container">
         <div className="background-overlay"></div>
 
-        <Card className="bg-white max-h-full overflow-y-auto">
-          <div className="flex justify-content-center align-content-center">
-            <div className="logo-container flex justify-content-center align-items-center">
-              <div className="p-8 hidden lg:block">
-                <Image alt="logo" src={logotext} height="100" />
-              </div>
+        <div className="login-card-container">
+          <Image alt="logo" src={logotext} height="50" />
+          <div className="login-card">
+            <div className="login-left">
+              <h1 className="m-0">Đăng nhập</h1>
+              <h3 className="">Sử dụng tài khoản Artworkia</h3>
             </div>
             <div className="hidden lg:block">
               <Divider layout="vertical" />
             </div>
-            <div className="login-card">
-              <div className="header-container pb-4">
-                <div className="logo flex justify-content-start align-items-center lg:hidden">
-                  <Image alt="logo" src={logo} height="40" />
-                  <h3 className="m-0">Artworkia</h3>
-                </div>
-                <h1>Đăng nhập</h1>
-                <span>Người dùng mới?</span> <Link to={"/register"}>Tạo tài khoản</Link>
-              </div>
+            <div className="login-right">
               <div className="normal-login">
                 <div className="username-container">
                   <InputText
@@ -128,6 +120,9 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
                     required
                   />
                 </div>
+                <div className="">
+                  <span>Người dùng mới?</span> <Link to={"/register"}>Tạo tài khoản</Link>
+                </div>
                 <Button
                   label="Tiếp tục"
                   onClick={handleLogin}
@@ -143,7 +138,7 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
               </div>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
     </>
   );
