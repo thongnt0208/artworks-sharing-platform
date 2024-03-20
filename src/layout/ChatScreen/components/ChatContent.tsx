@@ -1,20 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Dialog } from "./../../index";
+import { Button } from "./../../index";
 import { getAuthInfo } from "../../../util/AuthUtil";
-import { ChatboxItemType, requestStateToolsType } from "../ChatRelatedTypes";
+import {
+  ChatboxItemType,
+  proposalStateToolsType,
+  requestStateToolsType,
+} from "../ChatRelatedTypes";
 
 import "./ChatContent.scss";
 import MemoizedMessageItem from "./MessageItem/MessageItem";
-import { Suspense, useEffect, useRef, useState } from "react";
-import LazyProposalForm from "./Proposal/LazyProposalForm";
+import { useEffect, useRef, useState } from "react";
 import { translate2Vietnamese } from "../../../util/TextHandle";
+import ProposalCard from "./Proposal/ProposalCard";
 // ---------------------------------------------------------
 
 type Props = {
   selectingChatbox: ChatboxItemType;
   content: any;
   requestStateTools: requestStateToolsType;
-  isShowProposalForm: boolean;
+  proposalStateTools: proposalStateToolsType;
   setIsShowProposalForm: (value: boolean) => void;
   setProposalFormData: (data: any) => void;
   fetchNextPage: () => void;
@@ -26,17 +30,19 @@ export default function ChatContent({
   selectingChatbox,
   content,
   requestStateTools,
-  isShowProposalForm,
+  proposalStateTools,
   setIsShowProposalForm,
   fetchNextPage,
 }: Props) {
+  const { requestsList, acceptRequest, denyRequest } = requestStateTools;
+  const { proposalsList, acceptProposal, denyProposal } = proposalStateTools;
+
   const [tmpStatus, setTmpStatus] = useState<{ [key: string]: any }>({});
+  const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  
   const observer = useRef<IntersectionObserver | null>(null);
   const topMessageRef = useRef<HTMLDivElement>(null);
-  const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
-  const { acceptRequest, denyRequest, requestsList } = requestStateTools;
+  
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
@@ -92,19 +98,6 @@ export default function ChatContent({
 
   return (
     <div className="chat-content">
-      <Dialog
-        visible={isShowProposalForm}
-        onHide={() => {
-          setIsShowProposalForm(false);
-        }}
-        dismissableMask
-        headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
-      >
-        <Suspense fallback={<div>Đang tải...</div>}>
-          <LazyProposalForm />
-        </Suspense>
-      </Dialog>
-
       <div className="chat-scroll-area" ref={scrollRef}>
         {requestsList?.length !== 0 && (
           <div className="system-noti-card">
@@ -158,6 +151,24 @@ export default function ChatContent({
               </div>
             ))}
           </div>
+        )}
+
+        {proposalsList?.length !== 0 && (
+          proposalsList?.map((proposal) => {
+            return (
+              <ProposalCard
+                key={proposal.id}
+                {...proposal}
+                acceptCallback={acceptProposal}
+                denyCallback={denyProposal}
+                editCallback={() => {
+                  // setProposalFormData(proposal);
+                  // setIsShowProposalForm(true);
+                }}
+                cancelCallback={denyProposal}
+              />
+            );          
+          })
         )}
         <div ref={topMessageRef}></div>
         {content.map((item: any, index: number) => {

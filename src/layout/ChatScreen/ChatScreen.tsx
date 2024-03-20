@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Avatar } from "primereact/avatar";
@@ -17,27 +17,32 @@ import {
   SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
-import { GetRequestsByChatboxId, UpdateRequestStatus } from "./services/ProposalServices";
+import { GetProposalsByChatboxId, GetRequestsByChatboxId, UpdateRequestStatus } from "./services/ProposalServices";
 import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
-import { CatchAPICallingError } from "..";
+import { CatchAPICallingError, Dialog } from "..";
+import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [closeSocket, setCloseSocket] = useState<() => void | null>();
+
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPagesSt, setTotalPagesSt] = useState(1);
+  const [totalPagesSt, setTotalPagesSt] = useState(1);  
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
+
   const [newChatMessage, setNewChatMessage] = useState("");
   const [newChatImages, setNewChatImages] = useState([] as File[]);
+
   const [requestsList, setRequestsList] = useState<RequestItemType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
+  const [proposalsList, setProposalsList] = useState([] as any);
   const [proposalFormData, setProposalFormData] = useState({} as any);
-  const [closeSocket, setCloseSocket] = useState<() => void | null>();
 
   const location = useLocation();
-
   const navigate = useNavigate();
 
   // REQUESTS STATE TOOLS section start
@@ -74,6 +79,24 @@ export default function ChatScreen() {
   //     catchError(error);
   //   });
   // }
+
+  // PROPOSALS STATE TOOLS section start
+  const GetAllProposals = () => {
+    GetProposalsByChatboxId(selectingChatbox?.id)
+      .then((res) => {
+        setProposalsList(res);
+      })
+      .catch((error) => {
+        setProposalsList([]);
+        CatchAPICallingError(error, navigate);
+      });
+  };
+
+  function acceptProposal(id: string) {
+  }
+  function denyProposal(id: string) {
+  }
+  // PROPOSALS STATE TOOLS section end
 
   const GetChatboxes = () => {
     GetChatboxesCurrentAccount()
@@ -144,6 +167,7 @@ export default function ChatScreen() {
     setCurrentPage(1);
     setTotalPagesSt(1);
     GetAllRequests();
+    GetAllProposals();
     GetChatMessages();
     return () => {
       if (closeSocket) {
@@ -155,6 +179,18 @@ export default function ChatScreen() {
   return (
     <>
       {isLoading && <ProgressSpinner />}
+      <Dialog
+        visible={isShowProposalForm}
+        onHide={() => {
+          setIsShowProposalForm(false);
+        }}
+        dismissableMask
+        headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
+      >
+        <Suspense fallback={<div>Đang tải...</div>}>
+          <LazyProposalForm />
+        </Suspense>
+      </Dialog>
       <div className="chat-screen-container">
         <div className="first-col">
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
@@ -169,7 +205,7 @@ export default function ChatScreen() {
               selectingChatbox={selectingChatbox}
               content={chatMessages}
               requestStateTools={{ requestsList, acceptRequest, denyRequest }}
-              isShowProposalForm={isShowProposalForm}
+              proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
               setProposalFormData={setProposalFormData}
               fetchNextPage={fetchNextPage}
