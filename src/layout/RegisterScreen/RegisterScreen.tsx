@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./RegisterScreen.scss";
-import logo from "../../assets/logo/logo_notext.svg";
 import logotext from "../../assets/logo/logo.png";
-import { InputText, Button, Toast, Divider, Image, Card, useFormik, Password, Calendar } from "../index";
+import { InputText, Button, Toast, Divider, Image, useFormik, Password, Calendar } from "../index";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { initalValues, yupObject } from "./FormikData";
 import { register } from "../../auth/AuthService";
