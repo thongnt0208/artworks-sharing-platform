@@ -3,6 +3,7 @@ import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import { Dispatch, SetStateAction } from "react";
+import { arraysEqual } from "../../../util/ArrayUtil";
 const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 /**
@@ -163,30 +164,38 @@ export async function GetMessagesByChatboxIdPagin(
  */
 export function GetMessagesByChatboxIdRealTime(
   chatboxId: string,
+  messagesList: ChatMessageType[],
   setState: Dispatch<SetStateAction<ChatMessageType[]>>
 ): () => void {
   const url = `${WS_URL}/chatbox/${chatboxId}/messages/ws`;
   const socket = new WebSocket(url);
-
+  let _tmpMessages: ChatMessageType[] = [];
+  console.log("_original tmpMes", _tmpMessages);
   socket.onopen = () => {
     console.log("WebSocket connection established");
+    setState([]);
   };
 
   socket.onmessage = (event) => {
-    const message = JSON.parse(event.data);
-    console.log("WebSocket message received:", message);
+    const data = JSON.parse(event.data);
+    const message = data?.reverse()?.map((item: any) => {
+      return {
+        chatBoxId: item.ChatBoxId || "",
+        text: item.Text || "",
+        fileLocation: item.FileLocation,
+        createdOn: item.CreatedOn || "",
+        createdBy: item.CreatedBy || "",
+      };
+    });
 
-    Array.isArray(message) && setState(
-      message?.reverse().map((item: any) => {
-        return {
-          chatBoxId: item.ChatBoxId || "",
-          text: item.Text || "",
-          fileLocation: item.FileLocation,
-          createdOn: item.CreatedOn || "",
-          createdBy: item.CreatedBy || "",
-        };
-      })
-    );
+    console.log("WS message", message);
+    console.log("_tmpMes", _tmpMessages);
+
+    if (Array.isArray(message) && arraysEqual(_tmpMessages, message) === false) {
+      console.log("arrEqual", false);
+      _tmpMessages = message;
+      setState(message);
+    }
   };
 
   socket.onclose = () => {
