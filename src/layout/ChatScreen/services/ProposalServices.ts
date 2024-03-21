@@ -1,6 +1,6 @@
 import { notificationItemType } from "../../../components/Notification";
 import useAxios, { axiosPrivate } from "../../../hooks/useAxios";
-import { RequestItemType } from "../ChatRelatedTypes";
+import { ProposalFormType, ProposalType, RequestItemType } from "../ChatRelatedTypes";
 
 function mapRequestData(response: any): RequestItemType {
   return {
@@ -54,7 +54,7 @@ export async function GetRequestsByAudience(): Promise<notificationItemType[]> {
   return axiosPrivate
     .get(`/requests/audience`)
     .then((response) => {
-      return response.data.map((item: any) => (mapRequestData(item)));
+      return response.data.map((item: any) => mapRequestData(item));
     })
     .catch((error) => {
       console.error("Error fetching messages:", error);
@@ -86,7 +86,7 @@ export async function GetRequestById(requestId: string): Promise<RequestItemType
 
 /**
  * This function is used to get all requests of a chatbox
- * 
+ *
  * @param chatboxId - the id of the chatbox
  * @returns {Promise<RequestItemType[]>} - an array of requests
  * @throws {Error} an error from the API request
@@ -108,6 +108,49 @@ export async function GetRequestsByChatboxId(chatboxId: string): Promise<Request
     })
     .catch((error) => {
       console.error("Error fetching requests:", error);
+      throw error;
+    });
+}
+
+/**
+ * This function is used to get all proposals of a chatbox
+ *
+ * @param chatboxId - the id of the chatbox
+ * @returns {Promise<ProposalType[]>} - an array of proposals
+ * @throws {Error} an error from the API request
+ * @example
+ * const proposals = await GetProposalsByChatboxId("123");
+ * console.log(proposals);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function GetProposalsByChatboxId(chatboxId: string): Promise<ProposalType[]> {
+  return axiosPrivate
+    .get(`/chats/${chatboxId}/proposals`)
+    .then((response) => {
+      if (Array.isArray(response?.data)) {
+        return response.data.map((item: any) => {
+          return {
+            id: item.id,
+            chatBoxId: item.chatBoxId,
+            serviceId: item.serviceId,
+            projectTitle: item.projectTitle,
+            category: item.category,
+            description: item.description,
+            targetDelivery: item.targetDelivery,
+            initialPrice: item.initialPrice,
+            totalPrice: item.total,
+            status: item.proposalStatus,
+            createdBy: item.createdBy,
+            createdOn: item.createdOn,
+          };
+        });
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching proposals:", error);
       throw error;
     });
 }
@@ -158,16 +201,10 @@ export async function UpdateRequestStatus(
  * @author ThongNT
  * @version 1.0.0
  */
-export async function CreateProposal(
-  createdByRequest: string,
-  serviceId: string,
-  proposalInfo: any
-): Promise<any> {
+export async function CreateProposal(value: ProposalFormType): Promise<any> {
   return axiosPrivate
     .post(`/proposals`, {
-      createdByRequest,
-      serviceId,
-      ...proposalInfo,
+      ...value,
     })
     .then((response) => {
       return response.data;

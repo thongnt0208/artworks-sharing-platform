@@ -170,7 +170,6 @@ export function GetMessagesByChatboxIdRealTime(
   const url = `${WS_URL}/chatbox/${chatboxId}/messages/ws`;
   const socket = new WebSocket(url);
   let _tmpMessages: ChatMessageType[] = [];
-  console.log("_original tmpMes", _tmpMessages);
   socket.onopen = () => {
     console.log("WebSocket connection established");
     setState([]);
@@ -188,11 +187,7 @@ export function GetMessagesByChatboxIdRealTime(
       };
     });
 
-    console.log("WS message", message);
-    console.log("_tmpMes", _tmpMessages);
-
     if (Array.isArray(message) && arraysEqual(_tmpMessages, message) === false) {
-      console.log("arrEqual", false);
       _tmpMessages = message;
       setState(message);
     }

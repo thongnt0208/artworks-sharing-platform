@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Avatar } from "primereact/avatar";
 
 import "./ChatScreen.scss";
 
@@ -17,63 +16,57 @@ import {
   SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
-import { GetRequestsByChatboxId, UpdateRequestStatus } from "./services/ProposalServices";
 import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
-import { CatchAPICallingError } from "..";
+import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
+import LazyProposalForm from "./components/Proposal/LazyProposalForm";
+import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
+import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [closeSocket, setCloseSocket] = useState<() => void | null>();
+
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPagesSt, setTotalPagesSt] = useState(1);
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
+
   const [newChatMessage, setNewChatMessage] = useState("");
   const [newChatImages, setNewChatImages] = useState([] as File[]);
+
   const [requestsList, setRequestsList] = useState<RequestItemType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
-  const [proposalFormData, setProposalFormData] = useState({} as any);
-  const [closeSocket, setCloseSocket] = useState<() => void | null>();
+  const [proposalsList, setProposalsList] = useState([] as any);
 
   const location = useLocation();
-
   const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
 
   // REQUESTS STATE TOOLS section start
-  const GetAllRequests = () => {
-    selectingChatbox?.id &&
-      GetRequestsByChatboxId(selectingChatbox?.id)
-        .then((res) => {
-          setRequestsList(res);
-        })
-        .catch((error) => {
-          setRequestsList([]);
-          CatchAPICallingError(error, navigate);
-        });
-  };
-
-  function acceptRequest(id: string) {
-    UpdateRequestStatus(id, 1)
-      .then(() => GetAllRequests())
-      .catch((error) => CatchAPICallingError(error, navigate));
-  }
-  function denyRequest(id: string) {
-    UpdateRequestStatus(id, 2)
-      .then(() => GetAllRequests())
-      .catch((error) => CatchAPICallingError(error, navigate));
-  }
+  const handleGetAllRequests = () => GetAllRequests(selectingChatbox, setRequestsList, navigate);
+  const handleAcceptRequest = (id: string) => acceptRequest(id, handleGetAllRequests, navigate);
+  const handleDenyRequest = (id: string) => denyRequest(id, handleGetAllRequests, navigate);
   // REQUESTS STATE TOOLS section end
+  // ---------------------------------------------------------
 
-  // function CreateProposal() {
-  // CreateProposal()
-  //   .then((res) => {
-  //     setProposalFormData(res);
-  //   })
-  //   .catch((error) => {
-  //     catchError(error);
-  //   });
-  // }
+  // PROPOSALS STATE TOOLS section start
+  const handleGetAllProposals = () => GetAllProposals(selectingChatbox, setProposalsList, navigate);
+  const handleCreateAProposal = (values: any) =>
+    CreateAProposal(
+      values,
+      selectingChatbox,
+      setIsShowProposalForm,
+      toast,
+      handleGetAllProposals,
+      navigate
+    );
+  function acceptProposal(id: string) {}
+  function denyProposal(id: string) {}
+  // PROPOSALS STATE TOOLS section end
+  // ---------------------------------------------------------
 
   const GetChatboxes = () => {
     GetChatboxesCurrentAccount()
@@ -91,11 +84,19 @@ export default function ChatScreen() {
   const GetChatMessages = () => {
     if (selectingChatbox?.id) {
       if (!closeSocket) {
-        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, chatMessages , setChatMessages);
+        const cleanup = GetMessagesByChatboxIdRealTime(
+          selectingChatbox.id,
+          chatMessages,
+          setChatMessages
+        );
         setCloseSocket(() => cleanup);
       } else {
         closeSocket();
-        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, chatMessages, setChatMessages);
+        const cleanup = GetMessagesByChatboxIdRealTime(
+          selectingChatbox.id,
+          chatMessages,
+          setChatMessages
+        );
         setCloseSocket(() => cleanup);
       }
     }
@@ -143,7 +144,8 @@ export default function ChatScreen() {
   useEffect(() => {
     setCurrentPage(1);
     setTotalPagesSt(1);
-    GetAllRequests();
+    handleGetAllRequests();
+    handleGetAllProposals();
     GetChatMessages();
     return () => {
       if (closeSocket) {
@@ -155,6 +157,20 @@ export default function ChatScreen() {
   return (
     <>
       {isLoading && <ProgressSpinner />}
+      <Toast ref={toast} />
+      <Dialog
+        visible={isShowProposalForm}
+        onHide={() => {
+          setIsShowProposalForm(false);
+        }}
+        dismissableMask
+        headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
+      >
+        <Suspense fallback={<div>Đang tải...</div>}>
+          <LazyProposalForm createProposalCallback={handleCreateAProposal} />
+        </Suspense>
+      </Dialog>
+
       <div className="chat-screen-container">
         <div className="first-col">
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
@@ -168,10 +184,9 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{ requestsList, acceptRequest, denyRequest }}
-              isShowProposalForm={isShowProposalForm}
+              requestStateTools={{ requestsList, handleAcceptRequest, handleDenyRequest }}
+              proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
-              setProposalFormData={setProposalFormData}
               fetchNextPage={fetchNextPage}
             />
           </div>

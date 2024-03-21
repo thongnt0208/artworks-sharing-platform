@@ -1,15 +1,27 @@
-import { useFormik, Button, Calendar, Dropdown, InputNumber, InputText, InputTextarea, Slider } from "../../../index";
+import { Checkbox } from "primereact/checkbox";
+import {
+  useFormik,
+  Button,
+  Calendar,
+  Dropdown,
+  InputNumber,
+  InputText,
+  InputTextarea,
+  Slider,
+} from "../../../index";
 import * as Yup from "yup";
+import { ProposalFormProps } from "../../ChatRelatedTypes";
 
 const initialValues = {
   title: "",
-  category: "",
+  category: "string",
   description: "",
   targetDelivery: new Date(),
   numberOfConcept: 0,
   numberOfRevision: 0,
   depositPercent: 0.1,
   totalPrice: 0,
+  acceptRules: false,
 };
 
 const validationSchema = Yup.object().shape({
@@ -32,11 +44,13 @@ const validationSchema = Yup.object().shape({
     .max(1, "Phần trăm không thể lớn hơn 100%")
     .required(" không được bỏ trống"),
   totalPrice: Yup.number().min(0, "Giá không được âm").required(" không được bỏ trống"),
+  acceptRules: Yup.boolean().oneOf([true], "Bạn phải đồng ý với quy định của nền tảng"),
 });
 
-export default function ProposalForm() {
+export default function ProposalForm({ createProposalCallback }: ProposalFormProps) {
   let today = new Date();
   today.setDate(today.getDate() + 1);
+  const serviceId = localStorage.getItem("serviceId");
   // Added type annotation for Proposal component
   const formik: any = useFormik({
     initialValues,
@@ -44,6 +58,7 @@ export default function ProposalForm() {
     onSubmit: (values) => {
       console.log(values);
       // Handle form submission logic here
+      createProposalCallback({ ...values, serviceId });
     },
   });
 
@@ -148,6 +163,19 @@ export default function ProposalForm() {
           {...formik.getFieldProps("description")}
           className="w-full"
         />
+      </div>
+
+      {/* Must choose checkboxes to accept platform rules */}
+      <div className="p-field">
+        <Checkbox
+          inputId="acceptRules"
+          checked={formik.values.acceptRules}
+          onChange={() => formik.setFieldValue("acceptRules", !formik.values.acceptRules)}
+          className="w-full"
+        />
+        <label htmlFor="acceptRules">
+          Tôi đồng ý với các <a href="/rules">quy định</a> của nền tảng
+        </label>
       </div>
 
       <div className="p-field flex justify-content-center">
