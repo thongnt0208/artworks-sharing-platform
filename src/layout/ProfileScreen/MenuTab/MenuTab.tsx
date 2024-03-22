@@ -18,7 +18,7 @@ const MenuTab: React.FC<{accountId: string, isCreator: boolean, accountAvatar: s
           onClickHandler={handleTabNavigation}
         />
       </div>
-      <div className="mt-6">
+      <div className="mt-3">
         <Outlet context={[accountId, isCreator, accountAvatar, accountFullname]} />
       </div>
     </div>

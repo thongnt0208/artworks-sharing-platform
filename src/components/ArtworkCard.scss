@@ -28,8 +28,26 @@
       .view-button {
         width: fit-content;
         height: 24px;
+        background-color: $strong-200;
+        color: $primary-100;
+        padding: 0 12px;
+        border-radius: $borderRadius-100;
+        border: solid 1px $primary-100;
         position: absolute;
-        left: 35%;
+        left: 40%;
+        bottom: 12px;
+        cursor: default;
+      }
+      .view-privacy-button {
+        width: fit-content;
+        height: 24px;
+        background-color: $strong-200;
+        color: $primary-100;
+        padding: 0 12px;
+        border-radius: $borderRadius-100;
+        border: solid 1px $primary-100;
+        position: absolute;
+        left: 34%;
         bottom: 12px;
         cursor: default;
       }
