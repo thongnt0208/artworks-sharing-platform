@@ -1,23 +1,31 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { DeleteArtworkData, GetArtworksData } from "./ArtworksService";
-import { Artwork } from "../../../components/Gallery";
 import { Toast } from "primereact/toast";
 
-import ArtworkCard from "../../../components/ArtworkCard";
+import ArtworkCard, { ArtworkProps } from "../../../components/ArtworkCard";
 import "./ArtworksView.scss";
 import { Dialog } from "primereact/dialog";
+import { TabMenu } from "primereact/tabmenu";
 
 const ArtworksView: React.FC = () => {
   const toast = useRef<Toast>(null);
   let navigate = useNavigate();
   let [accountId, isCreator] = useOutletContext() as [string, boolean];
-  const [artworks, setArtworks] = React.useState<Artwork[]>([]);
+  const [artworks, setArtworks] = React.useState<ArtworkProps[]>([]);
   const [selectedArtworkId, setSelectedArtworkId] = React.useState<string>("");
   const [visibleDialogs, setVisibleDialogs] = React.useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState(0);
+
+  const items = [
+    { label: "Đã duyệt"},
+    { label: "Đang duyệt" },
+    { label: "Bị từ chối" },
+  ];
+
   const showError = () => {
     toast.current?.show({
       severity: "error",
@@ -45,8 +53,8 @@ const ArtworksView: React.FC = () => {
   React.useEffect(() => {
     const fetchArtworks = async () => {
       const response = await GetArtworksData(10, 1, accountId);
-      if (Array.isArray(response.items)) {
-        setArtworks(response.items);
+      if (Array.isArray(response)) {
+        setArtworks(response);
       } else {
         showError();
       }
@@ -54,9 +62,21 @@ const ArtworksView: React.FC = () => {
     fetchArtworks();
   }, [accountId]);
 
+  const handleTabChange = (event: any) => {
+    setActiveTab(event.index);
+  };
+
   return (
     <>
-      <h1 className="">Các tác phẩm</h1>
+      {/* <h1 className="">Các tác phẩm</h1> */}
+      {isCreator ? (
+        <TabMenu
+          model={items}
+          activeIndex={activeTab}
+          onTabChange={handleTabChange}
+          className="w-max mb-3 text-black-alpha-90 text-sm"
+        />
+      ) : null}
       <div className="gallery grid p-0 flex justify-content-start">
         {artworks.length === 0 ? (
           isCreator ? (
@@ -80,6 +100,7 @@ const ArtworksView: React.FC = () => {
                 id={artwork.id}
                 title={artwork.title}
                 isCreator={isCreator}
+                privacy={artwork.privacy}
                 createdBy={artwork.createdBy}
                 creatorFullName={artwork.creatorFullName}
                 thumbnail={artwork.thumbnail}
