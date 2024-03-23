@@ -32,6 +32,35 @@ export async function GetArtworksData(pageSize: number, pageNumber: number, acco
   }
 }
 
+export async function GetArtworksReferenceData(pageSize: number, pageNumber: number, accountId: string) {
+  try {
+    const response = await axios.get(
+      `${API_URL}/accounts/${accountId}/artworks`,
+      {
+        params: {
+          sortColumn: "create",
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+          privacy: 0, // public
+          state: 1 // accepted
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken || refreshToken}`,
+        },
+      }
+    );
+    if (response.status !== 200) {
+      console.log("Error fetching artworks data");
+      return [];
+    }
+    return response.data;
+  } catch (error) {
+    console.log("Error fetching artworks data:", accountId);
+    return [];
+  }
+}
+
 export async function DeleteArtworkData(artworkId: string) {
   try {
     await axios.delete(

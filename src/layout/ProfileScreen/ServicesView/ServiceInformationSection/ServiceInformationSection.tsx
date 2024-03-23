@@ -13,7 +13,7 @@ import { validationSchema } from "./FormikData";
 import { ServiceProps } from "../../../../components/ServiceCard";
 import { ArtworkProps } from "../../../../components/ArtworkCard";
 import { getAuthInfo } from "../../../../util/AuthUtil";
-import { GetArtworksData } from "../../ArtworksView/ArtworksService";
+import { GetArtworksData, GetArtworksReferenceData } from "../../ArtworksView/ArtworksService";
 import { deliveryTime } from "../../../../const/bizConstants";
 import { CreateServiceData, UpdateServiceData } from "../ServicesService";
 
@@ -48,7 +48,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   useEffect(() => {
     const handleGetArtworks = async () => {
       try {
-        const response = await GetArtworksData(4, pageNumber, accountId);
+        const response = await GetArtworksReferenceData(4, pageNumber, accountId);
         if (Array.isArray(response.items)) {
           setArtworks((prevArtworks) => {
             const uniqueArtworkIds = new Set(
