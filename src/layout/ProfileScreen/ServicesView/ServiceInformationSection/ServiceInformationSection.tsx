@@ -54,7 +54,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
             const uniqueArtworkIds = new Set(
               prevArtworks.map((artwork) => artwork.id)
             );
-            const newArtworks = response.filter(
+            const newArtworks = response.items.filter(
               (artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id)
             );
             return [...prevArtworks, ...newArtworks];
