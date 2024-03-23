@@ -214,3 +214,76 @@ export async function CreateProposal(value: ProposalFormType): Promise<any> {
       throw error;
     });
 }
+
+/**
+ * This function is used to update the status of a proposal
+ *
+ * @param proposalId - the id of the proposal
+ * @param status - the status of the proposal (Waiting = 0, Accepted = 1, Declined = 2, InitPayment = 3, CompletePayment = 4, Cancel = 5)
+ * @returns {Promise<ProposalType>} - the updated proposal detail
+ * @throws {Error} an error from the API request
+ * @example
+ * const updatedProposal = await UpdateProposalStatus("123", 1);
+ * console.log(updatedProposal);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function UpdateProposalStatus(
+  proposalId: string,
+  status: number
+): Promise<ProposalType> {
+  return axiosPrivate
+    .put(
+      `/proposals/${proposalId}`,
+      { status: status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return {
+        id: response?.data?.id,
+        chatBoxId: response?.data?.chatBoxId,
+        serviceId: response?.data?.serviceId,
+        projectTitle: response?.data?.projectTitle,
+        category: response?.data?.category,
+        description: response?.data?.description,
+        targetDelivery: response?.data?.targetDelivery,
+        initialPrice: response?.data?.initialPrice,
+        totalPrice: response?.data?.total,
+        status: response?.data?.proposalStatus,
+        createdBy: response?.data?.createdBy,
+        createdOn: response?.data?.createdOn,
+      };
+    })
+    .catch((error) => {
+      console.error("Error updating proposal status:", error);
+      throw error;
+    });
+}
+
+/**
+ * This functon is used to pay the initial price of a proposal
+ * 
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<any>} - the response from the API
+ * @throws {Error} an error from the API request
+ * @example
+ * const response = await InitPaymentProposal("123");
+ * console.log(response);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function InitPaymentProposal(proposalId: string): Promise<any> {
+  return axiosPrivate
+    .post(`/proposals/init-payment/${proposalId}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error initializing payment:", error);
+      throw error;
+    });
+}
