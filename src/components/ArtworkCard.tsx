@@ -15,6 +15,7 @@ export type ArtworkProps = {
   viewCount: number;
   likeCount: number;
   privacy?: string;
+  state?: string;
   isCreator?: boolean | undefined;
   createdBy: string;
   creatorFullName: string;
@@ -29,9 +30,9 @@ export type ArtworkProps = {
 
 const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   const op = useRef<OverlayPanel>(null);
-
+  console.log("ArtworkCard", props);
   let header = (
-    <div className={`header-container ${props.onSelection ? "mb-3" : "" }`}>
+    <div className={`header-container ${props.onSelection ? "mb-3" : ""}`}>
       <div className="thumbnail-container pt-0">
         <img
           alt={`Hình thu nhỏ của tác phẩm tên ${props.title}`}
@@ -40,14 +41,28 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
           onClick={props.viewHandler}
         />
       </div>
-      {!props.onSelection && (
+      {!props.isCreator ? (
         <Button
           label={props.viewCount ? formatLargeNumber(props.viewCount) : "0"}
           icon="pi pi-eye"
           onClick={props.viewHandler}
           className="view-button"
         />
-      )}  
+      ) : (
+        <div className="view-privacy-button flex flex-row justify-content-center align-items-center">
+          <div className="flex flex-row justify-content-center align-items-center mr-2">
+            <i className="pi pi-eye m-1" />
+            {props.viewCount ? formatLargeNumber(props.viewCount) : "0"}
+          </div>
+          <div className=" border-left-1 pl-2">
+            {props.privacy === "Public" ? (
+              <i className="pi pi-globe" />
+            ) : (
+              <i className="pi pi-lock" />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
   let footer = (
