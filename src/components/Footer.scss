@@ -1,12 +1,15 @@
 .footer {
     .menubar {
         width: 100%;
+        padding: 0;
+        border-radius: 0;
+        & * > .p-menuitem-link {
+            padding: 0.2rem 1rem;
+            font-size: 12px;
+        }
         img: {
             width: 100px;
             padding: 0;
-        }
-        .p-button {
-            margin-right: 0.5rem;
         }
     }
 }
