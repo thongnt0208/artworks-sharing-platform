@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer
-      className={`footer ${hideFooterRoutes.some((route) => currentUrl.includes(`/${route}`)) ? "hidden" : "h-3rem"}`}
+      className={`footer h-3rem ${hideFooterRoutes.some((route) => currentUrl.includes(`/${route}`)) ? "hidden" : ""}`}
     >
       <Menubar className="menubar fixed w-full bottom-0" model={items1} end={endItems} />
     </footer>
