@@ -19,6 +19,7 @@ const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
             <UserInformationCard
             key={creator.id}
             {...creator}
+            hire={true}
             />
           ))}
       </div>

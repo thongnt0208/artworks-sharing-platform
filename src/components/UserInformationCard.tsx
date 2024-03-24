@@ -22,6 +22,7 @@ export type UserInformationProps = {
   artworksView?: number;
   followerNum?: number;
   followingNum?: number;
+  hire?: boolean;
   followHandler?: () => void;
   messageHandler: (request: RequestProps) => void;
   editHandler?: () => void;
@@ -60,14 +61,26 @@ const UserInformationCard: React.FC<UserInformationProps> = (
             label="Theo dõi"
             onClick={props.followHandler}
           />
-          <Button
-            rounded
-            className="bot-button"
-            label="Nhắn tin"
-            onClick={() => {
-              setIsShowRequestPopup(true);
-            }}
-          />
+          {props.hire ? (
+            <Button
+              rounded
+              className="bot-button"
+              label="Thuê"
+              onClick={() => {
+                setIsShowRequestPopup(true);
+                setIsHire(true);
+              }}
+            />
+          ) : (
+            <Button
+              rounded
+              className="bot-button"
+              label="Nhắn tin"
+              onClick={() => {
+                setIsShowRequestPopup(true);
+              }}
+            />
+          )}
         </>
       )}
     </>
@@ -105,8 +118,9 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           <p>{props.address}</p>
         </div>
       </Card>
-
-      {props.bio ? (
+      {props.hire ? (
+        <></>
+      ) : props.bio ? (
         <div className="bio-container w-full pl-4 pr-4">
           <h3>Về tôi</h3>
           <p className="text-justify">{props.bio}</p>
@@ -155,38 +169,43 @@ const UserInformationCard: React.FC<UserInformationProps> = (
       ) : (
         <></>
       )}
-      {!props.isCreator && (
-        <div
-          className="w-full mt-5 grid"
-          style={{
-            height: "fit-content",
-            padding: "10px 10px",
-            cursor: "pointer",
-          }}
-        >
+
+      {props.hire ? (
+        <></>
+      ) : (
+        !props.isCreator && (
           <div
-            className="col-6 text-right"
+            className="w-full mt-5 grid"
             style={{
               height: "fit-content",
-              borderRight: "1px solid grey",
-              padding: "0 5px",
+              padding: "10px 10px",
+              cursor: "pointer",
             }}
-            onClick={() => setIsShowReportDialog(true)}
           >
-            Báo cáo
+            <div
+              className="col-6 text-right"
+              style={{
+                height: "fit-content",
+                borderRight: "1px solid grey",
+                padding: "0 5px",
+              }}
+              onClick={() => setIsShowReportDialog(true)}
+            >
+              Báo cáo
+            </div>
+            <div
+              className="col-6 text-left"
+              style={{
+                height: "fit-content",
+                borderLeft: "1px solid grey",
+                padding: "0 5px",
+              }}
+              onClick={() => {}}
+            >
+              Chặn
+            </div>
           </div>
-          <div
-            className="col-6 text-left"
-            style={{
-              height: "fit-content",
-              borderLeft: "1px solid grey",
-              padding: "0 5px",
-            }}
-            onClick={() => {}}
-          >
-            Chặn
-          </div>
-        </div>
+        )
       )}
     </div>
   );

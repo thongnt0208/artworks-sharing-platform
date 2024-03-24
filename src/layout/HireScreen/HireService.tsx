@@ -1,4 +1,6 @@
 import axios from "axios";
+import { axiosPrivate } from "../../hooks/useAxios";
+const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 
 export async function GetRecommendArtworksData() {
   try {
@@ -36,9 +38,13 @@ export async function GetTagsData() {
   }
 }
 
-export async function GetCreatorsData() {
+export async function GetCreatorsData(pageNumber: number, pageSize: number) {
   try {
-    const response = await axios.get("http://127.0.0.1:1880/account", {
+    const response = await axiosPrivate.get(`${API_URL}/accounts`, {
+      params: {
+        pageNumber,
+        pageSize,
+      },
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,6 +53,7 @@ export async function GetCreatorsData() {
       console.log("Error fetching artworks data");
       return [];
     }
+    console.log("Creators data:", response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching artworks data:", error);
