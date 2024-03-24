@@ -19,6 +19,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { useFormik } from 'formik';
 import { Slider } from "primereact/slider";
 import { Avatar } from 'primereact/avatar';
+import { toast } from 'react-toastify';
 
 export { Tooltip, Tag, ProgressBar, Password, Calendar, Image, Divider, Toast, Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik, Slider, Avatar };
 
@@ -30,12 +31,13 @@ export { Tooltip, Tag, ProgressBar, Password, Calendar, Image, Divider, Toast, C
  * @param error - The error object.
  * @param navigate - The navigation function (from 'react-router-dom').
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.1.0
  */
 export function CatchAPICallingError(error: any, navigate: any) {
     if (error.response?.status === 401) {
         navigate("/login");
     } else {
+        toast.error("Đã xảy ra lỗi." + error.message);
         console.log(error);
     }
 }

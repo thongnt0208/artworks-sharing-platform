@@ -17,12 +17,12 @@ import {
   SendMessageToAccount,
 } from "./services/ChatServices";
 import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
-import { CatchAPICallingError, Dialog, Toast, Avatar, Button } from "..";
+import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
 import { toast as toastify } from "react-toastify";
 import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
 import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
-import { InitPaymentProposal, UpdateProposalStatus } from "./services/ProposalServices";
+import { InitPaymentProposal, UpdateProposalStatus, UploadProposalAsset } from "./services/ProposalServices";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
@@ -85,6 +85,16 @@ export default function ChatScreen() {
 
   function denyProposal(id: string) {
     UpdateProposalStatus(id, 2)
+      .then(() => handleGetAllProposals())
+      .catch((error) => {
+        CatchAPICallingError(error, navigate);
+      });
+  }
+
+  function uploadProposalAsset(id: string, type: number, file: File){
+    console.log("uploadProposalAsset", id, type, file);
+    toastify.success("uploadProposalAsset" + id + type + file);
+    UploadProposalAsset(id, type, file)
       .then(() => handleGetAllProposals())
       .catch((error) => {
         CatchAPICallingError(error, navigate);
@@ -210,7 +220,7 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{ requestsList, handleAcceptRequest, handleDenyRequest }}
+              requestStateTools={{ requestsList, handleAcceptRequest, handleDenyRequest, uploadProposalAsset }}
               proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
               fetchNextPage={fetchNextPage}

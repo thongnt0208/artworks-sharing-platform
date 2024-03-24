@@ -31,7 +31,7 @@ export default function ChatContent({
   setIsShowProposalForm,
   fetchNextPage,
 }: Props) {
-  const { requestsList, handleAcceptRequest, handleDenyRequest } = requestStateTools;
+  const { requestsList, handleAcceptRequest, handleDenyRequest, uploadProposalAsset } = requestStateTools;
   const { proposalsList, acceptProposal, denyProposal } = proposalStateTools;
 
   const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
@@ -108,6 +108,7 @@ export default function ChatContent({
                 // setIsShowProposalForm(true);
               }}
               cancelCallback={denyProposal}
+              uploadAssetCallback={uploadProposalAsset}
             />
           ))}
         <div ref={topMessageRef}></div>
