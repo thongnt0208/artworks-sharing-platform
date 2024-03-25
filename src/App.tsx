@@ -11,6 +11,9 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 //---------------------------
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+//---------------------------
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./layout/HomeScreen/HomeScreen";
@@ -123,6 +126,7 @@ function App() {
 
           {/* {isFooterVisible && <Footer />} */}
           <Footer />
+          <ToastContainer />
         </BrowserRouter>
       </AuthProvider>
     </PrimeReactProvider>
