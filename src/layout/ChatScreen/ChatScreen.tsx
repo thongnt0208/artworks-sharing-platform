@@ -17,10 +17,12 @@ import {
   SendMessageToAccount,
 } from "./services/ChatServices";
 import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
-import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
+import { CatchAPICallingError, Dialog, Toast, Avatar, Button } from "..";
+import { toast as toastify } from "react-toastify";
 import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
 import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
+import { InitPaymentProposal, UpdateProposalStatus } from "./services/ProposalServices";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
@@ -63,8 +65,31 @@ export default function ChatScreen() {
       handleGetAllProposals,
       navigate
     );
-  function acceptProposal(id: string) {}
-  function denyProposal(id: string) {}
+
+  function acceptProposal(id: string) {
+    InitPaymentProposal(id)
+      .then(() => {
+        UpdateProposalStatus(id, 1)
+          .then(() => handleGetAllProposals())
+          .catch((error) => {
+            CatchAPICallingError(error, navigate);
+            toastify.error("Có lỗi xảy ra khi cập nhật trạng thái của Yêu cầu" + error.message);
+          });
+      })
+      .catch((error) => {
+        CatchAPICallingError(error, navigate);        
+        toastify.error("Có lỗi xảy ra khi đặt cọc: " + error.message);
+          
+      });
+  }
+
+  function denyProposal(id: string) {
+    UpdateProposalStatus(id, 2)
+      .then(() => handleGetAllProposals())
+      .catch((error) => {
+        CatchAPICallingError(error, navigate);
+      });
+  }
   // PROPOSALS STATE TOOLS section end
   // ---------------------------------------------------------
 
@@ -156,6 +181,7 @@ export default function ChatScreen() {
 
   return (
     <>
+      {/* <Button onClick={() => toastify.success("hhhhh", {bodyClassName:"dddddd"})}>Show toast success</Button> */}
       {isLoading && <ProgressSpinner />}
       <Toast ref={toast} />
       <Dialog
