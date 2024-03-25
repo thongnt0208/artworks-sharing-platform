@@ -26,6 +26,7 @@ export type RequestStateToolsType = {
   requestsList: RequestItemType[];
   handleAcceptRequest: (id: string) => void;
   handleDenyRequest: (id: string) => void;
+  uploadProposalAsset: (id: string, type: number, file: File) => void;
 };
 
 export type RequestCardProps = RequestItemType & {
@@ -64,6 +65,7 @@ export type ProposalCardProps = ProposalType & {
   denyCallback?: (id: string) => void;
   editCallback?: (id: string) => void;
   cancelCallback?: (id: string) => void;
+  uploadAssetCallback?: (id: string, type: number, file: File) => void;
 };
 
 export type ProposalFormProps = {

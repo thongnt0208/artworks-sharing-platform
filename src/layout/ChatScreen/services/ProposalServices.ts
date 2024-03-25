@@ -266,7 +266,7 @@ export async function UpdateProposalStatus(
 
 /**
  * This functon is used to pay the initial price of a proposal
- * 
+ *
  * @param proposalId - the id of the proposal
  * @returns {Promise<any>} - the response from the API
  * @throws {Error} an error from the API request
@@ -284,6 +284,40 @@ export async function InitPaymentProposal(proposalId: string): Promise<any> {
     })
     .catch((error) => {
       console.error("Error initializing payment:", error);
+      throw error;
+    });
+}
+
+/**
+ * This function is used to upload an asset (concept, revision or final product) for a proposal
+ * 
+ * @param id - the id of the proposal
+ * @param type - the type of the asset (0: concept, 1: final product, 2: revision)
+ * @param file - the file to upload
+ * @returns {Promise<any>} - the response from the API
+ * @throws {Error} an error from the API request
+ * @example
+ * const response = await UploadProposalAsset("123", 0, file);
+ * console.log(response);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function UploadProposalAsset(id: string, type: number, file: File) {
+  const formData = new FormData();
+  formData.append("ProposalId", id);
+  formData.append("Type", type.toString());
+  formData.append("File", file);
+  return axiosPrivate
+    .post(`/proposalassets/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error uploading asset:", error);
       throw error;
     });
 }
