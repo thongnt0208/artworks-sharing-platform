@@ -1,6 +1,81 @@
 @import "/src/const/variables.scss";
 
-.chat-right-nav{
-    border: solid 1px $strong-200;
-    height: 90vh;
+.chat-right-nav {
+  border: 1px solid $bg-300;
+  border-radius: $borderRadius-100;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .user-info-container {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    .text-cus-h1-bold {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .text-cus-normal {
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  .milestone-view-container,
+  .proposals-list-container {
+    background-color: $bg-200;
+    padding: 0.5rem;
+    border-radius: $borderRadius-100;
+
+    .milestone-view-header,
+    .proposals-list-header {
+      text-align: center;
+    }
+
+    .milestone-view-content,
+    .proposals-list-content {
+      .milestone-item,
+      .milestone-item-file,
+      .proposal-item {
+        .text-cus-normal {
+          color: $text-200;
+        }
+      }
+
+      .proposal-item {
+        border-bottom: 1px solid $bg-300;
+        border-radius: $borderRadius-100;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+
+        .text-cus-normal-bold {
+        }
+
+        .name-date-frame,
+        .status-price-frame {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .name-date-frame {
+          max-width: 80%;
+        }
+
+        &:hover {
+          background-color: $bg-100;
+        }
+      }
+
+      .milestone-item-file {
+        .p-button {
+          background-color: $primary-100;
+        }
+      }
+    }
+  }
 }
