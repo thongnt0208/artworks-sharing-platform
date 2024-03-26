@@ -67,7 +67,6 @@ function CommentComponent({ ...props }: PropsType) {
                 index={index}
                 comment={comment}
                 profileData={profileData}
-                reloadComments={props.reloadComments}
               />
             );
           } else {
@@ -77,7 +76,6 @@ function CommentComponent({ ...props }: PropsType) {
                 index={index}
                 comment={comment}
                 profileData={comment.createdBy}
-                reloadComments={props.reloadComments}
               />
             );
           }
