@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-import { maxCommentCharacter, maxSizeImagesUpload } from "../../../../const/bizConstants";
+import { maxCommentCharacter } from "../../../../const/bizConstants";
 import "./ChatInput.scss";
 import { useRef } from "react";
 import { Menu } from "primereact/menu";
@@ -10,10 +10,8 @@ type Props = {
   newChatMessage: string;
   setNewChatMessage: (value: string) => void;
   SendChatMessage: () => void;
-  newChatImages: File[];
   setNewChatImages: (value: File[]) => void;
   setIsShowProposalForm: (value: boolean) => void;
-  SendChatImages: () => void;
   isLoading: boolean;
 };
 
@@ -21,10 +19,8 @@ export default function ChatInput({
   newChatMessage,
   setNewChatMessage,
   SendChatMessage,
-  newChatImages,
   setNewChatImages,
   setIsShowProposalForm,
-  SendChatImages,
   isLoading,
 }: Props) {
   const menuRef = useRef<Menu>(null);
