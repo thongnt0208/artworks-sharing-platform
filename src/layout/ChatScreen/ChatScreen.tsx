@@ -89,7 +89,6 @@ export default function ChatScreen() {
       })
       .catch((error) => {
         CatchAPICallingError(error, navigate);
-        CatchAPICallingError(error, navigate);
         toastify.error("Có lỗi xảy ra khi đặt cọc: " + error.message);
       });
   }
