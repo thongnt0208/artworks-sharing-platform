@@ -15,14 +15,12 @@ interface CommentItemProps {
     fullname?: string;
   };
   comment: CommentType;
-  reloadComments: () => void;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({
   index,
   profileData,
   comment,
-  reloadComments,
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const blankPic = require("../../../assets/defaultImage/blank-100.png");
@@ -37,7 +35,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
     removeCommentFromArtwork(comment?.id)
       .then(() => {
         console.log("Comment removed");
-        reloadComments();
         setIsLoading(false);
         toast?.current?.show({
           severity: "success",
