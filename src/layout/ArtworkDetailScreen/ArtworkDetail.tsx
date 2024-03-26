@@ -7,6 +7,7 @@ import {
   addFollow,
   fetchArtworkDetail,
   fetchCommentsForArtwork,
+  fetchCommentsForArtworkRealTime,
   fetchIsFollow,
   removeFollow,
 } from "./Service";
@@ -25,6 +26,7 @@ export default function ArtworkDetail() {
   const [isLiked, setIsLiked] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [error, setError] = useState({} as any);
+  const [closeSocket, setCloseSocket] = useState<() => void | null>();
   const authenticationInfo = getAuthInfo();
 
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
@@ -69,16 +71,14 @@ export default function ArtworkDetail() {
 
   // Get Comments data
   const fetchComments = () => {
-    fetchCommentsForArtwork(id)
-      .then((res) => {
-        setComments(res);
-        setError("");
-      })
-      .catch((err) => {
-        let message = err.message || "Something went wrong";
-        setError({ ...message });
-        console.log(err);
-      });
+    if (!closeSocket) {
+      const cleanup = fetchCommentsForArtworkRealTime(id, setComments);
+      setCloseSocket(() => cleanup);
+    } else {
+      closeSocket();
+      const cleanup = fetchCommentsForArtworkRealTime(id, setComments);
+      setCloseSocket(() => cleanup);
+    }
   };
 
   const followUser = () => {
@@ -153,6 +153,7 @@ export default function ArtworkDetail() {
                     fullName={authenticationInfo?.fullname}
                     comments={comments}
                     reloadComments={fetchComments}
+                    // TODO: Delete reloadComments
                   />
                 )}
               </div>
