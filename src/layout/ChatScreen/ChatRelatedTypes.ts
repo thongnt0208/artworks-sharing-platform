@@ -5,6 +5,8 @@ export type ChatboxItemType = {
   author: {
     id: string;
     fullname: string;
+    bio?: string;
+    email?: string;
   };
   time: string;
   isSeen: boolean;
@@ -83,4 +85,21 @@ export type ProposalFormType = {
   numberOfRevision: number;
   initialPrice: number;
   total: number;
+};
+
+export type MilestoneItemType = {
+  id: string;
+  proposalId: string;
+  milestoneName: string;
+  fileUrl?: string;
+  fileName?: string;
+  createdBy: string;
+  createdOn: string;
+  createdAccount: {
+    id: string;
+    username: string;
+    email: string;
+    fullname: string;
+    avatar: string;
+  };
 };
