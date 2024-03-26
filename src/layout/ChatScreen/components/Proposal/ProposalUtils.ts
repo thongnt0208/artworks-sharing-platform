@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { ChatboxItemType, ProposalFormType } from "../../ChatRelatedTypes";
+import { ChatboxItemType, ProposalFormType, ProposalType } from "../../ChatRelatedTypes";
 import { CreateProposal, GetProposalsByChatboxId } from "../../services/ProposalServices";
 import { CatchAPICallingError, Toast } from "../../..";
 
 export const GetAllProposals = (
   selectingChatbox: ChatboxItemType,
-  setProposalsList: (proposalsList: any[]) => void,
+  setProposalsList: (proposalsList: ProposalType[]) => void,
   navigate: ReturnType<typeof useNavigate>
 ) => {
   selectingChatbox?.id &&

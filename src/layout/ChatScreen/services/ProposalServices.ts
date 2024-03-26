@@ -1,6 +1,11 @@
 import { notificationItemType } from "../../../components/Notification";
 import useAxios, { axiosPrivate } from "../../../hooks/useAxios";
-import { ProposalFormType, ProposalType, RequestItemType } from "../ChatRelatedTypes";
+import {
+  MilestoneItemType,
+  ProposalFormType,
+  ProposalType,
+  RequestItemType,
+} from "../ChatRelatedTypes";
 
 function mapRequestData(response: any): RequestItemType {
   return {
@@ -290,7 +295,7 @@ export async function InitPaymentProposal(proposalId: string): Promise<any> {
 
 /**
  * This function is used to upload an asset (concept, revision or final product) for a proposal
- * 
+ *
  * @param id - the id of the proposal
  * @param type - the type of the asset (0: concept, 1: final product, 2: revision)
  * @param file - the file to upload
@@ -302,7 +307,7 @@ export async function InitPaymentProposal(proposalId: string): Promise<any> {
  * @version 1.0.0
  * @author ThongNT
  */
-export async function UploadProposalAsset(id: string, type: number, file: File) {
+export async function UploadProposalAsset(id: string, type: number, file: File): Promise<any> {
   const formData = new FormData();
   formData.append("ProposalId", id);
   formData.append("Type", type.toString());
@@ -318,6 +323,43 @@ export async function UploadProposalAsset(id: string, type: number, file: File) 
     })
     .catch((error) => {
       console.error("Error uploading asset:", error);
+      throw error;
+    });
+}
+
+/**
+ * This function is used to get all milestones of a proposal
+ * 
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<MilestoneItemType[]>} - an array of milestones
+ * @throws {Error} an error from the API request
+ * @example
+ * const milestones = await GetProposalMilestone("123");
+ * console.log(milestones);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function GetProposalMilestone(proposalId: string): Promise<MilestoneItemType[]> {
+  return axiosPrivate
+    .get(`/proposals/milestones/${proposalId}`)
+    .then((response) => {
+      return response.data?.map((item: any) => ({
+        id: item?.id,
+        proposalId: item?.proposalId,
+        milestoneName: item?.milestoneName,
+        createdBy: item?.createdBy,
+        createdOn: item?.createdOn,
+        createdAccount: {
+          id: item?.createdAccount?.id,
+          username: item?.createdAccount?.username,
+          email: item?.createdAccount?.email,
+          fullname: item?.createdAccount?.fullname,
+          avatar: item?.createdAccount?.avatar,
+        },
+      }));
+    })
+    .catch((error) => {
+      console.error("Error fetching milestones:", error);
       throw error;
     });
 }
