@@ -9,13 +9,7 @@ import ChatLeftNav from "./components/ChatLeftNav";
 import ChatContent from "./components/ChatContent";
 import ChatRightNav from "./components/ChatRightNav";
 import ChatInput from "./components/ChatInput/ChatInput";
-import {
-  ChatMessageType,
-  GetChatboxesCurrentAccount,
-  GetMessagesByChatboxIdRealTime,
-  SendImageToAccount,
-  SendMessageToAccount,
-} from "./services/ChatServices";
+import { ChatMessageType, GetChatboxesCurrentAccount, GetMessagesByChatboxIdRealTime, SendImageToAccount, SendMessageToAccount } from "./services/ChatServices";
 import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
 import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
 import { toast as toastify } from "react-toastify";
@@ -32,7 +26,7 @@ export default function ChatScreen() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPagesSt, setTotalPagesSt] = useState(1);
+  // const [totalPagesSt, setTotalPagesSt] = useState(1);
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
 
   const [newChatMessage, setNewChatMessage] = useState("");
@@ -77,9 +71,8 @@ export default function ChatScreen() {
           });
       })
       .catch((error) => {
-        CatchAPICallingError(error, navigate);        
+        CatchAPICallingError(error, navigate);
         toastify.error("Có lỗi xảy ra khi đặt cọc: " + error.message);
-          
       });
   }
 
@@ -91,7 +84,7 @@ export default function ChatScreen() {
       });
   }
 
-  function uploadProposalAsset(id: string, type: number, file: File){
+  function uploadProposalAsset(id: string, type: number, file: File) {
     console.log("uploadProposalAsset", id, type, file);
     toastify.success("uploadProposalAsset" + id + type + file);
     UploadProposalAsset(id, type, file)
@@ -178,7 +171,6 @@ export default function ChatScreen() {
 
   useEffect(() => {
     setCurrentPage(1);
-    setTotalPagesSt(1);
     handleGetAllRequests();
     handleGetAllProposals();
     GetChatMessages();
@@ -189,12 +181,11 @@ export default function ChatScreen() {
     };
   }, [selectingChatbox]);
 
-  useEffect(()=> {
-    SendChatImages()
-  }, [newChatImages])
+  useEffect(() => {
+    SendChatImages();
+  }, [newChatImages]);
   return (
     <>
-      {/* <Button onClick={() => toastify.success("hhhhh", {bodyClassName:"dddddd"})}>Show toast success</Button> */}
       {isLoading && <ProgressSpinner />}
       <Toast ref={toast} />
       <Dialog
@@ -223,7 +214,12 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{ requestsList, handleAcceptRequest, handleDenyRequest, uploadProposalAsset }}
+              requestStateTools={{
+                requestsList,
+                handleAcceptRequest,
+                handleDenyRequest,
+                uploadProposalAsset,
+              }}
               proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
               fetchNextPage={fetchNextPage}
@@ -235,10 +231,8 @@ export default function ChatScreen() {
               newChatMessage={newChatMessage}
               setNewChatMessage={setNewChatMessage}
               SendChatMessage={SendChatMessage}
-              newChatImages={newChatImages}
               setNewChatImages={setNewChatImages}
               setIsShowProposalForm={setIsShowProposalForm}
-              SendChatImages={SendChatImages}
               isLoading={isLoading}
             />
           </div>
