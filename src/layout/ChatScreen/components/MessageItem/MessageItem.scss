@@ -16,6 +16,12 @@
       word-wrap: break-word;
     }
 
+    .message-file {
+      img {
+        border-radius: 25px;
+      }
+    }
+
     .message-timestamp {
       font-size: 12px;
       color: #999;

@@ -189,6 +189,9 @@ export default function ChatScreen() {
     };
   }, [selectingChatbox]);
 
+  useEffect(()=> {
+    SendChatImages()
+  }, [newChatImages])
   return (
     <>
       {/* <Button onClick={() => toastify.success("hhhhh", {bodyClassName:"dddddd"})}>Show toast success</Button> */}

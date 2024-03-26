@@ -188,6 +188,8 @@ export function GetMessagesByChatboxIdRealTime(
       };
     });
 
+    console.log(message);    
+
     if (Array.isArray(message) && arraysEqual(_tmpMessages, message) === false) {
       _tmpMessages = message;
       setState(message);

@@ -31,7 +31,8 @@ export default function ChatContent({
   setIsShowProposalForm,
   fetchNextPage,
 }: Props) {
-  const { requestsList, handleAcceptRequest, handleDenyRequest, uploadProposalAsset } = requestStateTools;
+  const { requestsList, handleAcceptRequest, handleDenyRequest, uploadProposalAsset } =
+    requestStateTools;
   const { proposalsList, acceptProposal, denyProposal } = proposalStateTools;
 
   const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
@@ -120,6 +121,7 @@ export default function ChatContent({
               avatar={selectingChatbox?.avatar || tmpAvt}
               createdOn={item.createdOn}
               text={item.text}
+              fileUrl={item.fileLocation}
             />
           );
         })}
