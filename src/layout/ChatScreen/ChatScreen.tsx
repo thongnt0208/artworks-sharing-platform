@@ -16,13 +16,23 @@ import {
   SendImageToAccount,
   SendMessageToAccount,
 } from "./services/ChatServices";
-import { ChatboxItemType, RequestItemType } from "./ChatRelatedTypes";
+import {
+  ChatboxItemType,
+  MilestoneItemType,
+  ProposalType,
+  RequestItemType,
+} from "./ChatRelatedTypes";
 import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
 import { toast as toastify } from "react-toastify";
 import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
 import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
-import { InitPaymentProposal, UpdateProposalStatus, UploadProposalAsset } from "./services/ProposalServices";
+import {
+  GetProposalMilestone,
+  InitPaymentProposal,
+  UpdateProposalStatus,
+  UploadProposalAsset,
+} from "./services/ProposalServices";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
@@ -41,7 +51,8 @@ export default function ChatScreen() {
   const [requestsList, setRequestsList] = useState<RequestItemType[]>([]);
 
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
-  const [proposalsList, setProposalsList] = useState([] as any);
+  const [proposalsList, setProposalsList] = useState<ProposalType[]>([]);
+  const [currentMilestone, setCurrentMilestone] = useState<MilestoneItemType[]>([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -77,9 +88,8 @@ export default function ChatScreen() {
           });
       })
       .catch((error) => {
-        CatchAPICallingError(error, navigate);        
+        CatchAPICallingError(error, navigate);
         toastify.error("Có lỗi xảy ra khi đặt cọc: " + error.message);
-          
       });
   }
 
@@ -91,11 +101,22 @@ export default function ChatScreen() {
       });
   }
 
-  function uploadProposalAsset(id: string, type: number, file: File){
+  function uploadProposalAsset(id: string, type: number, file: File) {
     console.log("uploadProposalAsset", id, type, file);
     toastify.success("uploadProposalAsset" + id + type + file);
     UploadProposalAsset(id, type, file)
       .then(() => handleGetAllProposals())
+      .catch((error) => {
+        CatchAPICallingError(error, navigate);
+      });
+  }
+
+  function getMilestone(id: string) {
+    // get milestone by proposal id
+    GetProposalMilestone(id)
+      .then((res) => {
+        setCurrentMilestone(res);
+      })
       .catch((error) => {
         CatchAPICallingError(error, navigate);
       });
@@ -220,7 +241,12 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{ requestsList, handleAcceptRequest, handleDenyRequest, uploadProposalAsset }}
+              requestStateTools={{
+                requestsList,
+                handleAcceptRequest,
+                handleDenyRequest,
+                uploadProposalAsset,
+              }}
               proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
               fetchNextPage={fetchNextPage}
@@ -241,7 +267,12 @@ export default function ChatScreen() {
           </div>
         </div>
         <div className="last-col">
-          <ChatRightNav />
+          <ChatRightNav
+            userInfo={{ avatar: selectingChatbox?.avatar, ...selectingChatbox?.author }}
+            proposalsList={proposalsList}
+            currentMilestone={currentMilestone}
+            getMilestoneCallback={getMilestone}
+          />
         </div>
       </div>
     </>
