@@ -1,0 +1,57 @@
+@import "/src/const/variables.scss";
+
+.wallet-history-section {
+  padding: 20px;
+
+  .method-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .method-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+        .p-highlight {
+            border-color: $primary-200;
+            .p-radiobutton-icon {
+                background-color: $strong-200;
+            }
+        }
+        
+      .label {
+        font-size: larger;
+        margin-left: 10px;
+      }
+
+      .logo {
+        margin-left: 10px;
+        width: 40px;
+        height: 20px;
+
+        &.zalopay-logo {
+          width: 100px;
+          height: 30px;
+        }
+      }
+    }
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding-top: 20px;
+    gap: 10px;
+    border-top: 1px solid $strong-200;
+  }
+
+  .btn-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    gap: 10px;
+  }
+}
