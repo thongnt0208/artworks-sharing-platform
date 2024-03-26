@@ -89,6 +89,7 @@ export default function ChatScreen() {
       })
       .catch((error) => {
         CatchAPICallingError(error, navigate);
+        CatchAPICallingError(error, navigate);
         toastify.error("Có lỗi xảy ra khi đặt cọc: " + error.message);
       });
   }
@@ -101,6 +102,7 @@ export default function ChatScreen() {
       });
   }
 
+  function uploadProposalAsset(id: string, type: number, file: File) {
   function uploadProposalAsset(id: string, type: number, file: File) {
     console.log("uploadProposalAsset", id, type, file);
     toastify.success("uploadProposalAsset" + id + type + file);
@@ -242,6 +244,12 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
+              requestStateTools={{
+                requestsList,
+                handleAcceptRequest,
+                handleDenyRequest,
+                uploadProposalAsset,
+              }}
               requestStateTools={{
                 requestsList,
                 handleAcceptRequest,
