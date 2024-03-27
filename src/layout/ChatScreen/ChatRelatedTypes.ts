@@ -103,3 +103,12 @@ export type MilestoneItemType = {
     avatar: string;
   };
 };
+
+export type ProposalAssetItemType = {
+  id: string;
+  proposalId: string;
+  type: string;
+  name: string;
+  url: string;
+  createdOn: string;
+};

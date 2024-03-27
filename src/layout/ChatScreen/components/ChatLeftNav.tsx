@@ -12,7 +12,7 @@ const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
   const { itemsList, selectingChatbox } = props;
 
   return (
-    <div className='max-h-full'>
+    <div className='max-h-full w-full'>
       <p className='text-cus-h2-bold'>Chưa đọc</p>
       {!itemsList && <p>Không có yêu cầu nào</p>}
       <DataScroller
