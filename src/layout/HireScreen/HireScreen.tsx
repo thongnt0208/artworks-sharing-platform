@@ -4,7 +4,6 @@ import { GetTagsData } from "../HomeScreen/HomeService";
 
 import BannerView from "./BannerView/BannerView";
 import FilterView from "./FilterView/FilterView";
-// import RecommendArtworkView from "./RecommendArtworkView/RecommendArtworkView";
 import CreatorsView from "./CreatorsView/CreatorsView";
 import { UserInformationProps } from "../../components/UserInformationCard";
 
@@ -15,7 +14,6 @@ type TagProps = {
 
 const HireScreen: React.FC = () => {
   const [tags, setTags] = React.useState<TagProps[]>([]);
-  // const [artworks, setArtworks] = React.useState<Artwork[]>([]);
   const [creators, setCreators] = React.useState<UserInformationProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
@@ -24,6 +22,7 @@ const HireScreen: React.FC = () => {
   const observer = useRef<IntersectionObserver | null>(null);
   const lastArtworkRef = useRef<HTMLDivElement | null>(null);
 
+  //Fetch Tags & Categories 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,16 +35,16 @@ const HireScreen: React.FC = () => {
     fetchData();
   }, []);
 
+  //Fetch Creators
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const creatorsData = await GetCreatorsData(pageNumber, pageSize);
         setCreators((prevCreators) => {
           const uniqueCreatorIds = new Set<string>(
             prevCreators.map((creator) => creator.id)
           );
-          const filteredCreators = Array.isArray(creatorsData.items) ? creatorsData.items.filter(
+          const filteredCreators = Array.isArray(creatorsData) ? creatorsData.filter(
             (artwork: { id: string }) => !uniqueCreatorIds.has(artwork.id)
           ) : [];
           return [...prevCreators, ...filteredCreators];
@@ -59,10 +58,10 @@ const HireScreen: React.FC = () => {
     fetchData();
   }, [pageNumber, pageSize]);
 
+  //Scroll handler
   const loadMoreData = () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);
   };
-
   useEffect(() => {
     observer.current = new IntersectionObserver(
       (entries) => {
@@ -88,7 +87,6 @@ const HireScreen: React.FC = () => {
     <>
       <BannerView />
       <FilterView tags={tags} />
-      {/* <RecommendArtworkView artworks={artworks} /> */}
       {!isLoading && creators.length === 0 && (
         <div className="text-center text-2xl">Không có dữ liệu</div>
       )}
