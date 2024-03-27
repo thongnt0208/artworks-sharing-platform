@@ -19,6 +19,7 @@ import {
 import {
   ChatboxItemType,
   MilestoneItemType,
+  ProposalAssetItemType,
   ProposalType,
   RequestItemType,
 } from "./ChatRelatedTypes";
@@ -28,11 +29,13 @@ import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
 import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
 import {
+  GetProposalAssets,
   GetProposalMilestone,
   InitPaymentProposal,
   UpdateProposalStatus,
   UploadProposalAsset,
 } from "./services/ProposalServices";
+import { Splitter, SplitterPanel } from "primereact/splitter";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
@@ -53,6 +56,7 @@ export default function ChatScreen() {
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const [proposalsList, setProposalsList] = useState<ProposalType[]>([]);
   const [currentMilestone, setCurrentMilestone] = useState<MilestoneItemType[]>([]);
+  const [currentAsset, setCurrentAsset] = useState<ProposalAssetItemType[]>([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -116,6 +120,17 @@ export default function ChatScreen() {
     GetProposalMilestone(id)
       .then((res) => {
         setCurrentMilestone(res);
+      })
+      .catch((error) => {
+        CatchAPICallingError(error, navigate);
+      });
+  }
+
+  function getAssets(id: string) {
+    // get assets by proposal id
+    GetProposalAssets(id)
+      .then((res) => {
+        setCurrentAsset(res);
       })
       .catch((error) => {
         CatchAPICallingError(error, navigate);
@@ -230,11 +245,11 @@ export default function ChatScreen() {
         </Suspense>
       </Dialog>
 
-      <div className="chat-screen-container">
-        <div className="first-col">
+      <Splitter className="chat-screen-container">
+        <SplitterPanel className="first-col" size={20}>
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
-        </div>
-        <div className="middle-col">
+        </SplitterPanel>
+        <SplitterPanel className="middle-col" size={50}>
           <div className="reciever-name-container">
             <Avatar image={selectingChatbox?.avatar} size="normal" shape="circle" />
             <p className="text-cus-normal-bold">{selectingChatbox?.author?.fullname}</p>
@@ -265,16 +280,18 @@ export default function ChatScreen() {
               isLoading={isLoading}
             />
           </div>
-        </div>
-        <div className="last-col">
+        </SplitterPanel>
+        <SplitterPanel className="last-col" size={30}>
           <ChatRightNav
             userInfo={{ avatar: selectingChatbox?.avatar, ...selectingChatbox?.author }}
             proposalsList={proposalsList}
             currentMilestone={currentMilestone}
+            currentAsset={currentAsset}
             getMilestoneCallback={getMilestone}
+            getAssetsCallback={getAssets}
           />
-        </div>
-      </div>
+        </SplitterPanel>
+      </Splitter>
     </>
   );
 }

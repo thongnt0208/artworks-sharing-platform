@@ -2,6 +2,7 @@ import { notificationItemType } from "../../../components/Notification";
 import useAxios, { axiosPrivate } from "../../../hooks/useAxios";
 import {
   MilestoneItemType,
+  ProposalAssetItemType,
   ProposalFormType,
   ProposalType,
   RequestItemType,
@@ -329,7 +330,7 @@ export async function UploadProposalAsset(id: string, type: number, file: File):
 
 /**
  * This function is used to get all milestones of a proposal
- * 
+ *
  * @param proposalId - the id of the proposal
  * @returns {Promise<MilestoneItemType[]>} - an array of milestones
  * @throws {Error} an error from the API request
@@ -360,6 +361,37 @@ export async function GetProposalMilestone(proposalId: string): Promise<Mileston
     })
     .catch((error) => {
       console.error("Error fetching milestones:", error);
+      throw error;
+    });
+}
+
+/**
+ * This function is used to get all assets of a proposal
+ * 
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<ProposalAssetItemType[]>} - an array of assets
+ * @throws {Error} an error from the API request
+ * @example
+ * const assets = await GetProposalAssets("123");
+ * console.log(assets);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function GetProposalAssets(proposalId: string): Promise<ProposalAssetItemType[]> {
+  return axiosPrivate
+    .get(`/proposalassets/${proposalId}`)
+    .then((response) => {
+      return response.data?.map((item: any) => ({
+        id: item.id,
+        proposalId: item.proposalId,
+        type: item.type,
+        name: item.proposalAssetName,
+        url: item.location,
+        createdOn: item.createdOn,
+      }));
+    })
+    .catch((error) => {
+      console.error("Error fetching assets:", error);
       throw error;
     });
 }
