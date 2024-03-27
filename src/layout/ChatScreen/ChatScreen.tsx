@@ -103,7 +103,6 @@ export default function ChatScreen() {
   }
 
   function uploadProposalAsset(id: string, type: number, file: File) {
-  function uploadProposalAsset(id: string, type: number, file: File) {
     console.log("uploadProposalAsset", id, type, file);
     toastify.success("uploadProposalAsset" + id + type + file);
     UploadProposalAsset(id, type, file)
@@ -244,12 +243,6 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{
-                requestsList,
-                handleAcceptRequest,
-                handleDenyRequest,
-                uploadProposalAsset,
-              }}
               requestStateTools={{
                 requestsList,
                 handleAcceptRequest,
