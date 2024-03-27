@@ -30,7 +30,6 @@ export type ArtworkProps = {
 
 const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   const op = useRef<OverlayPanel>(null);
-  console.log("ArtworkCard", props);
   let header = (
     <div className={`header-container ${props.onSelection ? "mb-3" : ""}`}>
       <div className="thumbnail-container pt-0">

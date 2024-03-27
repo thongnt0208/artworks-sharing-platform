@@ -5,15 +5,17 @@ import { Card } from "primereact/card";
 import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
 import RequestPopup, { RequestProps } from "./RequestPopup";
 import "./UserInformationCard.scss";
+import ProfilePreview from "./ProfilePreview";
+import { Dialog } from "primereact/dialog";
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
 export type UserInformationProps = {
   id: string;
   fullname: string;
   avatar: string;
-  job: string;
-  address: string;
-  isCreator: boolean;
+  job?: string;
+  address?: string;
+  isCreator?: boolean;
   email: string;
   username: string;
   role?: string;
@@ -22,9 +24,11 @@ export type UserInformationProps = {
   artworksView?: number;
   followerNum?: number;
   followingNum?: number;
+  isVerrified?: boolean;
+  projectCompleted?: number;
   hire?: boolean;
   followHandler?: () => void;
-  messageHandler: (request: RequestProps) => void;
+  messageHandler?: (request: RequestProps) => void;
   editHandler?: () => void;
   privacyEditHandler?: () => void;
 };
@@ -34,6 +38,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
 ) => {
   let [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
+  const [isShowProfilePreview, setIsShowProfilePreview] = useState(false);
   const [isHire, setIsHire] = useState(false);
 
   let footer = (
@@ -55,31 +60,43 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         </>
       ) : (
         <>
-          <Button
-            rounded
-            className="top-button"
-            label="Theo dõi"
-            onClick={props.followHandler}
-          />
           {props.hire ? (
-            <Button
-              rounded
-              className="bot-button"
-              label="Thuê"
-              onClick={() => {
-                setIsShowRequestPopup(true);
-                setIsHire(true);
-              }}
-            />
+            <>
+              <div className="hire-info">
+                <p className="project-completed">
+                  {props.projectCompleted} Dự án Hoàn thành
+                </p>
+                {props.isVerrified && (
+                  <i className="pi pi-verified verrified-icon" />
+                )}
+              </div>
+              <Button
+                rounded
+                className="bot-button"
+                label={`Thuê ${props.fullname}`}
+                onClick={() => {
+                  setIsShowRequestPopup(true);
+                  setIsHire(true);
+                }}
+              />
+            </>
           ) : (
-            <Button
-              rounded
-              className="bot-button"
-              label="Nhắn tin"
-              onClick={() => {
-                setIsShowRequestPopup(true);
-              }}
-            />
+            <>
+              <Button
+                rounded
+                className="top-button"
+                label="Theo dõi"
+                onClick={props.followHandler}
+              />
+              <Button
+                rounded
+                className="bot-button"
+                label="Nhắn tin"
+                onClick={() => {
+                  setIsShowRequestPopup(true);
+                }}
+              />
+            </>
           )}
         </>
       )}
@@ -91,12 +108,12 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         visible={isShowRequestPopup}
         onHide={() => {
           setIsShowRequestPopup(false);
-          setIsHire(false);
+          setIsHire(isHire);
         }}
         accountAvatar={props.avatar}
         accountName={props.fullname}
         isHire={isHire}
-        onSubmit={props.messageHandler}
+        onSubmit={props.messageHandler ? props.messageHandler : () => {}}
       />
       <ReportDialog
         visible={isShowReportDialog}
@@ -104,7 +121,31 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         targetId={props.id}
         entityName="Account"
       />
-      <Card footer={footer ? footer : ""} className="user-information-card">
+      {isShowProfilePreview && (
+        <Dialog
+          style={{ width: "60%", height: "100vh" }}
+          showHeader={false}
+          contentStyle={{ borderRadius: "12px", height: "100%" }}
+          visible={isShowProfilePreview}
+          onHide={() => setIsShowProfilePreview(false)}
+          modal={true}
+          dismissableMask={true}
+        >
+          <ProfilePreview
+            creator={props}
+            hireCallback={() => {
+              setIsShowRequestPopup(true);
+              setIsHire(true);
+            }}
+          />
+        </Dialog>
+      )}
+      <Card
+        footer={footer ? footer : ""}
+        className="user-information-card"
+        onClick={props.hire ? () => setIsShowProfilePreview(true) : undefined}
+        style={props.hire ? { cursor: "pointer" } : {}}
+      >
         <div className="avatar-container">
           <img
             alt={`Ảnh đại diện của ${props.fullname}`}
@@ -113,9 +154,8 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           />
         </div>
         <div className="information-container">
-          <h1>{props.fullname}</h1>
-          <h3>{props.email}</h3>
-          <p>{props.address}</p>
+          <h1 className="m-1">{props.fullname}</h1>
+          <h3 className="m-0">{props.email}</h3>
         </div>
       </Card>
       {props.hire ? (
