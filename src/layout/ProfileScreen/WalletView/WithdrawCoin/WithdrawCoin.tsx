@@ -26,11 +26,12 @@ export type AccountVerificationData = {
 };
 
 const WithdrawCoin: React.FC<{
+  balance: number;
   isVisible: boolean;
   hideCallback: () => void;
   phoneNumber: string;
   refreshCallback: () => void;
-}> = ({ isVisible, hideCallback, phoneNumber, refreshCallback }) => {
+}> = ({ balance, isVisible, hideCallback, phoneNumber, refreshCallback }) => {
   const [amount, setAmount] = useState<number>(0);
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
@@ -59,8 +60,8 @@ const WithdrawCoin: React.FC<{
         data.data.phone,
         data.data.referenceId
       )
-        .then((response) => {
-          if (response.returnCode === 1) {
+        .then((returnCode) => {
+          if (returnCode === 1) {
             setLoading(false);
             showSuccess();
             refreshCallback();
@@ -94,7 +95,10 @@ const WithdrawCoin: React.FC<{
               onValueChange={(e: InputNumberValueChangeEvent) =>
                 e?.value && setAmount(e.value)
               }
+              min={1000}
+              max={balance}
             />
+            <p className="text-red-500"><i className="pi pi-info-circle" /> Số XU rút tối thiểu: 1.000 Xu</p>
           </div>
 
           <div className="action-button">

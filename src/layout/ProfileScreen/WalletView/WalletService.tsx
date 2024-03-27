@@ -1,6 +1,11 @@
-import axios from "axios";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { AccountVerificationData } from "./WithdrawCoin/WithdrawCoin";
+import {
+  TransactionHistoryProps,
+  WalletHistoryProps,
+  WalletProps,
+} from "./WalletView";
+import { formatTime } from "../../../util/TimeHandle";
 const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
 
@@ -16,17 +21,18 @@ const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
  * @author AnhDH
  * @version 1.0.0
  */
-export async function GetWalletData(accountId: string) {
+export async function GetWalletData(accountId: string): Promise<WalletProps> {
   try {
     const response = await axiosPrivate.get(
       `${API_URL}/account/${accountId}/wallets`
     );
-    if (response.status !== 200) {
-      return {};
-    }
-    return response.data;
+    return {
+      balance: response.data.balance,
+      withdrawMethod: response.data.withdrawMethod,
+      withdrawInformation: response.data.withdrawInformation,
+    };
   } catch (error) {
-    return [];
+    throw new Error("Failed to retrieve wallet data.");
   }
 }
 
@@ -39,7 +45,9 @@ export async function GetWalletData(accountId: string) {
  * @author AnhDH
  * @version 1.0.0
  */
-export async function GetWalletHistoryData(accountId: string) {
+export async function GetWalletHistoryData(
+  accountId: string
+): Promise<WalletHistoryProps[]> {
   try {
     const response = await axiosPrivate.get(
       `${API_URL}/account/${accountId}/wallet-histories`,
@@ -49,31 +57,55 @@ export async function GetWalletHistoryData(accountId: string) {
         },
       }
     );
-    if (response.status !== 200) {
-      return [];
-    }
-    return response.data;
+    return response.data.map((item: any) => {
+      return {
+        id: item.id,
+        amount: item.amount,
+        type: item.type === "Deposit" ? "Nạp tiền" : "Rút tiền",
+        paymentMethod: item.paymentMethod,
+        transactionStatus: item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        createdOn: formatTime(item.createdOn),
+      };
+    });
   } catch (error) {
     return [];
   }
 }
 
-export async function GetTransactionHistoryData(accountId: string) {
+/**
+ * Retrieves transaction history data for a given account ID.
+ *
+ * @param accountId - The ID of the account.
+ * @returns A promise that resolves to an array of TransactionHistoryProps objects.
+ * @param AnhDH
+ * @version 1.0.0
+ */
+export async function GetTransactionHistoryData(
+  accountId: string
+): Promise<TransactionHistoryProps[]> {
   try {
-    const response = await axios.get(
-      `http://127.0.0.1:1880/account/${accountId}/transaction`,
+    const response = await axiosPrivate.get(
+      `${API_URL}/account/${accountId}/transaction-histories`,
       {
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
-    if (response.status !== 200) {
-      return [];
-    }
-    return response.data;
+    return response.data.map((item: any) => {
+      return {
+        id: item.id,
+        accountId: item.accountId,
+        detail: item.detail,
+        assetId: item.assetId,
+        proposalId: item.proposalId,
+        transactionStatus: item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        price: item.price,
+        createdOn: formatTime(item.createdOn),
+      };
+    });
   } catch (error) {
-    return [];
+  throw new Error("Không thể lấy dữ liệu lịch sử giao dịch.");
   }
 }
 
@@ -101,8 +133,6 @@ export async function DepositCoins(amount: number, redirectUrl: string) {
     return error;
   }
 }
-
-
 
 /**
  *
@@ -142,7 +172,7 @@ export async function VerifyZaloPayAccount(
 ): Promise<AccountVerificationData> {
   try {
     console.log("VerifyZaloPayAccount", phoneNumber);
-    
+
     const response = await axiosPrivate.post(
       `${API_URL}/payments/query-account`,
       { phone: phoneNumber }
@@ -172,11 +202,14 @@ export async function VerifyZaloPayAccount(
  * @param AnhDH
  * @version 1.0.0
  */
-export async function UpdateWalletInformation(phoneNumber: string){
+export async function UpdateWalletInformation(phoneNumber: string) {
   try {
-    const response = await axiosPrivate.post(`${API_URL}/payments/query-account`, {
-      phone: phoneNumber,
-    });
+    const response = await axiosPrivate.post(
+      `${API_URL}/payments/query-account`,
+      {
+        phone: phoneNumber,
+      }
+    );
     if (response.status !== 200) {
       return false;
     }
@@ -199,7 +232,7 @@ export async function WithdrawCoins(
   muId: string,
   phone: string,
   referenceId: string
-) {
+): Promise<number> {
   try {
     const response = await axiosPrivate.post(`${API_URL}/payments/topup`, {
       amount,
@@ -207,12 +240,8 @@ export async function WithdrawCoins(
       phone,
       referenceId,
     });
-    if (response.status !== 200) {
-      return {};
-    }
-    return response.data;
+    return response.data.returnCode;
   } catch (error) {
-    console.log(error);
-    return {};
+    throw new Error("Không đủ tiền! Số Xu còn lại trong ví của bạn không đủ để thực hiện giao dịch này.");
   }
 }

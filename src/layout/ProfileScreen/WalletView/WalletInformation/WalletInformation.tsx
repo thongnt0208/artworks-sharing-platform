@@ -26,20 +26,36 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
   onHide,
 }) => {
   const toast = useRef<Toast>(null);
+  const [loading, setLoading] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   const showSuccess = () => {
-    toast.current?.show({severity:'success', summary: 'Thành công', detail:'Cập nhật thông tin ví thành công', life: 2000});
-  }
+    toast.current?.show({
+      severity: "success",
+      summary: "Thành công",
+      detail: "Cập nhật thông tin ví thành công",
+      life: 2000,
+    });
+  };
 
   const showError = () => {
-    toast.current?.show({severity:'error', summary: 'Thất bại', detail:'Cập nhật thông tin ví không thành công', life: 2000});
-  }
+    toast.current?.show({
+      severity: "error",
+      summary: "Thất bại",
+      detail: "Cập nhật thông tin ví không thành công",
+      life: 2000,
+    });
+  };
 
   const showWarning = () => {
-    toast.current?.show({severity:'warn', summary: 'Cảnh báo', detail:'Tài khoản ZaloPay chưa được xác thực', life: 2000});
-  }
+    toast.current?.show({
+      severity: "warn",
+      summary: "Cảnh báo",
+      detail: "Tài khoản ZaloPay chưa được xác thực",
+      life: 2000,
+    });
+  };
 
   let content = (
     <div className="wallet-history-section">
@@ -80,15 +96,17 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
       </div>
       <div className="btn-container">
         <Button
-          label="Lưu"
-          className="p-button-raised p-button-rounded text-base pl-5 pr-5"
+          label="Cập nhật"
+          className="update-btn  p-button-rounded text-base pl-5 pr-5"
+          loading={loading}
           onClick={() => {
+            setLoading(true);
             handleSave(phoneNumber);
           }}
         />
         <Button
           label="Hủy"
-          className="p-button-raised p-button-rounded text-base pl-5 pr-5"
+          className="p-button p-button-rounded text-base pl-5 pr-5"
           onClick={onHide}
         />
       </div>
@@ -96,15 +114,14 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
   );
 
   const handleSave = async (phoneNumber: string) => {
-    console.log("handleSave", phoneNumber);
     try {
       const accountVerificationData: AccountVerificationData =
         await VerifyZaloPayAccount(phoneNumber);
       if (accountVerificationData.returnCode === 1) {
         UpdateWalletInformation(phoneNumber).then((response) => {
-          console.log("UpdateWalletInformation", response);
           if (response) {
             showSuccess();
+            setLoading(false);
             refreshCallback();
             onHide();
           } else {

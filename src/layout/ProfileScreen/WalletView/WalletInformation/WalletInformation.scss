@@ -14,13 +14,13 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-        .p-highlight {
-            border-color: $primary-200;
-            .p-radiobutton-icon {
-                background-color: $strong-200;
-            }
+      .p-highlight {
+        border-color: $primary-200;
+        .p-radiobutton-icon {
+          background-color: $strong-200;
         }
-        
+      }
+
       .label {
         font-size: larger;
         margin-left: 10px;
@@ -53,5 +53,13 @@
     flex-direction: row;
     margin-top: 20px;
     gap: 10px;
+    .update-btn {
+      background-color: $strong-100;
+      color: $bg-100;
+      &:hover {
+        background-color: $primary-100;
+        color: $strong-200;
+      }
+    }
   }
 }
