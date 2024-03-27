@@ -1,22 +1,17 @@
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-import { maxCommentCharacter, maxSizeImagesUpload } from "../../../../const/bizConstants";
+import { maxCommentCharacter } from "../../../../const/bizConstants";
 import "./ChatInput.scss";
-import { useRef, useState } from "react";
-import { Dialog } from "primereact/dialog";
-import { FileUpload } from "primereact/fileupload";
-import { emptyFileTemplate } from "../../../PostArtworkScreen/MultipleFileUpload/Templates";
+import { useRef } from "react";
 import { Menu } from "primereact/menu";
-// ----------------------------------------------------------
 
+// ----------------------------------------------------------
 type Props = {
   newChatMessage: string;
   setNewChatMessage: (value: string) => void;
   SendChatMessage: () => void;
-  newChatImages: File[];
   setNewChatImages: (value: File[]) => void;
   setIsShowProposalForm: (value: boolean) => void;
-  SendChatImages: () => void;
   isLoading: boolean;
 };
 
@@ -24,14 +19,12 @@ export default function ChatInput({
   newChatMessage,
   setNewChatMessage,
   SendChatMessage,
-  newChatImages,
   setNewChatImages,
   setIsShowProposalForm,
-  SendChatImages,
   isLoading,
 }: Props) {
-  const [isShowFilesUpDialog, setIsShowFilesUpDialog] = useState(false);
   const menuRef = useRef<Menu>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   let handleInputChange = (e: any) => {
     if (e.target.value.length <= maxCommentCharacter) {
@@ -46,10 +39,14 @@ export default function ChatInput({
     }
   };
 
-  const handleFileUpload = (files: File[]) => {
-    setNewChatImages(files);
-    SendChatImages();
-    setIsShowFilesUpDialog(false);
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const validFiles = Array.from(files).filter((file) => file);
+      console.log(validFiles);
+
+      setNewChatImages(validFiles);
+    }
   };
 
   const textareaProperties = {
@@ -66,7 +63,9 @@ export default function ChatInput({
     {
       label: "Đính kèm tệp",
       icon: "pi pi-paperclip",
-      command: () => setIsShowFilesUpDialog(true),
+      command: () => {
+        fileInputRef.current?.click();
+      },
     },
     {
       label: "Tạo thỏa thuận",
@@ -95,24 +94,16 @@ export default function ChatInput({
             disabled={isLoading || !newChatMessage}
             loading={isLoading}
           />
-          {/* <Button icon="pi pi-paperclip" onClick={() => setIsShowFilesUpDialog(true)} /> */}
         </div>
-      </div>
-
-      <Dialog
-        visible={isShowFilesUpDialog}
-        onHide={() => setIsShowFilesUpDialog(false)}
-        dismissableMask
-        headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
-      >
-        <FileUpload
+        <input
+          type="file"
           multiple
-          accept="*"
-          maxFileSize={maxSizeImagesUpload}
-          emptyTemplate={emptyFileTemplate}
-          onUpload={(event) => handleFileUpload(event.files)}
+          accept="image/*"
+          onChange={handleFileUpload}
+          ref={fileInputRef}
+          style={{ display: "none" }}
         />
-      </Dialog>
+      </div>
     </>
   );
 }

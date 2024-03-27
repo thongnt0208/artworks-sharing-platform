@@ -42,7 +42,7 @@ export default function ChatScreen() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPagesSt, setTotalPagesSt] = useState(1);
+  // const [totalPagesSt, setTotalPagesSt] = useState(1);
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
 
   const [newChatMessage, setNewChatMessage] = useState("");
@@ -199,7 +199,6 @@ export default function ChatScreen() {
 
   useEffect(() => {
     setCurrentPage(1);
-    setTotalPagesSt(1);
     handleGetAllRequests();
     handleGetAllProposals();
     GetChatMessages();
@@ -210,9 +209,11 @@ export default function ChatScreen() {
     };
   }, [selectingChatbox]);
 
+  useEffect(() => {
+    SendChatImages();
+  }, [newChatImages]);
   return (
     <>
-      {/* <Button onClick={() => toastify.success("hhhhh", {bodyClassName:"dddddd"})}>Show toast success</Button> */}
       {isLoading && <ProgressSpinner />}
       <Toast ref={toast} />
       <Dialog
@@ -258,10 +259,8 @@ export default function ChatScreen() {
               newChatMessage={newChatMessage}
               setNewChatMessage={setNewChatMessage}
               SendChatMessage={SendChatMessage}
-              newChatImages={newChatImages}
               setNewChatImages={setNewChatImages}
               setIsShowProposalForm={setIsShowProposalForm}
-              SendChatImages={SendChatImages}
               isLoading={isLoading}
             />
           </div>
