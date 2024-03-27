@@ -1,8 +1,11 @@
 import axios from "axios";
 import { axiosPrivate } from "../../hooks/useAxios";
-import { ArtworkDetailType } from "./ArtworkDetailType";
+import { ArtworkDetailType, CommentType } from "./ArtworkDetailType";
+import { arraysEqual } from "../../util/ArrayUtil";
+import { Dispatch, SetStateAction } from "react";
 // import axios from "../../api/axios";
 const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
+const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 /**
  * Fetches details of an artwork based on the provided ID.
@@ -106,21 +109,86 @@ export async function unlikeArtwork(artworkId: string, accountId: string): Promi
  * Fetches comments on an artwork.
  *
  * @param {string} artworkId - The ID of the artwork to fetch comments for.
- * @returns {Promise<any>}
+ * @returns {Promise<CommentType[]>} - An array of comments on the artwork.
  * @example
  * const comments = await fetchCommentsForArtwork("artworkId123");
  * console.log(comments);
  * @author ThongNT
- * @version 1.0.1
+ * @version 1.1.1
  */
-export async function fetchCommentsForArtwork(artworkId: string): Promise<any> {
+export async function fetchCommentsForArtwork(artworkId: string): Promise<CommentType[]> {
   try {
     const response = await axios.get(`${BASE_URL}/artworks/${artworkId}/comments`);
-    return response.data;
+    console.log("response.data", response.data);
+
+    return response.data?.map((comment: any) => ({
+      id: comment.id,
+      createdBy: comment.createdBy,
+      content: comment.content,
+    }));
   } catch (error) {
     console.error("Error fetching comments:", error);
     throw new Error(`Error fetching comments: ${error}`);
   }
+}
+/**
+ * This function fetches comments for an artwork in real-time.
+ *
+ * @param artworkId - The ID of the artwork to fetch comments for.
+ * @param setComments - The function to set the comments.
+ * @returns () => void
+ * @example
+ * const unsubscribe = fetchCommentsForArtworkRealTime("artworkId123", setComments);
+ * unsubscribe();
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export function fetchCommentsForArtworkRealTime(
+  artworkId: string,
+  setComments: Dispatch<SetStateAction<CommentType[]>>
+): () => void {
+  const url = `${WS_URL}/v2/artworks/${artworkId}/comments/ws?pageNumber=1&pageSize=100`;
+  const socket = new WebSocket(url);
+  let _tmpComments: CommentType[] = [];
+
+  socket.onopen = () => {
+    console.log("WebSocket connection established");
+    setComments([]);
+  };
+
+  socket.onmessage = (event) => {
+    console.log("WebSocket message received", JSON.parse(event.data));
+
+    const data = JSON.parse(event.data)?.Items;
+    const comments = data?.map((item: any) => {
+      return {
+        id: item.Id || "",
+        createdBy: {
+          id: item.CreatedBy.Id || "",
+          fullname: item.CreatedBy.Fullname || "",
+          avatar: item.CreatedBy.Avatar || "",
+        },
+        content: item.Content || "",
+      };
+    });
+
+    if (Array.isArray(comments) && arraysEqual(_tmpComments, comments) === false) {
+      _tmpComments = comments;
+      setComments(comments);
+    }
+  };
+
+  socket.onclose = () => {
+    console.log("WebSocket connection closed");
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  return () => {
+    socket.close();
+  };
 }
 
 /**
