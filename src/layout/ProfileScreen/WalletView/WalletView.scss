@@ -1,75 +1,87 @@
 @import "/src/const/variables.scss";
-.wallet-view { 
-  height: 100vh;
+.wallet-view {
   padding: 20px;
-  .action-section {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    .deposit-btn {
-      width: fit-content;
-      min-width: 160px;
-      background-color: $strong-100;
-      color: $bg-100;
-      font-size: $normal-bold;
-      font-weight: 600;
-      height: 40px;
-      line-height: 40px;
-      padding: 0 20px;
-      &:hover {
-        background-color: $primary-100;
-        color: $strong-200;
+  .balance-info-section,
+  .wallet-info-section {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.19);
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: $borderRadius-100;
+    border: 1px solid $linear-border-100;
+    .balance-info {
+      width: 100%;
+      text-align: center;
+      color: $strong-200;
+      font-weight: 900;
+    }
+    .action-section {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      .deposit-btn {
+        width: fit-content;
+        min-width: 160px;
+        background-color: $strong-100;
+        color: $bg-100;
+        font-size: $normal-bold;
+        font-weight: 600;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 20px;
+        &:hover {
+          background-color: $primary-100;
+          color: $strong-200;
+        }
+      }
+      .withdraw-btn {
+        width: fit-content;
+        min-width: 160px;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 20px;
       }
     }
-    .withdraw-btn {
-      width: fit-content;
-      min-width: 160px;
-      height: 40px;
-      line-height: 40px;
-      padding: 0 20px;
-    }
   }
 
-  .wallet-history-section {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    gap: 100px;
-    font-size: $h3;
-    .wallet-info {
-      width: 400px;
+  .history-section {
+    height: 550px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.19);
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: $borderRadius-100;
+    border: $section-border;
+    .wallet-history-section,
+    .transaction-history-section {
+      width: 100%;
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-    }
-    .method {
-      width: 250px;
-    }
-  }
-
-  .transaction-history-section {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    gap: 100px;
-    font-size: $h3;
-    .transaction-info {
-      width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-    }
-    .type {
-      width: 350px;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      gap: 100px;
+      font-size: $h3;
+      .transaction-info {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .type {
+        width: 350px;
+      }
+      .wallet-info {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .method {
+        width: 250px;
+      }
     }
   }
 }
