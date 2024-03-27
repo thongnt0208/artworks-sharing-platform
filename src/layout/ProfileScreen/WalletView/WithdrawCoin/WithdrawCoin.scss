@@ -8,10 +8,14 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    .phone-number-input, 
+    .method-input,
     .amount-input {
       display: flex;
       flex-direction: column;
       margin-bottom: 10px;
+      .phone-number-label,
+      .method-label,
       .amount-label {
         font-size: $h3;
         font-weight: 600;

@@ -12,6 +12,8 @@ import { getAuthInfo } from "../../../util/AuthUtil";
 import DepositCoin from "./DepositCoin/DepositCoin";
 import WithdrawCoin from "./WithdrawCoin/WithdrawCoin";
 import "./WalletView.scss";
+import WalletInformation from "./WalletInformation/WalletInformation";
+const zalopayLogo = require("../../../assets/logo/zalopay-logo.png");
 
 export type WalletProps = {
   balance: number;
@@ -39,11 +41,14 @@ export type TransactionHistoryProps = {
 
 const WalletView: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [refresh, setRefresh] = useState(false);
   const [wallet, setWallet] = useState<WalletProps>();
   const [walletHistory, setWalletHistory] = useState<WalletHistoryProps[]>([]);
   const [transactionHistory, setTransactionHistory] = useState<
     TransactionHistoryProps[]
   >([]);
+  const [isWalletInformationVisible, setIsWalletInformationVisible] =
+    useState(false);
   const [isDepositDialogVisible, setIsDepositDialogVisible] = useState(false);
   const [isWithdrawDialogVisible, setIsWithdrawDialogVisible] = useState(false);
 
@@ -157,39 +162,80 @@ const WalletView: React.FC = () => {
         setTransactionHistory(transactionHistory);
       } catch (error) {
         console.log("Error fetching wallet history data:", error);
+      } finally {
+        setRefresh(false);
       }
     };
     fetchData();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="wallet-view">
-      <h1>Số dư</h1>
-      <h1 className="balance-info w-full text-center">
-        {wallet?.balance?.toLocaleString()} Xu
-      </h1>
-      <div className="action-section">
+      <h1 className="wallet-title">Thông tin ví</h1>
+      <h2 className="w-full text-center">
+        Phương thức:{" "}
+        {wallet?.withdrawMethod === "Zalopay" ? (
+          <img style={{ width: "100px" }} src={zalopayLogo} alt="" />
+        ) : (
+          <></>
+        )}
+      </h2>
+      <h2 className="w-full text-center">
+        Số điện thoại: <strong>{wallet?.withdrawInformation}</strong>
+      </h2>
+      <div className="w-full flex justify-content-center align-items-center">
         <Button
-          label="Nạp tiền"
-          className="deposit-btn p-button-raised p-button-rounded"
-          onClick={() => setIsDepositDialogVisible(true)}
-        />
-        <DepositCoin
-          isVisible={isDepositDialogVisible}
-          onHide={() => setIsDepositDialogVisible(false)}
-        />
-
-        <Button
-          label="Rút tiền"
-          className="withdraw-btn p-button-raised p-button-rounded"
-          onClick={() => setIsWithdrawDialogVisible(true)}
-        />
-        <WithdrawCoin
-          isVisible={isWithdrawDialogVisible}
-          onHide={() => setIsWithdrawDialogVisible(false)}
+          label="Cập nhật thông tin ví"
+          className="p-button-raised p-button-rounded"
+          onClick={() => setIsWalletInformationVisible(true)}
         />
       </div>
+      <h1>Số dư</h1>
+      <h1 className="balance-info w-full text-center">
+        {wallet?.balance?.toLocaleString() || 0} Xu
+      </h1>
+      <div className="action-section">
+        {wallet?.withdrawInformation && wallet?.withdrawMethod ? (
+          <>
+            <Button
+              label="Nạp tiền"
+              className="deposit-btn p-button-raised p-button-rounded"
+              onClick={() => setIsDepositDialogVisible(true)}
+            />
+            <DepositCoin
+              isVisible={isDepositDialogVisible}
+              onHide={() => setIsDepositDialogVisible(false)}
+            />
 
+            <Button
+              label="Rút tiền"
+              className="withdraw-btn p-button-raised p-button-rounded"
+              onClick={() => setIsWithdrawDialogVisible(true)}
+            />
+            <WithdrawCoin
+              isVisible={isWithdrawDialogVisible}
+              hideCallback={() => setIsWithdrawDialogVisible(false)}
+              refreshCallback={() => {
+                setRefresh(true);
+              }}
+              phoneNumber={wallet?.withdrawInformation}
+            />
+          </>
+        ) : (
+          <>
+            <Button
+              label="Thêm phương thức thanh toán"
+              className="p-button-raised p-button-rounded"
+              onClick={() => setIsWalletInformationVisible(true)}
+            />
+          </>
+        )}
+      </div>
+      <WalletInformation
+        isVisible={isWalletInformationVisible}
+        refreshCallback={() => setRefresh(true)}
+        onHide={() => setIsWalletInformationVisible(false)}
+      />
       <TabMenu
         model={items}
         activeIndex={activeTab}
@@ -202,11 +248,15 @@ const WalletView: React.FC = () => {
           walletHistory.map((historyRow) => walletHistoryRow(historyRow))
         ) : (
           <div className="empty-section w-full h-full flex justify-content-center align-items-start p-5">
-            <h1>Hãy nạp thêm Xu để trải nghiệm các dịch vụ của Artworkia nhé!</h1>
+            <h1>
+              Hãy nạp thêm Xu để trải nghiệm các dịch vụ của Artworkia nhé!
+            </h1>
           </div>
         )
       ) : (
-        transactionHistory.map((historyRow) => transactionHistoryRow(historyRow))
+        transactionHistory.map((historyRow) =>
+          transactionHistoryRow(historyRow)
+        )
       )}
     </div>
   );
