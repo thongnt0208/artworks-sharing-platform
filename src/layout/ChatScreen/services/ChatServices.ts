@@ -57,7 +57,18 @@ export type ChatMessageType = {
   fileLocation?: string;
   createdOn: string;
   createdBy: string;
-};
+}
+
+interface PaginatedChatMessages {
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  totalCount: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  items: ChatMessageType[];
+}
+
 /**
  * This function is used to retrieves messages by chatbox ID.
  * @param chatboxId - The ID of the chatbox.
@@ -86,16 +97,6 @@ export async function GetMessagesByChatboxId(chatboxId: string): Promise<ChatMes
     .catch((error) => {
       throw error;
     });
-}
-
-interface PaginatedChatMessages {
-  currentPage: number;
-  totalPages: number;
-  pageSize: number;
-  totalCount: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
-  items: ChatMessageType[];
 }
 
 /**
@@ -187,6 +188,8 @@ export function GetMessagesByChatboxIdRealTime(
       };
     });
 
+    console.log(message);    
+
     if (Array.isArray(message) && arraysEqual(_tmpMessages, message) === false) {
       _tmpMessages = message;
       setState(message);
@@ -215,19 +218,19 @@ export function GetMessagesByChatboxIdRealTime(
  * @example
  * const message = await SendMessageToAccount("Id", "Hello");
  * console.log(message);
- * @version 1.0.1
+ * @version 1.1.0
  * @author ThongNT
  */
 export async function SendMessageToAccount(
   accountId: string,
   text: string
 ): Promise<ChatMessageType> {
+  const formData = new FormData();
+  formData.append("receiverId", accountId);
+  formData.append("text", text);
+
   return axiosPrivate
-    .post(`/messages`, {
-      receiverId: accountId,
-      text: text,
-      fileLocation: null,
-    })
+    .post(`/messages`, formData)
     .then((response) => {
       return {
         chatBoxId: response.data.chatBoxId || "",
@@ -244,7 +247,6 @@ export async function SendMessageToAccount(
 
 /**
  * Sends an image to a specified account.
- * CHƯA CÓ REAL API
  * @param accountId - The ID of the account to send the image to.
  * @param file - The image file to send.
  * @returns A Promise that resolves to a ChatMessageType object representing the sent message.
@@ -252,7 +254,7 @@ export async function SendMessageToAccount(
  * @example
  * const message = await SendImageToAccount("accountId", file);
  * console.log(message);
- * @version 1.0.0
+ * @version 1.1.0
  * @author ThongNT
  */
 export async function SendImageToAccount(
@@ -260,13 +262,11 @@ export async function SendImageToAccount(
   file: File[]
 ): Promise<ChatMessageType> {
   const formData = new FormData();
+  formData.append("receiverId", accountId);
   file.map((f) => formData.append("file", f));
+
   return axiosPrivate
-    .post(`/messages`, {
-      receiverId: accountId,
-      text: "",
-      fileLocation: null,
-    })
+    .post(`/messages`, formData)
     .then((response) => {
       return {
         chatBoxId: response.data.chatBoxId || "",

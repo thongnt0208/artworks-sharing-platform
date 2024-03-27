@@ -1,7 +1,9 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 import "./MessageItem.scss";
-import { Tooltip } from 'primereact/tooltip';
-import { Avatar } from 'primereact/avatar';
+import { Tooltip } from "primereact/tooltip";
+import { Avatar } from "primereact/avatar";
+import { Image } from "primereact/image";
+import { formatTime } from "../../../../util/TimeHandle";
 
 type Props = {
   isMyMessage: boolean;
@@ -22,11 +24,13 @@ function MessageItem({ avatar, text, fileUrl, createdOn, isMyMessage }: Props) {
       <div className="message-content">
         <div className="message-text">
           {text}
-          <Tooltip target=".message-content" >
-            {createdOn}
-          </Tooltip>
+          <Tooltip target=".message-content">{formatTime(createdOn)}</Tooltip>
         </div>
-        {fileUrl && <div className="message-file">{fileUrl}</div>}
+        {fileUrl && (
+          <div className="message-file">
+            <Image src={fileUrl} alt="MsgImage" width="250" preview/>
+          </div>
+        )}
       </div>
     </div>
   );
