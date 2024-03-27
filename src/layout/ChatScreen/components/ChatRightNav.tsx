@@ -30,7 +30,7 @@ export default function ChatRightNav({
   const [selectingProposal, setSelectingProposal] = useState<ProposalType>({} as ProposalType);
   useEffect(() => {
     proposalsList[0] && getMilestoneCallback(proposalsList[0]?.id);
-  }, [getMilestoneCallback, proposalsList]);
+  }, [proposalsList]);
 
   useEffect(()=> {
     selectingProposal?.id && getMilestoneCallback(selectingProposal.id);

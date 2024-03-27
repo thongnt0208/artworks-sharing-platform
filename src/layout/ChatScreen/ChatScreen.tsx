@@ -167,11 +167,12 @@ export default function ChatScreen() {
   };
 
   const SendChatImages = () => {
-    SendImageToAccount(selectingChatbox?.author?.id, newChatImages)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => CatchAPICallingError(error, navigate));
+    if (newChatImages && newChatImages?.length > 0)
+      SendImageToAccount(selectingChatbox?.author?.id, newChatImages)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => CatchAPICallingError(error, navigate));
   };
 
   const currentUrl = location.pathname;
