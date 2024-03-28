@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
 import Gallery from "../../components/Gallery";
@@ -12,6 +13,8 @@ import "./HomeScreen.scss";
 import { TagProps } from "../../components/Tag";
 import { ArtworkProps } from "../../components/ArtworkCard";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { CatchAPICallingError } from "..";
+import { useNavigate } from "react-router-dom";
 
 export type CategoryProps = {
   id: string;
@@ -25,6 +28,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
+  const navigate = useNavigate();
   const pageSize = 10;
 
   const items = [
@@ -64,7 +68,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           return [...prevArtworks, ...filteredArtworks];
         });
       } catch (error) {
-        console.error("Error fetching data:", error);
+        CatchAPICallingError(error, navigate);
       } finally {
         setIsLoading(false);
       }
