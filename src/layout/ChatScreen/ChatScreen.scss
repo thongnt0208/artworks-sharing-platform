@@ -3,8 +3,6 @@
 .chat-screen-container {
   max-height: calc(100vh - 106px);
   border: none;
-  display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
 
   .first-col,
   .last-col {
@@ -17,10 +15,12 @@
     display: flex;
     flex-direction: column;
     border: solid 1px $linear-border-100;
+    border-radius: $borderRadius-100;
 
     .reciever-name-container {
       border: solid 1px $linear-border-100;
-      padding: 0 0.5rem;
+      border-radius: $borderRadius-100;
+      padding: 1rem 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
