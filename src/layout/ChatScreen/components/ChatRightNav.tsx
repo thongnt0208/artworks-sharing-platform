@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { MilestoneItemType, ProposalType } from "../ChatRelatedTypes";
+import { MilestoneItemType, ProposalAssetItemType, ProposalType } from "../ChatRelatedTypes";
 import "./ChatRightNav.scss";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { formatTime } from "../../../util/TimeHandle";
-import { Splitter } from "primereact/splitter";
+import { translateProposalStatus } from "../../../util/Enums";
+import { Timeline } from "primereact/timeline";
+import { Badge } from "primereact/badge";
 
 type Props = {
   userInfo: {
@@ -18,67 +20,41 @@ type Props = {
   };
   proposalsList: ProposalType[];
   currentMilestone: MilestoneItemType[];
+  currentAsset: ProposalAssetItemType[];
   getMilestoneCallback: (id: string) => void;
+  getAssetsCallback: (id: string) => void;
 };
 
 export default function ChatRightNav({
   userInfo,
   proposalsList,
   currentMilestone,
+  currentAsset,
   getMilestoneCallback,
+  getAssetsCallback,
 }: Props) {
   const [selectingProposal, setSelectingProposal] = useState<ProposalType>({} as ProposalType);
-  useEffect(() => {
-    proposalsList[0] && getMilestoneCallback(proposalsList[0]?.id);
-  }, [getMilestoneCallback, proposalsList]);
 
-  useEffect(()=> {
-    selectingProposal?.id && getMilestoneCallback(selectingProposal.id);
-  }, [selectingProposal])
+  useEffect(() => {
+    proposalsList.length > 0 && setSelectingProposal(proposalsList[0]);
+  }, []);
+
+  useEffect(() => {
+    if (selectingProposal?.id) {
+      getMilestoneCallback(selectingProposal.id);
+      getAssetsCallback(selectingProposal.id);
+    }
+  }, [proposalsList, selectingProposal]);
 
   return (
     <div className="chat-right-nav">
-      ChatRightNav
       <div className="user-info-container">
         <Avatar size="xlarge" image={userInfo.avatar} shape="circle" />
         <p className="text-cus-h1-bold">{userInfo.fullname}</p>
         <p className="text-cus-normal">{userInfo.username}</p>
         <p className="text-cus-normal">{userInfo.bio}</p>
       </div>
-      <Splitter />
-      <div className="milestone-view-container">
-        <div className="milestone-view-header">
-          <p className="text-cus-h2-bold">Theo dõi quá trình</p>
-        </div>
-        <div className="milestone-view-content">
-          {currentMilestone?.map((milestone) =>
-            milestone?.fileUrl ? (
-              // proposal has file
-              <div key={milestone.id} className="milestone-item milestone-item-file flex">
-                <Button
-                  label={milestone.milestoneName}
-                  icon="pi pi-download"
-                  iconPos="right"
-                  onClick={() => {
-                    //TODO: download file from milestone?.fileUrl
-                  }}
-                />
-                <p className="text-cus-normal">
-                  {formatTime(milestone.createdOn, "dd/MM/yyyy HH:mm")}
-                </p>
-              </div>
-            ) : (
-              // proposal has no file
-              <div key={milestone.id} className="milestone-item">
-                <p className="text-cus-normal-bold">{milestone.milestoneName}</p>
-                <p className="text-cus-normal">
-                  {formatTime(milestone.createdOn, "dd/MM/yyyy HH:mm")}
-                </p>
-              </div>
-            )
-          )}
-        </div>
-      </div>
+      {/* Proposal area start */}
       <div className="proposals-list-container">
         <div className="proposals-list-header">
           <p className="text-cus-h2-bold">Các thỏa thuận</p>
@@ -87,25 +63,70 @@ export default function ChatRightNav({
           {proposalsList?.map((proposal) => (
             <div
               key={proposal.id}
-              className="proposal-item"
-              onClick={() => {
-                //TODO: change current milestone
-              }}
+              className={"proposal-item" + (proposal.id === selectingProposal.id ? " active" : "")}
+              onClick={() => setSelectingProposal(proposal)}
             >
-              <div className="name-date-frame">
+              <div className="first-collumn-frame">
                 <p className="text-cus-normal-bold">{proposal.projectTitle}</p>
                 <p className="text-cus-normal">
                   Đến hạn: {formatTime(proposal.targetDelivery, "dd/MM/yyyy")}
                 </p>
               </div>
-              <div className="status-price-frame">
-                <p className="text-cus-normal">{proposal.status}</p>
-                <p className="text-cus-normal">{proposal.totalPrice}</p>
+              <div className="second-collumn-frame">
+                <p className="text-cus-normal highlight-btn-100">
+                  {translateProposalStatus(proposal.status)}
+                </p>
+                <p className="text-cus-normal highlight-btn-200">{proposal.totalPrice}Xu</p>
               </div>
             </div>
           ))}
         </div>
       </div>
+      {/* Proposal area end */}
+      {/* Milestone area start */}
+      <div className="milestone-view-container">
+        <div className="milestone-view-header pb-4">
+          <p className="text-cus-h2-bold">Theo dõi quá trình</p>
+        </div>
+        <div className="milestone-view-content">
+          <Timeline
+            value={currentMilestone}
+            opposite={(milestone) => <Badge value={milestone.milestoneName} severity="info" />}
+            content={(milestone) => (
+              <small className="text-cus-normal">
+                {formatTime(milestone.createdOn, "dd/MM/yyyy HH:mm")}
+              </small>
+            )}
+          />
+        </div>
+      </div>
+      {/* Milestone area end */}
+      {/* Asset area start */}
+      <div className="proposal-assets-container">
+        <div className="proposal-assets-header">
+          <p className="text-cus-h2-bold">Tài nguyên liên quan</p>
+        </div>
+        <div className="proposal-assets-content">
+          {currentAsset?.map((asset) => (
+            <div className="proposal-asset-item">
+              <Button
+                label={asset.id}
+                icon="pi pi-download"
+                iconPos="right"
+                onClick={() => {
+                  //download file from asset?.url
+                  window.open(asset?.url, "_blank");
+                }}
+                className="first-collumn-frame"
+              />
+              <p className="text-cus-normal second-collumn-frame">
+                {formatTime(asset.createdOn, "dd/MM/yyyy HH:mm")}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Asset area end */}
     </div>
   );
 }

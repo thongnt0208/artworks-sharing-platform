@@ -19,17 +19,17 @@ export const proposalStatusEnums = [
   {
     name: "Waiting",
     value: 0,
-    vietnamese: "Chờ phản hồi",
+    vietnamese: "Đang chờ",
   },
   {
     name: "Accepted",
     value: 1,
-    vietnamese: "Đã được chấp nhận",
+    vietnamese: "Đã chấp nhận",
   },
   {
     name: "Declined",
     value: 2,
-    vietnamese: "Đã bị từ chối",
+    vietnamese: "Bị từ chối",
   },
   {
     name: "InitPayment",
@@ -39,12 +39,12 @@ export const proposalStatusEnums = [
   {
     name: "CompletePayment",
     value: 4,
-    vietnamese: "Hoàn thành thanh toán",
+    vietnamese: "Thanh toán xong",
   },
   {
     name: "Cancel",
     value: 5,
-    vietnamese: "Đã bị hủy",
+    vietnamese: "Bị hủy",
   },
 ];
 
