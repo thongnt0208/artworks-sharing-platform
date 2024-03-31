@@ -46,6 +46,7 @@ import { AuthProvider } from "./auth/context/auth-provider";
 import UnknownErrorPage from "./pages/unknown";
 import { notificationItemType } from "./components/Notification";
 import { GetChatboxesNoti } from "./layout/ChatScreen/services/ChatServices";
+import InternalServerErrPage from "./pages/500";
 // Need to have a Centralize Component to control Header and Footer visibility (will do later)
 // import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
 
@@ -122,6 +123,7 @@ function App() {
             <Route path="/search" element={<SearchScreen />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/error" element={<UnknownErrorPage />} />
+            <Route path="/error-internal-server" element={<InternalServerErrPage />} />
           </Routes>
 
           {/* {isFooterVisible && <Footer />} */}
