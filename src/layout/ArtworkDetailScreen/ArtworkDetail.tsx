@@ -54,9 +54,13 @@ export default function ArtworkDetail() {
 
   // Get Artwork Detail Data
   const fetchDetail = () => {
-    fetchArtworkDetail(id)
+    fetchArtworkDetail(id, currentUserId)
       .then((res) => {
         setData(res);
+        console.log("fetchDetail: ");
+        console.log(res);
+        
+        
         setIsLiked(res.isLiked);
         fetchIsFollowed(res.account.id);
         setError("");
