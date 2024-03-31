@@ -25,20 +25,11 @@ export async function fetchArtworkDetail(
   accountId?: string
 ): Promise<ArtworkDetailType> {
   try {
-    const response = await axios.get(`${BASE_URL}/artworks/${id}`);
-
-    if (accountId && Array.isArray(response.data.likes)) {
-      console.log("accountId", accountId);
-      console.log("response.data.likes", response.data.likes);
-
-      // Check if the accountId is present in the likes array
-      const isLiked = response.data.likes.includes(accountId);
-
-      // Inject the isLiked field into the response.data
-      response.data.isLiked = isLiked;
+    if (accountId) {
+      const response = await axiosPrivate.get(`${BASE_URL}/artworks/${id}`);
       return response.data;
     } else {
-      response.data.isLiked = false;
+      const response = await axios.get(`${BASE_URL}/artworks/${id}`);
       return response.data;
     }
   } catch (error) {
