@@ -6,7 +6,6 @@ import "./ArtworkDetail.scss";
 import {
   addFollow,
   fetchArtworkDetail,
-  fetchCommentsForArtwork,
   fetchCommentsForArtworkRealTime,
   fetchIsFollow,
   removeFollow,
@@ -152,8 +151,6 @@ export default function ArtworkDetail() {
                     avatar={authenticationInfo?.avatar}
                     fullName={authenticationInfo?.fullname}
                     comments={comments}
-                    reloadComments={fetchComments}
-                    // TODO: Delete reloadComments
                   />
                 )}
               </div>

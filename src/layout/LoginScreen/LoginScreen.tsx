@@ -49,13 +49,18 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
 
         toast.current.show({
           severity: "success",
-          summary: "Đăng nhập thành công",
-          detail: "Bạn sẽ được chuyển hướng trong 3 giây ...",
+          content: (props: any) => (
+            <div className="flex flex-column gap-2">
+              <span className="text-cus-h2-bold">Đăng nhập thành công</span>
+              <span>Bạn sẽ được chuyển hướng sang trang trước ...</span>
+              <span style={{cursor: "pointer", textDecoration:"underline"}} onClick={() => navigate(previousPath || "/")} >Đến ngay</span>
+            </div>
+          ),
           life: 3000,
         });
         setTimeout(() => {
           navigate(previousPath || "/");
-        }, 3000);
+        }, 800);
       })
       .catch((error) => {
         console.log(error);
