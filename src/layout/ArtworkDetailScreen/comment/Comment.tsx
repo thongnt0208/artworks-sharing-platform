@@ -18,7 +18,6 @@ interface PropsType {
   avatar: string;
   // ------------------
   comments: CommentType[];
-  reloadComments: () => void;
 }
 
 function CommentComponent({ ...props }: PropsType) {
