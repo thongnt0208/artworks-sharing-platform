@@ -26,8 +26,12 @@ export type CommentType = {
 
 export type AssetType = {
   id: string;
-  assetName: string;
+  name: string;
   price: number;
+  description?: string;
+  extension?: string;
+  size?: number;
+  thumbnail?: string;
   lastModificatedOn?: string | Date;
   assetType?: string;
 };

@@ -1,11 +1,54 @@
 import axios from "axios";
 import { axiosPrivate } from "../../hooks/useAxios";
-import { ArtworkDetailType, CommentType } from "./ArtworkDetailType";
+import { ArtworkDetailType, AssetType, CommentType } from "./ArtworkDetailType";
 import { arraysEqual } from "../../util/ArrayUtil";
 import { Dispatch, SetStateAction } from "react";
 // import axios from "../../api/axios";
 const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
 const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
+
+function castResponseData(data: any): ArtworkDetailType {
+  return {
+    id: data.id,
+    account: {
+      id: data.account.id,
+      username: data.account.username,
+      email: data.account.email,
+      fullname: data.account.fullname,
+      avatar: data.account.avatar,
+      Bio: data.account.Bio,
+      Job: data.account.Job,
+      Address: data.account.Address,
+    },
+    title: data.title,
+    images: data.images,
+    tagList: data.tagList,
+    description: data.description,
+    privacy: data.privacy,
+    createdOn: new Date(data.createdOn),
+    lastModificatedBy: data.lastModificatedBy,
+    lastModificatedOn: data.lastModificatedOn ? new Date(data.lastModificatedOn) : undefined,
+    tagDetails: data.tagDetails,
+    categoryArtworkDetails: data.categoryArtworkDetails,
+    likes: data.likes,
+    views: data.views,
+    assets: data.assets?.map(
+      (asset: any) =>
+        ({
+          id: asset.id,
+          name: asset.assetTitle.split(".")[0],
+          price: asset.price,
+          description: asset.description,
+          extension: asset.assetName.split(".").pop(),
+          lastModificatedOn: asset.lastModificatedOn
+            ? new Date(asset.lastModificatedOn)
+            : undefined,
+          assetType: asset.assetType,
+        } as AssetType)
+    ),
+    isLiked: data.isLiked,
+  };
+}
 
 /**
  * Fetches details of an artwork based on the provided ID.
@@ -18,7 +61,7 @@ const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.
  * console.log(artworkDetails);
  *
  * @author ThongNT
- * @version 2.0.2
+ * @version 2.2.2
  */
 export async function fetchArtworkDetail(
   id: string | undefined,
@@ -27,10 +70,10 @@ export async function fetchArtworkDetail(
   try {
     if (accountId) {
       const response = await axiosPrivate.get(`${BASE_URL}/artworks/${id}`);
-      return response.data;
+      return castResponseData(response.data);
     } else {
       const response = await axios.get(`${BASE_URL}/artworks/${id}`);
-      return response.data;
+      return castResponseData(response.data);
     }
   } catch (error) {
     console.error("Error fetching artwork:", error);
@@ -148,8 +191,6 @@ export function fetchCommentsForArtworkRealTime(
   };
 
   socket.onmessage = (event) => {
-    console.log("WebSocket message received", JSON.parse(event.data));
-
     const data = JSON.parse(event.data)?.Items;
     const comments = data?.map((item: any) => {
       return {
@@ -360,6 +401,28 @@ export async function fetchIsFollow(userId: string): Promise<boolean> {
     return response.data;
   } catch (error) {
     console.error("Error fetching following:", error);
+    throw error;
+  }
+}
+
+/**
+ * This function is used to buy an asset.
+ * @param assetId - The ID of the asset to be bought
+ * @returns Promise<any>
+ * @example
+ * const boughtAsset = await BuyAsset("assetId");
+ * console.log(boughtAsset);
+ * @version 1.0.0
+ * @author ThongNT
+ */
+export async function BuyAsset(assetId: string): Promise<any> {
+  try {
+    const response = await axiosPrivate.post(`${BASE_URL}/assettransactions`, {
+      assetId: assetId,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error buying asset:", error);
     throw error;
   }
 }
