@@ -13,6 +13,8 @@ export async function GetAssetDownloadLinkById(id: string): Promise<string> {
   return axiosPrivate
     .get(`/assets/download/${id}`)
     .then((response) => {
+      console.log(response);
+      
       if (response?.status === 200) {
         return response.data.link;
       } else {
