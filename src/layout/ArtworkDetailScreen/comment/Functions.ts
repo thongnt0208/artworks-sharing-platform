@@ -40,9 +40,7 @@ export function addComment(
 
     // API call
     addCommentToArtwork(props?.artworkId, commentValue)
-      .then(() => {
-        props?.reloadComments();
-      })
+      .then(() => console.log("Comment added successfully"))
       .catch((error) => {
         console.log("Error adding comment:", error);
 

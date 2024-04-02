@@ -30,7 +30,7 @@
   }
   .detail-column-container {
     padding: 12px;
-    width: 100%;
+    min-width: 400px;
     .detail-column {
       width: 100%;
       display: flex;
