@@ -42,10 +42,7 @@ export default function Content({
     console.log(id, currentUserId);
 
     action(id ? id : "", currentUserId)
-      .then((res) => {
-        alert("Like Success");
-        setError("");
-      })
+      .then((res) => setError(""))
       .catch((err) => {
         let message = err.message || "Something went wrong";
         setError({ ...message });
@@ -64,7 +61,7 @@ export default function Content({
   return (
     <>
       <Dialog
-      // Notification Dialog
+        // Notification Dialog
         visible={dialogVisible}
         onHide={() => setDialogVisible(false)}
         dismissableMask
@@ -92,7 +89,12 @@ export default function Content({
       >
         {/* Display images */}
         {data.images?.map((image, index) => (
-          <Image key={index} src={image?.location} alt={`Image ${index + 1}`} width="100%" />
+          <Image
+            key={index}
+            src={image?.location}
+            alt={`Image ${index + 1}`}
+            width="100%"
+          />
         ))}
       </div>
 
