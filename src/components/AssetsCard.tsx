@@ -3,25 +3,17 @@ import { DataScroller } from "primereact/datascroller";
 
 import React from "react";
 import "./AssetsCard.scss";
-
-type Item = {
-  id: string;
-  name: string;
-  price: number;
-  extension: string;
-  size: number;
-  thumbnail?: string;
-  editHandler?: () => void;
-  saveHandler?: (id: string) => void;
-  removeHandler?: () => void;
-};
+import { AssetType } from "../layout/ArtworkDetailScreen/ArtworkDetailType";
 
 type AssetsProps = {
   id: string;
   thumbnail: string;
   isCreator: boolean;
-  itemsList: Item[];
+  itemsList: AssetType[];
   onClickHandler?: () => void;
+  editHandler?: () => void;
+  saveHandler?: (id: string) => void;
+  removeHandler?: () => void;
 };
 
 const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
@@ -30,7 +22,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   const thumbnailColumn = (image: string) => {
     return (
       <div className="w-fit flex flex-column justify-content-center align-items-end">
-        <img alt="Ảnh thu nhỏ của một bài đăng" src={image} className="thumbnail" />
+        <img alt="Ảnh thu nhỏ của tài nguyên" src={image} className="thumbnail" />
         <Button
           className="number-of-items"
           rounded
@@ -41,18 +33,15 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
     );
   };
 
-  const detailsColumn = (item: Item) => {
-    const _saveHandler: any = () => {
-      if (item.saveHandler) {
-        item.saveHandler(item.id);
-      }
-    };
+  const detailsColumn = (item: AssetType) => {
+    const _saveHandler: any = () => props.saveHandler && props.saveHandler(item.id);
 
     return (
       <div className="detail-column">
         <div className="file-info flex flex-column justify-content-start align-items-start">
           <span className="file-name">{item.name}</span>
-          <span className="file-size">{item.size} KB</span>
+          <span className="file-description file-size">{item.description}</span>
+          {item.size && <span className="file-size">{item.size} KB</span>}
         </div>
         <div className="file-type">
           <span>.{item.extension}</span>
@@ -68,21 +57,21 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
             tooltipOptions={{ position: "top" }}
             onClick={_saveHandler}
           />
-          {props.isCreator && (
+          {props.isCreator && props.editHandler && props.removeHandler && (
             <>
               <Button
                 icon="pi pi-pencil"
                 className="edit-button"
                 tooltip="Sửa"
                 tooltipOptions={{ position: "top" }}
-                onClick={item.editHandler}
+                onClick={props.editHandler}
               />
               <Button
                 icon="pi pi-trash"
                 className="remove-button"
                 tooltip="Xoá"
                 tooltipOptions={{ position: "top" }}
-                onClick={item.removeHandler}
+                onClick={props.removeHandler}
               />
             </>
           )}
@@ -99,7 +88,6 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
 
       <div className="detail-column-container w-full h-full">
         <DataScroller
-          className="w-full"
           value={props.itemsList}
           itemTemplate={detailsColumn}
           rows={props.itemsList ? props.itemsList.length : 0}

@@ -21,7 +21,29 @@ import { Slider } from "primereact/slider";
 import { Avatar } from "primereact/avatar";
 import { toast } from "react-toastify";
 
-export { Tooltip, Tag, ProgressBar, Password, Calendar, Image, Divider, Toast, Card, Dialog, InputText, InputTextarea, InputNumber, Dropdown, Chips, FileUpload, Button, MultiSelect, useFormik, Slider, Avatar };
+export {
+  Tooltip,
+  Tag,
+  ProgressBar,
+  Password,
+  Calendar,
+  Image,
+  Divider,
+  Toast,
+  Card,
+  Dialog,
+  InputText,
+  InputTextarea,
+  InputNumber,
+  Dropdown,
+  Chips,
+  FileUpload,
+  Button,
+  MultiSelect,
+  useFormik,
+  Slider,
+  Avatar,
+};
 
 /**
  * A utility function for handling errors when calling APIs.
@@ -40,7 +62,15 @@ export function CatchAPICallingError(error: any, navigate: any) {
   } else if ([521, 500, 502].includes(error.response?.status)) {
     navigate("/error-internal-server");
   } else {
-    toast.error("Đã xảy ra lỗi." + error.message);
+    toast.error(
+      <>
+        <span className="text-cus-h3-bold">Đã xảy ra lỗi.</span>
+        <br />
+        <span>{error?.message}</span>
+        <br />
+        <span>{error?.response?.data?.errorMessage}</span>
+      </>
+    );
     console.log(error);
   }
 }
