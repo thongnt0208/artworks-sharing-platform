@@ -3,6 +3,8 @@ import { RefObject } from "react";
 import AssetsCard from "../../../components/AssetsCard";
 import { AssetType } from "../ArtworkDetailType";
 import { GetAssetDownloadLinkById } from "./Service";
+import { CatchAPICallingError } from "../..";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   assetsPanelOptions: RefObject<OverlayPanel>;
@@ -10,15 +12,15 @@ type Props = {
 };
 
 export default function AssetsDialog({ assetsPanelOptions, data }: Props) {
+  const navigate = useNavigate();
+
   const saveHandler = (id: string) => {
     console.log("Save");
     GetAssetDownloadLinkById(id)
-      .then((link) => {
-        console.log("Link ne:" + link);
-        window.open(link, "_blank");
-      })
+      .then((link) => window.open(link, "_blank"))
       .catch((error) => {
         console.error("loi roi" + error);
+        CatchAPICallingError(error, navigate);
       });
   };
 
