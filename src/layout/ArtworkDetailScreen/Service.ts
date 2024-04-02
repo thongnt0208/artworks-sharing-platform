@@ -4,8 +4,10 @@ import { ArtworkDetailType, CommentType } from "./ArtworkDetailType";
 import { arraysEqual } from "../../util/ArrayUtil";
 import { Dispatch, SetStateAction } from "react";
 // import axios from "../../api/axios";
-const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
-const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
+const BASE_URL =
+  process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
+const WS_URL =
+  process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 /**
  * Fetches details of an artwork based on the provided ID.
@@ -50,7 +52,10 @@ export async function fetchArtworkDetail(
  * @author ThongNT
  * @version 1.0.0
  */
-export async function likeArtwork(artworkId: string, accountId: string): Promise<any> {
+export async function likeArtwork(
+  artworkId: string,
+  accountId: string
+): Promise<any> {
   try {
     let body = {
       accountId: accountId,
@@ -74,18 +79,18 @@ export async function likeArtwork(artworkId: string, accountId: string): Promise
  * const unlikedArtwork = await unlikeArtwork("artworkId123", "accountId456");
  * console.log(unlikedArtwork);
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.1.0
  */
-export async function unlikeArtwork(artworkId: string, accountId: string): Promise<any> {
+export async function unlikeArtwork(
+  artworkId: string,
+  accountId: string
+): Promise<any> {
   try {
     let body = {
-      accountId: accountId,
       artworkId: artworkId,
     };
 
-    const response = await axios({
-      method: "DELETE",
-      url: `${BASE_URL}/likes`,
+    const response = await axiosPrivate.delete(`${BASE_URL}/likes`, {
       data: body,
     });
 
@@ -107,9 +112,13 @@ export async function unlikeArtwork(artworkId: string, accountId: string): Promi
  * @author ThongNT
  * @version 1.1.1
  */
-export async function fetchCommentsForArtwork(artworkId: string): Promise<CommentType[]> {
+export async function fetchCommentsForArtwork(
+  artworkId: string
+): Promise<CommentType[]> {
   try {
-    const response = await axios.get(`${BASE_URL}/artworks/${artworkId}/comments`);
+    const response = await axios.get(
+      `${BASE_URL}/artworks/${artworkId}/comments`
+    );
     console.log("response.data", response.data);
 
     return response.data?.map((comment: any) => ({
@@ -163,7 +172,10 @@ export function fetchCommentsForArtworkRealTime(
       };
     });
 
-    if (Array.isArray(comments) && arraysEqual(_tmpComments, comments) === false) {
+    if (
+      Array.isArray(comments) &&
+      arraysEqual(_tmpComments, comments) === false
+    ) {
       _tmpComments = comments;
       setComments(comments);
     }
@@ -195,12 +207,18 @@ export function fetchCommentsForArtworkRealTime(
  * @author ThongNT
  * @version 2.0.1
  */
-export async function addCommentToArtwork(artworkId: string, commentText: string): Promise<any> {
+export async function addCommentToArtwork(
+  artworkId: string,
+  commentText: string
+): Promise<any> {
   let body = {
     commentText: commentText,
   };
   try {
-    const response = await axiosPrivate.post(`${BASE_URL}/artworks/${artworkId}/comments`, body);
+    const response = await axiosPrivate.post(
+      `${BASE_URL}/artworks/${artworkId}/comments`,
+      body
+    );
     return response;
   } catch (error) {
     console.error("Error adding comment:", error);
@@ -218,9 +236,13 @@ console.log(removedComment);
  * @author ThongNT
  * @version 1.1.0
  */
-export async function removeCommentFromArtwork(commentId: string): Promise<any> {
+export async function removeCommentFromArtwork(
+  commentId: string
+): Promise<any> {
   try {
-    const response = await axiosPrivate.delete(`${BASE_URL}/comments/${commentId}`);
+    const response = await axiosPrivate.delete(
+      `${BASE_URL}/comments/${commentId}`
+    );
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
@@ -248,9 +270,12 @@ export async function editCommentOnArtwork(
   newText: string
 ): Promise<any> {
   try {
-    const response = await axios.put(`${BASE_URL}/artworks/comments/${artworkId}/${commentId}`, {
-      newText: newText,
-    });
+    const response = await axios.put(
+      `${BASE_URL}/artworks/comments/${artworkId}/${commentId}`,
+      {
+        newText: newText,
+      }
+    );
     return response;
   } catch (error) {
     console.error("Error editing comment:", error);
@@ -298,7 +323,9 @@ export async function removeFollow(followUserId: string): Promise<any> {
     let body = {
       accountId: followUserId,
     };
-    const response = await axiosPrivate.delete(`${BASE_URL}/follows`, { data: body });
+    const response = await axiosPrivate.delete(`${BASE_URL}/follows`, {
+      data: body,
+    });
     return response;
   } catch (error) {
     console.error("Error unfollowing user:", error);
@@ -356,7 +383,9 @@ export async function fetchFollowing(userId: string): Promise<any> {
  */
 export async function fetchIsFollow(userId: string): Promise<boolean> {
   try {
-    const response = await axiosPrivate.get(`${BASE_URL}/follows/is-existed/${userId}`);
+    const response = await axiosPrivate.get(
+      `${BASE_URL}/follows/is-existed/${userId}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching following:", error);
