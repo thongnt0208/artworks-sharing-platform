@@ -1,0 +1,11 @@
+@import "/src/const/variables.scss";
+
+.p-timeline-event-opposite {
+  padding-bottom: 1rem;
+
+  .p-badge {
+    height: fit-content;
+    line-height: unset;
+    padding: 4px;
+  }
+}

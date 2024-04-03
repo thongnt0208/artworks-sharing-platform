@@ -3,7 +3,7 @@
 .chatbox-item,
 chatbox-item-selecting {
   padding: 10px;
-  min-width: 315px;
+  width: 100%;
   border-radius: $borderRadius-100;
   position: relative;
   //   .chatbox-item-avatar {
@@ -22,19 +22,13 @@ chatbox-item-selecting {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: gray;
   }
 
   .message-status-content {
     text-align: end;
     .chatbox-item-time {
       color: $bg-300;
-    }
-    .chatbox-item-seen {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%; /* Makes the square shape into a circle */
-      background-color: $strong-100; /* Change the color to your preference */
     }
   }
 }
