@@ -18,3 +18,19 @@ export function arraysEqual(a: any[], b: any[]): boolean {
 
   return true;
 }
+
+
+export function arraysChatboxEqual(a: any[], b: any[]): boolean {
+  if (a.length !== b.length) {
+    return false;
+  } else {
+    for (let i = 0; i < a.length; i++) {
+      if (a[i]?.id !== b[i]?.id) {
+        console.log(`tmpCbx[${i}]: `, a[i], `cbx[${i}]: `, b[i]);
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
