@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ProgressSpinner } from "primereact/progressspinner";
 
 import "./ChatScreen.scss";
 
@@ -23,18 +22,10 @@ import {
   ProposalType,
   RequestItemType,
 } from "./ChatRelatedTypes";
-import { CatchAPICallingError, Dialog, Toast, Avatar } from "..";
-import { toast as toastify } from "react-toastify";
+import { CatchAPICallingError, Dialog, Toast, Avatar, Button, ProgressSpinner } from "..";
 import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
-import { CreateAProposal, GetAllProposals } from "./components/Proposal/ProposalUtils";
-import {
-  GetProposalAssets,
-  GetProposalMilestone,
-  InitPaymentProposal,
-  UpdateProposalStatus,
-  UploadProposalAsset,
-} from "./services/ProposalServices";
+import { AcceptProposal, CreateAProposal, DenyProposal, GetAllProposals, GetAssets, GetMilestone, UploadProposalAssetUtil } from "./components/Proposal/ProposalUtils";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 // ---------------------------------------------------------
 
@@ -55,6 +46,7 @@ export default function ChatScreen() {
 
   const [isShowProposalForm, setIsShowProposalForm] = useState(false);
   const [proposalsList, setProposalsList] = useState<ProposalType[]>([]);
+  const [selectingProposal, setSelectingProposal] = useState<ProposalType>(proposalsList[0]);
   const [currentMilestone, setCurrentMilestone] = useState<MilestoneItemType[]>([]);
   const [currentAsset, setCurrentAsset] = useState<ProposalAssetItemType[]>([]);
 
@@ -67,79 +59,20 @@ export default function ChatScreen() {
   const handleAcceptRequest = (id: string) => acceptRequest(id, handleGetAllRequests, navigate);
   const handleDenyRequest = (id: string) => denyRequest(id, handleGetAllRequests, navigate);
   // REQUESTS STATE TOOLS section end
-  // ---------------------------------------------------------
 
   // PROPOSALS STATE TOOLS section start
   const handleGetAllProposals = () => GetAllProposals(selectingChatbox, setProposalsList, navigate);
-  const handleCreateAProposal = (values: any) =>
-    CreateAProposal(
-      values,
-      selectingChatbox,
-      setIsShowProposalForm,
-      toast,
-      handleGetAllProposals,
-      navigate
-    );
-
-  function acceptProposal(id: string) {
-    InitPaymentProposal(id)
-      .then(() => {
-        UpdateProposalStatus(id, 1)
-          .then(() => handleGetAllProposals())
-          .catch((error) => {
-            CatchAPICallingError(error, navigate);
-            toastify.error("Có lỗi xảy ra khi cập nhật trạng thái của Yêu cầu" + error.message);
-          });
-      })
-      .catch((error) => {
-        CatchAPICallingError(error, navigate);
-        toastify.error("Có lỗi xảy ra khi đặt cọc: " + error.message);
-      });
-  }
-
-  function denyProposal(id: string) {
-    UpdateProposalStatus(id, 2)
-      .then(() => handleGetAllProposals())
-      .catch((error) => {
-        CatchAPICallingError(error, navigate);
-      });
-  }
-
-  function uploadProposalAsset(id: string, type: number, file: File) {
-    console.log("uploadProposalAsset", id, type, file);
-    toastify.success("uploadProposalAsset" + id + type + file);
-    UploadProposalAsset(id, type, file)
-      .then(() => handleGetAllProposals())
-      .catch((error) => {
-        CatchAPICallingError(error, navigate);
-      });
-  }
-
-  function getMilestone(id: string) {
-    // get milestone by proposal id
-    GetProposalMilestone(id)
-      .then((res) => {
-        setCurrentMilestone(res);
-      })
-      .catch((error) => {
-        CatchAPICallingError(error, navigate);
-      });
-  }
-
-  function getAssets(id: string) {
-    // get assets by proposal id
-    GetProposalAssets(id)
-      .then((res) => {
-        setCurrentAsset(res);
-      })
-      .catch((error) => {
-        CatchAPICallingError(error, navigate);
-      });
-  }
+  const handleCreateAProposal = (values: any) => CreateAProposal(values, selectingChatbox, setIsShowProposalForm, toast, handleGetAllProposals, navigate);
+  const handleAcceptProposal = (id: string) => AcceptProposal(id, handleGetAllProposals, navigate);
+  const handleDenyProposal = (id: string) => DenyProposal(id, handleGetAllProposals, navigate);
+  const handleUploadProposalAsset = (id: string, type: number, file: File) => UploadProposalAssetUtil(id, type, file, handleGetAllProposals, navigate);
+  const handleGetMilestone = (id: string) => GetMilestone(id, setCurrentMilestone, navigate);
+  const handleGetAssets = (id: string) => GetAssets(id, setCurrentAsset, navigate);
   // PROPOSALS STATE TOOLS section end
   // ---------------------------------------------------------
 
   const GetChatboxes = () => {
+    setIsLoading(true);
     GetChatboxesCurrentAccount()
       .then((res) => {
         setChatboxes(res);
@@ -219,18 +152,20 @@ export default function ChatScreen() {
     handleGetAllProposals();
     GetChatMessages();
     return () => {
-      if (closeSocket) {
-        closeSocket();
-      }
+      closeSocket && closeSocket();
     };
   }, [selectingChatbox]);
+
+  useEffect(() => {
+    proposalsList.length > 0 && setSelectingProposal(proposalsList[0]);
+  }, [proposalsList]);
 
   useEffect(() => {
     SendChatImages();
   }, [newChatImages]);
   return (
     <>
-      {isLoading && <ProgressSpinner />}
+      {isLoading && <ProgressSpinner style={{ position: "absolute", left: "40%" }} />}
       <Toast ref={toast} />
       <Dialog
         visible={isShowProposalForm}
@@ -245,6 +180,14 @@ export default function ChatScreen() {
         </Suspense>
       </Dialog>
 
+      <Button
+        rounded
+        loading={isLoading}
+        icon="pi pi-refresh"
+        tooltip="Làm mới"
+        style={{ position: "absolute", bottom: "1rem", left: "1rem" }}
+        onClick={GetChatboxes}
+      />
       <Splitter className="chat-screen-container">
         <SplitterPanel className="first-col" size={20}>
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
@@ -262,9 +205,9 @@ export default function ChatScreen() {
                 requestsList,
                 handleAcceptRequest,
                 handleDenyRequest,
-                uploadProposalAsset,
+                handleUploadProposalAsset,
               }}
-              proposalStateTools={{ proposalsList, acceptProposal, denyProposal }}
+              proposalStateTools={{ proposalsList, handleAcceptProposal, handleDenyProposal }}
               setIsShowProposalForm={setIsShowProposalForm}
               fetchNextPage={fetchNextPage}
             />
@@ -285,10 +228,12 @@ export default function ChatScreen() {
           <ChatRightNav
             userInfo={{ avatar: selectingChatbox?.avatar, ...selectingChatbox?.author }}
             proposalsList={proposalsList}
+            selectingProposal={selectingProposal}
+            setSelectingProposal={setSelectingProposal}
             currentMilestone={currentMilestone}
             currentAsset={currentAsset}
-            getMilestoneCallback={getMilestone}
-            getAssetsCallback={getAssets}
+            getMilestoneCallback={handleGetMilestone}
+            getAssetsCallback={handleGetAssets}
           />
         </SplitterPanel>
       </Splitter>
