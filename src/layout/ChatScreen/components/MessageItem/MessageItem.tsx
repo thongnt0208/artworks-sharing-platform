@@ -1,9 +1,8 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import "./MessageItem.scss";
-import { Tooltip } from "primereact/tooltip";
-import { Avatar } from "primereact/avatar";
-import { Image } from "primereact/image";
+import { Button, Tooltip, Avatar, Image } from "../../../index";
 import { formatTime } from "../../../../util/TimeHandle";
+import { isAnImage } from "../../../../util/FileNameUtil";
 
 type Props = {
   isMyMessage: boolean;
@@ -26,9 +25,20 @@ function MessageItem({ avatar, text, fileUrl, createdOn, isMyMessage }: Props) {
           {text}
           <Tooltip target=".message-content">{formatTime(createdOn)}</Tooltip>
         </div>
-        {fileUrl && (
+        {fileUrl && isAnImage(fileUrl) && (
           <div className="message-file">
-            <Image src={fileUrl} alt="MsgImage" width="250" preview/>
+            <Image src={fileUrl} alt="MsgImage" width="250" preview />
+          </div>
+        )}
+        {fileUrl && !isAnImage(fileUrl) && (
+          <div className="message-file">
+            <Button
+              icon="pi pi-download"
+              iconPos="right"
+              label="Tệp"
+              onClick={() => window.open(fileUrl, "_blank")}
+              className="w-8rem"
+            />
           </div>
         )}
       </div>

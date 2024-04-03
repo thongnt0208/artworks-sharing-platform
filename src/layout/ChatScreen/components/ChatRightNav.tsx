@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { MilestoneItemType, ProposalAssetItemType, ProposalType } from "../ChatRelatedTypes";
 import "./ChatRightNav.scss";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { formatTime } from "../../../util/TimeHandle";
 import { translateProposalStatus } from "../../../util/Enums";
-import { Timeline } from "primereact/timeline";
-import { Badge } from "primereact/badge";
+import MilestoneView from "./MilestoneViewSection/MilestoneView";
 
 type Props = {
   userInfo: {
@@ -19,6 +18,8 @@ type Props = {
     avatar: string;
   };
   proposalsList: ProposalType[];
+  selectingProposal: ProposalType;
+  setSelectingProposal: (proposal: ProposalType) => void;
   currentMilestone: MilestoneItemType[];
   currentAsset: ProposalAssetItemType[];
   getMilestoneCallback: (id: string) => void;
@@ -28,17 +29,13 @@ type Props = {
 export default function ChatRightNav({
   userInfo,
   proposalsList,
+  selectingProposal,
+  setSelectingProposal,
   currentMilestone,
   currentAsset,
   getMilestoneCallback,
   getAssetsCallback,
 }: Props) {
-  const [selectingProposal, setSelectingProposal] = useState<ProposalType>({} as ProposalType);
-
-  useEffect(() => {
-    proposalsList.length > 0 && setSelectingProposal(proposalsList[0]);
-  }, []);
-
   useEffect(() => {
     if (selectingProposal?.id) {
       getMilestoneCallback(selectingProposal.id);
@@ -63,7 +60,7 @@ export default function ChatRightNav({
           {proposalsList?.map((proposal) => (
             <div
               key={proposal.id}
-              className={"proposal-item" + (proposal.id === selectingProposal.id ? " active" : "")}
+              className={"proposal-item" + (proposal.id === selectingProposal?.id ? " active" : "")}
               onClick={() => setSelectingProposal(proposal)}
             >
               <div className="first-collumn-frame">
@@ -89,15 +86,7 @@ export default function ChatRightNav({
           <p className="text-cus-h2-bold">Theo dõi quá trình</p>
         </div>
         <div className="milestone-view-content">
-          <Timeline
-            value={currentMilestone}
-            opposite={(milestone) => <Badge value={milestone.milestoneName} severity="info" />}
-            content={(milestone) => (
-              <small className="text-cus-normal">
-                {formatTime(milestone.createdOn, "dd/MM/yyyy HH:mm")}
-              </small>
-            )}
-          />
+          <MilestoneView data={currentMilestone} />
         </div>
       </div>
       {/* Milestone area end */}

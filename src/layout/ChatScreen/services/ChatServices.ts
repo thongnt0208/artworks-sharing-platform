@@ -28,7 +28,7 @@ export async function GetChatboxesCurrentAccount(): Promise<ChatboxItemType[]> {
         const _acc2 = item?.account_2;
 
         const _avt = _acc1.id === currentUserId ? _acc2?.avatar : _acc1.avatar;
-        const _content = `Bạn có tin nhắn mới từ ${
+        const _content = `Tin nhắn từ ${
           _acc1.id === currentUserId ? _acc2?.fullname : _acc1.fullname
         }`;
         const _author =
