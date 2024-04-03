@@ -20,6 +20,7 @@ import { useFormik } from "formik";
 import { Slider } from "primereact/slider";
 import { Avatar } from "primereact/avatar";
 import { toast } from "react-toastify";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 export {
   Tooltip,
@@ -43,6 +44,7 @@ export {
   useFormik,
   Slider,
   Avatar,
+  ProgressSpinner,
 };
 
 /**

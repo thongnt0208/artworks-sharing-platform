@@ -4,7 +4,7 @@ import { DataScroller } from 'primereact/datascroller';
 import { ChatboxItemType } from '../ChatRelatedTypes';
 
 type ChatLeftNavProps = {
-  itemsList: any[]; // Update the type of itemsList with the actual type of your data
+  itemsList: ChatboxItemType[];
   selectingChatbox: ChatboxItemType;
 };
 
