@@ -75,6 +75,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
               onHide={() => {
                 setIsShowRequestPopup(false);
               }}
+              startingPrice={props.startingPrice}
               accountAvatar={props.accountAvatar}
               accountName={props.accountFullname}
               isHire={true}

@@ -1,6 +1,7 @@
 @import "/src/const/variables.scss";
 
 .request-popup {
+    z-index: 1;
     .request-popup-container {
         .account-info {
             display: flex;

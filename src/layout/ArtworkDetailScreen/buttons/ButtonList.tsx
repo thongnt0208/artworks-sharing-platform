@@ -63,7 +63,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
       thumbnailImg: hireIcon || blankPic,
       thumbnailAlt: "",
       onclick: () => {
-        navigate("");
+        navigate(`/account/${data?.account?.id}/service`);
       },
     },
     {
