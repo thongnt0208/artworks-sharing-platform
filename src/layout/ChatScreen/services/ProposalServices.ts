@@ -295,6 +295,30 @@ export async function InitPaymentProposal(proposalId: string): Promise<any> {
 }
 
 /**
+ * This function is used to complete the payment of a proposal
+ * 
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<any>} - the response from the API
+ * @throws {Error} an error from the API request
+ * @example
+ * const response = await CompletePaymentProposal("123");
+ * console.log(response);
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function CompletePaymentProposal(proposalId: string): Promise<any> {
+  return axiosPrivate
+    .post(`/proposals/complete-payment/${proposalId}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error completing payment:", error);
+      throw error;
+    });
+}
+
+/**
  * This function is used to upload an asset (concept, revision or final product) for a proposal
  *
  * @param id - the id of the proposal
@@ -367,7 +391,7 @@ export async function GetProposalMilestone(proposalId: string): Promise<Mileston
 
 /**
  * This function is used to get all assets of a proposal
- * 
+ *
  * @param proposalId - the id of the proposal
  * @returns {Promise<ProposalAssetItemType[]>} - an array of assets
  * @throws {Error} an error from the API request
