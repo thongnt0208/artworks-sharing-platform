@@ -75,8 +75,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
                 className="bot-button"
                 label={`Thuê ${props.fullname}`}
                 onClick={() => {
-                  setIsShowRequestPopup(true);
-                  setIsHire(true);
+                  window.location.href = `/account/${props.id}/service`;
                 }}
               />
             </>
