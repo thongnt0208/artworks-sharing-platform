@@ -3,8 +3,10 @@ import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import { Dispatch, SetStateAction } from "react";
-import { arraysEqual } from "../../../util/ArrayUtil";
+import { arraysChatboxEqual, arraysEqual } from "../../../util/ArrayUtil";
 const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
+
+const authenticationInfo = getAuthInfo();
 
 /**
  * This function is used to get all chatboxes of current account
@@ -51,13 +53,80 @@ export async function GetChatboxesCurrentAccount(): Promise<ChatboxItemType[]> {
     });
 }
 
+/**
+ * This function is used to get all chatboxes of current account in real-time
+ *
+ * @param setState - The state to set the chatboxes
+ * @returns {Promise<() => void>} a function to close the WebSocket connection
+ * @throws {Error} an error from the API request
+ * @example
+ * GetChatboxesCurrentAccountRealtime(setState)
+ *  .then((close) => {
+ *   close();
+ * })
+ * .catch((error) => {
+ *  console.error(error);
+ * });
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function GetChatboxesCurrentAccountRealtime(
+  setState: Dispatch<React.SetStateAction<ChatboxItemType[]>>
+): Promise<() => void> {
+  const url = `${WS_URL}/accounts/chatboxs/ws`;
+  const socket = new WebSocket(url);
+
+  let _tmpChatboxes: ChatboxItemType[] = [];
+
+  return new Promise<() => void>((resolve, reject) => {
+    socket.onopen = () => {
+      console.log("WebSocket connection established" + authenticationInfo?.accessToken);
+      socket.send(authenticationInfo?.accessToken);
+      setState([]);
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const chatboxes = data.map((item: any) => {
+        return {
+          id: item.Id || "",
+          name: item.Name || "",
+          participants: item.Participants || [],
+          lastMessageOn: item.LastMessageOn || "",
+          lastMessageText: item.LastMessageText || "",
+        };
+      });
+
+      console.log(chatboxes);
+
+      if (Array.isArray(chatboxes) && !arraysChatboxEqual(_tmpChatboxes, chatboxes)) {
+        _tmpChatboxes = chatboxes;
+        setState(chatboxes);
+      }
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      reject(error);
+    };
+
+    resolve(() => {
+      socket.close();
+    });
+  });
+}
+
 export type ChatMessageType = {
   chatBoxId: string;
   text: string;
   fileLocation?: string;
   createdOn: string;
   createdBy: string;
-}
+};
 
 interface PaginatedChatMessages {
   currentPage: number;
@@ -188,7 +257,7 @@ export function GetMessagesByChatboxIdRealTime(
       };
     });
 
-    console.log(message);    
+    console.log(message);
 
     if (Array.isArray(message) && arraysEqual(_tmpMessages, message) === false) {
       _tmpMessages = message;
