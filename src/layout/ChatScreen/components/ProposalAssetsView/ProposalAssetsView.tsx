@@ -3,6 +3,7 @@ import { formatTime } from "../../../../util/TimeHandle";
 import { ProposalAssetItemType, ProposalStateToolsType } from "../../ChatRelatedTypes";
 import "./ProposalAssetsView.scss";
 import { getAuthInfo } from "../../../../util/AuthUtil";
+import AddReviewView from "../Review/AddReviewView";
 
 type Props = { data: ProposalAssetItemType[]; proposalStateTools: ProposalStateToolsType };
 
@@ -11,6 +12,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
+  let completePrice = selectingProposal?.totalPrice * (1 - selectingProposal?.initialPrice);
   return (
     <div className="proposal-assets-container">
       <div className="proposal-assets-header">
@@ -26,11 +28,10 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
               disabled={
                 // check if asset is final && proposal status is not CompletePayment && current user is not the creator
                 asset.type === "Final" &&
-                selectingProposal.status !== "CompletePayment" &&
-                selectingProposal.createdBy !== currentUserId
+                selectingProposal?.status !== "CompletePayment" &&
+                selectingProposal?.createdBy !== currentUserId
               }
               onClick={() => {
-                //download file from asset?.url
                 window.open(asset?.url, "_blank");
               }}
               className="w-full mr-3"
@@ -44,23 +45,25 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
 
       <div className="complete-payment-container">
         {
-          // check if there is a final asset and proposal status is not CompletePayment -> Start to complete payment
+          // check if there is a final asset and proposal status is not Complete the Final Payment -> Start to complete payment
           data.some((asset) => asset.type === "Final") &&
-            selectingProposal.status !== "CompletePayment" &&
-            selectingProposal.createdBy !== currentUserId && (
+            selectingProposal?.status !== "CompletePayment" &&
+            selectingProposal?.createdBy !== currentUserId && (
               <Button
-                label="Trả tiền đủ"
+                label={`Thanh toán ${completePrice}Xu còn lại`}
                 icon="pi pi-check"
                 className="w-full"
                 onClick={() => {
                   //complete payment
                   // alert("complete payment");
-                  handleCompletePayment && handleCompletePayment(selectingProposal.id);
+                  handleCompletePayment && handleCompletePayment(selectingProposal?.id);
                 }}
               />
             )
         }
       </div>
+
+      <AddReviewView selectingProposal={selectingProposal} />
     </div>
   );
 }

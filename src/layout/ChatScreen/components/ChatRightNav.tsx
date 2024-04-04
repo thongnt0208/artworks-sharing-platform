@@ -11,6 +11,7 @@ import {
   ProposalStateToolsType,
 } from "../ChatRelatedTypes";
 import { useNavigate } from "react-router-dom";
+import UploadProposalAssetView from "./UploadProposalAsset/UploadProposalAssetView";
 
 type Props = {
   userInfo: {
@@ -26,6 +27,7 @@ type Props = {
   currentAssets: ProposalAssetItemType[];
   getMilestoneCallback: (id: string) => void;
   getAssetsCallback: (id: string) => void;
+  uploadAssetCallback: (proposalId: string, type: number, file: File) => void;
 };
 
 export default function ChatRightNav({
@@ -35,6 +37,7 @@ export default function ChatRightNav({
   currentAssets,
   getMilestoneCallback,
   getAssetsCallback,
+  uploadAssetCallback,
 }: Props) {
   const navigate = useNavigate();
   const { proposalsList, selectingProposal, setSelectingProposal } = proposalStateTools;
@@ -63,6 +66,12 @@ export default function ChatRightNav({
       />
       <MilestoneView data={currentMilestone} />
       <ProposalAssetsView data={currentAssets} proposalStateTools={proposalStateTools} />
+      {selectingProposal?.status !== "Waiting" && (
+        <UploadProposalAssetView
+          selectingProposal={selectingProposal}
+          uploadAssetCallback={uploadAssetCallback}
+        />
+      )}
     </div>
   );
 }
