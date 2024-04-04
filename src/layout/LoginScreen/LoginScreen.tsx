@@ -39,7 +39,17 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
         const role = decodedAToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         const exp = decodedAToken.exp;
 
-        let currentUserData: authInfoDataType = { id, email, fullname, username, avatar, accessToken, refreshToken, role, aTExp: exp };
+        let currentUserData: authInfoDataType = {
+          id,
+          email,
+          fullname,
+          username,
+          avatar,
+          accessToken,
+          refreshToken,
+          role,
+          aTExp: exp,
+        };
 
         setAuthInfo(currentUserData); //set Auth info to LocalStorage
         setAuthInfoChanged(currentUserData); //notify to state at App.tsx that the user has logged in
@@ -53,7 +63,12 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
             <div className="flex flex-column gap-2">
               <span className="text-cus-h2-bold">Đăng nhập thành công</span>
               <span>Bạn sẽ được chuyển hướng sang trang trước ...</span>
-              <span style={{cursor: "pointer", textDecoration:"underline"}} onClick={() => navigate(previousPath || "/")} >Đến ngay</span>
+              <span
+                style={{ cursor: "pointer", textDecoration: "underline" }}
+                onClick={() => navigate(previousPath || "/")}
+              >
+                Đến ngay
+              </span>
             </div>
           ),
           life: 3000,
@@ -67,7 +82,7 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
         setIsLoading(false);
         let message = "Kiểm tra lại thông tin và thử lại sau.";
         if (error?.response?.status === 500) message = "Lỗi hệ thống, vui lòng thử lại sau.";
-        if (error?.response?.status === 401) message = "Tên đăng nhập hoặc mật khẩu không đúng.";
+        else error?.response?.data?.message && (message = error?.response?.data?.message);
         toast.current.show({
           severity: "error",
           summary: "Đăng nhập lỗi",
