@@ -1,20 +1,25 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Toast } from "primereact/toast";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { getAuthInfo } from "../../util/AuthUtil";
-import { GetProfileData, SendRequestMessage } from "./ProfileService";
+import {
+  FollowUser,
+  GetIsFollowed,
+  GetProfileData,
+  SendRequestMessage,
+  UnfollowUser,
+} from "./ProfileService";
 import UserInformationCard, {
   UserInformationProps,
 } from "../../components/UserInformationCard";
 import MenuTab from "./MenuTab/MenuTab";
 import { RequestProps } from "../../components/RequestPopup";
-// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
+import { toast } from "react-toastify";
+import { CatchAPICallingError } from "..";
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const profileId = useParams()?.id;
   const navigate = useNavigate();
-  const toast = useRef<Toast>(null);
 
   const [profile, setProfile] = useState<UserInformationProps>({
     id: "",
@@ -34,52 +39,16 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     messageHandler: () => {}, // Add the missing messageHandler property
   });
   const [isCreator, setIsCreator] = useState<boolean>(isLogin);
-  // const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
-  // const [subscribeData, setSubscribeData] = useState<subscribeDataType[]>([
-  //   {
-  //     id: "1",
-  //     title: "Đây là một collection/artwork",
-  //     description: "Miêu tả của collection",
-  //   },
-  //   {
-  //     id: "2",
-  //     title: "Đây là một collection/artwork",
-  //     description: "Miêu tả của collection",
-  //   },
-  //   {
-  //     id: "3",
-  //     title: "Đây là một collection/artwork",
-  //     description: "Miêu tả của collection",
-  //   },
-  // ]);
-  // const [isSetup, setIsSetup] = useState<boolean>(false);
-
-  const showSuccess = () => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Thành công",
-      detail: "Gửi tin nhắn thành công",
-      life: 3000,
-    });
-  };
-
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Thất bại",
-      detail: "Gửi tin nhắn thất bại",
-      life: 3000,
-    });
-  };
+  const [isFollow, setIsFollow] = useState<boolean>(false);
 
   const requestMessageHandler = async (request: RequestProps) => {
     try {
       const response = await SendRequestMessage(profile.id, request.message);
       if (response) {
-        showSuccess();
+        toast.success("Gửi yêu cầu thành công");
       }
     } catch (error) {
-      showError();
+      CatchAPICallingError(error, navigate);
     }
   };
 
@@ -87,10 +56,27 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     navigate(`/account/settings`, { state: { profile: profile } });
   };
 
+  const handleFollow = (accountId: string) => {
+    const response = FollowUser(accountId);
+    response.then((res) => {
+      console.log(res);
+    });
+  };
+
+  const handleUnfollow = (accountId: string) => {
+    const response = UnfollowUser(accountId);
+    response.then((res) => {
+      console.log(res);
+    });
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await GetProfileData(profileId || "");
       setProfile(profileData);
+      const response = GetIsFollowed(profileId || ""); // Fix: Ensure profileId is always of type string
+      const data = await response.then((res) => res.data);
+      setIsFollow(Boolean(data));
       if (getAuthInfo()?.id === profileId) {
         setIsCreator(true);
       } else {
@@ -98,11 +84,10 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       }
     };
     fetchData();
-  }, [profileId]);
+  }, [profileId, isFollow]);
 
   return (
     <>
-      <Toast ref={toast} />
       {profile ? (
         <div className="profile-screen-container grid grid-nogutter mt-3">
           <div className="profile-information-container col col-3">
@@ -117,6 +102,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               address={profile.address}
               bio={profile.bio}
               avatar={profile.avatar}
+              isFollowed={isFollow}
               profileView={profile.profileView}
               artworksView={profile.artworksView}
               followerNum={profile.followerNum}
@@ -124,6 +110,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               editHandler={() => {
                 editProfileHandler();
               }}
+              followHandler={handleFollow}
+              unFollowHandler={handleUnfollow}
               messageHandler={requestMessageHandler}
             />
           </div>
@@ -141,17 +129,6 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           <h1>Opps! Chúng tôi không tìm thấy người dùng này.</h1>
         </div>
       )}
-
-      {/* <Button label="Test page" onClick={() => navigate("edit")} />
-      <Button
-        label="Vùng đăng ký"
-        onClick={() =>
-          navigate("subscribe", {
-            state: { subscribeData, isCreator, isSubscribed, isSetup },
-          })
-        }
-      />
-      <Outlet /> */}
     </>
   );
 };

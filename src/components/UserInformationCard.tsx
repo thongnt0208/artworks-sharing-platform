@@ -27,7 +27,9 @@ export type UserInformationProps = {
   isVerrified?: boolean;
   projectCompleted?: number;
   hire?: boolean;
-  followHandler?: () => void;
+  isFollowed?: boolean;
+  followHandler?: (accountId: string) => void;
+  unFollowHandler?: (accountId: string) => void;
   messageHandler?: (request: RequestProps) => void;
   editHandler?: () => void;
   privacyEditHandler?: () => void;
@@ -81,12 +83,26 @@ const UserInformationCard: React.FC<UserInformationProps> = (
             </>
           ) : (
             <>
-              <Button
-                rounded
-                className="top-button"
-                label="Theo dõi"
-                onClick={props.followHandler}
-              />
+              {props.isFollowed ? (
+                <Button
+                  rounded
+                  className="top-button"
+                  label="Theo dõi"
+                  onClick={() =>
+                    props.followHandler && props.followHandler(props.id)
+                  }
+                />
+              ) : (
+                <Button
+                  rounded
+                  className="top-button"
+                  label="Hủy theo dõi"
+                  onClick={() =>
+                    props.unFollowHandler && props.unFollowHandler(props.id)
+                  }
+                />
+              )}
+
               <Button
                 rounded
                 className="bot-button"

@@ -1,10 +1,4 @@
-import axios from "axios";
-import { getAuthInfo } from "../../util/AuthUtil";
-import { axiosPrivate } from "../../hooks/useAxios";
-const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
-
-const accessToken = getAuthInfo()?.accessToken || "";
-const refreshToken = getAuthInfo()?.refreshToken || "";
+import axios, { axiosPrivate } from "../../hooks/useAxios";
 
 /**
  *
@@ -17,12 +11,7 @@ const refreshToken = getAuthInfo()?.refreshToken || "";
  */
 export async function GetProfileData(accountId: string) {
   try {
-    const response = await axios.get(`${API_URL}/accounts/${accountId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken || refreshToken}`,
-      },
-    });
+    const response = await axios.get(`/accounts/${accountId}`);
     if (response.status !== 200) {
       console.log("Error fetching profile data");
       return [];
@@ -35,9 +24,9 @@ export async function GetProfileData(accountId: string) {
 }
 
 /**
- * 
+ *
  * Sends a request message to a receiver.
- * 
+ *
  * @param receiverId - The ID of the message receiver.
  * @param text - The content of the message.
  * @returns A Promise that resolves to the response data if the request is successful, otherwise an empty object.
@@ -46,7 +35,7 @@ export async function GetProfileData(accountId: string) {
  */
 export async function SendRequestMessage(receiverId: string, text: string) {
   try {
-    const response = await axiosPrivate.post(`${API_URL}/messages`, {
+    const response = await axiosPrivate.post(`/messages`, {
       receiverId,
       text,
     });
@@ -57,5 +46,49 @@ export async function SendRequestMessage(receiverId: string, text: string) {
     return response.data;
   } catch (error) {
     console.log("Error sending request message:", error);
+  }
+}
+
+export async function GetIsFollowed(accountId: string) {
+  try {
+    const response = await axiosPrivate.get(`/follows/is-existed${accountId}`);
+    if (response.status !== 200) {
+      return response;
+    }
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function FollowUser(accountId: string) {
+  try {
+    const response = await axiosPrivate.post("/follows", {
+      followedId: accountId,
+    });
+    if (response.status !== 200) {
+      console.log("Error following user");
+      return {};
+    }
+    return response.data;
+  } catch (error) {
+    console.log("Error following user:", error);
+  }
+}
+
+export async function UnfollowUser(accountId: string) {
+  try {
+    const response = await axiosPrivate.delete("/follows", {
+      data: {
+        followedId: accountId,
+      },
+    });
+    if (response.status !== 200) {
+      console.log("Error unfollowing user");
+      return {};
+    }
+    return response.data;
+  } catch (error) {
+    console.log("Error unfollowing user:", error);
   }
 }
