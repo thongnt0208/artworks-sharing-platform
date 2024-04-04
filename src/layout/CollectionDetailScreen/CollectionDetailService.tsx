@@ -1,8 +1,4 @@
-import axios from "axios";
-import { getAuthInfo } from "../../util/AuthUtil";
-const API_URl = process.env.REACT_APP_REAL_API_BASE_URL;
-const accessToken = getAuthInfo()?.accessToken;
-const refreshToken = getAuthInfo()?.refreshToken;
+import { axiosPrivate } from "../../hooks/useAxios";
 
 type Artwork = {
   id: string;
@@ -35,10 +31,9 @@ type CollectionProps = {
  */
 export async function GetCollectionData(collectionId: string) {
   try {
-    const response = await axios.get(`${API_URl}/collections/${collectionId}`, {
+    const response = await axiosPrivate.get(`/collections/${collectionId}`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken || refreshToken}`,
       },
     });
     if (response.status !== 200) {
@@ -70,8 +65,8 @@ export async function GetCollectionData(collectionId: string) {
  * @description This function to create a new Collection
  * @returns Update status (True: Successfully | False: Failed)
  * @example
- * @author AnhDH
- * @version 1.0.0
+ * @author AnhDH, @thongnt0208
+ * @version 2.0.0
  */
 export async function CreateCollectionData({
   collectionName,
@@ -84,25 +79,12 @@ export async function CreateCollectionData({
 }) {
   let privacyType = privacy ? 1 : 0;
   try {
-    const response = await axios.post(
-      `${API_URl}/collections`,
-      JSON.stringify({
-        collectionName,
-        privacyType,
-        artworkId,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken || refreshToken}`,
-        },
-      }
-    );
-    if (response.status === 201) {
-      return true;
-    } else {
-      return false;
-    }
+    const response = await axiosPrivate.post(`/collections`, {
+      collectionName: collectionName,
+      privacyType: privacyType,
+      artworkId: artworkId,
+    });
+    return true;
   } catch (error) {
     return false;
   }
@@ -128,8 +110,8 @@ export async function UpdateCollectionData({
 }) {
   let privacyType = privacy ? 1 : 0;
   try {
-    const response = await axios.put(
-      `${API_URl}/collections/${collectionId}`,
+    const response = await axiosPrivate.put(
+      `/collections/${collectionId}`,
       JSON.stringify({
         collectionName,
         privacyType,
@@ -137,7 +119,6 @@ export async function UpdateCollectionData({
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken || refreshToken}`,
         },
       }
     );
@@ -164,10 +145,9 @@ export async function UpdateCollectionData({
  */
 export async function DeleteCollectionData(collectionId: string) {
   try {
-    await axios.delete(`${API_URl}/collections/${collectionId}`, {
+    await axiosPrivate.delete(`/collections/${collectionId}`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken || refreshToken}`,
       },
     });
     return true;
@@ -193,20 +173,9 @@ export async function AddArtworkToCollection({
   artworkId: string;
 }) {
   try {
-    console.log("Access Token:", accessToken);
-    console.log("Refresh Token:", refreshToken);
-    await axios.post(
-      `${API_URl}/collections/${collectionId}/artwork`,
-      JSON.stringify({
-        artworkId,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken || refreshToken}`,
-        },
-      }
-    );
+    await axiosPrivate.post(`/collections/${collectionId}/artwork`, {
+      artworkId: artworkId,
+    });
     return true;
   } catch (error) {
     return false;
@@ -230,12 +199,9 @@ export async function RemoveArtworkFromCollection({
   artworkId: string;
 }) {
   try {
-    console.log("Access Token:", accessToken);
-    console.log("Refresh Token:", refreshToken);
-    await axios.delete(`${API_URl}/collections/${collectionId}/artwork`, {
+    await axiosPrivate.delete(`/collections/${collectionId}/artwork`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken || refreshToken}`,
       },
       data: JSON.stringify({
         artworkId,

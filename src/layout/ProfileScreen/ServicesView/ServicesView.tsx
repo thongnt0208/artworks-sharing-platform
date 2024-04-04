@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useOutletContext } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import {
@@ -8,15 +8,16 @@ import {
   GetServicesData,
 } from "./ServicesService";
 import { Dialog } from "primereact/dialog";
-import { Toast } from "primereact/toast";
 
 import "./ServicesView.scss";
 import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
 import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
 import { RequestProps } from "../../../components/RequestPopup";
+import { CatchAPICallingError } from "../..";
+import { toast } from "react-toastify";
 
 const ServicesView: React.FC = () => {
-  const toast = useRef<Toast>(null);
+  const navigate = useNavigate();
   let [accountId, isCreator, accountAvatar, accountFullname] =
     useOutletContext() as [string, boolean, string, string];
   const [services, setServices] = useState<ServiceProps[]>([]);
@@ -36,24 +37,6 @@ const ServicesView: React.FC = () => {
     hireHandler: () => {},
   });
 
-  const showSuccess = (summary: string, detail: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: summary,
-      detail: detail,
-      life: 3000,
-    });
-  };
-
-  const showError = (summary: string, detail: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: summary,
-      detail: detail,
-      life: 3000,
-    });
-  };
-
   const handleHireRequest = async (
     request: RequestProps,
     service: ServiceProps
@@ -65,11 +48,11 @@ const ServicesView: React.FC = () => {
         request.timeline || "",
         request.budget || 0
       );
-      if (response === true) {
-        showSuccess("Thành công", "Gửi yêu cầu thành công");
+      if (response) {
+        toast.success("Gửi yêu cầu thành công");
       }
     } catch (error) {
-      showError("Lỗi", "Gửi yêu cầu thất bại");
+      CatchAPICallingError(error, navigate);
     }
   };
 
@@ -92,19 +75,19 @@ const ServicesView: React.FC = () => {
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
-      showError("Lỗi", "Lấy dữ liệu dịch vụ thất bại");
+      CatchAPICallingError(response, navigate);
     }
-  }, [accountId]);
+  }, [accountId, navigate]);
 
   const handleDeleteService = async (serviceId: string) => {
     try {
       const response = await DeleteServiceData(serviceId);
       if (response) {
-        showSuccess("Thành công", "Xóa dịch vụ thành công");
+        toast.success("Xóa dịch vụ thành công");
         setVisible(false);
       }
     } catch (error) {
-      showError("Lỗi", "Xóa dịch vụ thất bại");
+      toast.error("Xóa dịch vụ thất bại");
     } finally {
       fetchServices();
       setSelectedService({} as ServiceProps);
