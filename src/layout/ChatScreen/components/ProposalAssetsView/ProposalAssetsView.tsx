@@ -12,6 +12,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
+  let completePrice = selectingProposal?.totalPrice * (1 - selectingProposal?.initialPrice);
   return (
     <div className="proposal-assets-container">
       <div className="proposal-assets-header">
@@ -49,7 +50,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
             selectingProposal?.status !== "CompletePayment" &&
             selectingProposal?.createdBy !== currentUserId && (
               <Button
-                label="Trả tiền đủ"
+                label={`Thanh toán ${completePrice}Xu còn lại`}
                 icon="pi pi-check"
                 className="w-full"
                 onClick={() => {

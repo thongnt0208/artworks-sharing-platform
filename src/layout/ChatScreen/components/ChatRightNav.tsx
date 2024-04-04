@@ -66,7 +66,12 @@ export default function ChatRightNav({
       />
       <MilestoneView data={currentMilestone} />
       <ProposalAssetsView data={currentAssets} proposalStateTools={proposalStateTools} />
-      <UploadProposalAssetView selectingProposal={selectingProposal} uploadAssetCallback={uploadAssetCallback} />
+      {selectingProposal?.status !== "Waiting" && (
+        <UploadProposalAssetView
+          selectingProposal={selectingProposal}
+          uploadAssetCallback={uploadAssetCallback}
+        />
+      )}
     </div>
   );
 }
