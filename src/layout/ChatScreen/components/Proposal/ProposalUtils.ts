@@ -7,6 +7,7 @@ import {
   ProposalType,
 } from "../../ChatRelatedTypes";
 import {
+  CompletePaymentProposal,
   CreateProposal,
   GetProposalAssets,
   GetProposalMilestone,
@@ -25,9 +26,7 @@ export const GetAllProposals = (
 ) => {
   selectingChatbox?.id &&
     GetProposalsByChatboxId(selectingChatbox?.id)
-      .then((res) => {
-        setProposalsList(res);
-      })
+      .then((res) => setProposalsList(res))
       .catch((error) => {
         setProposalsList([]);
         CatchAPICallingError(error, navigate);
@@ -147,6 +146,21 @@ export const GetAssets = (
   GetProposalAssets(id)
     .then((res) => {
       setCurrentAsset(res);
+    })
+    .catch((error) => {
+      CatchAPICallingError(error, navigate);
+    });
+};
+
+export const CompletePaymentProposalUtil = (
+  id: string,
+  GetAllProposals: Function,
+  navigate: ReturnType<typeof useNavigate>
+) => {
+  CompletePaymentProposal(id)
+    .then(() => {
+      toastify.success("Thanh toán thành công!");
+      GetAllProposals();
     })
     .catch((error) => {
       CatchAPICallingError(error, navigate);

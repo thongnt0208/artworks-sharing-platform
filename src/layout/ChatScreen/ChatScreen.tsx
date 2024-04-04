@@ -25,7 +25,16 @@ import {
 import { CatchAPICallingError, Dialog, Toast, Avatar, Button, ProgressSpinner } from "..";
 import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
-import { AcceptProposal, CreateAProposal, DenyProposal, GetAllProposals, GetAssets, GetMilestone, UploadProposalAssetUtil } from "./components/Proposal/ProposalUtils";
+import {
+  AcceptProposal,
+  CompletePaymentProposalUtil,
+  CreateAProposal,
+  DenyProposal,
+  GetAllProposals,
+  GetAssets,
+  GetMilestone,
+  UploadProposalAssetUtil,
+} from "./components/Proposal/ProposalUtils";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 // ---------------------------------------------------------
 
@@ -48,7 +57,7 @@ export default function ChatScreen() {
   const [proposalsList, setProposalsList] = useState<ProposalType[]>([]);
   const [selectingProposal, setSelectingProposal] = useState<ProposalType>(proposalsList[0]);
   const [currentMilestone, setCurrentMilestone] = useState<MilestoneItemType[]>([]);
-  const [currentAsset, setCurrentAsset] = useState<ProposalAssetItemType[]>([]);
+  const [currentAssets, setCurrentAssets] = useState<ProposalAssetItemType[]>([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,9 +74,12 @@ export default function ChatScreen() {
   const handleCreateAProposal = (values: any) => CreateAProposal(values, selectingChatbox, setIsShowProposalForm, toast, handleGetAllProposals, navigate);
   const handleAcceptProposal = (id: string) => AcceptProposal(id, handleGetAllProposals, navigate);
   const handleDenyProposal = (id: string) => DenyProposal(id, handleGetAllProposals, navigate);
-  const handleUploadProposalAsset = (id: string, type: number, file: File) => UploadProposalAssetUtil(id, type, file, handleGetAllProposals, navigate);
+  const handleUploadProposalAsset = (id: string, type: number, file: File) =>
+    UploadProposalAssetUtil(id, type, file, handleGetAllProposals, navigate);
   const handleGetMilestone = (id: string) => GetMilestone(id, setCurrentMilestone, navigate);
-  const handleGetAssets = (id: string) => GetAssets(id, setCurrentAsset, navigate);
+  const handleGetAssets = (id: string) => GetAssets(id, setCurrentAssets, navigate);
+  const handleCompletePayment = (id: string) =>
+    CompletePaymentProposalUtil(id, handleGetAllProposals, navigate);
   // PROPOSALS STATE TOOLS section end
   // ---------------------------------------------------------
 
@@ -137,6 +149,23 @@ export default function ChatScreen() {
 
   const fetchNextPage = () => setCurrentPage(currentPage + 1);
 
+  const requestStateTools = {
+    requestsList,
+    handleAcceptRequest,
+    handleDenyRequest,
+    handleUploadProposalAsset,
+  };
+
+  const proposalStateTools = {
+    proposalsList,
+    selectingProposal,
+    setSelectingProposal,
+    handleAcceptProposal,
+    handleDenyProposal,
+    handleUploadProposalAsset,
+    handleCompletePayment,
+  };
+
   useEffect(() => {
     GetChatboxes();
     SetCurrentChatbox();
@@ -193,7 +222,7 @@ export default function ChatScreen() {
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
         </SplitterPanel>
         <SplitterPanel className="middle-col" size={50}>
-          <div className="reciever-name-container">
+          <div className="reciever-name-container" onClick={()=> navigate(`/account/${selectingProposal.createdBy}`)}>
             <Avatar image={selectingChatbox?.avatar} size="normal" shape="circle" />
             <p className="text-cus-normal-bold">{selectingChatbox?.author?.fullname}</p>
           </div>
@@ -201,13 +230,8 @@ export default function ChatScreen() {
             <ChatContent
               selectingChatbox={selectingChatbox}
               content={chatMessages}
-              requestStateTools={{
-                requestsList,
-                handleAcceptRequest,
-                handleDenyRequest,
-                handleUploadProposalAsset,
-              }}
-              proposalStateTools={{ proposalsList, handleAcceptProposal, handleDenyProposal }}
+              requestStateTools={requestStateTools}
+              proposalStateTools={proposalStateTools}
               setIsShowProposalForm={setIsShowProposalForm}
               fetchNextPage={fetchNextPage}
             />
@@ -227,11 +251,9 @@ export default function ChatScreen() {
         <SplitterPanel className="last-col" size={30}>
           <ChatRightNav
             userInfo={{ avatar: selectingChatbox?.avatar, ...selectingChatbox?.author }}
-            proposalsList={proposalsList}
-            selectingProposal={selectingProposal}
-            setSelectingProposal={setSelectingProposal}
+            proposalStateTools={proposalStateTools}
             currentMilestone={currentMilestone}
-            currentAsset={currentAsset}
+            currentAssets={currentAssets}
             getMilestoneCallback={handleGetMilestone}
             getAssetsCallback={handleGetAssets}
           />
