@@ -18,9 +18,9 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
   const [selectedType, setSelectedType] = useState<number | null>(null);
 
   const typeOptions = [
-    { label: "Concept", value: 0 },
-    { label: "Final", value: 1 },
-    { label: "Revision", value: 2 },
+    { name: "Phát thảo", label: "Concept", value: 0 },
+    { name: "Làm lại", label: "Revision", value: 2 },
+    { name: "Cuối", label: "Final", value: 1 },
   ];
   const handleUploadAsset = () => {
     console.log("handleUploadAsset", selectingProposal?.id, selectedType, uploadedFile);
@@ -56,7 +56,7 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
                     checked={selectedType === option.value}
                     onChange={(e) => setSelectedType(e.value)}
                   />
-                  <label>{option.label}</label>
+                  <label>{option.name}</label>
                 </div>
               ))}
             </div>
