@@ -65,14 +65,14 @@ export async function CatchAPICallingError(error: any, navigate: any) {
   } else if ([521, 500, 502].includes(error.response?.status)) {
     navigate("/error-internal-server");
   } else {
-    const vnmMsg = await translate2Vietnamese(error?.response?.data);
+    const vnmMsg = await translate2Vietnamese(error?.response?.data?.errorMessage);
     toast.error(
       <>
         <span className="text-cus-h3-bold">Đã xảy ra lỗi.</span>
         <br />
         <span>{error?.message}</span>
         <br />
-        <span>{error?.response?.data}</span>
+        <br />
         <span>{vnmMsg}</span>
         <br />
         <span>{error?.response?.data?.errorMessage}</span>
