@@ -46,6 +46,9 @@ export const proposalStatusEnums = [
     value: 5,
     vietnamese: "Bị hủy",
   },
+  {
+    name: "Completed",
+    value: 6,
+    vietnamese: "Hoàn thành",
+  },
 ];
-
-
