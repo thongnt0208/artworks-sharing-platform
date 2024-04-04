@@ -44,7 +44,7 @@ export default function MultipleFileUpload({
         (prediction.className === "Porn" ||
           prediction.className === "Sexy" ||
           prediction.className === "Hentai") &&
-        prediction.probability > 0.3
+        prediction.probability > 0.7
     );
     setValidationResults((prevResults) => ({ ...prevResults, [file.name]: !isNSFW }));
   };
