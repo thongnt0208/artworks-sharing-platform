@@ -12,6 +12,7 @@
   .user-info-container {
     text-align: center;
     margin-bottom: 1rem;
+    cursor: pointer;
 
     .text-cus-h1-bold {
       font-size: 1.5rem;
@@ -89,15 +90,14 @@
   }
 }
 
-
-.highlight-btn-100{
+.highlight-btn-100 {
   background-color: $primary-100;
   border-radius: $borderRadius-100;
   width: fit-content;
   padding: 0 0.5rem;
 }
 
-.highlight-btn-200{
+.highlight-btn-200 {
   background-color: $strong-200;
   border-radius: $borderRadius-100;
   width: fit-content;
