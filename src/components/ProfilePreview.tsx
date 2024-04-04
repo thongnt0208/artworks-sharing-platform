@@ -89,7 +89,7 @@ const ProfilePreview: React.FC<{
             label="Thuê"
             className="left-button"
             rounded
-            onClick={hireCallback}
+            onClick={() => window.location.href = `/account/${creator.id}/service`}
           />
           <Button
             label="Trang cá nhân"

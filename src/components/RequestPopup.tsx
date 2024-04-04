@@ -4,12 +4,13 @@ import { Dropdown } from "primereact/dropdown";
 import { deliveryTime } from "../const/bizConstants";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
 
 import "./RequestPopup.scss";
-import { Button } from "primereact/button";
 
 export type RequestPopupProps = {
   visible: boolean;
+  startingPrice?: number;
   accountAvatar: string;
   accountName: string;
   isHire: boolean;
@@ -25,6 +26,7 @@ export type RequestProps = {
 
 const RequestPopup: React.FC<RequestPopupProps> = ({
   visible,
+  startingPrice,
   accountAvatar,
   accountName,
   isHire,
@@ -33,15 +35,15 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
 }) => {
   const [message, setMessage] = useState("");
   const [estimateDeliveryTime, setEstimateDeliveryTime] = useState("");
-  const [startingPrice, setStartingPrice] = useState(0);
+  const [budget, setBudget] = useState(0);
   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
 
   useEffect(() => {
     const fieldsFilled =
       message.trim() !== "" &&
-      (!isHire || (estimateDeliveryTime.trim() !== "" && startingPrice > 0));
+      (!isHire || (estimateDeliveryTime.trim() !== "" && (budget ?? 0) > (startingPrice ?? 0)));
     setAllFieldsFilled(fieldsFilled);
-  }, [message, estimateDeliveryTime, startingPrice, isHire]);
+  }, [message, estimateDeliveryTime, budget, isHire, startingPrice]);
 
   const handleSubmit = () => {
     const request: RequestProps = {
@@ -54,7 +56,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
       setAllFieldsFilled(false);
       setMessage("");
       setEstimateDeliveryTime("");
-      setStartingPrice(0);
+      setBudget(0);
       setTimeout(() => {
         onHide();
       }, 3000);
@@ -87,6 +89,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
             </div>
           </div>
           <div className="w-full flex flex-column justify-content-center align-items-center">
+            {message.length < 10 && (<span>Phải hơn 10 kí tự</span>)}
             <InputTextarea
               id="message"
               rows={8}
@@ -125,8 +128,9 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
                   className="text-base w-full"
                   name="startingPrice"
                   placeholder="100.000 Xu"
-                  onValueChange={(e) => setStartingPrice(e.value || 0)}
+                  onValueChange={(e) => setBudget(e.value || 0)}
                   value={startingPrice}
+                  min={startingPrice}
                 />
               </div>
             </div>
