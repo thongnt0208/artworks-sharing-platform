@@ -65,8 +65,8 @@ export async function GetCollectionData(collectionId: string) {
  * @description This function to create a new Collection
  * @returns Update status (True: Successfully | False: Failed)
  * @example
- * @author AnhDH
- * @version 1.0.0
+ * @author AnhDH, @thongnt0208
+ * @version 2.0.0
  */
 export async function CreateCollectionData({
   collectionName,
@@ -79,19 +79,12 @@ export async function CreateCollectionData({
 }) {
   let privacyType = privacy ? 1 : 0;
   try {
-    const response = await axiosPrivate.post(
-      `/collections`,
-      JSON.stringify({
-        collectionName,
-        privacyType,
-        artworkId,
-      })
-    );
-    if (response.status === 201) {
-      return true;
-    } else {
-      return false;
-    }
+    const response = await axiosPrivate.post(`/collections`, {
+      collectionName: collectionName,
+      privacyType: privacyType,
+      artworkId: artworkId,
+    });
+    return true;
   } catch (error) {
     return false;
   }
