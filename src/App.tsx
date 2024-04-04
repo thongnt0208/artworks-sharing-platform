@@ -11,8 +11,8 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 //---------------------------
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 //---------------------------
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -56,31 +56,52 @@ function App() {
   const primereactConfigValue = {};
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
-  const [chatboxes, setChatboxes] = useState<notificationItemType[]>([]);
+  // const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
+  const [chatNotis, setChatNotis] = useState<notificationItemType[]>([]);
   // const isHeaderVisible = useHeaderVisibility();
   // const isFooterVisible = useFooterVisibility();
 
   useEffect(() => {
+    // TODO: Đổi thành lấy chatbox realtime (chờ API) -> đổi setChatNotis thành setChatboxes
     GetChatboxesNoti()
       .then((chatboxes) => {
         console.log(chatboxes);
-        setChatboxes(chatboxes);
+        setChatNotis(chatboxes);
       })
       .catch((error) => {
         console.error("Error fetching chatboxes:", error);
-        setChatboxes([]);
+        setChatNotis([]);
         if (error.response?.status === 401) {
           setIsLogin(false);
         }
       });
   }, [isLogin]);
 
+  // Xử lý chatbox realtime - start
+  // function castChatboxToNotification(chatbox: ChatboxItemType): notificationItemType {
+  //   const notification: notificationItemType = {
+  //     notificationId: chatbox.id,
+  //     content: "Tin nhắn mới ...",
+  //     notifyType: "chat",
+  //     isSeen: chatbox.isSeen,
+  //     creationDate: chatbox.time,
+  //     createdBy: chatbox.author.fullname,
+  //     avatar: chatbox.avatar,
+  //   };
+  //   return notification;
+  // }
+
+  // useEffect(() => {
+  //   setChatNotis(chatboxes.map((chatbox) => castChatboxToNotification(chatbox)));
+  // }, [chatboxes]);
+  // Xử lý chatbox realtime - end
+
   return (
     <PrimeReactProvider value={primereactConfigValue}>
       <AuthProvider>
         <BrowserRouter>
           {/* {isHeaderVisible && <Header isLogin={isLogin} setIsLogin={setIsLogin} />} */}
-          <Header isLogin={isLogin} setIsLogin={setIsLogin} chatboxesData={chatboxes} />
+          <Header isLogin={isLogin} setIsLogin={setIsLogin} chatboxesData={chatNotis} />
 
           <Routes>
             <Route path="/" element={<HomeScreen isLogin={isLogin} />} />
