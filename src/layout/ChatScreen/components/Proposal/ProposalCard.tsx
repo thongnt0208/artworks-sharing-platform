@@ -1,29 +1,18 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
 import { ConfirmDialog } from "primereact/confirmdialog";
-import { FileUpload } from "primereact/fileupload";
-import { RadioButton } from "primereact/radiobutton";
 import { getAuthInfo } from "../../../../util/AuthUtil";
 import { ProposalCardProps } from "../../ChatRelatedTypes";
 import { translateProposalStatus } from "../../../../util/Enums";
-import { maxSizeImagesUpload } from "../../../../const/bizConstants";
 import "./styles/ProposalCard.scss";
 // ---------------------------------------------------------
 
 export default function ProposalCard({ ...props }: ProposalCardProps) {
-  const { id, projectTitle, description, targetDelivery, initialPrice, totalPrice, status, createdBy, acceptCallback, denyCallback, editCallback, cancelCallback, uploadAssetCallback } = props;
+  const { id, projectTitle, description, targetDelivery, initialPrice, totalPrice, status, createdBy, acceptCallback, denyCallback, editCallback, cancelCallback } = props;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [selectedType, setSelectedType] = useState<number | null>(null);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
-  const typeOptions = [
-    { label: "Concept", value: 0 },
-    { label: "Final", value: 1 },
-    { label: "Revision", value: 2 },
-  ];
 
   const showConfirmPopup = () => {
     setConfirmVisible(true);
@@ -34,15 +23,6 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
     setConfirmVisible(false);
   };
 
-  const handleUploadAsset = () => {
-    console.log("handleUploadAsset", id, selectedType, uploadedFile);
-
-    if (selectedType !== null && uploadedFile) {
-      uploadAssetCallback && uploadAssetCallback(id, selectedType, uploadedFile);
-      setUploadedFile(null);
-      setSelectedType(null);
-    }
-  };
 
   return (
     <div className="system-noti-card">
@@ -91,45 +71,6 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
           >
             Hủy thỏa thuận
           </Button>
-        </div>
-      )}
-
-      {status?.toUpperCase() === "ACCEPTED" && (
-        <div className="btns-container">
-          Thỏa thuận đã được chấp nhận.
-          {createdBy === currentUserId && (
-            <div className="upload-proposal-assets-container">
-              <FileUpload
-                mode="basic"
-                chooseLabel="Chọn tệp"
-                accept="*"
-                maxFileSize={maxSizeImagesUpload}
-                onSelect={(event) => setUploadedFile(event.files[0])}
-              />
-              <div className="radio-buttons flex gap-2 justify-content-center">
-                {typeOptions.map((option) => (
-                  <div key={option.label} className="radio-button-container flex gap-1 align-items-center">
-                    <RadioButton
-                      value={option.value}
-                      checked={selectedType === option.value}
-                      onChange={(e) => setSelectedType(e.value)}
-                    />
-                    <label>{option.label}</label>
-                  </div>
-                ))}
-              </div>
-              <Button
-                disabled={selectedType === null && uploadedFile === null}
-                onClick={handleUploadAsset}
-                rounded
-              >
-                Gửi tệp
-              </Button>
-            </div>
-          )}
-          {createdBy !== currentUserId && (
-            <p>Từ giờ, nhà sáng tạo sẽ làm việc và gửi bản thảo đến bạn!</p>
-          )}
         </div>
       )}
     </div>

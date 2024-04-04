@@ -256,6 +256,7 @@ export default function ChatScreen() {
             currentAssets={currentAssets}
             getMilestoneCallback={handleGetMilestone}
             getAssetsCallback={handleGetAssets}
+            uploadAssetCallback={handleUploadProposalAsset}
           />
         </SplitterPanel>
       </Splitter>

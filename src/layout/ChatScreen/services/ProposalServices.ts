@@ -419,3 +419,41 @@ export async function GetProposalAssets(proposalId: string): Promise<ProposalAss
       throw error;
     });
 }
+
+/**
+ * This function is used to get all reviews of a proposal
+ * 
+ * @param proposalId - the id of the proposal
+ * @param vote - the vote of the review
+ * @param detail - the detail of the review
+ * @returns {Promise<any>} - the response from the API
+ * @throws {Error} an error from the API request
+ * @example
+ * const response = await AddReviewToProposal("123", 5, "Good job");
+ * console.log(response);
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function AddReviewToProposal(proposalId: string, vote: number, detail: string): Promise<any> {
+  return axiosPrivate
+    .post('/reviews', { proposalId: proposalId, vote: vote, detail: detail })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error adding review:", error);
+      throw error;
+    });
+}
+
+export async function GetReviewOfService(proposalId: string): Promise<any> {
+  return axiosPrivate
+    .get(`/proposals/review/${proposalId}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching review:", error);
+      throw error;
+    });
+}
