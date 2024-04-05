@@ -360,9 +360,10 @@ export async function addFollow(followUserId: string): Promise<any> {
  * @version 1.2.0
  */
 export async function removeFollow(followUserId: string): Promise<any> {
+  console.log("followUserId", followUserId);
   try {
     let body = {
-      accountId: followUserId,
+      followedId: followUserId,
     };
     const response = await axiosPrivate.delete(`${BASE_URL}/follows`, {
       data: body,
