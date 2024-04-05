@@ -149,6 +149,7 @@ export async function GetProposalsByChatboxId(chatboxId: string): Promise<Propos
             status: item.proposalStatus,
             createdBy: item.createdBy,
             createdOn: item.createdOn,
+            isReviewed: item.isReviewed,
           };
         });
       } else {
