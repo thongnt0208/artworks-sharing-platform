@@ -52,6 +52,7 @@ export type ProposalType = {
   numberOfRevision?: number;
   createdBy?: string;
   createdOn?: string;
+  isReviewed?: boolean;
 };
 
 export type ProposalStateToolsType = {
