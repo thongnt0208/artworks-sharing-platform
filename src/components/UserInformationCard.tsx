@@ -24,10 +24,12 @@ export type UserInformationProps = {
   artworksView?: number;
   followerNum?: number;
   followingNum?: number;
+  isFollowed: boolean;
   isVerrified?: boolean;
   projectCompleted?: number;
   hire?: boolean;
   followHandler?: () => void;
+  unfollowHandler?: () => void;
   messageHandler?: (request: RequestProps) => void;
   editHandler?: () => void;
   privacyEditHandler?: () => void;
@@ -81,12 +83,22 @@ const UserInformationCard: React.FC<UserInformationProps> = (
             </>
           ) : (
             <>
-              <Button
-                rounded
-                className="top-button"
-                label="Theo dõi"
-                onClick={props.followHandler}
-              />
+              {props.isFollowed ? (
+                <Button
+                  rounded
+                  className="top-button"
+                  label="Hủy theo dõi"
+                  onClick={props.unfollowHandler}
+                />
+              ) : (
+                <Button
+                  rounded
+                  className="top-button"
+                  label="Theo dõi"
+                  onClick={props.followHandler}
+                />
+              )}
+
               <Button
                 rounded
                 className="bot-button"
