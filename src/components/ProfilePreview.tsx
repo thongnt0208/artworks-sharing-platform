@@ -89,7 +89,7 @@ const ProfilePreview: React.FC<{
             label="Thuê"
             className="left-button"
             rounded
-            onClick={() => window.location.href = `/account/${creator.id}/service`}
+            onClick={() => navigate(`/account/${creator.id}/service`)}
           />
           <Button
             label="Trang cá nhân"

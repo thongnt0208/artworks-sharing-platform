@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import {
@@ -18,8 +18,9 @@ import { toast } from "react-toastify";
 
 const ServicesView: React.FC = () => {
   const navigate = useNavigate();
-  let [accountId, isCreator, accountAvatar, accountFullname] =
-    useOutletContext() as [string, boolean, string, string];
+  const accountId = useParams()?.id; 
+  let [isCreator, accountAvatar, accountFullname] =
+    useOutletContext() as [boolean, string, string];
   const [services, setServices] = useState<ServiceProps[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [isNew, setIsNew] = useState<boolean>(false);
@@ -71,7 +72,7 @@ const ServicesView: React.FC = () => {
   };
 
   const fetchServices = useCallback(async () => {
-    const response = await GetServicesData(accountId);
+    const response = await GetServicesData(accountId || "");
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
