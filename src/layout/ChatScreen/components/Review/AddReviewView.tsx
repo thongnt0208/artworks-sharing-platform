@@ -64,7 +64,8 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal }) => {
     <div className="add-review-container">
       {
         // check if proposal status is CompletePayment && current user is not the creator -> Start to add review
-        selectingProposal?.status === "CompletePayment" &&
+        !selectingProposal?.isReviewed &&
+          selectingProposal?.status === "CompletePayment" &&
           selectingProposal?.createdBy !== currentUserId && (
             <form onSubmit={handleSubmit}>
               <div>
