@@ -15,9 +15,9 @@ const refreshToken = getAuthInfo()?.refreshToken || "";
  * @param accountId - The ID of the account to retrieve artworks for.
  * @returns A promise that resolves to the artworks data.
  * @author AnhDH 
- * @version 1.1.0
+ * @version 1.2.0
  */
-export async function GetArtworksData(pageSize: number, pageNumber: number, accountId: string) {
+export async function GetArtworksData(pageSize: number, pageNumber: number, accountId: string, state?: number) {
   try {
     const response = await axios.get(
       `${API_URL}/accounts/${accountId}/artworks`,
@@ -25,6 +25,7 @@ export async function GetArtworksData(pageSize: number, pageNumber: number, acco
         params: {
           pageNumber: pageNumber,
           pageSize: pageSize,
+          state: state,
         },
         headers: {
           "Content-Type": "application/json",
@@ -48,6 +49,7 @@ export async function GetArtworksData(pageSize: number, pageNumber: number, acco
           creatorFullName: artwork.account.fullname,
         }));
       }
+      console.log("artworksData", artworksData);
       return artworksData;
     }
   } catch (error) {

@@ -15,6 +15,7 @@ import {
   fetchIsFollow,
   removeFollow,
 } from "../ArtworkDetailScreen/Service";
+import "./ProfileScreen.scss";
 // import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
@@ -93,7 +94,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   return (
     <>
       {profile ? (
-        <div className="profile-screen-container grid grid-nogutter mt-3">
+        <div className="profile-screen-container grid">
           <div className="profile-information-container col col-3">
             <UserInformationCard
               id={profile.id}
@@ -119,7 +120,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               messageHandler={requestMessageHandler}
             />
           </div>
-          <div className="profile-menu-container col col-9 pl-6 ">
+          <div className="profile-menu-container col col-9">
             <MenuTab
               accountId={profile.id}
               isCreator={isCreator}
@@ -133,17 +134,6 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           <h1>Opps! Chúng tôi không tìm thấy người dùng này.</h1>
         </div>
       )}
-
-      {/* <Button label="Test page" onClick={() => navigate("edit")} />
-      <Button
-        label="Vùng đăng ký"
-        onClick={() =>
-          navigate("subscribe", {
-            state: { subscribeData, isCreator, isSubscribed, isSetup },
-          })
-        }
-      />
-      <Outlet /> */}
     </>
   );
 };

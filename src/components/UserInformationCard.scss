@@ -1,15 +1,16 @@
 @import "./../const/variables.scss";
 .user-information-card-container {
-  width: 371px;
-  margin: 33px;
+  width: fit-content;
+  margin: 0 auto;
   .user-information-card {
     text-align: center;
-    .p-card-footer {
+    .action-section {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 0;
+      padding: 30px 0;
+      border-bottom: 1px solid $bg-300;
       button {
         width: 100%;
         margin-bottom: 10px;
