@@ -18,12 +18,13 @@ import { toast } from "react-toastify";
 
 const ServicesView: React.FC = () => {
   const navigate = useNavigate();
-  const accountId = useParams()?.id; 
-  let [isCreator, accountAvatar, accountFullname] =
-    useOutletContext() as [boolean, string, string];
+  const paramAccountId = useParams()?.id; 
+  let [accountId, isCreator, accountAvatar, accountFullname] =
+    useOutletContext() as [string, boolean, string, string];
   const [services, setServices] = useState<ServiceProps[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [isNew, setIsNew] = useState<boolean>(false);
+  
   const [selectedService, setSelectedService] = useState<ServiceProps>({
     id: "",
     serviceName: "",
@@ -33,8 +34,10 @@ const ServicesView: React.FC = () => {
     numberOfRevision: 0,
     startingPrice: 0,
     thumbnail: "",
+    accountId: paramAccountId || "",
     accountFullname: "",
     accountAvatar: "",
+    isCreator: isCreator,
     hireHandler: () => {},
   });
 
@@ -72,7 +75,8 @@ const ServicesView: React.FC = () => {
   };
 
   const fetchServices = useCallback(async () => {
-    const response = await GetServicesData(accountId || "");
+    if (!accountId) return;
+    const response = await GetServicesData(accountId);
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
@@ -117,6 +121,7 @@ const ServicesView: React.FC = () => {
                   numberOfRevision={service.numberOfRevision}
                   startingPrice={service.startingPrice}
                   thumbnail={service.thumbnail}
+                  accountId={accountId}
                   accountFullname={accountFullname}
                   accountAvatar={accountAvatar}
                   isCreator={isCreator}
@@ -150,7 +155,7 @@ const ServicesView: React.FC = () => {
         contentClassName="service-dialog-content"
         visible={visible}
         modal
-        dismissableMask={false}
+        dismissableMask={true}
         closable={false}
         onHide={() => {
           localStorage.removeItem("artworksRef");

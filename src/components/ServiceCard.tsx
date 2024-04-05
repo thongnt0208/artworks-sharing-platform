@@ -15,16 +15,16 @@ export type ServiceProps = {
   numberOfRevision: number;
   startingPrice: number;
   thumbnail: string;
+  accountId: string;
   accountFullname: string;
   accountAvatar: string;
-  isCreator?: boolean;
+  isCreator: boolean;
   artworkReferences?: ArtworkProps[];
   editHandler?: () => void;
   hireHandler: (request: RequestProps) => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
   const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
-
   return (
     <div
       className="service-card-container "

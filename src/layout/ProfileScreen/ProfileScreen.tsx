@@ -10,7 +10,11 @@ import MenuTab from "./MenuTab/MenuTab";
 import { RequestProps } from "../../components/RequestPopup";
 import { toast } from "react-toastify";
 import { CatchAPICallingError } from "..";
-import { addFollow, fetchIsFollow, removeFollow } from "../ArtworkDetailScreen/Service";
+import {
+  addFollow,
+  fetchIsFollow,
+  removeFollow,
+} from "../ArtworkDetailScreen/Service";
 // import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
@@ -58,29 +62,33 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     response.then((res) => {
       setIsFollow(true);
     });
-  }
+  };
 
   const handleUnfollow = () => {
     const response = removeFollow(profileId || "");
     response.then((res) => {
       setIsFollow(false);
     });
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const profileData = await GetProfileData(profileId || "");
-      const isFollowed = await fetchIsFollow(profileId || "");
-      setProfile(profileData);
-      setIsFollow(isFollowed);
-      if (getAuthInfo()?.id === profileId) {
-        setIsCreator(true);
-      } else {
-        setIsCreator(false);
+      try {
+        const profileData = await GetProfileData(profileId || "");
+        const isFollowed = await fetchIsFollow(profileId || "");
+        setProfile(profileData);
+        setIsFollow(isFollowed);
+        if (getAuthInfo()?.id === profileId) {
+          setIsCreator(true);
+        } else {
+          setIsCreator(false);
+        }
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
       }
     };
     fetchData();
-  }, [isFollow, profileId]);
+  }, [isFollow, navigate, profileId]);
 
   return (
     <>
