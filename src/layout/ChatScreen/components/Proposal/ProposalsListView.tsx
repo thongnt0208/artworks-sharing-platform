@@ -1,7 +1,7 @@
-import React from "react";
 import { ProposalType } from "../../ChatRelatedTypes";
 import { formatTime } from "../../../../util/TimeHandle";
 import { translateProposalStatus } from "../../../../util/Enums";
+import { Panel } from "primereact/panel";
 
 type Props = {
   data: ProposalType[];
@@ -14,33 +14,44 @@ export default function ProposalsListView({
   selectingProposal,
   setSelectingProposal,
 }: Props) {
+  const headerTemplate = (options: any) => {
+    const className = `${options.className} justify-content-space-between`;
+
+    return (
+      <div className={className}>
+        <div className="proposals-list-header w-full" style={{textAlign: "center"}}>
+          <p className="text-cus-h3-bold pl-5">Các thỏa thuận</p>
+        </div>
+        <div>{options.togglerElement}</div>
+      </div>
+    );
+  };
   return (
-    <div className="proposals-list-container">
-      <div className="proposals-list-header">
-        <p className="text-cus-h2-bold">Các thỏa thuận</p>
-      </div>
-      <div className="proposals-list-content">
-        {data?.map((proposal) => (
-          <div
-            key={proposal.id}
-            className={"proposal-item" + (proposal.id === selectingProposal?.id ? " active" : "")}
-            onClick={() => setSelectingProposal(proposal)}
-          >
-            <div className="first-collumn-frame">
-              <p className="text-cus-normal-bold">{proposal.projectTitle}</p>
-              <p className="text-cus-normal">
-                Đến hạn: {formatTime(proposal.targetDelivery, "dd/MM/yyyy")}
-              </p>
+    <Panel headerTemplate={headerTemplate} toggleable>
+      <div className="proposals-list-container">
+        <div className="proposals-list-content">
+          {data?.map((proposal) => (
+            <div
+              key={proposal.id}
+              className={"proposal-item" + (proposal.id === selectingProposal?.id ? " active" : "")}
+              onClick={() => setSelectingProposal(proposal)}
+            >
+              <div className="first-collumn-frame">
+                <p className="text-cus-normal-bold">{proposal.projectTitle}</p>
+                <p className="text-cus-normal">
+                  Đến hạn: {formatTime(proposal.targetDelivery, "dd/MM/yyyy")}
+                </p>
+              </div>
+              <div className="second-collumn-frame">
+                <p className="text-cus-normal highlight-btn-100">
+                  {translateProposalStatus(proposal.status)}
+                </p>
+                <p className="text-cus-normal highlight-btn-200">{proposal.totalPrice}Xu</p>
+              </div>
             </div>
-            <div className="second-collumn-frame">
-              <p className="text-cus-normal highlight-btn-100">
-                {translateProposalStatus(proposal.status)}
-              </p>
-              <p className="text-cus-normal highlight-btn-200">{proposal.totalPrice}Xu</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </Panel>
   );
 }

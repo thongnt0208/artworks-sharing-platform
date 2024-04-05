@@ -4,6 +4,7 @@ import { ProposalAssetItemType, ProposalStateToolsType } from "../../ChatRelated
 import "./ProposalAssetsView.scss";
 import { getAuthInfo } from "../../../../util/AuthUtil";
 import AddReviewView from "../Review/AddReviewView";
+import { Panel } from "primereact/panel";
 
 type Props = { data: ProposalAssetItemType[]; proposalStateTools: ProposalStateToolsType };
 
@@ -13,43 +14,54 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   let completePrice = selectingProposal?.totalPrice * (1 - selectingProposal?.initialPrice);
-  return (
-    <div className="proposal-assets-container">
-      <div className="proposal-assets-header">
-        <p className="text-cus-h2-bold">Tài nguyên liên quan</p>
-      </div>
-      <div className="proposal-assets-content">
-        {data?.map((asset) => (
-          <div className="proposal-asset-item">
-            <Button
-              label="Tệp đính kèm"
-              icon="pi pi-download"
-              iconPos="right"
-              disabled={
-                // check if asset is final && proposal status is not CompletePayment && current user is not the creator
-                asset.type === "Final" &&
-                selectingProposal?.status !== "CompletePayment" &&
-                selectingProposal?.createdBy !== currentUserId
-              }
-              onClick={() => {
-                window.open(asset?.url, "_blank");
-              }}
-              className="w-full mr-3"
-            />
-            <p className="text-cus-normal second-collumn-frame">
-              {formatTime(asset.createdOn, "dd/MM/yyyy HH:mm")}
-            </p>
-          </div>
-        ))}
-      </div>
+  const isCreator = selectingProposal?.createdBy === currentUserId;
 
-      <div className="complete-payment-container">
+  const headerTemplate = (options: any) => {
+    const className = `${options.className} justify-content-space-between`;
+
+    return (
+      <div className={className}>
+        <div className="proposal-assets-header w-full" style={{ textAlign: "center" }}>
+          <p className="text-cus-h3-bold pl-5">Tài nguyên liên quan</p>
+        </div>
+        <div>{options.togglerElement}</div>
+      </div>
+    );
+  };
+  return (
+    <Panel headerTemplate={headerTemplate} toggleable>
+      <div className="proposal-assets-container">
+        <div className="proposal-assets-content">
+          {data?.map((asset) => (
+            <div className="proposal-asset-item">
+              <Button
+                label="Tệp đính kèm"
+                icon="pi pi-download"
+                iconPos="right"
+                disabled={
+                  // check if asset is final && proposal status is not CompletePayment && current user is not the creator
+                  asset.type === "Final" &&
+                  selectingProposal?.status !== "CompletePayment" &&
+                  selectingProposal?.createdBy !== currentUserId
+                }
+                onClick={() => {
+                  window.open(asset?.url, "_blank");
+                }}
+                className="w-full mr-3"
+              />
+              <p className="text-cus-normal second-collumn-frame">
+                {formatTime(asset.createdOn, "dd/MM/yyyy HH:mm")}
+              </p>
+            </div>
+          ))}
+        </div>
+
         {
           // check if there is a final asset and proposal status is not Complete the Final Payment -> Start to complete payment
-          data.some((asset) => asset.type === "Final") &&
-            selectingProposal?.status !== "CompletePayment" &&
-            selectingProposal?.createdBy !== currentUserId && (
+          selectingProposal?.status === "Completed" && !isCreator && (
+            <div className="complete-payment-container">
               <Button
+              severity="info"
                 label={`Thanh toán ${completePrice}Xu còn lại`}
                 icon="pi pi-check"
                 className="w-full"
@@ -59,11 +71,21 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
                   handleCompletePayment && handleCompletePayment(selectingProposal?.id);
                 }}
               />
+            </div>
+          )
+        }
+        {
+          // check if proposal status is CompletePayment && current user is not the creator -> Start to add review
+          selectingProposal?.status === "CompletePayment" &&
+            !selectingProposal?.isReviewed &&
+            !isCreator && (
+              <AddReviewView
+                selectingProposal={selectingProposal}
+                refreshProposalList={handleGetAllProposals}
+              />
             )
         }
       </div>
-
-      <AddReviewView selectingProposal={selectingProposal} refreshProposalList={handleGetAllProposals} />
-    </div>
+    </Panel>
   );
 }
