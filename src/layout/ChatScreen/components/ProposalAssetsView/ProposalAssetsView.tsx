@@ -8,7 +8,7 @@ import AddReviewView from "../Review/AddReviewView";
 type Props = { data: ProposalAssetItemType[]; proposalStateTools: ProposalStateToolsType };
 
 export default function ProposalAssetsView({ data, proposalStateTools }: Props) {
-  const { selectingProposal, handleCompletePayment } = proposalStateTools;
+  const { selectingProposal, handleCompletePayment, handleGetAllProposals } = proposalStateTools;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
@@ -63,7 +63,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
         }
       </div>
 
-      <AddReviewView selectingProposal={selectingProposal} />
+      <AddReviewView selectingProposal={selectingProposal} refreshProposalList={handleGetAllProposals} />
     </div>
   );
 }

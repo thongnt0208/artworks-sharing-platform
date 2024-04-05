@@ -12,9 +12,10 @@ import { toast } from "react-toastify";
 
 interface Props {
   selectingProposal: ProposalType;
+  refreshProposalList?: () => void;
 }
 
-const AddReviewView: React.FC<Props> = ({ selectingProposal }) => {
+const AddReviewView: React.FC<Props> = ({ selectingProposal, refreshProposalList }) => {
   const navigate = useNavigate();
   const [vote, setVote] = useState<number>(0);
   const [detail, setDetail] = useState("");
@@ -39,6 +40,7 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal }) => {
         await AddReviewToProposal(selectingProposal?.id, vote, detail);
         // Reset the form after successful submission
         toast.success("Đánh giá đã được gửi.");
+        refreshProposalList && refreshProposalList();
         setVote(0);
         setDetail("");
       }
