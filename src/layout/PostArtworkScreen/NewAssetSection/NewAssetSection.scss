@@ -1,6 +1,12 @@
 @import "../../../const/variables.scss";
 
 .new-asset-section-dialog {
+  .upload-asset-note-container{
+    span{
+      color: gray;
+      font-style: italic;
+    }
+  }
   .p-dialog-header {
     border: none;
     .p-dialog-title {

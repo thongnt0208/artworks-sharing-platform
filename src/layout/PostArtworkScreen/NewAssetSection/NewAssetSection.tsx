@@ -86,45 +86,57 @@ export default function NewAssetSection({
       footer={footerContent}
       closable
     >
+      <div className="upload-asset-note-container">
+        <span>
+          * Đăng tài nguyên có trả phí đồng nghĩa với việc bạn đồng ý mọi điều khoản của nền tảng.
+        </span>
+        <br />
+        <span>* Tác phẩm sẽ cần được duyệt bởi Quản trị viên hệ thống trước khi được hiển thị.</span>
+        <br />
+        <span>* Tài nguyên không phù hợp sẽ bị xóa cùng tác phẩm chứa tài nguyên đó.</span>
+        <br />
+        <br />
+      </div>
+
       <form onSubmit={onSubmit} style={{ textAlign: "center" }}>
-          <div className="asset-inputs w-full flex flex-column gap-3">
-            <div className="input-container">
-              <label htmlFor="AssetTitle">Tên tài nguyên</label>
-              <InputText
-                id="AssetTitle"
-                name="AssetTitle"
-                required
-                value={title}
-                placeholder="tên tài nguyên"
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-              />
-            </div>
-            <div className="input-container">
-              <label htmlFor="Description">Mô tả tài nguyên</label>
-              <InputText
-                id="Description"
-                name="Description"
-                required
-                value={description}
-                placeholder="tài nguyên gồm..."
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              />
-            </div>
-            <div className="input-container">
-              <label htmlFor="Price">Giá (Xu)</label>
-              <InputNumber
-                id="Price"
-                name="Price"
-                value={price}
-                onValueChange={(e: InputNumberValueChangeEvent) => {
-                  setPrice(e.value as number);
-                }}
-              />
-            </div>
+        <div className="asset-inputs w-full flex flex-column gap-3">
+          <div className="input-container">
+            <label htmlFor="AssetTitle">Tên tài nguyên</label>
+            <InputText
+              id="AssetTitle"
+              name="AssetTitle"
+              required
+              value={title}
+              placeholder="tên tài nguyên"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="Description">Mô tả tài nguyên</label>
+            <InputText
+              id="Description"
+              name="Description"
+              required
+              value={description}
+              placeholder="tài nguyên gồm..."
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+          </div>
+          <div className="input-container">
+            <label htmlFor="Price">Giá (Xu)</label>
+            <InputNumber
+              id="Price"
+              name="Price"
+              value={price}
+              onValueChange={(e: InputNumberValueChangeEvent) => {
+                setPrice(e.value as number);
+              }}
+            />
+          </div>
         </div>
       </form>
     </Dialog>
