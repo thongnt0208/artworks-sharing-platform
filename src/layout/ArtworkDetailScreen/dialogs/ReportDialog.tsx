@@ -2,9 +2,10 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { RadioButton } from "primereact/radiobutton";
 import { InputTextarea } from "primereact/inputtextarea";
-import { useState, useEffect, useRef } from "react";
-import { GetReportTypes, MakeReport } from "./Service";
+import { useState, useRef } from "react";
+import {  MakeReport } from "./Service";
 import { Toast } from "primereact/toast";
+import { reportTypeEnums } from "../../../util/Enums";
 
 type Props = {
   visible: boolean;
@@ -19,14 +20,9 @@ export type ReportType = {
 };
 
 export default function ReportDialog({ visible, setVisibility, targetId, entityName }: Props) {
-  const [reportTypes, setReportTypes] = useState<ReportType[]>([]);
   const [selectedType, setSelectedType] = useState(0);
   const [description, setDescription] = useState("");
   const toast: any = useRef(null);
-
-  useEffect(() => {
-    GetReportTypes().then((types) => setReportTypes(types));
-  }, [visible]);
 
   const onSubmit = () => {
     MakeReport(entityName.toUpperCase(), targetId, selectedType, description)
@@ -61,17 +57,17 @@ export default function ReportDialog({ visible, setVisibility, targetId, entityN
       >
         <div className="flex flex-column gap-2 pb-3">
           <div className="field-radiobutton flex flex-column align-items-start gap-2">
-            {reportTypes.map((type) => (
+            {reportTypeEnums.map((type) => (
               <div>
                 <RadioButton
-                  inputId={"rpType" + type.id.toString()}
-                  key={type.id}
+                  inputId={"rpType" + type.name}
+                  key={type.name}
                   value={type.id}
                   checked={selectedType === type.id}
                   onChange={(e) => setSelectedType(e.value)}
                 />
                 <label htmlFor={"rpType" + type.id.toString()} className="ml-2">
-                  {type.name}
+                  {type.vietnamese}
                 </label>
               </div>
             ))}

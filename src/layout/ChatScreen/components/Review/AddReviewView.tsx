@@ -68,7 +68,7 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal }) => {
           selectingProposal?.createdBy !== currentUserId && (
             <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="rating">Rating:</label>
+                <label htmlFor="rating">Đánh giá:</label>
                 <Rating
                   value={vote}
                   onChange={handleVoteChange}
@@ -78,12 +78,12 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal }) => {
                 />
               </div>
               <div>
-                <label htmlFor="detail">Review Details:</label>
+                <label htmlFor="detail">Đánh giá chi tiết:</label>
                 <InputTextarea {...textareaProperties} />
               </div>
               <Button
                 type="submit"
-                label="Submit Review"
+                label="Gửi đánh giá"
                 loading={isSubmitting}
                 disabled={isSubmitting || detail === "" || vote === 0}
               />
