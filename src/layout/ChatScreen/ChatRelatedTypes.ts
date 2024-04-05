@@ -59,6 +59,7 @@ export type ProposalStateToolsType = {
   proposalsList: ProposalType[];
   selectingProposal: ProposalType;
   setSelectingProposal: (proposal: ProposalType) => void;
+  handleGetAllProposals?: () => void;
   handleAcceptProposal?: (id: string) => void;
   handleDenyProposal?: (id: string) => void;
   handleCompletePayment?: (id: string) => void;
