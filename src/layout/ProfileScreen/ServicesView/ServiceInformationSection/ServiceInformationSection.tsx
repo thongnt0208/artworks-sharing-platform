@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { FileUpload } from "primereact/fileupload";
-import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 
 import { useFormik } from "formik";
@@ -20,6 +19,9 @@ import { CreateServiceData, UpdateServiceData } from "../ServicesService";
 import ReferenceArtworksSection from "../ReferenceArtworksSection/ReferenceArtworksSection";
 import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
 import "./ServiceInformationSection.scss";
+import { toast } from "react-toastify";
+import { CatchAPICallingError } from "../../..";
+import { useNavigate } from "react-router-dom";
 
 interface ServiceInformationProps {
   props: ServiceProps;
@@ -36,8 +38,8 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   fetchServiceData,
 }) => {
   let id = props?.id;
-  const toast = useRef<Toast>(null);
   const accountId = getAuthInfo()?.id;
+  const navigate = useNavigate();
   const [artworks, setArtworks] = useState<ArtworkProps[]>(
     props?.artworkReferences || []
   );
@@ -91,23 +93,25 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
     if (id) {
       UpdateServiceData(values, id)
         .then((response) => {
-          showSuccess();
+          toast.success("Cập nhật dịch vụ thành công");
           fetchServiceData();
           setClose(false);
         })
         .catch((err) => {
-          showError();
+          toast.error("Cập nhật dịch vụ thất bại");
+          CatchAPICallingError(err, navigate);
         });
     } else {
       CreateServiceData(values)
         .then((response) => {
           formik.resetForm();
-          showSuccess();
+          toast.success("Tạo dịch vụ thành công");
           fetchServiceData();
           setClose(false);
         })
         .catch((err) => {
-          showError();
+          toast.error("Tạo dịch vụ thất bại");
+          CatchAPICallingError(err, navigate);
         });
     }
   };
@@ -127,27 +131,8 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
     onSubmit: (values) => handleSubmit(values),
   });
 
-  const showSuccess = () => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Thành công",
-      detail: "Cập nhật thành công",
-      life: 3000,
-    });
-  };
-
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Lỗi",
-      detail: "Cập nhật lỗi",
-      life: 3000,
-    });
-  };
-
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Toast ref={toast} />
       {artworks.length === 0 ? (
         <>
           <div className="w-full">
