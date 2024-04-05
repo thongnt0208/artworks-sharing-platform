@@ -6,12 +6,10 @@
 
   .first-col,
   .last-col {
-    max-height: calc(100vh - 106px);
     overflow-y: auto;
   }
 
   .middle-col {
-    max-height: calc(100vh - 106px);
     display: flex;
     flex-direction: column;
     border: solid 1px $linear-border-100;

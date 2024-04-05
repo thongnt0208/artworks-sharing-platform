@@ -4,7 +4,6 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { AddReviewToProposal } from "../../services/ProposalServices";
 import { ProposalType } from "../../ChatRelatedTypes";
-import { getAuthInfo } from "../../../../util/AuthUtil";
 import { maxCommentCharacter } from "../../../../const/bizConstants";
 import { CatchAPICallingError } from "../../..";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +19,6 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal, refreshProposalList
   const [vote, setVote] = useState<number>(0);
   const [detail, setDetail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const authenticationInfo = getAuthInfo();
-  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   const handleVoteChange = (event: RatingChangeEvent) => {
     setVote(event.value as number);
@@ -64,11 +61,8 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal, refreshProposalList
 
   return (
     <div className="add-review-container">
-      {
-        // check if proposal status is CompletePayment && current user is not the creator -> Start to add review
-        !selectingProposal?.isReviewed &&
-          selectingProposal?.status === "CompletePayment" &&
-          selectingProposal?.createdBy !== currentUserId && (
+      
+       
             <form onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="rating">Đánh giá:</label>
@@ -91,8 +85,8 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal, refreshProposalList
                 disabled={isSubmitting || detail === "" || vote === 0}
               />
             </form>
-          )
-      }
+        
+      
     </div>
   );
 };
