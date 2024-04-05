@@ -7,12 +7,14 @@
   background-color: #ffffff !important;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.25);
   margin-bottom: 34px;
+
   .menubar {
     width: 100%;
     border-radius: 0;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+
     .p-menubar-start {
       .logo {
         text-decoration: none;
@@ -21,19 +23,39 @@
         img {
           width: 100px;
           padding: 0;
+
+          @media (max-width: 768px) {
+            width: 80px;
+          }
         }
       }
     }
+
     .p-menubar-root-list {
       padding: 0 3rem 0 3rem;
       span {
         font-weight: bold;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1rem;
+      }
+
+      .search-bar {
+        margin: 0 1rem 0 1rem;
+        width: 100%;
+
+        @media (max-width: 768px) {
+          margin: 0.5rem 1rem;
+          order: 1;
+        }
       }
     }
 
     .p-menubar-end {
       flex: 1;
       margin: 0;
+
       .end-menu {
         width: 100%;
         padding: 0 10px;
@@ -41,15 +63,22 @@
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
-        .search-bar {
-          margin: 0 1rem 0 1rem;
+
+        @media (max-width: 768px) {
+          flex-wrap: wrap;
+          justify-content: center;
         }
+
         .notification-icon,
         .message-icon,
         .avatar-icon {
           position: relative;
           cursor: pointer;
           margin: 0 1rem 0 1rem;
+
+          @media (max-width: 768px) {
+            margin: 0.5rem 0.5rem;
+          }
         }
       }
     }
