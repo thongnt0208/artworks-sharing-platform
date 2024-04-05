@@ -7,6 +7,7 @@ import RequestPopup, { RequestProps } from "./RequestPopup";
 import "./UserInformationCard.scss";
 import ProfilePreview from "./ProfilePreview";
 import { Dialog } from "primereact/dialog";
+import { useNavigate } from "react-router-dom";
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
 export type UserInformationProps = {
@@ -38,6 +39,7 @@ export type UserInformationProps = {
 const UserInformationCard: React.FC<UserInformationProps> = (
   props: UserInformationProps
 ) => {
+  const navigate = useNavigate();
   let [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
   const [isShowProfilePreview, setIsShowProfilePreview] = useState(false);
@@ -77,7 +79,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
                 className="bot-button"
                 label={`Thuê ${props.fullname}`}
                 onClick={() => {
-                  window.location.href = `/account/${props.id}/service`;
+                  navigate(`/account/${props.id}/service`);
                 }}
               />
             </>
@@ -132,25 +134,23 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         targetId={props.id}
         entityName="Account"
       />
-      {isShowProfilePreview && (
-        <Dialog
-          style={{ width: "60%", height: "100vh" }}
-          showHeader={false}
-          contentStyle={{ borderRadius: "12px", height: "100%" }}
-          visible={isShowProfilePreview}
-          onHide={() => setIsShowProfilePreview(false)}
-          modal={true}
-          dismissableMask={true}
-        >
-          <ProfilePreview
-            creator={props}
-            hireCallback={() => {
-              setIsShowRequestPopup(true);
-              setIsHire(true);
-            }}
-          />
-        </Dialog>
-      )}
+      <Dialog
+        style={{ width: "60%", height: "100vh" }}
+        showHeader={false}
+        contentStyle={{ borderRadius: "12px", height: "100%" }}
+        visible={isShowProfilePreview}
+        onHide={() => setIsShowProfilePreview(false)}
+        modal={true}
+        dismissableMask={true}
+      >
+        <ProfilePreview
+          creator={props}
+          hireCallback={() => {
+            setIsShowRequestPopup(true);
+            setIsHire(true);
+          }}
+        />
+      </Dialog>
       <Card
         footer={footer ? footer : ""}
         className="user-information-card"
