@@ -4,7 +4,9 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: start;
+    flex-wrap: wrap !important;
+    padding: 10px !important;
     .add-artwork-card {
         width: 298px;
         height: 450px;

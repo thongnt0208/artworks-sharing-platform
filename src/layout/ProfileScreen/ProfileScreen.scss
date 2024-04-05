@@ -1,5 +1,9 @@
-.profile-screen {
+.profile-screen-container {
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  .profile-information-container, .profile-menu-container {
+    padding: 5px;
+  }
 }
