@@ -160,6 +160,7 @@ export default function ChatScreen() {
     proposalsList,
     selectingProposal,
     setSelectingProposal,
+    handleGetAllProposals,
     handleAcceptProposal,
     handleDenyProposal,
     handleUploadProposalAsset,
