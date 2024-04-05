@@ -35,8 +35,6 @@ export default function PostArtworkScreen({ ...props }: Props) {
           severity: "error",
           summary: error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
           detail: _tmpMsg === "" && error?.message,
-          // summary: "Đã xảy ra lỗi",
-          // detail: "Vui lòng thử lại sau ít phút.",
         });
       } else {
         toast.current.show({

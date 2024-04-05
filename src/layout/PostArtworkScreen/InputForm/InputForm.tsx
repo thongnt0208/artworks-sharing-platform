@@ -108,7 +108,7 @@ export default function InputForm({
 
   return (
     <>
-      {hasNSFWImage && <p style={{color: "red"}}> Có hình ảnh không phù hợp </p>}
+      {hasNSFWImage && <p style={{ color: "red" }}> Có hình ảnh không phù hợp </p>}
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">
           {/* images field */}
@@ -198,7 +198,7 @@ export default function InputForm({
 
           {/* Assets field */}
           <div className="p-field">
-            <label htmlFor="Assets">Nguồn đính kèm</label>
+            <label htmlFor="Assets">Tài nguyên đính kèm</label>
             <MultipleAssetUpload
               assets={assets}
               setAssets={setAssets}
