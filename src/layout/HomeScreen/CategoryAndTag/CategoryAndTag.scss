@@ -1,9 +1,52 @@
+@import "/src/const/variables.scss";
+
 .category-and-tag {
-  .category-menu-section {
-    height: fit-content;
+  height: 66px;
+    background-color: #f0f0f0;
+  .category-carousel-section {
     border-right: 1px solid #e2e2e2;
   }
-  .tag-carousel-section {
-    background-color: #f0f0f0;
+  .category-carousel-section,.tag-carousel-section{
+    .category-carousel, .tag-carousel {
+      position: relative;
+      width: 100%;
+      overflow-y: auto;
+    
+      // Hide scrollbar initially
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    
+      &::-webkit-scrollbar {
+        width: 0; /* Chrome, Safari, Opera */
+      }
+    
+      // Show scrollbar on hover
+      &:hover {
+        scrollbar-width: auto; /* Firefox */
+        -ms-overflow-style: auto; /* Internet Explorer 10+ */
+      }
+    }
+  }
+
+  .style-section-left {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 100%;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+    background-image: linear-gradient(to right, #ffffff00, $bg-100);
+  }
+
+  .style-section-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2rem;
+    height: 100%;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+    background-image: linear-gradient(to left, #ffffff00, $bg-100);
   }
 }

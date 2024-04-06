@@ -1,5 +1,5 @@
 import React from "react";
-import CategoryMenu from "./CategoryMenu/CategoryMenu";
+import CategoryMenu from "./CategoryCarousel/CategoryCarousel";
 import TagCarousel from "../../../components/TagCarousel";
 import "./CategoryAndTag.scss";
 
@@ -23,8 +23,8 @@ const CategoryAndTag: React.FC<CategoryAndTagProps> = ({
   categories,
 }) => {
   return (
-    <div className="category-and-tag grid flex align-items-center mt-2 mb-4 w-full">
-      <div className="category-menu-section col-4 flex align-items-center p-0">
+    <div className="category-and-tag grid flex mt-2 mb-4 w-full">
+      <div className="category-carousel-section col-4 p-0">
         <CategoryMenu categories={categories} />
       </div>
       <div className="tag-carousel-section col-8 p-0">

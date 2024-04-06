@@ -15,7 +15,7 @@ const Tag: React.FC<TagProps> = ({ id, tagName, color, isCategory }) => {
   const [isSelected, setIsSelected] = React.useState(false);
   const handleOnClick = () => {
     setIsSelected(!isSelected);
-    navigate(`/discover/${tagName}`);
+    navigate(`/search?value=${tagName}`);
   };
   return isCategory ? (
     <div
