@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import { Toast } from "primereact/toast";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import {
@@ -11,6 +10,7 @@ import "./WithdrawCoin.scss";
 import { VerifyZaloPayAccount, WithdrawCoins } from "../WalletService";
 import { CatchAPICallingError } from "../../..";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export type AccountVerificationData = {
   returnCode: number;
@@ -34,24 +34,8 @@ const WithdrawCoin: React.FC<{
 }> = ({ balance, isVisible, hideCallback, phoneNumber, refreshCallback }) => {
   const [amount, setAmount] = useState<number>(0);
   const navigate = useNavigate();
-  const toast = useRef<Toast>(null);
   const [loading, setLoading] = useState(false);
-  const showSuccess = () => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Thành công",
-      detail: "Rút xu thành công",
-      life: 2000,
-    });
-  };
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Thất bại",
-      detail: "Rút xu không thành công",
-      life: 2000,
-    });
-  };
+
   const handleWithdrawBtn = () => {
     VerifyZaloPayAccount(phoneNumber).then((data: AccountVerificationData) => {
       WithdrawCoins(
@@ -63,21 +47,25 @@ const WithdrawCoin: React.FC<{
         .then((returnCode) => {
           if (returnCode === 1) {
             setLoading(false);
-            showSuccess();
+            toast.success("Rút Xu thành công");
             refreshCallback();
             hideCallback();
           } else {
-            showError();
+            toast.error("Rút Xu thất bại");
             setLoading(false);
           }
         })
-        .catch((error) => CatchAPICallingError(error, navigate));
+        .catch((error) => {
+          setLoading(false);
+          toast.error("Lỗi hệ thống");
+          CatchAPICallingError(error, navigate);
+          
+        });
     });
   };
 
   return (
     <>
-      <Toast ref={toast} />
       <Dialog
         closable={false}
         visible={isVisible}
@@ -98,7 +86,9 @@ const WithdrawCoin: React.FC<{
               min={1000}
               max={balance}
             />
-            <p className="text-red-500"><i className="pi pi-info-circle" /> Số XU rút tối thiểu: 1.000 Xu</p>
+            <p className="text-red-500">
+              <i className="pi pi-info-circle" /> Số XU rút tối thiểu: 1.000 Xu
+            </p>
           </div>
 
           <div className="action-button">

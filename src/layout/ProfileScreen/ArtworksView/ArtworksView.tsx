@@ -1,18 +1,18 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { DeleteArtworkData, GetArtworksData } from "./ArtworksService";
-import { Toast } from "primereact/toast";
 
 import ArtworkCard, { ArtworkProps } from "../../../components/ArtworkCard";
-import "./ArtworksView.scss";
 import { Dialog } from "primereact/dialog";
 import { TabMenu } from "primereact/tabmenu";
+import "./ArtworksView.scss";
+import { toast } from "react-toastify";
+import { CatchAPICallingError } from "../..";
 
 const ArtworksView: React.FC = () => {
-  const toast = useRef<Toast>(null);
   let navigate = useNavigate();
   let [accountId, isCreator] = useOutletContext() as [string, boolean];
   const [artworks, setArtworks] = React.useState<ArtworkProps[]>([]);
@@ -26,25 +26,17 @@ const ArtworksView: React.FC = () => {
     { label: "Bị từ chối" },
   ];
 
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Lỗi",
-      detail: "Hệ thống lỗi",
-      life: 3000,
-    });
-  };
-
   const deleteArtworkHandler = async (artworkId: string) => {
     try {
       const response = await DeleteArtworkData(artworkId);
       if (response) {
         setArtworks(artworks.filter((artwork) => artwork.id !== artworkId));
       } else {
-        showError();
+        toast.error("Xóa tác phẩm thất bại");
       }
     } catch (error) {
-      showError();
+      toast.error("Xóa tác phẩm thất bại");
+      CatchAPICallingError(error, navigate);
     } finally {
       setVisibleDialogs(false);
     }
@@ -52,15 +44,15 @@ const ArtworksView: React.FC = () => {
 
   React.useEffect(() => {
     const fetchArtworks = async () => {
-      const response = await GetArtworksData(10, 1, accountId);
+      const response = await GetArtworksData(50, 1, accountId, activeTab);
       if (Array.isArray(response)) {
         setArtworks(response);
       } else {
-        showError();
+        toast.error("Lấy dữ liệu tác phẩm thất bại");
       }
     };
     fetchArtworks();
-  }, [accountId]);
+  }, [accountId, activeTab]);
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
@@ -68,7 +60,6 @@ const ArtworksView: React.FC = () => {
 
   return (
     <>
-      {/* <h1 className="">Các tác phẩm</h1> */}
       {isCreator ? (
         <TabMenu
           model={items}
@@ -77,7 +68,7 @@ const ArtworksView: React.FC = () => {
           className="w-max mb-3 text-black-alpha-90 text-sm"
         />
       ) : null}
-      <div className="gallery grid p-0 flex justify-content-start">
+      <div className="gallery">
         {artworks.length === 0 ? (
           isCreator ? (
             <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
@@ -94,7 +85,7 @@ const ArtworksView: React.FC = () => {
           )
         ) : (
           artworks.map((artwork) => (
-            <div className="gallery__item col col-4" key={artwork.id}>
+            <div className="gallery__item" key={artwork.id}>
               <ArtworkCard
                 key={artwork.id}
                 id={artwork.id}
