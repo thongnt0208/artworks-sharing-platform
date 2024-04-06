@@ -5,11 +5,13 @@
  * @example
  *
  * @author ThongNT
- * @version 1.0.0
+ * @version 2.0.0
  *
  */
-export function copyURLToClipboard(): any {
-  const currentURL = window.location.href;
+export function copyURLToClipboard(currentURL?: string): any {
+  if (!currentURL) {
+    currentURL = window.location.href;
+  }
   navigator.clipboard
     .writeText(currentURL)
     .then(() => {

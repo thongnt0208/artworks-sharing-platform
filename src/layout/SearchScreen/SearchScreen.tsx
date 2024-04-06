@@ -4,7 +4,7 @@ import "./SearchScreen.scss";
 import { useEffect, useState } from "react";
 import Tag, { TagProps } from "../../components/Tag";
 import { GetCategoriesData, GetTagsData } from "../HomeScreen/HomeService";
-import { CategoryProps } from "../HomeScreen/HomeScreen";
+import { awDetailStateToolsType, CategoryProps } from "../HomeScreen/HomeScreen";
 import { ArtworkProps } from "../../components/ArtworkCard";
 import Gallery from "../../components/Gallery";
 // ----------------------------------------------------------------
@@ -43,6 +43,11 @@ export default function SearchScreen({ ...props }: Props) {
     isAssets: true,
     isAssetsFree: true,
   });
+  const [selectingAw, setSelectingAw] = useState<ArtworkProps>({} as ArtworkProps);
+  const [currentAwDetail, setCurrentAwDetail] = useState({} as any);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(false);
+
 
   const handleKeyDown = async (e: any) => {
     if (e.key === "Enter") {
@@ -92,6 +97,17 @@ export default function SearchScreen({ ...props }: Props) {
     }
   };
 
+  const awDetailStateTools: awDetailStateToolsType = {
+    selectingAw,
+    setSelectingAw,
+    currentAwDetail,
+    setCurrentAwDetail,
+    isLiked,
+    setIsLiked,
+    isFollowed,
+    setIsFollowed,
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -133,7 +149,7 @@ export default function SearchScreen({ ...props }: Props) {
       {/* Result */}
       <div className="result-container">
         {state.artworks.length === 0 && !state.isLoading && <p>Không tìm thấy dữ liệu nào</p>}
-        <Gallery artworks={state.artworks} />
+        <Gallery artworks={state.artworks} awDetailStateTools={awDetailStateTools}/>
       </div>
     </div>
   );
