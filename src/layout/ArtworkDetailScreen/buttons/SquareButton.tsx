@@ -24,10 +24,9 @@ export default function SquareButton({
   makeFollow,
   makeUnFollow,
 }: Props) {
-
   return (
     <>
-      {title !== "Theo dõi" && (
+      {title !== "Theo dõi" && title !== "Trang cá nhân" && (
         <div id={id} className="square-button-container" onClick={onclick}>
           <Button rounded className="square-button-thumbnail-container">
             <img
@@ -59,6 +58,18 @@ export default function SquareButton({
             }}
             className="follow-btn"
           />
+        </div>
+      )}
+      {title === "Trang cá nhân" && (
+        <div id={id} className="square-button-container avatar-btn-ctn">
+          <Avatar
+            image={thumbnailImg || "https://placehold.in/600"}
+            size="xlarge"
+            shape="circle"
+            className="avatar"
+            onClick={onclick}
+          />
+          <div className="square-button-title text-cus-small">{title}</div>
         </div>
       )}
     </>
