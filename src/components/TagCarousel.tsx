@@ -1,17 +1,6 @@
 import React from "react";
 import Tag from "./Tag";
 import { GenerateRandomColorCode } from "../util/TagColorHandler";
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/effect-fade";
-
-import "./TagCarousel.scss";
-
-// import required modules
-import { Mousewheel } from "swiper/modules";
 
 type TagProps = {
   id: string;
@@ -38,18 +27,8 @@ const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
 
   return (
     <>
-      <div className="tag-carousel">
-        <Swiper
-          direction="horizontal"
-          slidesPerView={7}
-          mousewheel={true}
-          modules={[Mousewheel]}
-          effect={"fade"}
-        >
-          {tags.map((tag) => (
-            <SwiperSlide key={tag.id}>{productTemplate(tag)}</SwiperSlide>
-          ))}
-        </Swiper>
+      <div className="tag-carousel flex">
+        {tags.map((tag)=> productTemplate(tag))}
         <div className="style-section-right" />
         <div className="style-section-left" />
       </div>
