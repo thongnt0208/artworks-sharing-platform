@@ -18,7 +18,7 @@ const ArtworksView: React.FC = () => {
   const [artworks, setArtworks] = React.useState<ArtworkProps[]>([]);
   const [selectedArtworkId, setSelectedArtworkId] = React.useState<string>("");
   const [visibleDialogs, setVisibleDialogs] = React.useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
 
   const items = [
     { label: "Đã duyệt"},
@@ -43,6 +43,7 @@ const ArtworksView: React.FC = () => {
   };
 
   React.useEffect(() => {
+    if (!accountId) return;
     const fetchArtworks = async () => {
       const response = await GetArtworksData(50, 1, accountId, activeTab);
       if (Array.isArray(response)) {

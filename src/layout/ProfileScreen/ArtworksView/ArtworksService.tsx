@@ -1,10 +1,5 @@
-import axios from "axios";
-import { getAuthInfo } from "../../../util/AuthUtil";
+import { axiosPrivate } from "../../../hooks/useAxios";
 import { ArtworkProps } from "../../../components/ArtworkCard";
-const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
-
-const accessToken = getAuthInfo()?.accessToken || "";
-const refreshToken = getAuthInfo()?.refreshToken || "";
 
 /**
  * 
@@ -19,18 +14,14 @@ const refreshToken = getAuthInfo()?.refreshToken || "";
  */
 export async function GetArtworksData(pageSize: number, pageNumber: number, accountId: string, state?: number) {
   try {
-    const response = await axios.get(
-      `${API_URL}/accounts/${accountId}/artworks`,
+    const response = await axiosPrivate.get(
+      `/accounts/${accountId}/artworks`,
       {
         params: {
           pageNumber: pageNumber,
           pageSize: pageSize,
           state: state,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken || refreshToken}`,
-        },
+        }
       }
     );
     if (response.status !== 200) {
@@ -49,7 +40,6 @@ export async function GetArtworksData(pageSize: number, pageNumber: number, acco
           creatorFullName: artwork.account.fullname,
         }));
       }
-      console.log("artworksData", artworksData);
       return artworksData;
     }
   } catch (error) {
@@ -68,14 +58,8 @@ export async function GetArtworksData(pageSize: number, pageNumber: number, acco
  */
 export async function DeleteArtworkData(artworkId: string) {
   try {
-    await axios.delete(
-      `${API_URL}/artworks/${artworkId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken || refreshToken}`,
-        },
-      }
+    await axiosPrivate.delete(
+      `/artworks/${artworkId}`
     );
     return true;
   } catch (error) {

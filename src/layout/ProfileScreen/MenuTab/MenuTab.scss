@@ -1,7 +1,20 @@
-// .menu-tab {
-//   max-width: 93.813rem;
-//   display: flex;
-//   flex-direction: column;
-//   margin-left: 1rem;
-//   justify-content: flex-start;
-// }
+@import "/src/const/variables.scss";
+
+.menu-tab {
+  .tab-list {
+    border: 1px solid var(--primary-200, #B6CCD8);
+    border-radius: $borderRadius-100;
+    box-shadow: $card-shadow;
+    padding: $padding-100;
+    margin: 0 20px;
+  }
+  .content-section {
+    height: fit-content;
+    min-height: 76.5vh;
+    border: $section-border;
+    border-radius: $borderRadius-100;
+    box-shadow: $card-shadow;
+    padding: $padding-100;
+    margin: 20px;
+  }
+}
