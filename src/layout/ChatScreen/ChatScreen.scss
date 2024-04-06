@@ -1,7 +1,7 @@
 @import "/src/const/variables.scss";
 
 .chat-screen-container {
-  max-height: calc(100vh - 106px);
+  height: calc(100vh - 106px);
   border: none;
 
   .first-col,
