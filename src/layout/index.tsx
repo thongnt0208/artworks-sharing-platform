@@ -70,11 +70,6 @@ export async function CatchAPICallingError(error: any, navigate: any) {
       <>
         <span className="text-cus-h3-bold">Đã xảy ra lỗi.</span>
         <br />
-        <span>{error?.response?.data}</span>
-        <br />
-        <span>{error?.message}</span>
-        <br />
-        <br />
         <span>{vnmMsg}</span>
         <br />
         <span>{error?.response?.data?.errorMessage}</span>
