@@ -47,128 +47,6 @@ const UserInformationCard: React.FC<UserInformationProps> = (
 
   let footer = (
     <>
-      {props.isCreator ? (
-        <>
-          <Button
-            rounded
-            className="top-button"
-            label="Chỉnh sửa trang cá nhân"
-            onClick={props.editHandler}
-          />
-          <Button
-            rounded
-            className="bot-button"
-            label="Thay đổi chế độ riêng tư"
-            onClick={props.privacyEditHandler}
-          />
-        </>
-      ) : (
-        <>
-          {props.hire ? (
-            <>
-              <div className="hire-info">
-                <p className="project-completed">
-                  {props.projectCompleted} Dự án Hoàn thành
-                </p>
-                {props.isVerrified && (
-                  <i className="pi pi-verified verrified-icon" />
-                )}
-              </div>
-              <Button
-                rounded
-                className="bot-button"
-                label={`Thuê ${props.fullname}`}
-                onClick={() => {
-                  navigate(`/account/${props.id}/service`);
-                }}
-              />
-            </>
-          ) : (
-            <>
-              {props.isFollowed ? (
-                <Button
-                  rounded
-                  className="top-button"
-                  label="Hủy theo dõi"
-                  onClick={props.unfollowHandler}
-                />
-              ) : (
-                <Button
-                  rounded
-                  className="top-button"
-                  label="Theo dõi"
-                  onClick={props.followHandler}
-                />
-              )}
-
-              <Button
-                rounded
-                className="bot-button"
-                label="Nhắn tin"
-                onClick={() => {
-                  setIsShowRequestPopup(true);
-                }}
-              />
-            </>
-          )}
-        </>
-      )}
-    </>
-  );
-  return (
-    <div className="user-information-card-container">
-      <RequestPopup
-        visible={isShowRequestPopup}
-        onHide={() => {
-          setIsShowRequestPopup(false);
-          setIsHire(isHire);
-        }}
-        accountAvatar={props.avatar}
-        accountName={props.fullname}
-        isHire={isHire}
-        onSubmit={props.messageHandler ? props.messageHandler : () => {}}
-      />
-      <ReportDialog
-        visible={isShowReportDialog}
-        setVisibility={setIsShowReportDialog}
-        targetId={props.id}
-        entityName="Account"
-      />
-      <Dialog
-        style={{ width: "60%", height: "100vh" }}
-        showHeader={false}
-        contentStyle={{ borderRadius: "12px", height: "100%" }}
-        visible={isShowProfilePreview}
-        onHide={() => setIsShowProfilePreview(false)}
-        modal={true}
-        dismissableMask={true}
-      >
-        <ProfilePreview
-          creator={props}
-          hireCallback={() => {
-            setIsShowRequestPopup(true);
-            setIsHire(true);
-          }}
-        />
-      </Dialog>
-      <Card
-        footer={footer ? footer : ""}
-        className="user-information-card"
-        onClick={props.hire ? () => setIsShowProfilePreview(true) : undefined}
-        style={props.hire ? { cursor: "pointer" } : {}}
-      >
-        <div className="avatar-container">
-          <img
-            alt={`Ảnh đại diện của ${props.fullname}`}
-            src={props.avatar ? props.avatar : defaultAvatar}
-            className="avatar-image"
-          />
-        </div>
-        <div className="information-container">
-          <h1 className="m-1">{props.fullname}</h1>
-          <h3 className="m-0">{props.email}</h3>
-        </div>
-      </Card>
       {props.hire ? (
         <></>
       ) : props.bio ? (
@@ -258,6 +136,131 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           </div>
         )
       )}
+    </>
+  );
+
+  return (
+    <div className="user-information-card-container">
+      <RequestPopup
+        visible={isShowRequestPopup}
+        onHide={() => {
+          setIsShowRequestPopup(false);
+          setIsHire(isHire);
+        }}
+        accountAvatar={props.avatar}
+        accountName={props.fullname}
+        isHire={isHire}
+        onSubmit={props.messageHandler ? props.messageHandler : () => {}}
+      />
+      <ReportDialog
+        visible={isShowReportDialog}
+        setVisibility={setIsShowReportDialog}
+        targetId={props.id}
+        entityName="Account"
+      />
+      <Dialog
+        style={{ width: "60%", height: "100vh" }}
+        showHeader={false}
+        contentStyle={{ borderRadius: "12px", height: "100%" }}
+        visible={isShowProfilePreview}
+        onHide={() => setIsShowProfilePreview(false)}
+        modal={true}
+        dismissableMask={true}
+      >
+        <ProfilePreview
+          creator={props}
+          hireCallback={() => {
+            setIsShowRequestPopup(true);
+            setIsHire(true);
+          }}
+        />
+      </Dialog>
+      <Card
+        footer={footer ? footer : ""}
+        className="user-information-card"
+        onClick={props.hire ? () => setIsShowProfilePreview(true) : undefined}
+        style={props.hire ? { cursor: "pointer" } : {}}
+      >
+        <div className="avatar-container">
+          <img
+            alt={`Ảnh đại diện của ${props.fullname}`}
+            src={props.avatar ? props.avatar : defaultAvatar}
+            className="avatar-image"
+          />
+        </div>
+        <div className="information-container">
+          <h1 className="m-1">{props.fullname}</h1>
+          <h3 className="m-0">{props.email}</h3>
+        </div>
+        <div className="action-section">
+          {props.isCreator ? (
+            <>
+              <Button
+                rounded
+                className="top-button"
+                label="Chỉnh sửa trang cá nhân"
+                onClick={props.editHandler}
+              />
+              <Button
+                rounded
+                className="bot-button"
+                label="Thay đổi chế độ riêng tư"
+                onClick={props.privacyEditHandler}
+              />
+            </>
+          ) : (
+            <>
+              {props.hire ? (
+                <>
+                  <div className="hire-info">
+                    <p className="project-completed">
+                      {props.projectCompleted} Dự án Hoàn thành
+                    </p>
+                    {props.isVerrified && (
+                      <i className="pi pi-verified verrified-icon" />
+                    )}
+                  </div>
+                  <Button
+                    rounded
+                    className="bot-button"
+                    label={`Thuê ${props.fullname}`}
+                    onClick={() => {
+                      navigate(`/account/${props.id}/service`);
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  {props.isFollowed ? (
+                    <Button
+                      rounded
+                      className="top-button"
+                      label="Hủy theo dõi"
+                      onClick={props.unfollowHandler}
+                    />
+                  ) : (
+                    <Button
+                      rounded
+                      className="top-button"
+                      label="Theo dõi"
+                      onClick={props.followHandler}
+                    />
+                  )}
+
+                  <Button
+                    rounded
+                    className="bot-button"
+                    label="Nhắn tin"
+                    onClick={() => {
+                      setIsShowRequestPopup(true);
+                    }}
+                  />
+                </>
+              )}
+            </>
+          )}
+        </div>
+      </Card>
     </div>
   );
 };
