@@ -34,7 +34,6 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
   return (
     <div>
       <div className="btns-container">
-        Thỏa thuận đã được chấp nhận.
         {selectingProposal?.createdBy === currentUserId && (
           <div className="upload-proposal-assets-container">
             <FileUpload
@@ -69,7 +68,7 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
             </Button>
           </div>
         )}
-        {selectingProposal?.createdBy !== currentUserId && (
+        {selectingProposal?.status === "InitPayment" && selectingProposal?.createdBy !== currentUserId && (
           <p>Từ giờ, nhà sáng tạo sẽ làm việc và gửi bản thảo đến bạn!</p>
         )}
       </div>
