@@ -1,7 +1,7 @@
 @import "/src/const/variables.scss";
 
 .deposit-dialog {
-  width: 30%;
+  width: 30vw;
   .deposit-dialog-content {
     display: flex;
     flex-direction: column;
@@ -28,8 +28,11 @@
       gap: 30px;
       .confirm-btn,
       .cancel-btn {
-        width: max-content;
-        height: max-content;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: fit-content;
+        height: fit-content;
         font-size: $h3;
         line-height: 40px;
         padding: 0 40px;

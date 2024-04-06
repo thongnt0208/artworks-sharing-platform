@@ -15,13 +15,14 @@ import { getAuthInfo } from "../../../../util/AuthUtil";
 import { GetArtworksData } from "../../ArtworksView/ArtworksService";
 import { deliveryTime } from "../../../../const/bizConstants";
 import { CreateServiceData, UpdateServiceData } from "../ServicesService";
+import { toast } from "react-toastify";
+import { CatchAPICallingError } from "../../..";
+import { useNavigate } from "react-router-dom";
 
 import ReferenceArtworksSection from "../ReferenceArtworksSection/ReferenceArtworksSection";
 import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
 import "./ServiceInformationSection.scss";
-import { toast } from "react-toastify";
-import { CatchAPICallingError } from "../../..";
-import { useNavigate } from "react-router-dom";
+
 
 interface ServiceInformationProps {
   props: ServiceProps;
@@ -141,7 +142,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
         </>
       ) : (
         <>
-          <div className="header-container mt-4 mb-4">
+          <div className="header-container mt-2 mb-2">
             {id ? (
               <>
                 <h1 className="p-1 m-1 pl-0 ml-0 ">Chỉnh sửa dịch vụ</h1>

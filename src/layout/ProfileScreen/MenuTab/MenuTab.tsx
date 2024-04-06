@@ -23,7 +23,7 @@ const MenuTab: React.FC<{
           onClickHandler={handleTabNavigation}
         />
       </div>
-      <div className="content-section">
+      <div className={currentTabId === "wallet" ? "mt-3" : "content-section" }>
         <Outlet
           context={[accountId, isCreator, accountAvatar, accountFullname]}
         />
