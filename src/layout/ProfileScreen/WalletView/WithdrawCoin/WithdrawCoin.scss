@@ -30,6 +30,9 @@
       gap: 30px;
       .confirm-btn,
       .cancel-btn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
         width: max-content;
         height: max-content;
         font-size: $h3;

@@ -10,6 +10,8 @@
     .add-artwork-card {
         width: 298px;
         height: 450px;
+        border: 1px dashed $primary-300;
+        border-radius: $borderRadius-100;
         .p-card-content {
             display: flex;
             flex-direction: column;

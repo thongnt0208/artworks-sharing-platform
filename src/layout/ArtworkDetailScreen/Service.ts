@@ -388,8 +388,8 @@ export async function removeFollow(followUserId: string): Promise<any> {
  */
 export async function fetchFollowers(userId: string): Promise<any> {
   try {
-    const response = await axios.get(`${BASE_URL}/follows/${userId}/followers`);
-    return response.data;
+    const response = await axiosPrivate.get(`${BASE_URL}/accounts/${userId}/followers`);
+    return response.data.followers.length;
   } catch (error) {
     console.error("Error fetching followers:", error);
     throw error;
@@ -409,8 +409,8 @@ export async function fetchFollowers(userId: string): Promise<any> {
  */
 export async function fetchFollowing(userId: string): Promise<any> {
   try {
-    const response = await axios.get(`${BASE_URL}/follows/${userId}/following`);
-    return response.data;
+    const response = await axiosPrivate.get(`${BASE_URL}/accounts/${userId}/following`);
+    return response.data.followings.length;
   } catch (error) {
     console.error("Error fetching following:", error);
     throw error;

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
+import { Dialog } from "primereact/dialog";
+import { Divider } from "primereact/divider";
 
+import { useNavigate } from "react-router-dom";
 import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
 import RequestPopup, { RequestProps } from "./RequestPopup";
 import "./UserInformationCard.scss";
 import ProfilePreview from "./ProfilePreview";
-import { Dialog } from "primereact/dialog";
-import { useNavigate } from "react-router-dom";
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
 export type UserInformationProps = {
@@ -53,47 +54,6 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         <div className="bio-container w-full pl-4 pr-4">
           <h3>Về tôi</h3>
           <p className="text-justify">{props.bio}</p>
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {props.profileView &&
-      props.artworksView &&
-      props.followerNum &&
-      props.followingNum ? (
-        <div className="views-container w-full flex flex-row justify-content-between align-items-center">
-          {/* Column for labels */}
-          <div className="pl-4 text-left">
-            <div>
-              <p>Lượt xem trang cá nhân</p>
-            </div>
-            <div>
-              <p>Lượt xem tác phẩm</p>
-            </div>
-            <div>
-              <p>Người theo dõi</p>
-            </div>
-            <div>
-              <p>Đang theo dõi</p>
-            </div>
-          </div>
-
-          {/* Column for numbers */}
-          <div className="pr-7 text-left">
-            <div>
-              <p>{props.profileView}</p>
-            </div>
-            <div>
-              <p>{props.artworksView}</p>
-            </div>
-            <div>
-              <p>{props.followerNum}</p>
-            </div>
-            <div>
-              <p>{props.followingNum}</p>
-            </div>
-          </div>
         </div>
       ) : (
         <></>
@@ -189,25 +149,26 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           />
         </div>
         <div className="information-container">
-          <h1 className="m-1">{props.fullname}</h1>
+          <h1 className="m-0 mb-3">{props.fullname}</h1>
           <h3 className="m-0">{props.email}</h3>
+        </div>
+        <div className="w-full h-fit flex flex-row justify-content-center mt-2">
+          <p className="h-fit m-0">
+            <strong>{props.followerNum}</strong> người theo dõi
+          </p>
+          <Divider layout="vertical" className="h-full p-0" />
+          <p className="h-fit m-0">
+            <strong>{props.followingNum}</strong> đang theo dõi
+          </p>
         </div>
         <div className="action-section">
           {props.isCreator ? (
-            <>
-              <Button
-                rounded
-                className="top-button"
-                label="Chỉnh sửa trang cá nhân"
-                onClick={props.editHandler}
-              />
-              <Button
-                rounded
-                className="bot-button"
-                label="Thay đổi chế độ riêng tư"
-                onClick={props.privacyEditHandler}
-              />
-            </>
+            <Button
+              rounded
+              className="top-button"
+              label="Chỉnh sửa thông tin"
+              onClick={props.editHandler}
+            />
           ) : (
             <>
               {props.hire ? (

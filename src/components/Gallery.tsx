@@ -23,12 +23,6 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
     setSelectedArtworks(artworkId);
   };
 
-  const closeDialog = () => {
-    setTimeout(() => {
-      setIsShowSaveDialog(false);
-    }, 2000);
-  };
-
   return (
     <>
       <div className="gallery w-full p-0 flex flex-wrap justify-content-center">
@@ -50,7 +44,6 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
               thumbnail={artwork.thumbnail}
               likeCount={artwork.likeCount}
               viewCount={artwork.viewCount}
-              viewHandler={() => {}}
               saveHandler={() => openDialog(artwork.id)}
             />
           </div>
@@ -63,9 +56,10 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
           contentClassName="save-popup-dialog"
           modal
           closable={false}
-          onHide={closeDialog}
+          onHide={() => setIsShowSaveDialog(false)}
+          style={{ width: "20vw" }}
         >
-          <SavePopup artworkId={selectedArtworks} closeDialog={closeDialog} />
+          <SavePopup artworkId={selectedArtworks} closeDialog={() => setIsShowSaveDialog(false)} />
         </Dialog>
       </div>
       <ArtworkDetailDialog

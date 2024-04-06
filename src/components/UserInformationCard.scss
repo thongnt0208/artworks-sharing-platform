@@ -37,6 +37,9 @@
           font-size: 28px;
         }
       }
+      .top-button, .bot-button {
+        cursor: pointer;
+      }
       .top-button {
         background-color: $strong-200;
         color: $bg-100;

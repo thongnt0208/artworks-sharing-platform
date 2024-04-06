@@ -44,7 +44,7 @@ const AssetsView: React.FC = () => {
       }
     };
     fetchAssets();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -53,8 +53,8 @@ const AssetsView: React.FC = () => {
       <div className="gallery">
         {assets.length === 0 ? (
           isCreator ? (
-            <Card>
-              <div className="add-asset-card cursor-pointer flex flex-column justify-content-center align-items-center">
+            <Card className="add-asset-card">
+              <div className="cursor-pointer flex flex-column justify-content-center align-items-center">
                 <i className="pi pi-plus-circle icon m-3" />
                 <Button
                   label="Thêm tài nguyên"
@@ -68,21 +68,17 @@ const AssetsView: React.FC = () => {
             <div> Tác giả chưa có tài nguyên nào </div>
           )
         ) : (
-          assets.map(
-            (asset) => (
-              (
-                <div className="gallery__item col col-12" key={asset.id}>
-                  <AssetsCard
-                    key={asset.id}
-                    id={asset.id}
-                    thumbnail={asset.thumbnail}
-                    isCreator={asset.isCreator}
-                    itemsList={asset.itemsList}
-                  />
-                </div>
-              )
-            )
-          )
+          assets.map((asset) => (
+            <div className="gallery__item col col-12" key={asset.id}>
+              <AssetsCard
+                key={asset.id}
+                id={asset.id}
+                thumbnail={asset.thumbnail}
+                isCreator={asset.isCreator}
+                itemsList={asset.itemsList}
+              />
+            </div>
+          ))
         )}
       </div>
     </div>
