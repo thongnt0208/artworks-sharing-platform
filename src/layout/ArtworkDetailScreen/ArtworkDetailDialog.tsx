@@ -1,122 +1,87 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import "./ArtworkDetail.scss";
-import {
-  addFollow,
-  fetchArtworkDetail,
-  fetchCommentsForArtworkRealTime,
-  fetchIsFollow,
-  removeFollow,
-} from "./Service";
+import { addFollow, fetchCommentsForArtworkRealTime, removeFollow } from "./Service";
 import ButtonList from "./buttons/ButtonList";
 import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
-import { ArtworkDetailType, CommentType } from "./ArtworkDetailType";
+import { CommentType } from "./ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
+import { CatchAPICallingError } from "..";
+import { awDetailStateToolsType } from "../HomeScreen/HomeScreen";
 // import UserInformationCard from "../../components/UserInformationCard";
 
-export default function ArtworkDetail() {
-  const id = useParams().id || "";
+type Props = {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  awDetailStateTools: awDetailStateToolsType;
+};
+
+export default function ArtworkDetailDialog(props: Props) {
+  const { visible, setVisible, awDetailStateTools } = props;
+  const {
+    currentAwDetail,
+    isLiked,
+    setIsLiked,
+    isFollowed,
+    setIsFollowed,
+  } = awDetailStateTools;
+  const data = currentAwDetail;
   const navigate = useNavigate();
-  const [data, setData] = useState({} as ArtworkDetailType);
   const [comments, setComments] = useState([] as CommentType[]);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [error, setError] = useState({} as any);
   const [closeSocket, setCloseSocket] = useState<() => void | null>();
   const authenticationInfo = getAuthInfo();
 
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   let dialogProperties = {
-    visible: true,
-    onHide: () => navigate(-1),
+    visible: visible,
+    onHide: () => setVisible(false),
     closable: false,
     headerStyle: { border: "none", padding: "8px" },
     dismissableMask: true,
     draggable: false,
   };
 
-  const fetchIsFollowed = (id: string) => {
-    fetchIsFollow(id)
-      .then((res) => {
-        console.log("fetchIsFollowed: " + res);
-
-        setIsFollowed(res);
-      })
-      .catch((err) => {
-        console.log("fetchIsFollowed: " + err);
-        setIsFollowed(false);
-      });
-  };
-
-  // Get Artwork Detail Data
-  const fetchDetail = () => {
-    fetchArtworkDetail(id, currentUserId)
-      .then((res) => {
-        setData(res);
-        console.log("fetchDetail: ");
-        console.log(res);
-        
-        
-        setIsLiked(res.isLiked);
-        fetchIsFollowed(res.account.id);
-        setError("");
-      })
-      .catch((err) => {
-        let message = err.message || "Something went wrong";
-        setError({ ...message });
-        console.log(err);
-      });
-  };
-
   // Get Comments data
   const fetchComments = () => {
     if (!closeSocket) {
-      const cleanup = fetchCommentsForArtworkRealTime(id, setComments);
+      const cleanup = fetchCommentsForArtworkRealTime(data?.id, setComments);
       setCloseSocket(() => cleanup);
     } else {
       closeSocket();
-      const cleanup = fetchCommentsForArtworkRealTime(id, setComments);
+      const cleanup = fetchCommentsForArtworkRealTime(data?.id, setComments);
       setCloseSocket(() => cleanup);
     }
   };
 
   const followUser = () => {
-    console.log("followUser: " + data?.account?.id);
     addFollow(data?.account?.id || "")
-      .then((res) => {
-        console.log("followUser: " + res + "Success");
-        setIsFollowed(true);
-      })
+      .then((res) => setIsFollowed(true))
       .catch((err) => {
-        console.log("followUser: " + err);
+        setIsFollowed(false);
+        CatchAPICallingError(err, navigate);
       });
   };
 
   const unFollowUser = () => {
-    console.log("unFollowUser: " + data?.account?.id);
     removeFollow(data?.account?.id || "")
-      .then((res) => {
-        console.log("unFollowUser: " + res + "Success");
-        setIsFollowed(false);
-      })
+      .then((res) => setIsFollowed(false))
       .catch((err) => {
-        console.log("unFollowUser: " + err);
+        setIsFollowed(true);
+        CatchAPICallingError(err, navigate);
       });
   };
 
   useEffect(() => {
-    fetchDetail();
     fetchComments();
-  }, []);
+  }, [data]);
 
   return (
     <Dialog {...dialogProperties}>
       <>
-        {error && <p>Đã xảy ra lỗi, vui lòng thử lại</p>}
         {!data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
         {data.images && (
           <div className="artwork-detail-container">
@@ -126,7 +91,7 @@ export default function ArtworkDetail() {
                   data={data}
                   isLiked={isLiked}
                   setIsLiked={setIsLiked}
-                  id={id ? id : ""}
+                  id={data?.id ? data?.id : ""}
                   currentUserId={currentUserId}
                 />
               </div>
@@ -149,7 +114,7 @@ export default function ArtworkDetail() {
                   </>
                 ) : (
                   <CommentComponent
-                    artworkId={id ? id : ""}
+                    artworkId={data?.id ? data?.id : ""}
                     userId={authenticationInfo?.id}
                     avatar={authenticationInfo?.avatar}
                     fullName={authenticationInfo?.fullname}

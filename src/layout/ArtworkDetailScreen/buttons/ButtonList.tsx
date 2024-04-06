@@ -48,7 +48,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
 
   const buttonsList: btnListItemType[] = [
     {
-      title: data?.account?.id === currentUserId ? "My profile" : "Theo dõi",
+      title: data?.account?.id === currentUserId ? "Trang cá nhân" : "Theo dõi",
       thumbnailImg: data?.account?.avatar || blankPic,
       thumbnailAlt: "",
       onclick: () => {
@@ -122,7 +122,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
             <br />
             <span>Tài nguyên sẽ tự động tải xuống sau ít phút.</span>
             <br />
-            <span>Nếu không, hãy sang trang Asset của tôi để tải lại.</span>
+            <span>Nếu không, hãy sang trang "Tài nguyên của tôi" để tải lại.</span>
           </>
         );
         setTimeout(() => {
@@ -151,7 +151,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
         }}
         reject={() => setIsShowBuyAssetDialog(false)}
       />
-      <ShareDialog visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
+      <ShareDialog awId={data?.id || ""} visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
       <ReportDialog
         visible={isShowReportDialog}
         setVisibility={setIsShowReportDialog}

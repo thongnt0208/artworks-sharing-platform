@@ -1,6 +1,6 @@
 import { Image } from "primereact/image";
 import { ArtworkDetailType } from "../ArtworkDetailType";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Content.scss";
 import { useState } from "react";
 import { Button } from "primereact/button";
@@ -9,14 +9,14 @@ import { likeArtwork, unlikeArtwork } from "../Service";
 import likeIcon from "../../../assets/icons/aw-deatail-06-like-icon.svg";
 import likedIcon from "../../../assets/icons/aw-deatail-07-did-like-icon.svg";
 import { Dialog } from "primereact/dialog";
+import { CatchAPICallingError } from "../..";
 
 const logo = require("../../../assets/logo/logo.png");
 
 type ContentProps = {
   data: ArtworkDetailType;
   isLiked: boolean;
-  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>; // Update this line
-  setError: (value: any) => void;
+  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
   id: string;
   currentUserId: string;
   onTagClick?: (tag: string) => void;
@@ -26,13 +26,13 @@ export default function Content({
   data,
   isLiked,
   setIsLiked,
-  setError,
   id,
   currentUserId,
   onTagClick,
 }: ContentProps) {
   const [showAllImages, setShowAllImages] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
+  const navigate = useNavigate();
 
   let likeButtonHandle = () => {
     setIsLiked((prevIsLiked) => !prevIsLiked); // Change UI
@@ -42,13 +42,8 @@ export default function Content({
     console.log(id, currentUserId);
 
     action(id ? id : "", currentUserId)
-      .then((res) => setError(""))
       .catch((err) => {
-        let message = err.message || "Something went wrong";
-        setError({ ...message });
-        if (err.response?.status === 401) {
-          setDialogVisible(true);
-        }
+        CatchAPICallingError(err, navigate);
         setIsLiked((prevIsLiked) => !prevIsLiked); // Change UI back
         console.log(err);
       });
@@ -89,12 +84,7 @@ export default function Content({
       >
         {/* Display images */}
         {data.images?.map((image, index) => (
-          <Image
-            key={index}
-            src={image?.location}
-            alt={`Image ${index + 1}`}
-            width="100%"
-          />
+          <Image key={index} src={image?.location} alt={`Image ${index + 1}`} width="100%" />
         ))}
       </div>
 

@@ -1,77 +1,79 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 
-import ArtworkCard from "./ArtworkCard";
+import ArtworkCard, { ArtworkProps } from "./ArtworkCard";
 import SavePopup from "./SavePopup";
 import "./Gallery.scss";
-
-export type Artwork = {
-  id: string;
-  title: string;
-  thumbnail: string;
-  viewCount: number;
-  likeCount: number;
-  createdBy: string;
-  creatorFullName: string;
-};
+import { awDetailStateToolsType } from "../layout/HomeScreen/HomeScreen";
+import ArtworkDetailDialog from "../layout/ArtworkDetailScreen/ArtworkDetailDialog";
 
 type ArtworksProps = {
-  artworks: Artwork[];
+  artworks: ArtworkProps[];
+  awDetailStateTools: awDetailStateToolsType;
 };
 
-const Gallery: React.FC<ArtworksProps> = ({ artworks }) => {
-  const navigate = useNavigate();
-  const [isShowDialog, setIsShowDialog] = React.useState<boolean>(false);
-  const [selectedArtworks, setSelectedArtworks] = React.useState<string>("");
+const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
+  const { setSelectingAw } = awDetailStateTools;
+  const [isShowSaveDialog, setIsShowSaveDialog] = useState<boolean>(false);
+  const [selectedArtworks, setSelectedArtworks] = useState<string>("");
+  const [isShowDetailDialog, setIsShowDetailDialog] = useState(false);
 
   const openDialog = (artworkId: string) => {
-    setIsShowDialog(true);
+    setIsShowSaveDialog(true);
     setSelectedArtworks(artworkId);
   };
 
   const closeDialog = () => {
     setTimeout(() => {
-      setIsShowDialog(false);
+      setIsShowSaveDialog(false);
     }, 2000);
   };
 
   return (
-    <div className="gallery w-full p-0 flex flex-wrap justify-content-center">
-      {artworks.map((artwork) => (
-        <div
-          className="gallery__item flex flex-row flex-wrap justify-content-center"
-          key={artwork.id}
-        >
-          <ArtworkCard
+    <>
+      <div className="gallery w-full p-0 flex flex-wrap justify-content-center">
+        {artworks.map((artwork) => (
+          <div
+            className="gallery__item flex flex-row flex-wrap justify-content-center"
             key={artwork.id}
-            id={artwork.id}
-            title={artwork.title}
-            createdBy={artwork.createdBy}
-            creatorFullName={artwork.creatorFullName}
-            thumbnail={artwork.thumbnail}
-            likeCount={artwork.likeCount}
-            viewCount={artwork.viewCount}
-            viewHandler={() => navigate(`/artwork/${artwork.id}`)}
-            saveHandler={() => openDialog(artwork.id)}
-          />
-        </div>
-      ))}
-      <Dialog
-        className="save-popup-dialog"
-        visible={isShowDialog}
-        showHeader={false}
-        dismissableMask={true}
-        contentClassName="save-popup-dialog"
-        modal
-        closable={false}
-        onHide={closeDialog}
-      >
-        <>
+            onClick={() => {
+              setIsShowDetailDialog(true);
+              setSelectingAw(artwork);
+            }}
+          >
+            <ArtworkCard
+              key={artwork.id}
+              id={artwork.id}
+              title={artwork.title}
+              createdBy={artwork.createdBy}
+              creatorFullName={artwork.creatorFullName}
+              thumbnail={artwork.thumbnail}
+              likeCount={artwork.likeCount}
+              viewCount={artwork.viewCount}
+              viewHandler={() => {}}
+              saveHandler={() => openDialog(artwork.id)}
+            />
+          </div>
+        ))}
+        <Dialog
+          className="save-popup-dialog"
+          visible={isShowSaveDialog}
+          showHeader={false}
+          dismissableMask={true}
+          contentClassName="save-popup-dialog"
+          modal
+          closable={false}
+          onHide={closeDialog}
+        >
           <SavePopup artworkId={selectedArtworks} closeDialog={closeDialog} />
-        </>
-      </Dialog>
-    </div>
+        </Dialog>
+      </div>
+      <ArtworkDetailDialog
+        visible={isShowDetailDialog}
+        setVisible={setIsShowDetailDialog}
+        awDetailStateTools={awDetailStateTools}
+      />
+    </>
   );
 };
 
