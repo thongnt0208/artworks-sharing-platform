@@ -40,7 +40,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
                 iconPos="right"
                 disabled={
                   // check if asset is final && proposal status is not CompletePayment && current user is not the creator
-                  asset.type === "Final" &&
+                  (asset.type === "Final" || asset.type === "Revision") &&
                   selectingProposal?.status !== "CompletePayment" &&
                   selectingProposal?.createdBy !== currentUserId
                 }
