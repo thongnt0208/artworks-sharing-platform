@@ -42,8 +42,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
     const fieldsFilled =
       message.trim() !== "" &&
       (!isHire ||
-        (estimateDeliveryTime.trim() !== "" &&
-          (budget ?? 0) > (startingPrice ?? 0)));
+        (estimateDeliveryTime.trim() !== ""));
     setAllFieldsFilled(fieldsFilled);
   }, [message, estimateDeliveryTime, budget, isHire, startingPrice]);
 

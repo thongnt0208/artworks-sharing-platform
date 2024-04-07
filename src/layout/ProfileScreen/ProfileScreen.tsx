@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
 import { getAuthInfo } from "../../util/AuthUtil";
 import { GetProfileData, SendRequestMessage } from "./ProfileService";
 import UserInformationCard, {
@@ -17,7 +16,6 @@ import {
   removeFollow,
 } from "../ArtworkDetailScreen/Service";
 import "./ProfileScreen.scss";
-// import { subscribeDataType } from "./SubscribeArea/SubscribeArea";
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const profileId = useParams()?.id;
