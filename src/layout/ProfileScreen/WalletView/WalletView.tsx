@@ -27,13 +27,14 @@ export type WalletHistoryProps = {
   amount: number;
   type: string;
   paymentMethod: string;
-  transactionStatus: boolean;
+  transactionStatus: string;
   createdOn: string;
 };
 
 export type TransactionHistoryProps = {
   id: string;
   accountId: string;
+  fromFullname: string;
   detail: string;
   assetId: string;
   proposalId: string;
@@ -82,6 +83,61 @@ const WalletView: React.FC = () => {
     };
     fetchData();
   }, [refresh, activeTab]);
+
+  const typeRowTemplate = (rowData: WalletHistoryProps) => {
+    return (
+      <span
+        className={
+          rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"
+        }
+      >
+        {rowData.type === "Nạp tiền" ? (
+          <i className="pi pi-arrow-up mr-1" />
+        ) : (
+          <i className="pi pi-arrow-down mr-1" />
+        )}
+        {rowData.type}
+      </span>
+    );
+  };
+
+  const statusRowTemplate = (rowData: WalletHistoryProps) => {
+    return (
+      <span
+        style={{
+          backgroundColor:
+            rowData.transactionStatus === "Thành công" ? "green" : "red",
+          padding: "0.25rem 0.5rem",
+          borderRadius: "1rem",
+          color: "white",
+        }}
+      >
+        {rowData.transactionStatus}
+      </span>
+    );
+  };
+
+  const fromAccRowTemplate = (rowData: TransactionHistoryProps) => {
+    return (
+      <span
+        className={
+          rowData.accountId !== getAuthInfo()?.id
+            ? "text-blue-600"
+            : "text-red-500"
+        }
+      >
+        {rowData.accountId !== getAuthInfo()?.id ? (
+          <>
+            <i className="pi pi-arrow-up mr-1" />{rowData.fromFullname}
+          </>
+        ) : (
+          <>
+            <i className="pi pi-arrow-down mr-1" />Tôi
+          </>
+        )}
+      </span>
+    );
+  };
 
   return (
     <div className="wallet-view">
@@ -158,6 +214,7 @@ const WalletView: React.FC = () => {
         refreshCallback={() => setRefresh(true)}
         onHide={() => setIsWalletInformationVisible(false)}
       />
+
       <div className="history-section">
         <h1 className="history-title">Giao dịch</h1>
         <TabMenu
@@ -178,8 +235,12 @@ const WalletView: React.FC = () => {
             currentPageReportTemplate="{first} to {last} of {totalRecords}"
             emptyMessage="Hãy nạp thêm Xu để trải nghiệm các dịch vụ của Artworkia nhé!"
           >
-            <Column field="id" header="Mã giao dịch"></Column>
-            <Column field="type" header="Loại" sortable></Column>
+            <Column
+              field="type"
+              header="Loại"
+              body={typeRowTemplate}
+              sortable
+            ></Column>
             <Column
               field="paymentMethod"
               header="Phương thức"
@@ -189,6 +250,7 @@ const WalletView: React.FC = () => {
             <Column
               field="transactionStatus"
               header="Trạng thái"
+              body={statusRowTemplate}
               sortable
             ></Column>
             <Column field="createdOn" header="Ngày tạo" sortable></Column>
@@ -204,15 +266,17 @@ const WalletView: React.FC = () => {
             currentPageReportTemplate="{first} to {last} of {totalRecords}"
             emptyMessage="Hãy tham gia vào các dịch vụ của Artworkia nhé!"
           >
-            <Column field="id" header="Mã giao dịch"></Column>
-            {/* <Column field="accountId" header="Tài khoản"></Column> */}
+            <Column
+              field="fromFullname"
+              header="Tài khoản đối tác"
+              body={fromAccRowTemplate}
+            ></Column>
             <Column field="detail" header="Chi tiết"></Column>
-            {/* <Column field="assetId" header="Tài nguyên"></Column>
-            <Column field="proposalId" header="Công việc"></Column> */}
-            <Column field="price" header="Giá"></Column>
+            <Column field="price" header="Giá (XU)"></Column>
             <Column
               field="transactionStatus"
               header="Trạng thái"
+              body={statusRowTemplate}
               sortable
             ></Column>
             <Column field="createdOn" header="Ngày tạo"></Column>
