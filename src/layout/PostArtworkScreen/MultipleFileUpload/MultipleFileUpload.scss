@@ -1,34 +1,52 @@
 @import "/src/const/variables.scss";
 
+.nsfw-spiner-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  background: #d4eaf7b0;
+  border-radius: $borderRadius-100;
+}
+
 .empty-template-container {
   color: $gray-default;
 }
+.p-fileupload-row {
+  margin-bottom: 1rem;
+  .item-container {
+    background-color: $bg-200;
+    border-radius: $borderRadius-100;
+    .item-name-conatiner {
+      width: 50%;
+      p {
+        width: 100%;
+        overflow-wrap: break-word;
+        text-align: start;
+      }
+      .validation-progress {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
 
-.item-container {
-  .item-name-conatiner {
-    width: 50%;
-    p {
-      width: 100%;
-      overflow-wrap: break-word;
-      text-align: start;
-    }
-    .validation-progress {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    
-      .validation-result {
-        font-weight: bold;
-    
-        &.valid {
-          color: green;
-        }
-    
-        &.invalid {
-          color: red;
+        .validation-result {
+          font-weight: bold;
+
+          &.valid {
+            color: green;
+          }
+
+          &.invalid {
+            color: red;
+          }
         }
       }
     }
   }
+}
+.p-fileupload-row:last-child {
+  margin-bottom: 0;
 }
