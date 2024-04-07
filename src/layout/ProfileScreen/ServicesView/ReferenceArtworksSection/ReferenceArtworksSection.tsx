@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Checkbox } from "primereact/checkbox";
 import { ScrollPanel } from "primereact/scrollpanel";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 
 import ArtworkCard, { ArtworkProps } from "../../../../components/ArtworkCard";
 import "./ReferenceArtworksSection.scss";
+import { toast } from "react-toastify";
 
 interface ReferenceArtworksSectionProps {
   artworks: ArtworkProps[];
@@ -20,7 +20,6 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
   setShow,
   loadData,
 }) => {
-  const toast = useRef<Toast | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
   const lastArtworkRef = useRef<HTMLDivElement | null>(null);
   const [selectedArtworkIds, setSelectedArtworkIds] = useState<
@@ -89,7 +88,7 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
       (id) => selectedArtworkIds[id]
     );
     if (selectedIds.length === 0) {
-      showError();
+      toast.error("Vui lòng chọn ít nhất một tác phẩm");
     } else {
       localStorage.setItem(
         "artworksRefIds",
@@ -98,15 +97,6 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
       selectArtworks(selectedIds);
       setShow(false);
     }
-  };
-
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Lỗi",
-      detail: "Bạn phải chọn ít nhất 1 tác phẩm",
-      life: 3000,
-    });
   };
 
   useEffect(() => {
@@ -118,7 +108,6 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
 
   return (
     <div className="reference-artworks-section w-full">
-      <Toast ref={toast} />
       <div className="header">
         <div className="title">
           <h2>Chọn các tác phẩm</h2>
@@ -131,7 +120,7 @@ const ReferenceArtworksSection: React.FC<ReferenceArtworksSectionProps> = ({
           <Button label="Lưu" className="p-button" onClick={handleSaveClick} />
           <Button
             label="Quay lại"
-            className="p-button ml-2"
+            className="p-button"
             onClick={() => setShow(false)}
           />
         </div>

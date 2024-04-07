@@ -2,19 +2,19 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+
 import {
   CreateNewRequestData,
   DeleteServiceData,
   GetServicesData,
 } from "./ServicesService";
-import { Dialog } from "primereact/dialog";
-
-import "./ServicesView.scss";
-import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
-import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
 import { RequestProps } from "../../../components/RequestPopup";
 import { CatchAPICallingError } from "../..";
 import { toast } from "react-toastify";
+import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
+import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
+import "./ServicesView.scss";
 
 const ServicesView: React.FC = () => {
   const navigate = useNavigate();
@@ -151,6 +151,7 @@ const ServicesView: React.FC = () => {
       </div>
       <Dialog
         className="dialog"
+        style={{ width: "60vw" }}
         showHeader={false}
         contentClassName="service-dialog-content"
         visible={visible}

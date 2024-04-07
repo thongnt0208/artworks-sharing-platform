@@ -2,7 +2,7 @@
 
 .menu-tab {
   .tab-list {
-    border: 1px solid var(--primary-200, #B6CCD8);
+    border: $section-border;
     border-radius: $borderRadius-100;
     box-shadow: $card-shadow;
     padding: $padding-100;

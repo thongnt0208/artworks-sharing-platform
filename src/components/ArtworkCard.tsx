@@ -31,20 +31,21 @@ export type ArtworkProps = {
 const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   const op = useRef<OverlayPanel>(null);
   let header = (
-    <div className={`header-container ${props.onSelection ? "mb-3" : ""}`}>
+    <div
+      className={`header-container ${props.onSelection ? "mb-3" : ""}`}
+      onClick={props.viewHandler}
+    >
       <div className="thumbnail-container pt-0">
         <img
           alt={`Hình thu nhỏ của tác phẩm tên ${props.title}`}
           src={props.thumbnail}
           className="thumbnail border-round"
-          onClick={props.viewHandler}
         />
       </div>
       {!props.isCreator ? (
         <Button
           label={props.viewCount ? formatLargeNumber(props.viewCount) : "0"}
           icon="pi pi-eye"
-          onClick={props.viewHandler}
           className="view-button"
         />
       ) : (
@@ -127,6 +128,7 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
       subTitle={!props.onSelection && `bởi ${props.creatorFullName}`}
       header={header}
       footer={!props.onSelection && footer}
+      onClick={() => {}}
       className="artwork-card cursor-pointer"
     ></Card>
   );
