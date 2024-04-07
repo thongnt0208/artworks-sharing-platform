@@ -3,9 +3,10 @@ import { Dialog } from "primereact/dialog";
 
 import ArtworkCard, { ArtworkProps } from "./ArtworkCard";
 import SavePopup from "./SavePopup";
-import "./Gallery.scss";
-import { awDetailStateToolsType } from "../layout/HomeScreen/HomeScreen";
 import ArtworkDetailDialog from "../layout/ArtworkDetailScreen/ArtworkDetailDialog";
+import { awDetailStateToolsType } from "../layout/HomeScreen/HomeScreen";
+
+import "./Gallery.scss";
 
 type ArtworksProps = {
   artworks: ArtworkProps[];
@@ -13,14 +14,18 @@ type ArtworksProps = {
 };
 
 const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
-  const { setSelectingAw } = awDetailStateTools;
+  const { selectingAw, setSelectingAw } = awDetailStateTools;
   const [isShowSaveDialog, setIsShowSaveDialog] = useState<boolean>(false);
-  const [selectedArtworks, setSelectedArtworks] = useState<string>("");
   const [isShowDetailDialog, setIsShowDetailDialog] = useState(false);
 
-  const openDialog = (artworkId: string) => {
+  const openSaveDialog = (artwork: ArtworkProps) => {
     setIsShowSaveDialog(true);
-    setSelectedArtworks(artworkId);
+    setSelectingAw(artwork);
+  };
+
+  const openDetailDialog = (artwork: ArtworkProps) => {
+    setIsShowDetailDialog(true);
+    setSelectingAw(artwork);
   };
 
   return (
@@ -30,10 +35,6 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
           <div
             className="gallery__item flex flex-row flex-wrap justify-content-center"
             key={artwork.id}
-            onClick={() => {
-              setIsShowDetailDialog(true);
-              setSelectingAw(artwork);
-            }}
           >
             <ArtworkCard
               key={artwork.id}
@@ -44,7 +45,8 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
               thumbnail={artwork.thumbnail}
               likeCount={artwork.likeCount}
               viewCount={artwork.viewCount}
-              saveHandler={() => openDialog(artwork.id)}
+              viewHandler={() => openDetailDialog(artwork)}
+              saveHandler={() => openSaveDialog(artwork)}
             />
           </div>
         ))}
@@ -59,7 +61,7 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
           onHide={() => setIsShowSaveDialog(false)}
           style={{ width: "20vw" }}
         >
-          <SavePopup artworkId={selectedArtworks} closeDialog={() => setIsShowSaveDialog(false)} />
+          <SavePopup artworkId={selectingAw?.id} closeDialog={() => setIsShowSaveDialog(false)} />
         </Dialog>
       </div>
       <ArtworkDetailDialog
