@@ -1,5 +1,7 @@
 import React from "react";
-import UserInformationCard, { UserInformationProps } from "../../../components/UserInformationCard";
+import UserInformationCard, {
+  UserInformationProps,
+} from "../../../components/UserInformationCard";
 
 import "./CreatorsView.scss";
 
@@ -11,16 +13,14 @@ const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
   return (
     <div className="creators-view-container w-full flex flex-column flex-wrap justify-content-center align-items-start">
       <p className="title">
-        <i className="pi pi-star text-2xl" /> Nhà sáng tạo
+        <i className="pi pi-star text-2xl ml-4" /> Nhà sáng tạo
       </p>
-      <div className="w-fit flex flex-row flex-wrap justify-content-center align-items-center">
+      <div className="creator-list">
         {Array.isArray(creators) &&
           creators.map((creator) => (
-            <UserInformationCard
-            key={creator.id}
-            {...creator}
-            hire={true}
-            />
+            <div className="creator-card" key={creator.id}>
+              <UserInformationCard {...creator} hire={true} />
+            </div>
           ))}
       </div>
     </div>
