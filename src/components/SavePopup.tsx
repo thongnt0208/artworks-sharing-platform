@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch, InputSwitchChangeEvent } from "primereact/inputswitch";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 
-import { GetCollectionsData } from "../layout/ProfileScreen/CollectionsView/CollectionsService";
 import {
   AddArtworkToCollection,
   CreateCollectionData,
 } from "../layout/CollectionDetailScreen/CollectionDetailService";
+import { GetCollectionsData } from "../layout/ProfileScreen/CollectionsView/CollectionsService";
 import { CollectionProps } from "../layout/CollectionDetailScreen/CollectionDetailScreen";
 import { getAuthInfo } from "../util/AuthUtil";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import * as Yup from "yup";
 import "./SavePopup.scss";
 
 const validationSchema = Yup.object().shape({
@@ -26,12 +26,10 @@ interface SavePopupProps {
 }
 
 const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
-  const toast = useRef<Toast>(null);
   const [createCollection, setCreateCollection] = useState(false);
   const [selectedCollection, setSelectedCollection] =
     useState<CollectionProps>();
   const [collections, setCollections] = useState<CollectionProps[]>([]);
-  // const [newCollectionName, setNewCollectionName] = useState<string>("");
   const [privacy, setPrivacy] = useState<boolean>(true);
   let accountId = getAuthInfo()?.id;
 
@@ -46,33 +44,6 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
     },
   });
 
-  const showSuccess = () => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Lưu thành công",
-      detail: "Lưu thành công vào bộ sưu tập",
-      life: 2000,
-    });
-  };
-
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Lỗi",
-      detail: "Lưu bị lỗi",
-      life: 2000,
-    });
-  };
-
-  const showSaved = () => {
-    toast.current?.show({
-      severity: "warn",
-      summary: "Đã lưu",
-      detail: "Bạn đã lưu tác phẩm này vào bộ sưu tập của mình",
-      life: 2000,
-    });
-  };
-
   const handleAddArtworkToCollection = async (
     collectionId: string,
     artworkId: string
@@ -83,13 +54,12 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
         artworkId,
       });
       if (response) {
-        showSuccess();
+        toast.success("Đã lưu tác phẩm này vào bộ sưu tập của mình");
       } else {
-        showSaved();
+        toast.warning("Tác phẩm này đã tồn tại trong bộ sưu tập của bạn");
       }
     } catch (error) {
-      console.error(error);
-      showError();
+      toast.error("Đã xảy ra lỗi khi thêm tác phẩm vào bộ sưu tập");
     }
   };
 
@@ -104,26 +74,30 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
         artworkId,
       });
       if (response) {
-        showSuccess();
+        toast.success("Đã tạo bộ sưu tập mới thành công");
       } else {
-        showError();
+        toast.error("Đã xảy ra lỗi khi tạo bộ sưu tập mới");
       }
     } catch (error) {
-      console.error(error);
-      showError();
+      toast.error("Đã xảy ra lỗi khi tạo bộ sưu tập mới");
     }
   };
 
   useEffect(() => {
     const fetchServices = async () => {
-      const response = await GetCollectionsData(accountId);
-      if (Array.isArray(response)) {
-        setCollections(response);
-      } else {
-        console.error("Response is not an array:", response);
+      try {
+        const response = await GetCollectionsData(accountId);
+        if (Array.isArray(response)) {
+          setCollections(response);
+          setSelectedCollection(response[0]);
+          setCreateCollection(response.length === 0);
+        } else {
+          toast.error("Đã xảy ra lỗi khi lấy dữ liệu bộ sưu tập");
+        }
+      } catch (error) {
+        toast.error("Đã xảy ra lỗi khi lấy dữ liệu bộ sưu tập");
       }
     };
-
     fetchServices();
   }, [accountId]);
 
@@ -139,27 +113,30 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
 
   return (
     <div className="container">
-      <Toast ref={toast} />
       <h2 className="font-bold">Thêm vào bộ sưu tập</h2>
       <div className="select-collection w-full flex flex-column justify-content-start align-items-start">
-        <label className="font-bold" style={{ marginBottom: "10px" }}>
-          Bộ sưu tập
-        </label>
-        <Dropdown
-          className="collection-dropdown"
-          value={selectedCollection}
-          onChange={(e) => setSelectedCollection(e.value)}
-          options={options}
-        />
-        <div className="flex flex-row align-items-center mt-2 mb-4">
-          <InputSwitch
-            checked={createCollection}
-            onChange={(e: InputSwitchChangeEvent) =>
-              setCreateCollection(e.value)
-            }
-          />
-          <label className="ml-2">Tạo bộ sưu tập mới</label>
-        </div>
+        {collections.length !== 0 && (
+          <>
+            <label className="font-bold" style={{ marginBottom: "10px" }}>
+              Bộ sưu tập
+            </label>
+            <Dropdown
+              className="collection-dropdown"
+              value={selectedCollection}
+              onChange={(e) => setSelectedCollection(e.value)}
+              options={options}
+            />
+            <div className="flex flex-row align-items-center mt-2 mb-4">
+              <InputSwitch
+                checked={createCollection}
+                onChange={(e: InputSwitchChangeEvent) =>
+                  setCreateCollection(e.value)
+                }
+              />
+              <label className="ml-2">Tạo bộ sưu tập mới</label>
+            </div>
+          </>
+        )}
 
         {createCollection && (
           <>

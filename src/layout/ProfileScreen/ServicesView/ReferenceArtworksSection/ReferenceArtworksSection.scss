@@ -3,14 +3,25 @@
 .reference-artworks-section {
   .header {
     width: 100%;
-    padding: 0 10px;
     height: fit-content;
+    padding: 50px 50px !important;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    .title {
+      width: 70%;
+      height: fit-content;
+      h4 {
+        text-overflow: ellipsis;
+      }
+    }
     .action {
-      padding-right: 30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
     }
   }
   .artwork-scroll-panel {

@@ -61,7 +61,7 @@ const ArtworksView: React.FC = () => {
 
   return (
     <>
-      {isCreator ? (
+      {isCreator && artworks.length > 0 ? (
         <TabMenu
           model={items}
           activeIndex={activeTab}

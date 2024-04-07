@@ -16,7 +16,7 @@ export type RequestPopupProps = {
   isHire: boolean;
   onHide: () => void;
   onSubmit: (request: RequestProps) => void;
-}
+};
 
 export type RequestProps = {
   message: string;
@@ -31,7 +31,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
   accountName,
   isHire,
   onHide,
-  onSubmit
+  onSubmit,
 }) => {
   const [message, setMessage] = useState("");
   const [estimateDeliveryTime, setEstimateDeliveryTime] = useState("");
@@ -41,7 +41,9 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
   useEffect(() => {
     const fieldsFilled =
       message.trim() !== "" &&
-      (!isHire || (estimateDeliveryTime.trim() !== "" && (budget ?? 0) > (startingPrice ?? 0)));
+      (!isHire ||
+        (estimateDeliveryTime.trim() !== "" &&
+          (budget ?? 0) > (startingPrice ?? 0)));
     setAllFieldsFilled(fieldsFilled);
   }, [message, estimateDeliveryTime, budget, isHire, startingPrice]);
 
@@ -72,7 +74,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
         modal
         dismissableMask={true}
         style={{ width: "40vw" }}
-        contentStyle={{ padding: "30px", borderRadius: "12px" }}
+        contentStyle={{ padding: "30px 0", borderRadius: "12px" }}
         onHide={onHide}
       >
         <div className="request-popup-container w-full flex flex-column justify-content-center align-items-center">
@@ -89,13 +91,15 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
             </div>
           </div>
           <div className="w-full flex flex-column justify-content-center align-items-center">
-            {message.length < 10 && (<span>Phải hơn 10 kí tự</span>)}
             <InputTextarea
               id="message"
-              rows={8}
-              cols={60}
+              rows={8} 
+              style={{ width: "80%" }}
               onChange={(e) => setMessage(e.target.value)}
             />
+            {message.length < 10 && (
+              <span className="text-red-500">Phải hơn 10 kí tự</span>
+            )}
           </div>
           {isHire && (
             <div className="w-full mt-4 flex flex-column justify-content-center align-items-center">

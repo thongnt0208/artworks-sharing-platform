@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { CatchAPICallingError } from "..";
 import {
   addFollow,
+  fetchFollowers,
   fetchIsFollow,
   removeFollow,
 } from "../ArtworkDetailScreen/Service";
@@ -77,8 +78,13 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       try {
         const profileData = await GetProfileData(profileId || "");
         const isFollowed = await fetchIsFollow(profileId || "");
+        const followerNum = await fetchFollowers(profileId || "");
+        const followingNum = await fetchFollowers(profileId || "");
+        console.log("Follower num", followerNum); 
+        console.log("Following num", followingNum);
         setProfile(profileData);
         setIsFollow(isFollowed);
+        setProfile((prev) => ({ ...prev, followerNum: followerNum, followingNum: followingNum }));
         if (getAuthInfo()?.id === profileId) {
           setIsCreator(true);
         } else {

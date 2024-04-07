@@ -1,9 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputMask } from "primereact/inputmask";
 import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 
 import {
   UpdateWalletInformation,
@@ -11,6 +10,7 @@ import {
 } from "../WalletService";
 import { AccountVerificationData } from "../WithdrawCoin/WithdrawCoin";
 import "./WalletInformation.scss";
+import { toast } from "react-toastify";
 
 const zalopayLogo = require("../../../../assets/logo/zalopay-logo.png");
 
@@ -25,37 +25,9 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
   refreshCallback,
   onHide,
 }) => {
-  const toast = useRef<Toast>(null);
   const [loading, setLoading] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState<string>("");
-
-  const showSuccess = () => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Thành công",
-      detail: "Cập nhật thông tin ví thành công",
-      life: 2000,
-    });
-  };
-
-  const showError = () => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Thất bại",
-      detail: "Cập nhật thông tin ví không thành công",
-      life: 2000,
-    });
-  };
-
-  const showWarning = () => {
-    toast.current?.show({
-      severity: "warn",
-      summary: "Cảnh báo",
-      detail: "Tài khoản ZaloPay chưa được xác thực",
-      life: 2000,
-    });
-  };
 
   let content = (
     <div className="wallet-history-section">
@@ -120,31 +92,30 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
       if (accountVerificationData.returnCode === 1) {
         UpdateWalletInformation(phoneNumber).then((response) => {
           if (response) {
-            showSuccess();
+            toast.success("Cập nhật thông tin ví thành công");
             setLoading(false);
             refreshCallback();
             onHide();
           } else {
-            showError();
+            toast.error("Cập nhật thông tin ví không thành công");
           }
         });
       } else {
-        showWarning();
+        toast.warning("Tài khoản ZaloPay chưa được xác thực");
       }
     } catch (error) {
-      showError();
+      toast.error("Cập nhật thông tin ví không thành công");
     }
   };
 
   return (
     <>
-      <Toast ref={toast} />
       <Dialog
         showHeader={false}
         visible={isVisible}
         className="wallet-information-dialog"
         contentStyle={{ borderRadius: "12px" }}
-        style={{ width: "30vw" }}
+        style={{ width: "50vw" }}
         modal={true}
         dismissableMask={true}
         onHide={onHide}
