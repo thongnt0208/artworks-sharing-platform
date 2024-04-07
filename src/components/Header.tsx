@@ -149,7 +149,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
       >
         <Notification
           notifications={chatboxesData}
-          account={{ accountId: "1", name: "Trung Thông" }}
+          type="chat"
         />
       </Dialog>
 
@@ -183,7 +183,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
               creationDate: "28/12/2023",
             },
           ]}
-          account={{ accountId: "1", name: "Trung Thông" }}
+          type="noti"
         />
       </Dialog>
 

@@ -7,6 +7,7 @@ import { arraysChatboxEqual, arraysEqual } from "../../../util/ArrayUtil";
 const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 const authenticationInfo = getAuthInfo();
+let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
 /**
  * This function is used to get all chatboxes of current account
@@ -20,8 +21,6 @@ const authenticationInfo = getAuthInfo();
  * @version 3.1.0
  */
 export async function GetChatboxesCurrentAccount(): Promise<ChatboxItemType[]> {
-  const authenticationInfo = getAuthInfo();
-  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
   return axiosPrivate
     .get("/accounts/chatboxs")
     .then((response) =>
@@ -73,34 +72,46 @@ export async function GetChatboxesCurrentAccount(): Promise<ChatboxItemType[]> {
 export async function GetChatboxesCurrentAccountRealtime(
   setState: Dispatch<React.SetStateAction<ChatboxItemType[]>>
 ): Promise<() => void> {
-  const url = `${WS_URL}/accounts/chatboxs/ws`;
+  const url = `${WS_URL}/accounts/${authenticationInfo?.id}/chatboxs/ws`;
   const socket = new WebSocket(url);
 
   let _tmpChatboxes: ChatboxItemType[] = [];
 
   return new Promise<() => void>((resolve, reject) => {
     socket.onopen = () => {
-      console.log("WebSocket connection established" + authenticationInfo?.accessToken);
       socket.send(authenticationInfo?.accessToken);
       setState([]);
     };
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+
       const chatboxes = data.map((item: any) => {
+        const _acc1 = item?.Account_1;
+        const _acc2 = item?.Account_2;
+
+        const _avt = _acc1?.Id === currentUserId ? _acc2?.Avatar : _acc1?.Avatar;
+        const _content = `Tin nhắn từ ${
+          _acc1?.Id === currentUserId ? _acc2?.Fullname : _acc1?.Fullname
+        }`;
+        const _author =
+          _acc1?.Id === currentUserId
+            ? { id: _acc2?.Id, fullname: _acc2?.Fullname }
+            : { id: _acc1?.Id, fullname: _acc1?.Fullname };
+
         return {
-          id: item.Id || "",
-          name: item.Name || "",
-          participants: item.Participants || [],
-          lastMessageOn: item.LastMessageOn || "",
-          lastMessageText: item.LastMessageText || "",
+          id: item?.Id || "",
+          avatar: _avt,
+          text: _content,
+          author: _author,
+          time: item.createdOn || "",
+          isSeen: false,
         };
       });
 
-      console.log(chatboxes);
-
       if (Array.isArray(chatboxes) && !arraysChatboxEqual(_tmpChatboxes, chatboxes)) {
         _tmpChatboxes = chatboxes;
+        
         setState(chatboxes);
       }
     };

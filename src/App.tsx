@@ -45,10 +45,12 @@ import SearchScreen from "./layout/SearchScreen/SearchScreen";
 import { AuthProvider } from "./auth/context/auth-provider";
 import UnknownErrorPage from "./pages/unknown";
 import { notificationItemType } from "./components/Notification";
-import { GetChatboxesNoti } from "./layout/ChatScreen/services/ChatServices";
+import {
+  GetChatboxesCurrentAccount,
+  GetChatboxesCurrentAccountRealtime,
+} from "./layout/ChatScreen/services/ChatServices";
 import InternalServerErrPage from "./pages/500";
-// Need to have a Centralize Component to control Header and Footer visibility (will do later)
-// import { useFooterVisibility, useHeaderVisibility } from "./hooks/useVisibility";
+import { ChatboxItemType } from "./layout/ChatScreen/ChatRelatedTypes";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -56,51 +58,47 @@ function App() {
   const primereactConfigValue = {};
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
-  // const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
+  const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatNotis, setChatNotis] = useState<notificationItemType[]>([]);
-  // const isHeaderVisible = useHeaderVisibility();
-  // const isFooterVisible = useFooterVisibility();
 
   useEffect(() => {
-    // TODO: Đổi thành lấy chatbox realtime (chờ API) -> đổi setChatNotis thành setChatboxes
-    GetChatboxesNoti()
-      .then((chatboxes) => {
-        console.log(chatboxes);
-        setChatNotis(chatboxes);
-      })
-      .catch((error) => {
-        console.error("Error fetching chatboxes:", error);
-        setChatNotis([]);
-        if (error.response?.status === 401) {
-          setIsLogin(false);
-        }
-      });
+    GetChatboxesCurrentAccountRealtime(setChatboxes).catch((error) => {
+      console.error("Error fetching chatboxes:", error);
+      // If the realtime API fails, we will use the normal API
+      GetChatboxesCurrentAccount()
+        .then((response) => setChatboxes(response))
+        .catch((error) => setChatboxes([]));
+      setChatboxes([]);
+      if (error.response?.status === 401) {
+        setIsLogin(false);
+      }
+    });
   }, [isLogin]);
 
-  // Xử lý chatbox realtime - start
-  // function castChatboxToNotification(chatbox: ChatboxItemType): notificationItemType {
-  //   const notification: notificationItemType = {
-  //     notificationId: chatbox.id,
-  //     content: "Tin nhắn mới ...",
-  //     notifyType: "chat",
-  //     isSeen: chatbox.isSeen,
-  //     creationDate: chatbox.time,
-  //     createdBy: chatbox.author.fullname,
-  //     avatar: chatbox.avatar,
-  //   };
-  //   return notification;
-  // }
+  // Chatbox realtime - start
+  function castChatboxToNotification(chatbox: ChatboxItemType): notificationItemType {
+    const notification: notificationItemType = {
+      notificationId: chatbox.id,
+      content: chatbox?.text || "Tin nhắn mới ...",
+      notifyType: "chat",
+      isSeen: chatbox.isSeen,
+      creationDate: chatbox.time,
+      createdBy: chatbox.author.fullname,
+      avatar: chatbox.avatar,
+    };
+    
+    return notification;
+  }
 
-  // useEffect(() => {
-  //   setChatNotis(chatboxes.map((chatbox) => castChatboxToNotification(chatbox)));
-  // }, [chatboxes]);
-  // Xử lý chatbox realtime - end
+  useEffect(() => {
+    setChatNotis(chatboxes.map((chatbox) => castChatboxToNotification(chatbox)));
+  }, [chatboxes]);
+  // Chatbox realtime - end
 
   return (
     <PrimeReactProvider value={primereactConfigValue}>
       <AuthProvider>
         <BrowserRouter>
-          {/* {isHeaderVisible && <Header isLogin={isLogin} setIsLogin={setIsLogin} />} */}
           <Header isLogin={isLogin} setIsLogin={setIsLogin} chatboxesData={chatNotis} />
 
           <Routes>
@@ -146,8 +144,6 @@ function App() {
             <Route path="/error" element={<UnknownErrorPage />} />
             <Route path="/error-internal-server" element={<InternalServerErrPage />} />
           </Routes>
-
-          {/* {isFooterVisible && <Footer />} */}
           <Footer />
           <ToastContainer />
         </BrowserRouter>
