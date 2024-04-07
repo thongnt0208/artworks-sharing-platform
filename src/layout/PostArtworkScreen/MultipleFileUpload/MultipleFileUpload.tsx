@@ -5,7 +5,7 @@ import {
   FileUploadHeaderTemplateOptions,
   ItemTemplateOptions,
 } from "primereact/fileupload";
-import { Button, ProgressBar, Tooltip, Tag, Toast } from "../../index";
+import { Button, ProgressBar, Tooltip, Tag, Toast, ProgressSpinner } from "../../index";
 import * as nsfwjs from "nsfwjs";
 // ---------------------------------------------------------------
 import { maxSizeImagesUpload } from "../../../const/bizConstants";
@@ -25,16 +25,18 @@ export default function MultipleFileUpload({
   uploadedFiles,
   setUploadedFiles,
   onFormChange,
-  sendValidationResults
+  sendValidationResults,
 }: Props) {
   const toast = useRef<Toast>(null);
   const maxSize = maxSizeImagesUpload;
   const [totalSize, setTotalSize] = useState(0);
   const [validationProgress, setValidationProgress] = useState<{ [key: string]: number }>({});
   const [validationResults, setValidationResults] = useState<{ [key: string]: boolean }>({});
+  const [isLoading, setIsLoading] = useState(false);
   const fileUploadRef = useRef<FileUpload>(null);
 
   const validateImage = async (file: File) => {
+    setIsLoading(true);
     const _img = new Image();
     _img.src = URL.createObjectURL(file);
     const model = await nsfwjs.load();
@@ -47,6 +49,7 @@ export default function MultipleFileUpload({
         prediction.probability > 0.7
     );
     setValidationResults((prevResults) => ({ ...prevResults, [file.name]: !isNSFW }));
+    setIsLoading(false);
   };
 
   const onTemplateSelect = async (e: { files: File[]; originalEvent: any }) => {
@@ -116,6 +119,7 @@ export default function MultipleFileUpload({
             value={value}
             showValue={false}
             style={{ width: "10rem", height: "12px" }}
+            color="info"
           ></ProgressBar>
         </div>
       </div>
@@ -141,11 +145,6 @@ export default function MultipleFileUpload({
           <span className="max-w-max text-cus-normal">{props.formatSize}</span>
           {validationProgress !== undefined && (
             <div className="validation-progress">
-              <ProgressBar
-                value={_validationProgress}
-                showValue={false}
-                style={{ width: "10rem", height: "12px" }}
-              />
               {_validationProgress === 100 && (
                 <span className={`validation-result ${isValid ? "valid" : "invalid"}`}>
                   {isValid ? "Đạt chuẩn" : "Không phù hợp"}
@@ -174,11 +173,21 @@ export default function MultipleFileUpload({
     console.log("validationResults", validationResults);
     sendValidationResults(validationResults);
     onFormChange(uploadedFiles);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploadedFiles, validationResults]);
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      {isLoading && (
+        <div className="nsfw-spiner-container">
+          <ProgressSpinner
+            className="nsfw-spinner"
+            style={{ width: "50px", height: "50px" }}
+            strokeWidth="8"
+            animationDuration=".5s"
+          />
+        </div>
+      )}
       <Toast ref={toast} />
       <Tooltip target=".custom-choose-btn" content="Chọn files" position="bottom" />
       <FileUpload
