@@ -20,6 +20,10 @@ export default function PostArtworkScreen({ ...props }: Props) {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const toast: any = useRef(null);
 
+  const isShowEmptyTemplate =
+    uploadedFiles.length === 0 && !data?.title && !data?.description && data?.tags?.length === 0;
+  const previewClassname = "preview-container" + (!isShowEmptyTemplate ? "-filled" : "");
+
   useEffect(() => {
     if (error !== 0) {
       let _tmpMsg = "";
@@ -56,7 +60,7 @@ export default function PostArtworkScreen({ ...props }: Props) {
       <div className="artwork-detail-container">
         <div className="detail-container flex grid-nogutter">
           <div className="left-panel-container col col-9 p-3">
-            <div className="preview-container p-2">
+            <div className={previewClassname + " p-2"}>
               {/* Review title */}
               {data?.title && (
                 <div className="title-container">
@@ -78,10 +82,10 @@ export default function PostArtworkScreen({ ...props }: Props) {
                 </div>
               )}
               {/* Review Images */}
-              {uploadedFiles.length === 0 && (
+              {isShowEmptyTemplate && (
                 <div className="empty-template flex flex-column gap-1">
                   <span className="text-cus-h1-bold">Hãy bắt đầu xây dựng dự án của bạn</span>
-                  <span className="text-cus-h3">Bản xem trước của bài đăng sẽ  hiển thị ở đây</span>
+                  <span className="text-cus-h3">Bản xem trước của bài đăng sẽ hiển thị ở đây</span>
                 </div>
               )}
               {uploadedFiles.length > 0 && (
