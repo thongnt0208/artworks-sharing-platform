@@ -55,41 +55,48 @@ export default function PostArtworkScreen({ ...props }: Props) {
       <Toast ref={toast} />
       <div className="artwork-detail-container">
         <div className="detail-container flex grid-nogutter">
-          <div className="left-panel-container review-container col col-9">
-            {/* Review title */}
-            {data?.title && (
-              <div className="title-container">
-                <h1 className="text-cus-h1-bold">{data?.title}</h1>
-              </div>
-            )}
-            {/* Review Description */}
-            {data?.description && <p className="text-cus-body">{data?.description}</p>}
-            {/* Review Tags */}
-            {data?.tags?.length > 0 && (
-              <div className="tags-container">
-                {data.tags.map((tag: string, index: number) => (
-                  <Button key={index}>
-                    <Link to={""} className="tag-inline">
-                      #{tag}
-                    </Link>
-                  </Button>
-                ))}
-              </div>
-            )}
-            {/* Review Images */}
-            {uploadedFiles.length === 0 && <p>Hình ảnh bạn chọn sẽ hiển thị ở đây</p>}
-            {uploadedFiles.length > 0 && (
-              <div>
-                {uploadedFiles.map((file: any, index: number) => (
-                  <Image
-                    key={index}
-                    src={URL.createObjectURL(file)}
-                    alt={`Uploaded ${file.name}`}
-                    width="100%"
-                  />
-                ))}
-              </div>
-            )}
+          <div className="left-panel-container col col-9 p-3">
+            <div className="preview-container p-2">
+              {/* Review title */}
+              {data?.title && (
+                <div className="title-container">
+                  <h1 className="text-cus-h1-bold">{data?.title}</h1>
+                </div>
+              )}
+              {/* Review Description */}
+              {data?.description && <p className="text-cus-body">{data?.description}</p>}
+              {/* Review Tags */}
+              {data?.tags?.length > 0 && (
+                <div className="tags-container">
+                  {data.tags.map((tag: string, index: number) => (
+                    <Button key={index}>
+                      <Link to={""} className="tag-inline">
+                        #{tag}
+                      </Link>
+                    </Button>
+                  ))}
+                </div>
+              )}
+              {/* Review Images */}
+              {uploadedFiles.length === 0 && (
+                <div className="empty-template flex flex-column gap-1">
+                  <span className="text-cus-h1-bold">Hãy bắt đầu xây dựng dự án của bạn</span>
+                  <span className="text-cus-h3">Bản xem trước của bài đăng sẽ  hiển thị ở đây</span>
+                </div>
+              )}
+              {uploadedFiles.length > 0 && (
+                <div>
+                  {uploadedFiles.map((file: any, index: number) => (
+                    <Image
+                      key={index}
+                      src={URL.createObjectURL(file)}
+                      alt={`Uploaded ${file.name}`}
+                      width="100%"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className="right-panel-container col col-3 p-3">
             <InputForm
