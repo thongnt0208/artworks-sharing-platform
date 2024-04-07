@@ -7,8 +7,9 @@ import { Divider } from "primereact/divider";
 import { useNavigate } from "react-router-dom";
 import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
 import RequestPopup, { RequestProps } from "./RequestPopup";
-import "./UserInformationCard.scss";
 import ProfilePreview from "./ProfilePreview";
+import "./UserInformationCard.scss";
+
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
 
 export type UserInformationProps = {
@@ -51,7 +52,10 @@ const UserInformationCard: React.FC<UserInformationProps> = (
       {props.hire ? (
         <></>
       ) : props.bio ? (
-        <div className="bio-container w-full pl-4 pr-4">
+        <div
+          className="bio-container w-full pt-2 pl-4 pr-4"
+          style={{ borderTop: "1px solid #CCCBC8" }}
+        >
           <h3>Về tôi</h3>
           <p className="text-justify">{props.bio}</p>
         </div>
@@ -136,7 +140,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         />
       </Dialog>
       <Card
-        footer={footer ? footer : ""}
+        footer={footer ? footer : undefined}
         className="user-information-card"
         onClick={props.hire ? () => setIsShowProfilePreview(true) : undefined}
         style={props.hire ? { cursor: "pointer" } : {}}
@@ -152,6 +156,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           <h1 className="m-0 mb-3">{props.fullname}</h1>
           <h3 className="m-0">{props.email}</h3>
         </div>
+        {!props.hire && (
         <div className="w-full h-fit flex flex-row justify-content-center mt-2">
           <p className="h-fit m-0">
             <strong>{props.followerNum}</strong> người theo dõi
@@ -161,6 +166,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
             <strong>{props.followingNum}</strong> đang theo dõi
           </p>
         </div>
+        )}
         <div className="action-section">
           {props.isCreator ? (
             <Button

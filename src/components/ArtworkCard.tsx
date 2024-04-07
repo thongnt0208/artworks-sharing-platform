@@ -67,34 +67,35 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   );
   let footer = (
     <div className="footer-container">
-      <Button
-        className="like-button"
-        label={props.likeCount ? formatLargeNumber(props.likeCount) : "0"}
-        icon="pi pi-heart"
-        onClick={props.likeHandler}
-      />
-      <Divider className="divider" layout="vertical" />
-      {props.isCreator ? (
+      <div className="footer-content">
         <Button
-          className="save-button"
-          icon="pi pi-cog"
-          onClick={(e) => {
-            console.log("Clicked", e, op);
-            op.current?.toggle(e);
-          }}
+          className="like-button"
+          label={props.likeCount ? formatLargeNumber(props.likeCount) : "0"}
+          icon="pi pi-heart"
+          onClick={props.likeHandler}
         />
-      ) : props.onRemoveFromCollection ? (
-        <Button className="save-button" onClick={props.saveHandler}>
-          <img src={unsavedIcon} alt="icon" />
-        </Button>
-      ) : (
-        <Button
-          className="save-button"
-          icon="pi pi-bookmark"
-          onClick={props.saveHandler}
-        />
-      )}
-
+        <Divider className="divider" layout="vertical" />
+        {props.isCreator ? (
+          <Button
+            className="save-button"
+            icon="pi pi-cog"
+            onClick={(e) => {
+              console.log("Clicked", e, op);
+              op.current?.toggle(e);
+            }}
+          />
+        ) : props.onRemoveFromCollection ? (
+          <Button className="save-button" onClick={props.saveHandler}>
+            <img src={unsavedIcon} alt="icon" />
+          </Button>
+        ) : (
+          <Button
+            className="save-button"
+            icon="pi pi-bookmark"
+            onClick={props.saveHandler}
+          />
+        )}
+      </div>
       <OverlayPanel ref={op} showCloseIcon={false}>
         <table>
           <tbody>

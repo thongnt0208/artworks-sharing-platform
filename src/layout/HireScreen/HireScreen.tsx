@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { GetCreatorsData } from "./HireService";
 import { GetTagsData } from "../HomeScreen/HomeService";
+import { UserInformationProps } from "../../components/UserInformationCard";
 
 import BannerView from "./BannerView/BannerView";
 import FilterView from "./FilterView/FilterView";
 import CreatorsView from "./CreatorsView/CreatorsView";
-import { UserInformationProps } from "../../components/UserInformationCard";
 
 type TagProps = {
   id: string;
