@@ -64,7 +64,7 @@ const setNewAccessToken = (accessToken: string) => {
  * @author ThongNT
  * @version 1.1.0
  */
-const getAuthInfo = (): any => {
+const getAuthInfo = (): authInfoDataType => {
   return getFromLS("authData");
 };
 
