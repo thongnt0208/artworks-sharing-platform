@@ -21,8 +21,8 @@ const ArtworksView: React.FC = () => {
   const [activeTab, setActiveTab] = useState(1);
 
   const items = [
-    { label: "Đã duyệt"},
-    { label: "Đang duyệt" },
+    { label: "Đang duyệt"},
+    { label: "Đã duyệt" },
     { label: "Bị từ chối" },
   ];
 

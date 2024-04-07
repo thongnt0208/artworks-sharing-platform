@@ -5,4 +5,19 @@
         font-size: $h1;
         font-weight: bolder;
     }
+    .creator-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        .creator-card {
+            width: 400px;
+            height: fit-content;
+            padding: 30px; 
+            border: $section-border;
+            border-radius: $borderRadius-100;
+            box-shadow: $card-shadow;
+        }
+    }
 }
