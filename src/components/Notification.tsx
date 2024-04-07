@@ -18,25 +18,22 @@ export type notificationItemType = {
 
 type Props = {
   notifications: notificationItemType[];
-  account: {
-    accountId: string;
-    name: string;
-  };
+  type: "chat" | "noti";
 };
 
-const Notification: React.FC<Props> = ({ notifications, account }) => {
+const Notification: React.FC<Props> = ({ notifications, type }) => {
   const [notification, setNotification] = useState<notificationItemType[]>([]);
   const itemTemplate = (data: notificationItemType) => {
     return (
       <div className="notification">
-        <Link to={`/chat/${data.notificationId}`}>
+        <Link to={`/${type === "chat" ? "chat" : ""}/${data.notificationId}`}>
           <div className="avatar">
             <Avatar image={data.avatar || blankPic} size="xlarge" shape="circle" />
           </div>
           {data.isSeen ? (
             <div className="notification-content">
               <p className="notification-message">
-                <strong style={{ color: "black", fontWeight: "bolder" }}>{account.name}</strong>{" "}
+                <strong style={{ color: "black", fontWeight: "bolder" }}>{data.createdBy}</strong>
                 {data.content}
               </p>
               <p className="notification-date" style={{ color: "#71C4EF" }}>
@@ -46,6 +43,7 @@ const Notification: React.FC<Props> = ({ notifications, account }) => {
           ) : (
             <div className="notification-content" style={{ color: "grey" }}>
               <p className="notification-message">
+                <strong style={{ color: "black", fontWeight: "bolder" }}>{data.createdBy}</strong>
                 {data.content}
               </p>
               <p className="notification-date">{data.creationDate}</p>
