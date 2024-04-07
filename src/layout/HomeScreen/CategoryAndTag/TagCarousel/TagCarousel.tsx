@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import Tag from "../../../../components/Tag";
 import { GenerateRandomColorCode } from "../../../../util/TagColorHandler";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -40,7 +40,7 @@ const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
       <div className="tag-carousel">
         <Swiper
           direction="horizontal"
-          slidesPerView={5}
+          slidesPerView={10}
           mousewheel={true}
           modules={[Mousewheel]}
           effect={"fade"}
