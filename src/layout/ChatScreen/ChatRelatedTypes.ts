@@ -117,3 +117,36 @@ export type ProposalAssetItemType = {
   url: string;
   createdOn: string;
 };
+
+export type ReviewItemType = {
+  id: string;
+  proposalId: string;
+  rating: number;
+  detail: string;
+  createdBy: string;
+  createdOn: string;
+  createdAccount: {
+    id: string;
+    username: string;
+    email: string;
+    fullname: string;
+    avatar: string;
+  };
+  proposal: {
+    id: string;
+    chatBoxId?: string;
+    serviceId?: string;
+    projectTitle?: string;
+    category?: string;
+    description?: string;
+    targetDelivery?: string;
+    initialPrice?: number;
+    totalPrice?: number;
+    status?: string;
+    numberOfConcept?: number;
+    numberOfRevision?: number;
+    createdBy?: string;
+    createdOn?: string;
+    isReviewed?: boolean;
+  };
+};
