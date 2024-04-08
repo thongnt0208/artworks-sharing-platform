@@ -21,8 +21,8 @@ export type CommentType = {
         fullname: string;
         avatar: string;
       };
-  content: string
-}
+  content: string;
+};
 
 export type AssetType = {
   id: string;
@@ -51,6 +51,9 @@ export type ArtworkDetailType = {
   categoryArtworkDetails: CategoryProps[] | any[];
   likes?: string[];
   views?: number;
+  viewCount: number;
+  likeCount: number;
+  commentCount: number;
   comments?: CommentType[];
   assets?: AssetType[];
   isLiked: boolean;
