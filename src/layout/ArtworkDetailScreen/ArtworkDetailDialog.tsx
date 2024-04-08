@@ -74,6 +74,8 @@ export default function ArtworkDetailDialog(props: Props) {
 
   useEffect(() => {
     fetchComments();
+    console.log(currentAwDetail);
+    
   }, [data]);
 
   return (
