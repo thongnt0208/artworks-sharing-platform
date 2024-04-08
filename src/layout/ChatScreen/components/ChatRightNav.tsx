@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Avatar } from "primereact/avatar";
 import "./ChatRightNav.scss";
 import MilestoneView from "./MilestoneView/MilestoneView";
@@ -9,9 +9,12 @@ import {
   MilestoneItemType,
   ProposalAssetItemType,
   ProposalStateToolsType,
+  ReviewItemType,
 } from "../ChatRelatedTypes";
 import { useNavigate } from "react-router-dom";
 import UploadProposalAssetView from "./UploadProposalAsset/UploadProposalAssetView";
+import { GetReviewsByProposalId } from "../services/ProposalServices";
+import { Rating } from "primereact/rating";
 
 type Props = {
   userInfo: {
@@ -41,10 +44,14 @@ export default function ChatRightNav({
 }: Props) {
   const navigate = useNavigate();
   const { proposalsList, selectingProposal, setSelectingProposal } = proposalStateTools;
+  const [reviews, setReviews] = useState<ReviewItemType>({} as ReviewItemType);
   useEffect(() => {
     if (selectingProposal?.id) {
       getMilestoneCallback(selectingProposal.id);
       getAssetsCallback(selectingProposal.id);
+      GetReviewsByProposalId(selectingProposal.id)
+        .then((res) => setReviews(res))
+        .catch((err) => console.log(err));
     }
   }, [proposalsList, selectingProposal]);
 
@@ -71,6 +78,14 @@ export default function ChatRightNav({
           selectingProposal={selectingProposal}
           uploadAssetCallback={uploadAssetCallback}
         />
+      )}
+      {reviews?.id && (
+        <div className="review-container">
+          <p className="text-cus-h2-bold">Đánh giá</p>
+          <p>{reviews?.createdAccount?.fullname} đã đánh giá dự án này: </p>
+          <Rating value={reviews?.rating} readOnly cancel={false} />
+          <p className="text-cus-normal">{reviews?.detail}</p>
+        </div>
       )}
     </div>
   );
