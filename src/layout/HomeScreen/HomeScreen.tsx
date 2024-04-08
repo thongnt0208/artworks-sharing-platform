@@ -27,6 +27,7 @@ export type CategoryProps = {
 export type awDetailStateToolsType = {
   selectingAw: ArtworkProps;
   setSelectingAw: React.Dispatch<React.SetStateAction<ArtworkProps>>;
+  isLoading?: boolean;
   currentAwDetail: ArtworkDetailType;
   setCurrentAwDetail: React.Dispatch<React.SetStateAction<ArtworkDetailType>>;
   isLiked: boolean;
@@ -43,6 +44,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectingAw, setSelectingAw] = useState<ArtworkProps>({} as ArtworkProps); //an artwork from the artworks list state
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [currentAwDetail, setCurrentAwDetail] = useState<ArtworkDetailType>(
     {} as ArtworkDetailType
   ); //the artwork detail of the selectingAw
@@ -65,6 +67,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     setIsLiked,
     isFollowed,
     setIsFollowed,
+    isLoading: isLoadingDetail,
   };
 
   const items = [
@@ -87,15 +90,17 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   };
 
   const fetchDetail = () => {
+    setIsLoadingDetail(true);
+    setCurrentAwDetail({} as ArtworkDetailType);
     fetchArtworkDetail(selectingAw?.id, currentUserId)
       .then((res) => {
         setCurrentAwDetail(res);
         setIsLiked(res.isLiked);
         fetchIsFollowed(res.account.id);
       })
-      .catch((err) => CatchAPICallingError(err, navigate));
+      .catch((err) => CatchAPICallingError(err, navigate))
+      .finally(() => setIsLoadingDetail(false));
   };
-
   // AW Detail state tools - end
 
   useEffect(() => {
