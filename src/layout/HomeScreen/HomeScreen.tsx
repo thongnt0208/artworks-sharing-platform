@@ -27,6 +27,7 @@ export type CategoryProps = {
 export type awDetailStateToolsType = {
   selectingAw: ArtworkProps;
   setSelectingAw: React.Dispatch<React.SetStateAction<ArtworkProps>>;
+  isLoading?: boolean;
   currentAwDetail: ArtworkDetailType;
   setCurrentAwDetail: React.Dispatch<React.SetStateAction<ArtworkDetailType>>;
   isLiked: boolean;
@@ -43,6 +44,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectingAw, setSelectingAw] = useState<ArtworkProps>({} as ArtworkProps); //an artwork from the artworks list state
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [currentAwDetail, setCurrentAwDetail] = useState<ArtworkDetailType>(
     {} as ArtworkDetailType
   ); //the artwork detail of the selectingAw
@@ -65,7 +67,8 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     setIsLiked,
     isFollowed,
     setIsFollowed,
-  }
+    isLoading: isLoadingDetail,
+  };
 
   const items = [
     { label: "Mới nhất", icon: "pi pi-fw pi-compass" },
@@ -83,22 +86,21 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const fetchIsFollowed = (id: string) => {
     fetchIsFollow(id)
       .then((res) => setIsFollowed(res))
-      .catch((err) => {
-        setIsFollowed(false);
-        CatchAPICallingError(err, navigate);
-      });
+      .catch((err) => setIsFollowed(false));
   };
 
   const fetchDetail = () => {
+    setIsLoadingDetail(true);
+    setCurrentAwDetail({} as ArtworkDetailType);
     fetchArtworkDetail(selectingAw?.id, currentUserId)
       .then((res) => {
         setCurrentAwDetail(res);
         setIsLiked(res.isLiked);
         fetchIsFollowed(res.account.id);
       })
-      .catch((err) => CatchAPICallingError(err, navigate));
+      .catch((err) => CatchAPICallingError(err, navigate))
+      .finally(() => setIsLoadingDetail(false));
   };
-
   // AW Detail state tools - end
 
   useEffect(() => {
@@ -157,11 +159,11 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     };
   }, []);
 
-  useEffect(()=> {
-    if(selectingAw?.id) {
+  useEffect(() => {
+    if (selectingAw?.id) {
       fetchDetail();
     }
-  }, [selectingAw])
+  }, [selectingAw]);
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
@@ -184,7 +186,9 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       {!isLoading && artworks.length === 0 && (
         <div className="text-center text-2xl">Không có dữ liệu</div>
       )}
-      {artworks.length > 0 && <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />}
+      {artworks.length > 0 && (
+        <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />
+      )}
       <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
   );
