@@ -95,7 +95,8 @@ export async function GetTransactionHistoryData(
     return response.data.map((item: any) => {
       return {
         id: item.id,
-        accountId: item.accountId,
+        accountId: item.fromAccount.id,
+        fromFullname: item.fromAccount.fullname,
         detail: item.detail,
         assetId: item.assetId,
         proposalId: item.proposalId,
