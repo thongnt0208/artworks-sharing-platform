@@ -65,7 +65,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     setIsLiked,
     isFollowed,
     setIsFollowed,
-  }
+  };
 
   const items = [
     { label: "Mới nhất", icon: "pi pi-fw pi-compass" },
@@ -83,10 +83,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const fetchIsFollowed = (id: string) => {
     fetchIsFollow(id)
       .then((res) => setIsFollowed(res))
-      .catch((err) => {
-        setIsFollowed(false);
-        CatchAPICallingError(err, navigate);
-      });
+      .catch((err) => setIsFollowed(false));
   };
 
   const fetchDetail = () => {
@@ -157,11 +154,11 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     };
   }, []);
 
-  useEffect(()=> {
-    if(selectingAw?.id) {
+  useEffect(() => {
+    if (selectingAw?.id) {
       fetchDetail();
     }
-  }, [selectingAw])
+  }, [selectingAw]);
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
@@ -184,7 +181,9 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       {!isLoading && artworks.length === 0 && (
         <div className="text-center text-2xl">Không có dữ liệu</div>
       )}
-      {artworks.length > 0 && <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />}
+      {artworks.length > 0 && (
+        <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />
+      )}
       <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
   );
