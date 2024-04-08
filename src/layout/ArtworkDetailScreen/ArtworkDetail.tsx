@@ -41,15 +41,8 @@ export default function ArtworkDetail() {
 
   const fetchIsFollowed = (id: string) => {
     fetchIsFollow(id)
-      .then((res) => {
-        console.log("fetchIsFollowed: " + res);
-
-        setIsFollowed(res);
-      })
-      .catch((err) => {
-        console.log("fetchIsFollowed: " + err);
-        setIsFollowed(false);
-      });
+      .then((res) => setIsFollowed(res))
+      .catch((err) => setIsFollowed(false));
   };
 
   // Get Artwork Detail Data
@@ -57,10 +50,6 @@ export default function ArtworkDetail() {
     fetchArtworkDetail(id, currentUserId)
       .then((res) => {
         setData(res);
-        console.log("fetchDetail: ");
-        console.log(res);
-        
-        
         setIsLiked(res.isLiked);
         fetchIsFollowed(res.account.id);
         setError("");
