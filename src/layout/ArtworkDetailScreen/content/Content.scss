@@ -1,4 +1,4 @@
-@import "./../../../const/variables.scss";
+@import "/src/const/variables.scss";
 
 .title-container {
   text-align: center;
@@ -19,8 +19,27 @@
     top: -8.8rem;
   }
 
-  .tag-inline {
-    text-decoration: none;
-    color: $primary-300;
+  .tags-aw-detail-container {
+    .tag-aw-detail-item {
+      box-shadow: 0 2px 5px #00000040;
+      .tag-inline {
+        text-decoration: none;
+        color: $strong-200;
+      }
+    }
+  }
+
+  .like-btn-container, .like-view-comment-count-container{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .like-view-comment-count-container{
+    div{
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
   }
 }

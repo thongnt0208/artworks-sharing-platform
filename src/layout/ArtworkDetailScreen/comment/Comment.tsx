@@ -9,6 +9,7 @@ import { Toast } from "primereact/toast";
 import { addComment } from "./Functions";
 import { GetProfileData } from "../../ProfileScreen/ProfileService";
 import CommentItem from "./CommentItem";
+import { useNavigate } from "react-router-dom";
 
 interface PropsType {
   // Current user data
@@ -25,6 +26,7 @@ function CommentComponent({ ...props }: PropsType) {
   const [commentsElement, setCommentsElement] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const toast: any = useRef(null);
+  const navigate = useNavigate();
 
   let handleInputChange = (e: any) => {
     if (e.target.value.length <= maxCommentCharacter) {
@@ -33,7 +35,7 @@ function CommentComponent({ ...props }: PropsType) {
   };
 
   let addNewComment = () => {
-    addComment(props, commentValue, setCommentValue, setLoading, toast);
+    addComment(props, commentValue, setCommentValue, setLoading, toast, navigate);
   };
 
   let handleKeyDown = (e: any) => {
