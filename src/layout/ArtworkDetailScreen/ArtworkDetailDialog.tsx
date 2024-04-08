@@ -9,7 +9,7 @@ import Content from "./content/Content";
 import CommentComponent from "./comment/Comment";
 import { CommentType } from "./ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
-import { CatchAPICallingError } from "..";
+import { CatchAPICallingError, ProgressSpinner } from "..";
 import { awDetailStateToolsType } from "../HomeScreen/HomeScreen";
 // import UserInformationCard from "../../components/UserInformationCard";
 
@@ -21,13 +21,7 @@ type Props = {
 
 export default function ArtworkDetailDialog(props: Props) {
   const { visible, setVisible, awDetailStateTools } = props;
-  const {
-    currentAwDetail,
-    isLiked,
-    setIsLiked,
-    isFollowed,
-    setIsFollowed,
-  } = awDetailStateTools;
+  const { currentAwDetail, isLiked, setIsLiked, isFollowed, setIsFollowed, isLoading } = awDetailStateTools;
   const data = currentAwDetail;
   const navigate = useNavigate();
   const [comments, setComments] = useState([] as CommentType[]);
@@ -43,7 +37,10 @@ export default function ArtworkDetailDialog(props: Props) {
     headerStyle: { border: "none", padding: "8px" },
     dismissableMask: true,
     draggable: false,
+    className: "artwork-detail-dialog w-screen h-screen ml-7 mr-7",
   };
+
+  const previewClassname = "preview-container" + (isLoading ? "" : "-filled");
 
   // Get Comments data
   const fetchComments = () => {
@@ -81,55 +78,66 @@ export default function ArtworkDetailDialog(props: Props) {
 
   return (
     <Dialog {...dialogProperties}>
-      <>
-        {!data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>}
-        {data.images && (
-          <div className="artwork-detail-container">
-            <div className="detail-container flex grid-nogutter">
-              <div className="content-container col col-11">
-                <Content
-                  data={data}
-                  isLiked={isLiked}
-                  setIsLiked={setIsLiked}
-                  id={data?.id ? data?.id : ""}
-                  currentUserId={currentUserId}
-                />
-              </div>
-              <div className="side-buttons-container col col-1 pt-7">
-                <ButtonList
-                  data={data}
-                  isFollowed={isFollowed}
-                  makeFollow={followUser}
-                  makeUnFollow={unFollowUser}
-                />
-              </div>
+      {isLoading ? (
+        <div className={previewClassname}>
+          <div className="empty-template flex flex-column gap-1">
+            <ProgressSpinner
+              style={{ width: "50px", height: "50px" }}
+              strokeWidth="8"
+              animationDuration=".5s"
+            />
+            <span className="text-cus-h3">Đang tải dữ liệu...</span>
+          </div>
+        </div>
+      ) : (
+        !data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>
+      )}{" "}
+      {data.images && (
+        <div className="artwork-detail-container">
+          <div className="detail-container flex grid-nogutter">
+            <div className="content-container col col-11">
+              <Content
+                data={data}
+                isLiked={isLiked}
+                setIsLiked={setIsLiked}
+                id={data?.id ? data?.id : ""}
+                currentUserId={currentUserId}
+              />
             </div>
-
-            <div className="interartion-container flex grid-nogutter">
-              <div className="col col-5">
-                {currentUserId === "unknown" ? (
-                  <>
-                    <p>Bạn cần đăng nhập để bình luận.</p>
-                    <Link to={"/login"} />
-                  </>
-                ) : (
-                  <CommentComponent
-                    artworkId={data?.id ? data?.id : ""}
-                    userId={authenticationInfo?.id}
-                    avatar={authenticationInfo?.avatar}
-                    fullName={authenticationInfo?.fullname}
-                    comments={comments}
-                  />
-                )}
-              </div>
-              <div className="creator-info-container col col-5">
-                {/* <UserInformationCard .. /> */}
-              </div>
-              <div className="blank-container col col-2" />
+            <div className="side-buttons-container col col-1 pt-7">
+              <ButtonList
+                data={data}
+                isFollowed={isFollowed}
+                makeFollow={followUser}
+                makeUnFollow={unFollowUser}
+              />
             </div>
           </div>
-        )}
-      </>
+
+          <div className="interartion-container flex grid-nogutter">
+            <div className="col col-5">
+              {currentUserId === "unknown" ? (
+                <>
+                  <p>Bạn cần đăng nhập để bình luận.</p>
+                  <Link to={"/login"} />
+                </>
+              ) : (
+                <CommentComponent
+                  artworkId={data?.id ? data?.id : ""}
+                  userId={authenticationInfo?.id}
+                  avatar={authenticationInfo?.avatar}
+                  fullName={authenticationInfo?.fullname}
+                  comments={comments}
+                />
+              )}
+            </div>
+            <div className="creator-info-container col col-5">
+              {/* <UserInformationCard .. /> */}
+            </div>
+            <div className="blank-container col col-2" />
+          </div>
+        </div>
+      )}
     </Dialog>
   );
 }
