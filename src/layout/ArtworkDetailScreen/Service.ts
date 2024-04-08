@@ -34,6 +34,9 @@ function castResponseData(data: any): ArtworkDetailType {
     categoryArtworkDetails: data.categoryArtworkDetails,
     likes: data.likes,
     views: data.views,
+    viewCount: data.viewCount,
+    likeCount: data.likeCount,
+    commentCount: data.commentCount,
     assets: data.assets?.map(
       (asset: any) =>
         ({
@@ -263,7 +266,7 @@ export async function addCommentToArtwork(
     return response;
   } catch (error) {
     console.error("Error adding comment:", error);
-    throw new Error(`Error adding comment: ${error}`);
+    throw error;
   }
 }
 

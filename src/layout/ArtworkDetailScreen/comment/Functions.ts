@@ -1,3 +1,4 @@
+import { CatchAPICallingError } from "../..";
 import { addCommentToArtwork } from "../Service";
 
 /**
@@ -23,14 +24,15 @@ import { addCommentToArtwork } from "../Service";
  * toast
  * );
  * @author ThongNT
- * @version 1.0.1
+ * @version 1.1.0
  */
 export function addComment(
   props: any,
   commentValue: string,
   setCommentValue: (commentValue: string) => void,
   setLoading: (loading: boolean) => void,
-  toast: any
+  toast: any,
+  navigate?: any
 ) {
   setCommentValue(""); // Clear input after adding comment
 
@@ -41,16 +43,7 @@ export function addComment(
     // API call
     addCommentToArtwork(props?.artworkId, commentValue)
       .then(() => console.log("Comment added successfully"))
-      .catch((error) => {
-        console.log("Error adding comment:", error);
-
-        toast.current.show({
-          severity: "error",
-          summary: "Đã xảy ra lỗi",
-          detail: "Vui lòng thử lại sau",
-          life: 3000,
-        });
-      })
+      .catch((error) => CatchAPICallingError(error, navigate))
       .finally(() => {
         setLoading(false);
       });
