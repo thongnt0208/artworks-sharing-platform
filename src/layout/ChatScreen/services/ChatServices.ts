@@ -79,6 +79,8 @@ export async function GetChatboxesCurrentAccountRealtime(
 
   return new Promise<() => void>((resolve, reject) => {
     socket.onopen = () => {
+      console.log("WebSocket connection  GetChatboxesCurrentAccountRealtime established");
+      
       socket.send(authenticationInfo?.accessToken);
       setState([]);
     };
@@ -117,7 +119,7 @@ export async function GetChatboxesCurrentAccountRealtime(
     };
 
     socket.onclose = () => {
-      console.log("WebSocket connection closed");
+      console.log("WebSocket connection GetChatboxesCurrentAccountRealtime closed");
     };
 
     socket.onerror = (error) => {

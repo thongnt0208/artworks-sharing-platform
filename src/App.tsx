@@ -45,10 +45,7 @@ import SearchScreen from "./layout/SearchScreen/SearchScreen";
 import { AuthProvider } from "./auth/context/auth-provider";
 import UnknownErrorPage from "./pages/unknown";
 import { notificationItemType } from "./components/Notification";
-import {
-  GetChatboxesCurrentAccount,
-  GetChatboxesCurrentAccountRealtime,
-} from "./layout/ChatScreen/services/ChatServices";
+import { GetChatboxesCurrentAccountRealtime } from "./layout/ChatScreen/services/ChatServices";
 import InternalServerErrPage from "./pages/500";
 import { ChatboxItemType } from "./layout/ChatScreen/ChatRelatedTypes";
 
@@ -62,18 +59,8 @@ function App() {
   const [chatNotis, setChatNotis] = useState<notificationItemType[]>([]);
 
   useEffect(() => {
-    GetChatboxesCurrentAccountRealtime(setChatboxes).catch((error) => {
-      console.error("Error fetching chatboxes:", error);
-      // If the realtime API fails, we will use the normal API
-      GetChatboxesCurrentAccount()
-        .then((response) => setChatboxes(response))
-        .catch((error) => setChatboxes([]));
-      setChatboxes([]);
-      if (error.response?.status === 401) {
-        setIsLogin(false);
-      }
-    });
-  }, [isLogin]);
+    GetChatboxesCurrentAccountRealtime(setChatboxes);
+  }, []);
 
   // Chatbox realtime - start
   function castChatboxToNotification(chatbox: ChatboxItemType): notificationItemType {
@@ -86,7 +73,7 @@ function App() {
       createdBy: chatbox.author.fullname,
       avatar: chatbox.avatar,
     };
-    
+
     return notification;
   }
 
