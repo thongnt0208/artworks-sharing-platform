@@ -6,6 +6,7 @@ import {
   ProposalFormType,
   ProposalType,
   RequestItemType,
+  ReviewItemType,
 } from "../ChatRelatedTypes";
 
 function mapRequestData(response: any): RequestItemType {
@@ -297,7 +298,7 @@ export async function InitPaymentProposal(proposalId: string): Promise<any> {
 
 /**
  * This function is used to complete the payment of a proposal
- * 
+ *
  * @param proposalId - the id of the proposal
  * @returns {Promise<any>} - the response from the API
  * @throws {Error} an error from the API request
@@ -423,7 +424,7 @@ export async function GetProposalAssets(proposalId: string): Promise<ProposalAss
 
 /**
  * This function is used to get all reviews of a proposal
- * 
+ *
  * @param proposalId - the id of the proposal
  * @param vote - the vote of the review
  * @param detail - the detail of the review
@@ -435,9 +436,13 @@ export async function GetProposalAssets(proposalId: string): Promise<ProposalAss
  * @version 1.0.0
  * @author @thongnt0208
  */
-export async function AddReviewToProposal(proposalId: string, vote: number, detail: string): Promise<any> {
+export async function AddReviewToProposal(
+  proposalId: string,
+  vote: number,
+  detail: string
+): Promise<any> {
   return axiosPrivate
-    .post('/reviews', { proposalId: proposalId, vote: vote, detail: detail })
+    .post("/reviews", { proposalId: proposalId, vote: vote, detail: detail })
     .then((response) => {
       return response.data;
     })
@@ -447,14 +452,55 @@ export async function AddReviewToProposal(proposalId: string, vote: number, deta
     });
 }
 
-export async function GetReviewOfService(proposalId: string): Promise<any> {
+/**
+ * This function is used to get all reviews of a proposal
+ *
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<ReviewItemType>} - the review detail
+ * @throws {Error} an error from the API request
+ * @example
+ * const review = await GetReviewsByProposalId("123");
+ * console.log(review);
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function GetReviewsByProposalId(proposalId: string): Promise<ReviewItemType> {
   return axiosPrivate
-    .get(`/proposals/review/${proposalId}`)
+    .get(`/proposals/${proposalId}/review`)
     .then((response) => {
-      return response.data;
+      let _tmp = response?.data;
+      return {
+        id: _tmp?.id,
+        proposalId: _tmp?.proposalId,
+        rating: _tmp?.vote,
+        detail: _tmp?.detail,
+        createdBy: _tmp?.createdBy,
+        createdOn: _tmp?.createdOn,
+        createdAccount: {
+          id: _tmp?.account?.id,
+          username: _tmp?.account?.username,
+          email: _tmp?.account?.email,
+          fullname: _tmp?.account?.fullname,
+          avatar: _tmp?.account?.avatar,
+        },
+        proposal: {
+          id: _tmp?.proposal?.id,
+          chatBoxId: _tmp?.proposal?.chatBoxId,
+          serviceId: _tmp?.proposal?.serviceId,
+          projectTitle: _tmp?.proposal?.projectTitle,
+          category: _tmp?.proposal?.category,
+          description: _tmp?.proposal?.description,
+          targetDelivery: _tmp?.proposal?.targetDelivery,
+          initialPrice: _tmp?.proposal?.initialPrice,
+          totalPrice: _tmp?.proposal?.total,
+          status: _tmp?.proposal?.proposalStatus,
+          createdBy: _tmp?.proposal?.createdBy,
+          createdOn: _tmp?.proposal?.createdOn,
+        },
+      };
     })
     .catch((error) => {
-      console.error("Error fetching review:", error);
+      console.error("Error fetching reviews:", error);
       throw error;
     });
 }
