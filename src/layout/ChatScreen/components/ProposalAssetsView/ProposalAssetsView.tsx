@@ -3,13 +3,12 @@ import { formatTime } from "../../../../util/TimeHandle";
 import { ProposalAssetItemType, ProposalStateToolsType } from "../../ChatRelatedTypes";
 import "./ProposalAssetsView.scss";
 import { getAuthInfo } from "../../../../util/AuthUtil";
-import AddReviewView from "../Review/AddReviewView";
 import { Panel } from "primereact/panel";
 
 type Props = { data: ProposalAssetItemType[]; proposalStateTools: ProposalStateToolsType };
 
 export default function ProposalAssetsView({ data, proposalStateTools }: Props) {
-  const { selectingProposal, handleCompletePayment, handleGetAllProposals } = proposalStateTools;
+  const { selectingProposal, handleCompletePayment } = proposalStateTools;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
@@ -73,17 +72,6 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
               />
             </div>
           )
-        }
-        {
-          // check if proposal status is CompletePayment && current user is not the creator -> Start to add review
-          selectingProposal?.status === "CompletePayment" &&
-            !selectingProposal?.isReviewed &&
-            !isCreator && (
-              <AddReviewView
-                selectingProposal={selectingProposal}
-                refreshProposalList={handleGetAllProposals}
-              />
-            )
         }
       </div>
     </Panel>
