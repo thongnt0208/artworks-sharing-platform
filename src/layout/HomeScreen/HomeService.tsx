@@ -3,7 +3,13 @@ import { axiosPrivate } from "../../hooks/useAxios";
 import { ArtworkProps } from "../../components/ArtworkCard";
 const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 
-export async function GetTagsData() {
+/**
+ * Fetches tags data from the API.
+ * @returns {Promise<Array>} A promise that resolves to an array of tags data.
+ * @author AnhDh
+ * @version 1.0.0
+ */
+export async function GetTagsData(): Promise<Array<any>> {
   try {
     const response = await axios.get(`${API_URL}/tags`, {
       headers: {
@@ -21,6 +27,12 @@ export async function GetTagsData() {
   }
 }
 
+/**
+ * Fetches categories data from the API.
+ * @returns {Promise<Array>} A promise that resolves to an array of category data.
+ * @author AnhDh
+ * @version 1.0.0
+ */
 export async function GetCategoriesData() {
   try {
     const response = await axios.get(`${API_URL}/categories`, {
@@ -39,12 +51,23 @@ export async function GetCategoriesData() {
   }
 }
 
+/**
+ * Fetches new artworks data from the server.
+ *
+ * @param pageNumber - The page number of the artworks data to fetch.
+ * @param pageSize - The number of artworks per page.
+ * @returns An array of ArtworkProps representing the new artworks data.
+ * @author AnhDh
+ * @version 1.0.0
+ */
 export async function GetNewArtworksData(pageNumber: number, pageSize: number) {
   try {
     const response = await axios.get(`${API_URL}/artworks`, {
       params: {
         pageNumber,
         pageSize,
+        sortColumn: "create",
+        sortOrder: "desc",
       },
       headers: {
         "Content-Type": "application/json",
@@ -77,6 +100,14 @@ export async function GetNewArtworksData(pageNumber: number, pageSize: number) {
   }
 }
 
+/**
+ * Retrieves the data of following artworks from the server.
+ * @param pageNumber - The page number of the artworks to retrieve.
+ * @param pageSize - The number of artworks per page.
+ * @returns An array of following artworks data.
+ * @author AnhDh
+ * @version 1.0.0
+ */
 export async function GetFollowingArtworksData(
   pageNumber: number,
   pageSize: number
