@@ -8,6 +8,7 @@ import { maxCommentCharacter } from "../../../../const/bizConstants";
 import { CatchAPICallingError } from "../../..";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import "./AddReviewView.scss";
 
 interface Props {
   selectingProposal: ProposalType;
@@ -61,32 +62,28 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal, refreshProposalList
 
   return (
     <div className="add-review-container">
-      
-       
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="rating">Đánh giá:</label>
-                <Rating
-                  value={vote}
-                  onChange={handleVoteChange}
-                  cancel={false}
-                  stars={5}
-                  id="rating"
-                />
-              </div>
-              <div>
-                <label htmlFor="detail">Đánh giá chi tiết:</label>
-                <InputTextarea {...textareaProperties} />
-              </div>
-              <Button
-                type="submit"
-                label="Gửi đánh giá"
-                loading={isSubmitting}
-                disabled={isSubmitting || detail === "" || vote === 0}
-              />
-            </form>
-        
-      
+      <form onSubmit={handleSubmit}>
+        <span className="text-cus-h3-bold">Đánh giá</span>
+        <Rating
+          value={vote}
+          onChange={handleVoteChange}
+          cancel={false}
+          stars={5}
+          id="rating"
+          onIcon={<span>🩵</span>}
+          offIcon={<span>🩶</span>}
+        />
+        <InputTextarea {...textareaProperties} />
+        <span className="text-cus-caption">
+          {detail.length}/{maxCommentCharacter}
+        </span>
+        <Button
+          type="submit"
+          label="Gửi"
+          loading={isSubmitting}
+          disabled={isSubmitting || detail === "" || vote === 0}
+        />
+      </form>
     </div>
   );
 };
