@@ -1,0 +1,36 @@
+@import "/src/const/variables.scss";
+
+.request-noti-container {
+  width: 100%;
+  text-align: start;
+  padding: 0 1.5rem;
+
+  .btns-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0;
+    .btn-accept {
+      background-color: $strong-100;
+      color: white;
+
+      &:hover {
+        background-color: $strong-200;
+      }
+    }
+  }
+
+  .create-proposal-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: center;
+    .create-proposal-title {
+      color: $strong-200;
+    }
+    span {
+      width: fit-content;
+      text-align: center;
+    }
+  }
+}
