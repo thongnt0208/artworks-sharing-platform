@@ -1,8 +1,8 @@
 @import "/src/const/variables.scss";
 
-.wallet-history-section {
+.wallet-info{
+  width: fit-content;
   padding: 20px;
-
   .method-list {
     display: flex;
     flex-direction: column;
