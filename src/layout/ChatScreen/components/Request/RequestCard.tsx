@@ -34,7 +34,7 @@ export default function RequestCard({ ...props }: RequestCardProps) {
                 ? "info"
                 : requestStatus === "Accepted"
                 ? "success"
-                : "danger"
+                : null
             }
           />
         </p>
