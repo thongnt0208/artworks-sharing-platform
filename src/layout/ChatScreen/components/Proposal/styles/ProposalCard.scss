@@ -1,30 +1,37 @@
 @import "/src/const/variables.scss";
 
-.btns-container {
-  .upload-proposal-assets-container {
-    background-color: $bg-200;
-    padding: 1rem;
-    border-radius: 6px;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: $card-shadow;
+.propo-noti-container {
+  width: 100%;
+  text-align: start;
+  padding: 0 1.5rem;
 
-    .p-fileupload {
-      width: 100%;
-      span {
-        width: 100%;
-        border-radius: 50px;
-        font-weight: bold;
-        text-decoration: underline;
-        background-color: $strong-100;
-        color: white;
+  .btns-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0;
+
+    .btn-accept {
+      background-color: $strong-100;
+      color: white;
+
+      &:hover {
+        background-color: $strong-200;
       }
     }
+    .upload-proposal-assets-container {
+      background-color: $bg-200;
+      padding: 1rem;
+      border-radius: 6px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: $card-shadow;
 
-    .p-button {
-      width: fit-content;
+      .p-button {
+        width: fit-content;
+      }
     }
   }
 }
