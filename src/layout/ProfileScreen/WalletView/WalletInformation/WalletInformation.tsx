@@ -26,11 +26,11 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
   onHide,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   let content = (
-    <div className="wallet-history-section">
+    <div className="wallet-info">
       <h1 className="mb-6 text-center">Phương thức thanh toán</h1>
       <div className="method-list">
         <div className="method-item">
@@ -115,7 +115,7 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
         visible={isVisible}
         className="wallet-information-dialog"
         contentStyle={{ borderRadius: "12px" }}
-        style={{ width: "50vw" }}
+        style={{ width: "fit-content" }}
         modal={true}
         dismissableMask={true}
         onHide={onHide}
