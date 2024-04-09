@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Avatar } from "primereact/avatar";
 import "./ChatRightNav.scss";
 import MilestoneView from "./MilestoneView/MilestoneView";
 import ProposalAssetsView from "./ProposalAssetsView/ProposalAssetsView";
@@ -11,7 +10,6 @@ import {
   ProposalStateToolsType,
   ReviewItemType,
 } from "../ChatRelatedTypes";
-import { useNavigate } from "react-router-dom";
 import UploadProposalAssetView from "./UploadProposalAsset/UploadProposalAssetView";
 import { GetReviewsByProposalId } from "../services/ProposalServices";
 import { Rating } from "primereact/rating";
@@ -34,7 +32,6 @@ type Props = {
 };
 
 export default function ChatRightNav({
-  userInfo,
   proposalStateTools,
   currentMilestone,
   currentAssets,
@@ -42,7 +39,6 @@ export default function ChatRightNav({
   getAssetsCallback,
   uploadAssetCallback,
 }: Props) {
-  const navigate = useNavigate();
   const { proposalsList, selectingProposal, setSelectingProposal } = proposalStateTools;
   const [reviews, setReviews] = useState<ReviewItemType>({} as ReviewItemType);
   useEffect(() => {
@@ -57,15 +53,6 @@ export default function ChatRightNav({
 
   return (
     <div className="chat-right-nav">
-      <div
-        className="user-info-container"
-        onClick={() => navigate(`/account/${selectingProposal.createdBy}`)}
-      >
-        <Avatar size="xlarge" image={userInfo.avatar} shape="circle" />
-        <p className="text-cus-h1-bold">{userInfo.fullname}</p>
-        <p className="text-cus-normal">{userInfo.username}</p>
-        <p className="text-cus-normal">{userInfo.bio}</p>
-      </div>
       <ProposalsListView
         data={proposalsList}
         selectingProposal={selectingProposal}
