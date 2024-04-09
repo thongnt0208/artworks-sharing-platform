@@ -1,0 +1,27 @@
+@import "/src/const/variables.scss";
+
+.add-review-container{
+    width: 100%;
+    padding: 1.2rem;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    
+    form{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .btn-upload-asset {
+        background-color: $strong-100;
+        color: white;
+    
+        &:hover {
+        background-color: $strong-200;
+        }
+    }
+}

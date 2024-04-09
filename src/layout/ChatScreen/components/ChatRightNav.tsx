@@ -13,6 +13,8 @@ import {
 import UploadProposalAssetView from "./UploadProposalAsset/UploadProposalAssetView";
 import { GetReviewsByProposalId } from "../services/ProposalServices";
 import { Rating } from "primereact/rating";
+import AddReviewView from "./Review/AddReviewView";
+import { getAuthInfo } from "../../../util/AuthUtil";
 
 type Props = {
   userInfo: {
@@ -39,8 +41,12 @@ export default function ChatRightNav({
   getAssetsCallback,
   uploadAssetCallback,
 }: Props) {
-  const { proposalsList, selectingProposal, setSelectingProposal } = proposalStateTools;
+  const { proposalsList, selectingProposal, setSelectingProposal, handleGetAllProposals } =
+    proposalStateTools;
   const [reviews, setReviews] = useState<ReviewItemType>({} as ReviewItemType);
+  const authenticationInfo = getAuthInfo();
+  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
+  const isCreator = selectingProposal?.createdBy === currentUserId;
   useEffect(() => {
     if (selectingProposal?.id) {
       getMilestoneCallback(selectingProposal.id);
@@ -66,11 +72,28 @@ export default function ChatRightNav({
           uploadAssetCallback={uploadAssetCallback}
         />
       )}
+      {
+        // check if proposal status is CompletePayment && current user is not the creator -> Start to add review
+        selectingProposal?.status === "CompletePayment" &&
+          !selectingProposal?.isReviewed &&
+          !isCreator && (
+            <AddReviewView
+              selectingProposal={selectingProposal}
+              refreshProposalList={handleGetAllProposals}
+            />
+          )
+      }
       {reviews?.id && (
         <div className="review-container">
           <p className="text-cus-h2-bold">Đánh giá</p>
           <p>{reviews?.createdAccount?.fullname} đã đánh giá dự án này: </p>
-          <Rating value={reviews?.rating} readOnly cancel={false} />
+          <Rating
+            value={reviews?.rating}
+            readOnly
+            cancel={false}
+            onIcon={<span>🩵</span>}
+            offIcon={<span>🩶</span>}
+          />
           <p className="text-cus-normal">{reviews?.detail}</p>
         </div>
       )}
