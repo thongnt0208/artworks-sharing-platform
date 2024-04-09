@@ -71,7 +71,15 @@ export default function ChatScreen() {
 
   // PROPOSALS STATE TOOLS section start
   const handleGetAllProposals = () => GetAllProposals(selectingChatbox, setProposalsList, navigate);
-  const handleCreateAProposal = (values: any) => CreateAProposal(values, selectingChatbox, setIsShowProposalForm, toast, handleGetAllProposals, navigate);
+  const handleCreateAProposal = (values: any) =>
+    CreateAProposal(
+      values,
+      selectingChatbox,
+      setIsShowProposalForm,
+      toast,
+      handleGetAllProposals,
+      navigate
+    );
   const handleAcceptProposal = (id: string) => AcceptProposal(id, handleGetAllProposals, navigate);
   const handleDenyProposal = (id: string) => DenyProposal(id, handleGetAllProposals, navigate);
   const handleUploadProposalAsset = (id: string, type: number, file: File) =>
@@ -199,9 +207,7 @@ export default function ChatScreen() {
       <Toast ref={toast} />
       <Dialog
         visible={isShowProposalForm}
-        onHide={() => {
-          setIsShowProposalForm(false);
-        }}
+        onHide={() => setIsShowProposalForm(false)}
         dismissableMask
         headerStyle={{ padding: "3px 6px 0 0", border: 0 }}
       >
@@ -223,7 +229,10 @@ export default function ChatScreen() {
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
         </SplitterPanel>
         <SplitterPanel className="middle-col" size={50}>
-          <div className="reciever-name-container" onClick={()=> navigate(`/account/${selectingProposal.createdBy}`)}>
+          <div
+            className="reciever-name-container"
+            onClick={() => navigate(`/account/${selectingChatbox?.author?.id}`)}
+          >
             <Avatar image={selectingChatbox?.avatar} size="normal" shape="circle" />
             <p className="text-cus-normal-bold">{selectingChatbox?.author?.fullname}</p>
           </div>

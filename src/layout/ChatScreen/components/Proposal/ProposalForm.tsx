@@ -178,8 +178,8 @@ export default function ProposalForm({ createProposalCallback }: ProposalFormPro
         </label>
       </div>
 
-      <div className="p-field flex justify-content-center">
-        <Button type="submit" label="Submit" disabled={!formik.isValid} className="w-4" rounded />
+      <div className="p-field flex justify-content-center pb-3">
+        <Button type="submit" label="Xác nhận" disabled={!formik.isValid} className="w-4" rounded />
       </div>
     </form>
   );
