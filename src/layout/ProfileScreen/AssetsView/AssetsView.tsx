@@ -1,85 +1,181 @@
-import React from "react";
-import { GetAssetsData } from "./AssetsService";
+import React, { useState, useRef, useEffect } from "react";
 import { Card } from "primereact/card";
+import { TabMenu } from "primereact/tabmenu";
 import { Button } from "primereact/button";
+
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router-dom";
-
-import AssetsCard from "../../../components/AssetsCard";
+import { CatchAPICallingError } from "../..";
+import { GetAssetsData, GetBoughtAssetsData } from "./AssetsService";
+import BoughtAssets, {
+  BoughtAssetsProps,
+} from "./BoughtAssetsSection/BoughtAssets";
+import AssetsCard, { AssetsProps } from "../../../components/AssetsCard";
 import "./AssetsView.scss";
 
-type Item = {
-  id: string;
-  name: string;
-  price: number;
-  extension: string;
-  size: number;
-  thumbnail?: string;
-  editHandler?: () => void;
-  saveHandler?: () => void;
-  removeHandler?: () => void;
-};
-
-type AssetsProps = {
-  id: string;
-  thumbnail: string;
-  isCreator: boolean;
-  itemsList: Item[];
-  onClickHandler?: () => void;
-};
-
 const AssetsView: React.FC = () => {
-  let navigate = useNavigate();
-  let [accountId, isCreator] = useOutletContext() as [string, boolean];
-  const [assets, setAssets] = React.useState<AssetsProps[]>([]);
+  const navigate = useNavigate();
+  const [accountId, isCreator] = useOutletContext() as [string, boolean];
+  const [assets, setAssets] = useState<AssetsProps[]>([]);
+  const [boughtAssets, setBoughtAssets] = useState<BoughtAssetsProps[]>([]);
+  const [activeTab, setActiveTab] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
-  React.useEffect(() => {
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastAssetRef = useRef<HTMLDivElement | null>(null);
+
+  const loadMoreData = () => {
+    setPageNumber((prevPageNumber) => prevPageNumber + 1);
+  };
+
+  const handleTabChange = (event: any) => {
+    setActiveTab(event.index);
+  };
+
+  const items = [{ label: "Đã đăng" }, { label: "Đã mua" }];
+
+  useEffect(() => {
     const fetchAssets = async () => {
-      const response = await GetAssetsData(accountId);
-      console.log("Response:", response);
-      if (Array.isArray(response)) {
-        setAssets(response);
-      } else {
-        console.error("Response is not an array:", response);
+      setPageNumber(1);
+      try {
+        if (activeTab === 0) {
+          console.log("Page number: ", pageNumber);
+          const response = await GetAssetsData(accountId, pageNumber, 3);
+          if (Array.isArray(response)) {
+            setAssets((prevAssets) => {
+              const uniqueAssetIds = new Set<string>(
+                prevAssets.map((asset) => asset.id)
+              );
+              const filteredAssets = Array.isArray(response)
+                ? response.filter(
+                    (asset: { id: string }) => !uniqueAssetIds.has(asset.id)
+                  )
+                : [];
+              return [...prevAssets, ...filteredAssets];
+            });
+          } else {
+            toast.error("Lấy dữ liệu tài nguyên thất bại!");
+          }
+        } else if (activeTab === 1) {
+          console.log("Page number: ", pageNumber);
+          const response = await GetBoughtAssetsData(accountId, pageNumber, 10);
+          if (Array.isArray(response)) {
+            setBoughtAssets((prevAssets) => {
+              const uniqueAssetIds = new Set<string>(
+                prevAssets.map((asset) => asset.id)
+              );
+              const filteredAssets = Array.isArray(response)
+                ? response.filter(
+                    (asset: { id: string }) => !uniqueAssetIds.has(asset.id)
+                  )
+                : [];
+              return [...prevAssets, ...filteredAssets];
+            });
+          } else {
+            toast.error("Lấy dữ liệu tài nguyên thất bại!");
+          }
+        } else {
+          toast.error("Lấy dữ liệu tài nguyên thất bại!");
+        }
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
       }
     };
     fetchAssets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId, navigate, pageNumber, activeTab]);
+
+  useEffect(() => {
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreData();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (lastAssetRef.current && observer.current) {
+      observer.current.observe(lastAssetRef.current);
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
   }, []);
 
   return (
     <div className="assets-gallery-container">
-      <h1>Các tài nguyên</h1>
-      <div className="gallery">
-        {assets.length === 0 ? (
-          isCreator ? (
-            <Card className="add-asset-card">
-              <div className="cursor-pointer flex flex-column justify-content-center align-items-center">
-                <i className="pi pi-plus-circle icon m-3" />
-                <Button
-                  label="Thêm tài nguyên"
-                  onClick={() => {
-                    navigate("/artwork/post");
-                  }}
-                ></Button>
-              </div>
-            </Card>
+      {isCreator ? (
+        <TabMenu
+          model={items}
+          activeIndex={activeTab}
+          onTabChange={handleTabChange}
+          className="w-max mb-3 text-black-alpha-90 text-sm"
+        />
+      ) : null}
+
+      {activeTab === 0 ? (
+        <div className="gallery">
+          {assets.length === 0 ? (
+            isCreator ? (
+              <Card className="add-asset-card">
+                <div className="cursor-pointer flex flex-column justify-content-center align-items-center">
+                  <i className="pi pi-plus-circle icon m-3" />
+                  <Button
+                    label="Thêm tài nguyên"
+                    onClick={() => {
+                      navigate("/artwork/post");
+                    }}
+                  ></Button>
+                </div>
+              </Card>
+            ) : (
+              <div> Tác giả chưa có tài nguyên nào </div>
+            )
           ) : (
-            <div> Tác giả chưa có tài nguyên nào </div>
-          )
-        ) : (
-          assets.map((asset) => (
-            <div className="gallery__item col col-12" key={asset.id}>
-              <AssetsCard
-                key={asset.id}
-                id={asset.id}
-                thumbnail={asset.thumbnail}
-                isCreator={asset.isCreator}
-                itemsList={asset.itemsList}
-              />
-            </div>
-          ))
-        )}
+            assets.map((asset, index) => (
+              <div className="gallery__item col col-12" key={index}>
+                <AssetsCard
+                  id={asset.id}
+                  thumbnail={asset.thumbnail}
+                  itemsList={asset.itemsList}
+                  isCreator={isCreator}
+                  saveHandler={(id: string) => {}}
+                />
+              </div>
+            ))
+          )}
+        </div>
+      ) : (
+        <div className="gallery">
+          {boughtAssets.length === 0 ? (
+            <div> Bạn chưa mua tài nguyên nào </div>
+          ) : (
+            boughtAssets.map((asset, index) => (
+              <div className="gallery__item col col-12" key={index}>
+                <BoughtAssets
+                  id={asset.id}
+                  artworkId={asset.artworkId}
+                  order={asset.order}
+                  assetTitle={asset.assetTitle}
+                  description={asset.description}
+                  assetName={asset.assetName}
+                  price={asset.price}
+                  isBought={asset.isBought}
+                  fileMetaData={asset.fileMetaData}
+                  lastModificatedOn={asset.lastModificatedOn}
+                />
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      <div ref={lastAssetRef}>
+        {/* This is an invisible marker to observe */}
       </div>
     </div>
   );
