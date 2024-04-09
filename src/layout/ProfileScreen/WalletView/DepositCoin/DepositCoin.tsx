@@ -18,31 +18,22 @@ const DepositCoin: React.FC<{ isVisible: boolean; onHide: () => void }> = ({
 }) => {
   let currentUrl = window.location.href;
   const toast = useRef<Toast>(null);
-  const [selectedMethod, setSelectedMethod] = useState<Method | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<Method>({ name: "ZaloPay", code: "ZALOPAY" });
   const [amount, setAmount] = useState(0);
-  const [amountValidationMessage, setAmountValidationMessage] = useState<
-    string | null
-  >(null);
   const [methodValidationMessage, setMethodAmountValidationMessage] = useState<
     string | null
   >(null);
   const methodList: Method[] = [
-    { name: "ZaloPay", code: "ZALOPAY" },
-    { name: "Momo", code: "MOMO" },
-    { name: "PayPal", code: "PAYPAL" },
-    { name: "Tài khoản ngân hàng", code: "BANK" },
+    { name: "ZaloPay", code: "ZALOPAY" }
   ];
 
   const handleDeposit = async () => {
-    if (amount < 1000 && selectedMethod === null) {
-      setAmountValidationMessage("Số Xu cần nạp ít nhất là 1000 Xu");
+    if (selectedMethod === null) {
       setMethodAmountValidationMessage("Hãy chọn phương thức thanh toán");
       return;
     }
     if (selectedMethod?.code === "ZALOPAY") {
-      console.log("ZALOPAY");
       try {
-        
         const response = await DepositCoins(amount, currentUrl);
         if (response.returnCode === 1) {
           window.location.href = response.orderUrl;
@@ -54,7 +45,6 @@ const DepositCoin: React.FC<{ isVisible: boolean; onHide: () => void }> = ({
       }
     }
     setMethodAmountValidationMessage(null);
-    setSelectedMethod(null);
     setAmount(0);
     onHide();
   };
@@ -70,6 +60,7 @@ const DepositCoin: React.FC<{ isVisible: boolean; onHide: () => void }> = ({
         closable={false}
         visible={isVisible}
         onHide={onHide}
+        dismissableMask={true}
         className="deposit-dialog"
         headerClassName="deposit-dialog-header"
       >
@@ -98,20 +89,15 @@ const DepositCoin: React.FC<{ isVisible: boolean; onHide: () => void }> = ({
             <label className="amount-label">Số Xu cần nạp</label>
             <InputNumber
               className="w-full md:w-14rem"
+              value={amount}
               onValueChange={(e) => {
-                setAmount(e.value || 0);
-                setAmountValidationMessage(
-                  e.value && e.value < 1000
-                    ? "Số Xu cần nạp ít nhất là 1000 Xu"
-                    : null
-                );
+                setAmount(e.value || 1000);
               }}
+              min={1000}
             />
-            {amountValidationMessage && (
-              <span className="validation-message text-red-500">
-                {amountValidationMessage}
-              </span>
-            )}
+            <p className="flex align-items-center">
+              <i className="pi pi-info-circle mr-1" /> Số XU nạp tối thiểu: 1.000 Xu
+            </p>
           </div>
           <div className="action-button">
             <Button

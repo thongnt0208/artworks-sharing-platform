@@ -1,11 +1,9 @@
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { AccountVerificationData } from "./WithdrawCoin/WithdrawCoin";
-import {
-  TransactionHistoryProps,
-  WalletHistoryProps,
-  WalletProps,
-} from "./WalletView";
+import { WalletProps } from "./WalletView";
 import { formatTime } from "../../../util/TimeHandle";
+import { WalletHistoryProps } from "./WalletHistory/WalletHistory";
+import { TransactionHistoryProps } from "./TransactionHistory/TransactionHistory";
 const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
 
@@ -63,7 +61,8 @@ export async function GetWalletHistoryData(
         amount: item.amount,
         type: item.type === "Deposit" ? "Nạp tiền" : "Rút tiền",
         paymentMethod: item.paymentMethod,
-        transactionStatus: item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        transactionStatus:
+          item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
         createdOn: formatTime(item.createdOn),
       };
     });
@@ -100,13 +99,14 @@ export async function GetTransactionHistoryData(
         detail: item.detail,
         assetId: item.assetId,
         proposalId: item.proposalId,
-        transactionStatus: item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        transactionStatus:
+          item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
         price: item.price,
         createdOn: formatTime(item.createdOn),
       };
     });
   } catch (error) {
-  throw new Error("Không thể lấy dữ liệu lịch sử giao dịch.");
+    throw new Error("Không thể lấy dữ liệu lịch sử giao dịch.");
   }
 }
 
@@ -243,6 +243,8 @@ export async function WithdrawCoins(
     });
     return response.data.returnCode;
   } catch (error) {
-    throw new Error("Không đủ tiền! Số Xu còn lại trong ví của bạn không đủ để thực hiện giao dịch này.");
+    throw new Error(
+      "Không đủ tiền! Số Xu còn lại trong ví của bạn không đủ để thực hiện giao dịch này."
+    );
   }
 }
