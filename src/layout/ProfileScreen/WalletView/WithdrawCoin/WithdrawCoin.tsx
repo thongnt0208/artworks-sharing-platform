@@ -70,6 +70,7 @@ const WithdrawCoin: React.FC<{
         closable={false}
         visible={isVisible}
         onHide={hideCallback}
+        dismissableMask={true}
         className="withdraw-dialog"
         headerClassName="withdraw-dialog-header"
       >
@@ -86,8 +87,8 @@ const WithdrawCoin: React.FC<{
               min={1000}
               max={balance}
             />
-            <p className="text-red-500">
-              <i className="pi pi-info-circle" /> Số XU rút tối thiểu: 1.000 Xu
+            <p className="flex align-items-center">
+              <i className="pi pi-info-circle mr-1" /> Số XU rút tối thiểu: 1.000 Xu
             </p>
           </div>
 

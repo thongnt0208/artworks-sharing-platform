@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { TabMenu } from "primereact/tabmenu";
 
+import { toast } from "react-toastify";
 import {
   GetTransactionHistoryData,
   GetWalletData,
@@ -11,36 +12,21 @@ import { getAuthInfo } from "../../../util/AuthUtil";
 import DepositCoin from "./DepositCoin/DepositCoin";
 import WithdrawCoin from "./WithdrawCoin/WithdrawCoin";
 import WalletInformation from "./WalletInformation/WalletInformation";
+import WalletHistory, {
+  WalletHistoryProps,
+} from "./WalletHistory/WalletHistory";
+import TransactionHistory, {
+  TransactionHistoryProps,
+} from "./TransactionHistory/TransactionHistory";
+
 import "./WalletView.scss";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
+
 const zalopayLogo = require("../../../assets/logo/zalopay-logo.png");
 
 export type WalletProps = {
   balance: number;
   withdrawMethod: string;
   withdrawInformation: string;
-};
-
-export type WalletHistoryProps = {
-  id: string;
-  amount: number;
-  type: string;
-  paymentMethod: string;
-  transactionStatus: string;
-  createdOn: string;
-};
-
-export type TransactionHistoryProps = {
-  id: string;
-  accountId: string;
-  fromFullname: string;
-  detail: string;
-  assetId: string;
-  proposalId: string;
-  transactionStatus: string;
-  price: number;
-  createdOn: string;
 };
 
 const WalletView: React.FC = () => {
@@ -76,68 +62,13 @@ const WalletView: React.FC = () => {
           setTransactionHistory(transactionHistory);
         }
       } catch (error) {
-        console.log("Error fetching wallet history data:", error);
+        toast.error("Lỗi khi tải dữ liệu ví");
       } finally {
         setRefresh(false);
       }
     };
     fetchData();
   }, [refresh, activeTab]);
-
-  const typeRowTemplate = (rowData: WalletHistoryProps) => {
-    return (
-      <span
-        className={
-          rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"
-        }
-      >
-        {rowData.type === "Nạp tiền" ? (
-          <i className="pi pi-arrow-up mr-1" />
-        ) : (
-          <i className="pi pi-arrow-down mr-1" />
-        )}
-        {rowData.type}
-      </span>
-    );
-  };
-
-  const statusRowTemplate = (rowData: WalletHistoryProps) => {
-    return (
-      <span
-        style={{
-          backgroundColor:
-            rowData.transactionStatus === "Thành công" ? "green" : "red",
-          padding: "0.25rem 0.5rem",
-          borderRadius: "1rem",
-          color: "white",
-        }}
-      >
-        {rowData.transactionStatus}
-      </span>
-    );
-  };
-
-  const fromAccRowTemplate = (rowData: TransactionHistoryProps) => {
-    return (
-      <span
-        className={
-          rowData.accountId !== getAuthInfo()?.id
-            ? "text-blue-600"
-            : "text-red-500"
-        }
-      >
-        {rowData.accountId !== getAuthInfo()?.id ? (
-          <>
-            <i className="pi pi-arrow-up mr-1" />{rowData.fromFullname}
-          </>
-        ) : (
-          <>
-            <i className="pi pi-arrow-down mr-1" />Tôi
-          </>
-        )}
-      </span>
-    );
-  };
 
   return (
     <div className="wallet-view">
@@ -225,62 +156,9 @@ const WalletView: React.FC = () => {
         />
 
         {activeTab === 0 ? (
-          <DataTable
-            value={walletHistory}
-            className="w-full"
-            paginator
-            rows={5}
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-            currentPageReportTemplate="{first} to {last} of {totalRecords}"
-            emptyMessage="Hãy nạp thêm Xu để trải nghiệm các dịch vụ của Artworkia nhé!"
-          >
-            <Column
-              field="type"
-              header="Loại"
-              body={typeRowTemplate}
-              sortable
-            ></Column>
-            <Column
-              field="paymentMethod"
-              header="Phương thức"
-              sortable
-            ></Column>
-            <Column field="amount" header="Số lượng (Xu)" sortable></Column>
-            <Column
-              field="transactionStatus"
-              header="Trạng thái"
-              body={statusRowTemplate}
-              sortable
-            ></Column>
-            <Column field="createdOn" header="Ngày tạo" sortable></Column>
-          </DataTable>
+          <WalletHistory walletHistory={walletHistory} />
         ) : (
-          <DataTable
-            value={transactionHistory}
-            className="w-full"
-            paginator
-            rows={5}
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-            currentPageReportTemplate="{first} to {last} of {totalRecords}"
-            emptyMessage="Hãy tham gia vào các dịch vụ của Artworkia nhé!"
-          >
-            <Column
-              field="fromFullname"
-              header="Tài khoản đối tác"
-              body={fromAccRowTemplate}
-            ></Column>
-            <Column field="detail" header="Chi tiết"></Column>
-            <Column field="price" header="Giá (XU)"></Column>
-            <Column
-              field="transactionStatus"
-              header="Trạng thái"
-              body={statusRowTemplate}
-              sortable
-            ></Column>
-            <Column field="createdOn" header="Ngày tạo"></Column>
-          </DataTable>
+          <TransactionHistory transactions={transactionHistory} />
         )}
       </div>
     </div>
