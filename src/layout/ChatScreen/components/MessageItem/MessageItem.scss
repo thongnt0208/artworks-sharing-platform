@@ -10,7 +10,7 @@
 
   .message-content {
     max-width: 70%;
-    padding: 25px;
+    padding: $borderRadius-100;
 
     .message-text {
       word-wrap: break-word;

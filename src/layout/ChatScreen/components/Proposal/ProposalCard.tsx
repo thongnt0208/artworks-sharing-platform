@@ -8,6 +8,7 @@ import "./styles/ProposalCard.scss";
 import { numberToXu } from "../../../../util/CurrencyHandle";
 import { Badge } from "primereact/badge";
 import { Divider } from "primereact/divider";
+import { formatTime } from "../../../../util/TimeHandle";
 // ---------------------------------------------------------
 
 export default function ProposalCard({ ...props }: ProposalCardProps) {
@@ -62,7 +63,7 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
           Mô tả dự án: <strong>{description}</strong>
         </p>
         <p>
-          Thời gian hoàn thành: <strong>{targetDelivery}</strong>
+          Thời gian hoàn thành: <strong>{formatTime(targetDelivery, "HH:mm ngày dd-MM-yyyy")}</strong>
         </p>
         <p>
           Tổng chi phí: <strong>{numberToXu(totalPrice)}</strong>
