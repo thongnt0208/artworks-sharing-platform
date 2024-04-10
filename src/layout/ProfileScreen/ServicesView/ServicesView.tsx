@@ -14,17 +14,21 @@ import { CatchAPICallingError } from "../..";
 import { toast } from "react-toastify";
 import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
 import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
+import ServiceReviewPopup from "../../../components/ServiceReviewPopup";
 import "./ServicesView.scss";
 
 const ServicesView: React.FC = () => {
   const navigate = useNavigate();
-  const paramAccountId = useParams()?.id; 
+  const paramAccountId = useParams()?.id;
   let [accountId, isCreator, accountAvatar, accountFullname] =
     useOutletContext() as [string, boolean, string, string];
   const [services, setServices] = useState<ServiceProps[]>([]);
-  const [visible, setVisible] = useState<boolean>(false);
+  const [serviceInfoDialogVisible, setServiceInfoDialogVisible] =
+    useState<boolean>(false);
+  const [serviceReviewDialogVisible, setServiceReviewDialogVisible] =
+    useState<boolean>(false);
   const [isNew, setIsNew] = useState<boolean>(false);
-  
+
   const [selectedService, setSelectedService] = useState<ServiceProps>({
     id: "",
     serviceName: "",
@@ -60,10 +64,6 @@ const ServicesView: React.FC = () => {
     }
   };
 
-  const handleEditService = () => {
-    setVisible(true);
-  };
-
   const handleArtworkReferences = (artworkReferences: any) => {
     const artworkReferencesIds = artworkReferences.map(
       (artwork: any) => artwork.id
@@ -89,7 +89,7 @@ const ServicesView: React.FC = () => {
       const response = await DeleteServiceData(serviceId);
       if (response) {
         toast.success("Xóa dịch vụ thành công");
-        setVisible(false);
+        setServiceInfoDialogVisible(false);
       }
     } catch (error) {
       toast.error("Xóa dịch vụ thất bại");
@@ -102,6 +102,12 @@ const ServicesView: React.FC = () => {
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
+
+  const dialogModelFields = {
+    modal: true,
+    dismissableMask: true,
+    closable: false,
+  };
 
   return (
     <>
@@ -128,9 +134,13 @@ const ServicesView: React.FC = () => {
                   editHandler={() => {
                     setSelectedService(service);
                     handleArtworkReferences(service.artworkReferences);
-                    handleEditService();
+                    setServiceInfoDialogVisible(true);
                   }}
                   hireHandler={(request) => handleHireRequest(request, service)}
+                  reviewHandler={() => {
+                    setSelectedService(service);
+                    setServiceReviewDialogVisible(true);
+                  }}
                 />
               ))}
               <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
@@ -138,7 +148,7 @@ const ServicesView: React.FC = () => {
                 <Button
                   label="Tạo dịch vụ"
                   onClick={() => {
-                    setVisible(true);
+                    setServiceInfoDialogVisible(true);
                     setIsNew(true);
                   }}
                 ></Button>
@@ -150,27 +160,25 @@ const ServicesView: React.FC = () => {
         )}
       </div>
       <Dialog
-        className="dialog"
-        style={{ width: "60vw" }}
+        className="service-info-dialog"
         showHeader={false}
+        style={{ width: "60vw" }}
         contentClassName="service-dialog-content"
-        visible={visible}
-        modal
-        dismissableMask={true}
-        closable={false}
+        visible={serviceInfoDialogVisible}
         onHide={() => {
           localStorage.removeItem("artworksRef");
           localStorage.removeItem("selectedArtworkIds");
-          setVisible(false);
+          setServiceInfoDialogVisible(false);
           setIsNew(false);
         }}
+        {...dialogModelFields}
       >
         <>
           {selectedService && (
             <ServiceInformationSection
               props={selectedService}
               setClose={() => {
-                setVisible(false);
+                setServiceInfoDialogVisible(false);
                 setIsNew(false);
                 setSelectedService({} as ServiceProps);
               }}
@@ -184,6 +192,18 @@ const ServicesView: React.FC = () => {
             />
           )}
         </>
+      </Dialog>
+      <Dialog
+        className="service-review-dialog"
+        showHeader={false}
+        contentClassName="service-dialog-content"
+        visible={serviceReviewDialogVisible}
+        onHide={() => {
+          setServiceReviewDialogVisible(false);
+        }}
+        {...dialogModelFields}
+      >
+        <ServiceReviewPopup service={selectedService} rating={4} />
       </Dialog>
     </>
   );

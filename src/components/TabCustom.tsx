@@ -54,6 +54,7 @@ export const TabCustom = (props: Props) => {
             props.currentTabId === tab.id ? activeTabClassName : "p-button-text inactive-tab"
           }
           onClick={() => props.onClickHandler(tab.id)}
+          style={{ fontWeight: "bold" }}
         />
       ))}
     </>
