@@ -21,6 +21,7 @@ export type CommentType = {
         fullname: string;
         avatar: string;
       };
+  createdOn: string;
   content: string;
 };
 
