@@ -3,22 +3,19 @@
 .notification-container {
   background-color: $bg-100 !important;
   border-radius: $padding-100 !important;
-  .notification {
-    width: 22.5rem;
+  // border: 1px solid gray;
+  .notification-item a {
     display: flex;
-    flex-direction: row;
+    gap: 0.5rem;
     align-items: center;
-    justify-content: flex-start;
-    margin: 1rem;
-    .notification-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      margin-left: 0.5rem;
-      .notification-date,
+    padding: 0 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: solid 1px $bg-300;
+    border-radius: $borderRadius-100;
+    .notification-content {      
       .notification-message {
-        margin: 0.1rem;
+        display: flex;
+        flex-direction: column;
       }
     }
   }
