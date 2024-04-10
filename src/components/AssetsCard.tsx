@@ -5,6 +5,7 @@ import React from "react";
 import "./AssetsCard.scss";
 import { AssetType } from "../layout/ArtworkDetailScreen/ArtworkDetailType";
 import { TextLimit } from "../util/StringHandler";
+import { formatFileSize } from "../util/FileSizeHandler";
 
 export type AssetsProps = {
   id: string;
@@ -50,19 +51,18 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   const detailsColumn = (item: AssetType) => {
     const _saveHandler: any = () =>
       props.saveHandler && props.saveHandler(item.id);
-
     return (
       <div className="detail-column grid">
         <div className="col col-4 file-info flex flex-column justify-content-start align-items-start">
           <span className="file-name">{TextLimit(item.name ?? '', 20)}</span>
           <span className="file-description file-size">{TextLimit(item.description ?? '', 20)}</span>
-          {item.size && <span className="file-size">{item.size} KB</span>}
+          {item.size && <span className="file-size">{formatFileSize(item.size)}</span>}
         </div>
         <div className="col col-2 file-type">
           {item.extension ? <span>.{item.extension}</span> : <span>.file</span>}
         </div>
         <div className="col col-4 file-price">
-          <span>{`${item.price} Xu`}</span>
+          <span>{`${item.price.toLocaleString()} Xu`}</span>
         </div>
         <div className="col col-2 file-action flex flex-row justify-content-start align-items-center">
           <Button
