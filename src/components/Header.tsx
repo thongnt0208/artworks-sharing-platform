@@ -73,7 +73,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
           <InputText
             className="w-full"
             placeholder="Tìm kiếm"
-            style={{ borderRadius: "50px"}}
+            style={{ borderRadius: "50px" }}
             tooltip="Nhấn phím Enter để tìm"
             onKeyDown={handleKeyDown}
             onInput={(e) => setSearchValue(e.currentTarget.value)}
@@ -85,7 +85,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
             severity="info"
             aria-label="Tìm kiếm"
             disabled={searchValue === ""}
-            style={{position: "absolute", right: 0}}
+            style={{ position: "absolute", right: 0 }}
             onClick={() => navigate(`/search?value=${searchValue}`)}
           />
         </span>
@@ -144,15 +144,20 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
       />
 
       <Dialog
+        className="notification-dialog"
         header="Tin nhắn"
         visible={showMessageNotification}
         onHide={() => setShowMessageNotification(false)}
         {...dialogModelFields}
       >
         <Notification notifications={chatboxesData} type="chat" />
+        <Link to="/chat" className="flex justify-content-center p-2 pb-3">
+          <Button icon="pi pi-inbox " label="Xem tất cả" />
+        </Link>
       </Dialog>
 
       <Dialog
+        className="notification-dialog"
         header="Thông báo"
         visible={showNotification}
         onHide={() => setShowNotification(false)}
