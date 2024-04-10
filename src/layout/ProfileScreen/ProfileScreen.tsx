@@ -78,8 +78,6 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
         const isFollowed = await fetchIsFollow(profileId || "");
         const followerNum = await fetchFollowers(profileId || "");
         const followingNum = await fetchFollowers(profileId || "");
-        console.log("Follower num", followerNum); 
-        console.log("Following num", followingNum);
         setProfile(profileData);
         setIsFollow(isFollowed);
         setProfile((prev) => ({ ...prev, followerNum: followerNum, followingNum: followingNum }));

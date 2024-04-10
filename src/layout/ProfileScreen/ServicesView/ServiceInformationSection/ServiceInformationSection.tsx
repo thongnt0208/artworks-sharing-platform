@@ -64,11 +64,12 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
           });
         }
       } catch (error) {
-        console.log("Error fetching artworks data:", accountId);
+        toast.error("Lấy dữ liệu tác phẩm thất bại");
+        CatchAPICallingError(error, navigate);
       }
     };
     handleGetArtworks();
-  }, [accountId, pageNumber]);
+  }, [accountId, navigate, pageNumber]);
 
   const loadMoreData = () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);

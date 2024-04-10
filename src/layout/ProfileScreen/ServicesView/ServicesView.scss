@@ -30,22 +30,11 @@
     }
 }
 
-.dialog {
+.service-info-dialog, .service-review-dialog {
     width: fit-content;
-    // .form-container {
-    //     .thumbnail-container {
-    //         display: flex;
-    //         flex-direction: column;
-    //         justify-content: center;
-    //         align-items: center;
-    //         .thumbnail {
-    //             width: 300px;
-    //             height: 300px;
-    //             border-radius: 50%;
-    //             object-fit: cover;
-    //         }
-    //     }
-    // }
+    height: fit-content;
+    min-width: 30vw;
+    min-height: 40vh;
     .service-dialog-header {
         display: none;
     }

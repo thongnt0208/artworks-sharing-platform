@@ -1,0 +1,66 @@
+@import "/src/const/variables.scss";
+
+.service-review-popup {
+  .rating-section {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: $bg-200;
+    padding: 12px;
+    border-radius: $borderRadius-100;
+    margin-bottom: 30px;
+    .rating {
+      width: fit-content;
+      .p-rating-item-active svg {
+        color: $strong-200;
+      }
+    }
+    h3 {
+      margin: 0;
+      margin-left: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: $strong-200;
+    }
+  }
+  .review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    .review-item {
+      display: flex;
+      padding: 5px 0;
+      flex-direction: row;
+      justify-content: space-between;
+      border-bottom: 1px solid $bg-300;
+      gap: 12px;
+      .account-info-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 12px;
+        .avatar {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background-color: $strong-200;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+        }
+      }
+      .rating-service {
+        width: fit-content;
+        .p-rating-item-active svg {
+          color: $strong-200;
+        }
+      }
+    }
+  }
+}

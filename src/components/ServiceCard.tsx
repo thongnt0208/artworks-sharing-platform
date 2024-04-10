@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
+import { Rating } from "primereact/rating";
 
-import "./ServiceCard.scss";
 import RequestPopup, { RequestProps } from "./RequestPopup";
 import { ArtworkProps } from "./ArtworkCard";
+import "./ServiceCard.scss";
+
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
 export type ServiceProps = {
@@ -22,6 +24,7 @@ export type ServiceProps = {
   artworkReferences?: ArtworkProps[];
   editHandler?: () => void;
   hireHandler: (request: RequestProps) => void;
+  reviewHandler?: () => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
   const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
@@ -40,18 +43,23 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
           <p className="starting-price mt-0 mb-0 ml-3">
             Từ {props.startingPrice.toLocaleString()} Xu
           </p>
-          {/* <p className="cover-location mt-0 mb-0 ml-3">{props.coverLocation}</p> */}
         </div>
-        <div className="service-card-details-bottom mt-2 ml-3">
-          <p className="mt-1 mb-0">
-            {" "}
-            <i className="pi pi-clock" /> {props.deliveryTime}{" "}
-          </p>
-          <p className="mt-1 mb-0">
-            {" "}
-            <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}
-            {props.numberOfRevision} lần chỉnh sửa{" "}
-          </p>
+        <div className="service-card-details-bottom">
+          <div>
+            <p className="mt-1 mb-0">
+              {" "}
+              <i className="pi pi-clock" /> {props.deliveryTime}{" "}
+            </p>
+            <p className="mt-1 mb-0">
+              {" "}
+              <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}
+              {props.numberOfRevision} lần chỉnh sửa{" "}
+            </p>
+          </div>
+          <div className="review">
+            <Rating className="rating mt-1" stars={5} value={4} readOnly cancel={false} />
+            <p className="review-popup" onClick={props.reviewHandler}>Tất cả đánh giá</p>
+          </div>
         </div>
         {props.isCreator ? (
           <div className="hire-button-container w-full flex justify-content-center mt-3 mb-3 ">
