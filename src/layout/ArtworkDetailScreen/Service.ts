@@ -212,6 +212,7 @@ export function fetchCommentsForArtworkRealTime(
           fullname: item.CreatedBy.Fullname || "",
           avatar: item.CreatedBy.Avatar || "",
         },
+        createdOn: item.CreatedOn,
         content: item.Content || "",
       };
     });
@@ -278,7 +279,7 @@ export async function addCommentToArtwork(
 console.log(removedComment);
  * 
  * @author ThongNT
- * @version 1.1.0
+ * @version 1.1.1
  */
 export async function removeCommentFromArtwork(
   commentId: string
@@ -290,7 +291,7 @@ export async function removeCommentFromArtwork(
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
-    throw new Error(`Error removing comment: ${error}`);
+    throw error;
   }
 }
 
@@ -305,25 +306,24 @@ export async function removeCommentFromArtwork(
  * const editedComment = await editCommentOnArtwork("artworkId123", "commentId789", "Updated text");
  * console.log(editedComment);
  *
- * @author ThongNT
- * @version 1.0.0
+ * @author @thongnt0208
+ * @version 1.1.0
  */
 export async function editCommentOnArtwork(
-  artworkId: string,
   commentId: string,
   newText: string
 ): Promise<any> {
   try {
-    const response = await axios.put(
-      `${BASE_URL}/artworks/comments/${artworkId}/${commentId}`,
+    const response = await axiosPrivate.put(
+      `${BASE_URL}/comments/${commentId}`,
       {
-        newText: newText,
+        commentText: newText,
       }
     );
     return response;
   } catch (error) {
     console.error("Error editing comment:", error);
-    throw new Error(`Error editing comment: ${error}`);
+    throw error;
   }
 }
 

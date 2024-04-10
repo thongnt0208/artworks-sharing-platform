@@ -10,6 +10,7 @@ import { addComment } from "./Functions";
 import { GetProfileData } from "../../ProfileScreen/ProfileService";
 import CommentItem from "./CommentItem";
 import { useNavigate } from "react-router-dom";
+import { editCommentOnArtwork } from "../Service";
 
 interface PropsType {
   // Current user data
@@ -36,6 +37,15 @@ function CommentComponent({ ...props }: PropsType) {
 
   let addNewComment = () => {
     addComment(props, commentValue, setCommentValue, setLoading, toast, navigate);
+  };
+
+  let editComment = (cmtId: string) => {
+    editCommentOnArtwork(commentValue, cmtId).then(() => {
+      toast.current.show({
+        severity: "success",
+        summary: "Chỉnh sửa bình luận thành công",
+      });
+    });
   };
 
   let handleKeyDown = (e: any) => {
@@ -68,6 +78,7 @@ function CommentComponent({ ...props }: PropsType) {
                 index={index}
                 comment={comment}
                 profileData={profileData}
+                editCommentCallback={editComment}
               />
             );
           } else {
@@ -77,6 +88,7 @@ function CommentComponent({ ...props }: PropsType) {
                 index={index}
                 comment={comment}
                 profileData={comment.createdBy}
+                editCommentCallback={editComment}
               />
             );
           }

@@ -64,8 +64,8 @@ export default function Content({ data, isLiked, setIsLiked, id, currentUserId }
           </Link>
         </div>
       </Dialog>
-      <div className="title-container">
-        <h1 className="text-cus-h1-bold">{data.title}</h1>
+      <div className="title-container pb-2">
+        <h1 className="">{data.title}</h1>
       </div>
       <div
         className="artwork-images-container"
