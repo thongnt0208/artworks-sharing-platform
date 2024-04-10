@@ -42,7 +42,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ fullname, email, avatar }) 
   ];
 
   return (
-    <div className="notification-container">
+    <div className="notification-container-profile">
       <div className="user-information-bar" onClick={handleProfileClick}>
         <Avatar image={avatar} style={{ padding: "0" }} size="xlarge" shape="circle" />
         <h3>{fullname}</h3>
