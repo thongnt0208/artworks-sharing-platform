@@ -1,13 +1,14 @@
-@import '/src/const/variables.scss';
+@import "/src/const/variables.scss";
 
 .service-card-container {
-  background-size: cover ;
-  background-color: transparent ;
-  outline: none ;
-  border-radius: $borderRadius-100 ;
-  width: 450px ;
-  height: 286px ;
-  display: flex ;
+  width: 450px;
+  min-height: 332px;
+  height: fit-content;
+  background-size: cover;
+  background-color: transparent;
+  outline: none;
+  border-radius: $borderRadius-100;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
@@ -17,17 +18,38 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: white ;
-    color: $primary-300 ;
-    width: 100% ;
+    background-color: white;
+    color: $primary-300;
+    width: 100%;
     border-radius: 0px 0px 12px 12px;
     .service-card-details-top {
       .service-name {
-        font-weight: 900 ;
+        font-weight: 900;
       }
       .starting-price {
-        font-weight: 900 ;
+        font-weight: 900;
         color: $strong-200;
+      }
+    }
+    .service-card-details-bottom {
+      width: 100%;
+      padding: 20px 15px 0 15px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+      .review {
+        .rating .p-rating-item-active svg {
+          color: $strong-200;
+        }
+        .review-popup {
+          margin-top: 5px;
+          text-align: right;
+          font-weight: 700;
+          color: $strong-200;
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
     }
     .hire-button-container {
