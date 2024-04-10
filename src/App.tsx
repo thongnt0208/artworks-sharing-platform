@@ -127,6 +127,7 @@ function App() {
             <Route path="/collection/:id" element={<CollectionDetailScreen />} />
             <Route path="/hire" element={<HireScreen />} />
             <Route path="/search" element={<SearchScreen />} />
+            <Route path="/explore" element={<SearchScreen />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/error" element={<UnknownErrorPage />} />
             <Route path="/error-internal-server" element={<InternalServerErrPage />} />
