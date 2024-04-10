@@ -11,6 +11,11 @@ import Gallery from "../../components/Gallery";
 import { ProgressSpinner } from "primereact/progressspinner";
 import InputsContainer from "./InputsContainer/InputsContainer";
 import { searchArtworksByKeyword } from "./Service";
+import { ArtworkDetailType } from "../ArtworkDetailScreen/ArtworkDetailType";
+import { getAuthInfo } from "../../util/AuthUtil";
+import { fetchArtworkDetail, fetchIsFollow } from "../ArtworkDetailScreen/Service";
+import { CatchAPICallingError } from "..";
+import { useNavigate } from "react-router-dom";
 // ----------------------------------------------------------------
 
 export type SearchScreenStateType = {
@@ -47,7 +52,11 @@ export default function SearchScreen({ ...props }: Props) {
   const [currentAwDetail, setCurrentAwDetail] = useState({} as any);
   const [isLiked, setIsLiked] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+  const navigate = useNavigate();
 
+  const authenticationInfo = getAuthInfo();
+  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   const handleKeyDown = async (e: any) => {
     if (e.key === "Enter") {
@@ -106,17 +115,43 @@ export default function SearchScreen({ ...props }: Props) {
     setIsLiked,
     isFollowed,
     setIsFollowed,
-  }
+    isLoading: isLoadingDetail,
+  };
+
+  const fetchIsFollowed = (id: string) => {
+    fetchIsFollow(id)
+      .then((res) => setIsFollowed(res))
+      .catch((err) => setIsFollowed(false));
+  };
+
+  const fetchDetail = () => {
+    setIsLoadingDetail(true);
+    setCurrentAwDetail({} as ArtworkDetailType);
+    fetchArtworkDetail(selectingAw?.id, currentUserId)
+      .then((res) => {
+        setCurrentAwDetail(res);
+        setIsLiked(res.isLiked);
+        fetchIsFollowed(res.account.id);
+      })
+      .catch((err) => CatchAPICallingError(err, navigate))
+      .finally(() => setIsLoadingDetail(false));
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selectingAw?.id) {
+      fetchDetail();
+    }
+  }, [selectingAw]);
+
   // Auto refresh data when searchValue changes
   useEffect(() => {
     let timeoutId: any;
 
-    if (state.searchValue !== '') {
+    if (state.searchValue !== "") {
       // Clear the previous timeout if there's any
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -125,8 +160,8 @@ export default function SearchScreen({ ...props }: Props) {
     }
     return () => clearTimeout(timeoutId);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },  [state.searchValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.searchValue]);
 
   return (
     <div className="search-container">
@@ -149,7 +184,7 @@ export default function SearchScreen({ ...props }: Props) {
       {/* Result */}
       <div className="result-container">
         {state.artworks.length === 0 && !state.isLoading && <p>Không tìm thấy dữ liệu nào</p>}
-        <Gallery artworks={state.artworks} awDetailStateTools={awDetailStateTools}/>
+        <Gallery artworks={state.artworks} awDetailStateTools={awDetailStateTools} />
       </div>
     </div>
   );
