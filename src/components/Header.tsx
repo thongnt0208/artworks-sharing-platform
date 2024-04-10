@@ -57,23 +57,23 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
   ];
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && searchValue !== "") {
       e.preventDefault();
       navigate(`/search?value=${searchValue}`);
     }
   };
 
   const items: MenuItem[] = [
-    { label: "Khám phá", command: () => navigate("/search?value=") },
+    { label: "Khám phá", command: () => navigate("/explore") },
     { label: "Thuê", command: () => navigate("/hire") },
     {
-      label: !currentUrl.includes("/search") ? "Tìm kiếm" : "",
-      template: !currentUrl.includes("/search") && (
+      label: !["/search", "/explore"].includes(currentUrl) ? "Tìm kiếm" : "",
+      template: !["/search", "/explore"].includes(currentUrl) && (
         <span className="p-input-icon-right search-bar flex">
           <InputText
-          className="w-full"
+            className="w-full"
             placeholder="Tìm kiếm"
-            style={{ width: "30rem" }}
+            style={{ borderRadius: "50px"}}
             tooltip="Nhấn phím Enter để tìm"
             onKeyDown={handleKeyDown}
             onInput={(e) => setSearchValue(e.currentTarget.value)}
@@ -84,12 +84,14 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
             text
             severity="info"
             aria-label="Tìm kiếm"
+            disabled={searchValue === ""}
+            style={{position: "absolute", right: 0}}
             onClick={() => navigate(`/search?value=${searchValue}`)}
           />
         </span>
       ),
     },
-  ].filter(item => item.label !== "");
+  ].filter((item) => item.label !== "");
 
   const dialogModelFields = {
     modal: true,
@@ -147,10 +149,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
         onHide={() => setShowMessageNotification(false)}
         {...dialogModelFields}
       >
-        <Notification
-          notifications={chatboxesData}
-          type="chat"
-        />
+        <Notification notifications={chatboxesData} type="chat" />
       </Dialog>
 
       <Dialog

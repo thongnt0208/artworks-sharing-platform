@@ -42,7 +42,7 @@ export default function InputsContainer({ ...props }: Props) {
   };
 
   return (
-    <Panel ref={panelRef} headerTemplate={searchHeaderTemplate} toggleable collapsed>
+    <Panel ref={panelRef} headerTemplate={searchHeaderTemplate} toggleable>
       <div className="filters flex flex-column md:flex-row align-items-center justify-content-center gap-3 md:gap-8">
         {/* type */}
         <div className="type flex gap-3">
