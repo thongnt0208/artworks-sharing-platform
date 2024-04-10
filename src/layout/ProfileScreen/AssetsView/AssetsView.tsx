@@ -164,6 +164,8 @@ const AssetsView: React.FC = () => {
                   description={asset.description}
                   assetName={asset.assetName}
                   price={asset.price}
+                  extension={asset.extension}
+                  size={asset.size}
                   isBought={asset.isBought}
                   fileMetaData={asset.fileMetaData}
                   lastModificatedOn={asset.lastModificatedOn}
