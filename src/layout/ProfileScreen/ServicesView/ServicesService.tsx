@@ -1,10 +1,5 @@
-import axios from "axios";
-import { getAuthInfo } from "../../../util/AuthUtil";
-import { axiosPrivate } from "../../../hooks/useAxios";
-const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
-
-const accessToken = getAuthInfo()?.accessToken || "";
-const refreshToken = getAuthInfo()?.refreshToken || "";
+import axios, { axiosPrivate } from "../../../hooks/useAxios";
+import { ServiceReviewProps } from "../../../components/ServiceReviewPopup";
 
 /**
  * Get Services from database by accountId
@@ -17,20 +12,11 @@ const refreshToken = getAuthInfo()?.refreshToken || "";
  */
 export async function GetServicesData(accountId: string) {
   try {
-    const response = await axios.get(
-      `${API_URL}/accounts/${accountId}/services`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken || refreshToken}`,
-        },
-      }
-    );
+    const response = await axiosPrivate.get(`/accounts/${accountId}/services`);
     if (response.status !== 200) {
       console.log("Error fetching artworks data");
       return [];
     }
-    console.log("Success fetching collection data", response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching artworks data:", error);
@@ -111,12 +97,7 @@ export async function UpdateServiceData(
  */
 export async function DeleteServiceData(serviceId: string) {
   try {
-    await axios.delete(`${API_URL}/services/${serviceId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken || refreshToken}`,
-      },
-    });
+    await axiosPrivate.delete(`/services/${serviceId}`);
     return true;
   } catch (error) {
     return false;
@@ -142,7 +123,7 @@ export async function CreateNewRequestData(
   budget: number
 ) {
   try {
-    const response = await axiosPrivate.post(`${API_URL}/requests`, {
+    const response = await axiosPrivate.post(`/requests`, {
       serviceId,
       message,
       timeline,
@@ -156,5 +137,37 @@ export async function CreateNewRequestData(
   } catch (error) {
     console.log("Error sending request message:", error);
     return false;
+  }
+}
+
+export async function GetReviewOfServiceData(
+  serviceId: string
+): Promise<ServiceReviewProps[]> {
+  try {
+    const response = await axios.get(`/services/${serviceId}/reviews`);
+    if (response.status !== 200) {
+      return [];
+    } else {
+      let serviceReview: ServiceReviewProps[] = [];
+      if (Array.isArray(response.data.items)) {
+        serviceReview = response.data.items.map((review: any) => ({
+          id: review.id,
+          proposalId: review.proposalId,
+          vote: review.vote,
+          detail: review.detail,
+          createdOn: review.createdOn,
+          account: {
+            id: review.account.id,
+            username: review.account.username,
+            email: review.account.email,
+            fullname: review.account.fullname,
+            avatar: review.account.avatar,
+          },
+        }));
+      }
+      return serviceReview;
+    }
+  } catch (error) {
+    throw new Error("Error fetching service reviews");
   }
 }
