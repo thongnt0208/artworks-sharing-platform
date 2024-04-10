@@ -7,6 +7,7 @@ import { translateProposalStatus } from "../../../../util/Enums";
 import "./styles/ProposalCard.scss";
 import { numberToXu } from "../../../../util/CurrencyHandle";
 import { Badge } from "primereact/badge";
+import { Divider } from "primereact/divider";
 // ---------------------------------------------------------
 
 export default function ProposalCard({ ...props }: ProposalCardProps) {
@@ -52,7 +53,7 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
         reject={() => setConfirmVisible(false)}
       />
 
-      <p className="sys-noti-title text-cus-h1-bold pt-2">ProposalCard</p>
+      <p className="sys-noti-title text-cus-h1-bold pt-2">Thỏa thuận</p>
       <div className="propo-noti-container">
         <p>
           Tên dự án: <strong>{projectTitle}</strong>
@@ -94,18 +95,25 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
         )}
 
         {createdBy === currentUserId && status?.toUpperCase() === "WAITING" && (
-          <div className="btns-container flex gap-3">
-            Bạn đang chờ đối tác chấp nhận thỏa thuận.
-            <Button className="btn-accept" rounded onClick={() => editCallback && editCallback(id)}>
-              Chỉnh sửa
-            </Button>
-            <Button
-              className="btn-decline"
-              rounded
-              onClick={() => cancelCallback && cancelCallback(id)}
-            >
-              Hủy thỏa thuận
-            </Button>
+          <div className="btns-container flex flex-column gap-3 pt-0">
+            <Divider />
+            <strong>Bạn đang chờ đối tác chấp nhận thỏa thuận.</strong>
+            <div className="flex gap-2">
+              <Button
+                className="btn-accept"
+                rounded
+                onClick={() => editCallback && editCallback(id)}
+              >
+                Chỉnh sửa
+              </Button>
+              <Button
+                className="btn-decline"
+                rounded
+                onClick={() => cancelCallback && cancelCallback(id)}
+              >
+                Hủy thỏa thuận
+              </Button>
+            </div>
           </div>
         )}
       </div>

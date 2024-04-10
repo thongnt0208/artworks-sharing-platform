@@ -11,6 +11,9 @@ import {
 } from "../../../index";
 import * as Yup from "yup";
 import { ProposalFormProps } from "../../ChatRelatedTypes";
+import { useEffect, useState } from "react";
+import { getCategoriesList } from "../../../PostArtworkScreen/Service";
+import { CategoryProps } from "../../../HomeScreen/HomeScreen";
 
 const initialValues = {
   title: "",
@@ -48,6 +51,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function ProposalForm({ createProposalCallback }: ProposalFormProps) {
+  const [categoriesOptions, setcategoriesOptions] = useState([] as CategoryProps[]);
   let today = new Date();
   today.setDate(today.getDate() + 1);
   const serviceId = localStorage.getItem("serviceId");
@@ -68,11 +72,9 @@ export default function ProposalForm({ createProposalCallback }: ProposalFormPro
     ) : null;
   };
 
-  const categories = [
-    { label: "Category 1", value: "category1" },
-    { label: "Category 2", value: "category2" },
-    // Add more categories as needed
-  ];
+  useEffect(() => {
+    getCategoriesList().then((res) => setcategoriesOptions(res));
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-column gap-3">
@@ -92,7 +94,7 @@ export default function ProposalForm({ createProposalCallback }: ProposalFormPro
         <Dropdown
           id="category"
           {...formik.getFieldProps("category")}
-          options={categories}
+          options={categoriesOptions}
           optionLabel="label"
           placeholder="Chọn một thể loại"
           className="w-full"
