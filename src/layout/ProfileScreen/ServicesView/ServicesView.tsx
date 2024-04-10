@@ -42,6 +42,7 @@ const ServicesView: React.FC = () => {
     accountFullname: "",
     accountAvatar: "",
     isCreator: isCreator,
+    averageRating: 0,
     hireHandler: () => {},
   });
 
@@ -130,6 +131,7 @@ const ServicesView: React.FC = () => {
                   accountId={accountId}
                   accountFullname={accountFullname}
                   accountAvatar={accountAvatar}
+                  averageRating={service.averageRating}
                   isCreator={isCreator}
                   editHandler={() => {
                     setSelectedService(service);
@@ -203,7 +205,10 @@ const ServicesView: React.FC = () => {
         }}
         {...dialogModelFields}
       >
-        <ServiceReviewPopup service={selectedService} rating={4} />
+        <ServiceReviewPopup
+          service={selectedService}
+          averageRating={selectedService.averageRating}
+        />
       </Dialog>
     </>
   );

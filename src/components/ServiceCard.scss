@@ -37,12 +37,13 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      align-items: start;
+      align-items: end;
       .review {
         .rating .p-rating-item-active svg {
           color: $strong-200;
         }
         .review-popup {
+          margin: 0;
           margin-top: 5px;
           text-align: right;
           font-weight: 700;
