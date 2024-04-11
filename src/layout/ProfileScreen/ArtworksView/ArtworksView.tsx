@@ -18,7 +18,7 @@ const ArtworksView: React.FC = () => {
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [selectedArtworkId, setSelectedArtworkId] = useState<string>("");
   const [visibleDialogs, setVisibleDialogs] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState(0); // Changed initial active tab index to 0
+  const [activeTab, setActiveTab] = useState(1); // Changed initial active tab index to 0
   const [pageNumber, setPageNumber] = useState(1);
 
   const items = [
