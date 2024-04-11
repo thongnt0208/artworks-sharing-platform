@@ -40,9 +40,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
 
   useEffect(() => {
     const fieldsFilled =
-      message.trim() !== "" &&
-      (!isHire ||
-        (estimateDeliveryTime.trim() !== ""));
+      message.trim() !== "" && (!isHire || estimateDeliveryTime.trim() !== "");
     setAllFieldsFilled(fieldsFilled);
   }, [message, estimateDeliveryTime, budget, isHire, startingPrice]);
 
@@ -50,7 +48,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
     const request: RequestProps = {
       message,
       timeline: estimateDeliveryTime,
-      budget: startingPrice,
+      budget: budget,
     };
     onSubmit(request);
     if (allFieldsFilled) {
@@ -58,9 +56,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
       setMessage("");
       setEstimateDeliveryTime("");
       setBudget(0);
-      setTimeout(() => {
-        onHide();
-      }, 3000);
+      onHide();
     }
   };
 
@@ -92,7 +88,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
           <div className="w-full flex flex-column justify-content-center align-items-center">
             <InputTextarea
               id="message"
-              rows={8} 
+              rows={8}
               style={{ width: "80%" }}
               onChange={(e) => setMessage(e.target.value)}
             />
