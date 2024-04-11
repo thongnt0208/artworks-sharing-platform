@@ -12,6 +12,17 @@ export type ChatboxItemType = {
   isSeen: boolean;
 };
 
+export type ChatMessageItemType = {
+  id: string;
+  chatBoxId: string;
+  text: string;
+  fileLocation?: string;
+  createdOn: string;
+  createdBy: string;
+  request: RequestItemType;
+  proposal: ProposalType;
+}
+
 export type RequestItemType = {
   id: string;
   serviceId: string;

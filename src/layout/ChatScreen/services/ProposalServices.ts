@@ -9,17 +9,35 @@ import {
   ReviewItemType,
 } from "../ChatRelatedTypes";
 
-function mapRequestData(response: any): RequestItemType {
+export function mapRequestData(response: any): RequestItemType {
   return {
-    id: response?.id,
-    serviceId: response?.serviceId,
-    message: response?.message,
-    timeline: response?.timeline,
-    price: response?.price || response?.budget,
-    requestStatus: response?.requestStatus,
-    createdBy: response?.createdBy,
-    createdOn: response?.createdOn,
-    service: response?.service,
+    id: response?.id || response?.Id,
+    serviceId: response?.serviceId || response?.ServiceId,
+    message: response?.message || response?.Message,
+    timeline: response?.timeline || response?.Timeline,
+    price: response?.budget || response?.Budget,
+    requestStatus: response?.requestStatus || response?.RequestStatus,
+    createdBy: response?.createdBy || response?.CreatedBy,
+    createdOn: response?.createdOn || response?.CreatedOn,
+    service: response?.service || response?.Service,
+  };
+}
+
+export function mapProposalData(response: any): ProposalType {
+  return {
+    id: response?.Id || response?.id,
+    chatBoxId: response?.ChatBoxId || response?.chatBoxId,
+    serviceId: response?.ServiceId || response?.serviceId,
+    projectTitle: response?.ProjectTitle || response?.projectTitle,
+    category: response?.Category || response?.category,
+    description: response?.Description || response?.description,
+    targetDelivery: response?.TargetDelivery || response?.targetDelivery,
+    initialPrice: response?.InitialPrice || response?.initialPrice,
+    totalPrice: response?.Total || response?.total,
+    status: response?.ProposalStatus || response?.status,
+    createdBy: response?.CreatedBy || response?.createdBy,
+    createdOn: response?.CreatedOn || response?.createdOn,
+    isReviewed: response?.IsReviewed || response?.isReviewed,
   };
 }
 
@@ -136,23 +154,7 @@ export async function GetProposalsByChatboxId(chatboxId: string): Promise<Propos
     .get(`/chats/${chatboxId}/proposals`)
     .then((response) => {
       if (Array.isArray(response?.data)) {
-        return response.data.map((item: any) => {
-          return {
-            id: item.id,
-            chatBoxId: item.chatBoxId,
-            serviceId: item.serviceId,
-            projectTitle: item.projectTitle,
-            category: item.category,
-            description: item.description,
-            targetDelivery: item.targetDelivery,
-            initialPrice: item.initialPrice,
-            totalPrice: item.total,
-            status: item.proposalStatus,
-            createdBy: item.createdBy,
-            createdOn: item.createdOn,
-            isReviewed: item.isReviewed,
-          };
-        });
+        return response.data.map((item: any) => mapProposalData(item));
       } else {
         return [];
       }
