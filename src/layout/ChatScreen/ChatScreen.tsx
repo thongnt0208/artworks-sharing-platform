@@ -2,14 +2,11 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import "./ChatScreen.scss";
-
 import ChatLeftNav from "./components/ChatLeftNav";
 import ChatContent from "./components/ChatContent";
 import ChatRightNav from "./components/ChatRightNav";
 import ChatInput from "./components/ChatInput/ChatInput";
 import {
-  ChatMessageType,
   GetChatboxesCurrentAccount,
   GetMessagesByChatboxIdRealTime,
   SendImageToAccount,
@@ -17,6 +14,7 @@ import {
 } from "./services/ChatServices";
 import {
   ChatboxItemType,
+  ChatMessageItemType,
   MilestoneItemType,
   ProposalAssetItemType,
   ProposalType,
@@ -36,14 +34,16 @@ import {
   UploadProposalAssetUtil,
 } from "./components/Proposal/ProposalUtils";
 import { Splitter, SplitterPanel } from "primereact/splitter";
+
+import "./ChatScreen.scss";
 // ---------------------------------------------------------
 
 export default function ChatScreen() {
   const [isLoading, setIsLoading] = useState(true);
-  const [closeSocket, setCloseSocket] = useState<() => void | null>();
+  const [closeSocket, setCloseSocket] = useState<() => void>();
 
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
-  const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessageItemType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   // const [totalPagesSt, setTotalPagesSt] = useState(1);
   const [selectingChatbox, setSelectingChatbox] = useState<ChatboxItemType>({} as ChatboxItemType);
@@ -108,19 +108,11 @@ export default function ChatScreen() {
   const GetChatMessages = () => {
     if (selectingChatbox?.id) {
       if (!closeSocket) {
-        const cleanup = GetMessagesByChatboxIdRealTime(
-          selectingChatbox.id,
-          chatMessages,
-          setChatMessages
-        );
+        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
         setCloseSocket(() => cleanup);
       } else {
         closeSocket();
-        const cleanup = GetMessagesByChatboxIdRealTime(
-          selectingChatbox.id,
-          chatMessages,
-          setChatMessages
-        );
+        const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
         setCloseSocket(() => cleanup);
       }
     }
@@ -178,10 +170,16 @@ export default function ChatScreen() {
   useEffect(() => {
     GetChatboxes();
     SetCurrentChatbox();
+    return () => {
+      closeSocket && closeSocket();
+    };
   }, []);
 
   useEffect(() => {
     SetCurrentChatbox();
+    return () => {
+      closeSocket && closeSocket();
+    };
   }, [currentUrl, chatboxes]);
 
   useEffect(() => {

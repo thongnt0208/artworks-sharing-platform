@@ -1,9 +1,10 @@
-import { ChatboxItemType } from "../ChatRelatedTypes";
+import { ChatboxItemType, ChatMessageItemType } from "../ChatRelatedTypes";
 import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import { Dispatch, SetStateAction } from "react";
 import { arraysChatboxEqual, arraysEqual } from "../../../util/ArrayUtil";
+import { mapProposalData, mapRequestData } from "./ProposalServices";
 const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 const authenticationInfo = getAuthInfo();
@@ -232,29 +233,26 @@ export async function GetMessagesByChatboxIdPagin(
 /**
  * This function is used to retrieve real-time messages by chatbox ID.
  * @param chatboxId - The ID of the chatbox.
+ * @param setState - The state to set the chat messages.
  * @returns A promise that resolves to an array of chat messages.
  * @throws An error if the API request fails.
  * @example
- * GetMessagesByChatboxIdRealTime("chatboxId")
- *   .then((messages) => {
- *     console.log(messages);
- *   })
- *   .catch((error) => {
- *     console.error(error);
- *   });
+ * GetMessagesByChatboxIdRealTime("chatboxId", setState)
+ * .then((close) => {
+ *  close();
+ * })
  * @version 1.0.0
  * @author ThongNT
  */
 export function GetMessagesByChatboxIdRealTime(
   chatboxId: string,
-  messagesList: ChatMessageType[],
-  setState: Dispatch<SetStateAction<ChatMessageType[]>>
+  setState: Dispatch<SetStateAction<ChatMessageItemType[]>>
 ): () => void {
   const url = `${WS_URL}/chatbox/${chatboxId}/messages/ws`;
   const socket = new WebSocket(url);
-  let _tmpMessages: ChatMessageType[] = [];
+  let _tmpMessages: ChatMessageItemType[] = [];
   socket.onopen = () => {
-    console.log("WebSocket connection established");
+    console.log("WebSocket connection in GetMessagesByChatboxIdRealTime established");
     setState([]);
   };
 
@@ -262,11 +260,14 @@ export function GetMessagesByChatboxIdRealTime(
     const data = JSON.parse(event.data);
     const message = data?.reverse()?.map((item: any) => {
       return {
-        chatBoxId: item.ChatBoxId || "",
-        text: item.Text || "",
+        id: item.Id,
+        chatBoxId: item.ChatBoxId,
+        text: item.Text,
         fileLocation: item.FileLocation,
-        createdOn: item.CreatedOn || "",
-        createdBy: item.CreatedBy || "",
+        createdOn: item.CreatedOn,
+        createdBy: item.CreatedBy,
+        request: mapRequestData(item.Request),
+        proposal: mapProposalData(item.Proposal),
       };
     });
 
@@ -277,7 +278,7 @@ export function GetMessagesByChatboxIdRealTime(
   };
 
   socket.onclose = () => {
-    console.log("WebSocket connection closed");
+    console.log("WebSocket connection in GetMessagesByChatboxIdRealTime closed");
   };
 
   socket.onerror = (error) => {

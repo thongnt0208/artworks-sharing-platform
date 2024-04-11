@@ -1,6 +1,7 @@
 import { getAuthInfo } from "../../../util/AuthUtil";
 import {
   ChatboxItemType,
+  ChatMessageItemType,
   ProposalStateToolsType,
   RequestStateToolsType,
 } from "../ChatRelatedTypes";
@@ -14,7 +15,7 @@ import RequestCard from "./Request/RequestCard";
 
 type Props = {
   selectingChatbox: ChatboxItemType;
-  content: any;
+  content: ChatMessageItemType[];
   requestStateTools: RequestStateToolsType;
   proposalStateTools: ProposalStateToolsType;
   setIsShowProposalForm: (value: boolean) => void;
@@ -31,9 +32,8 @@ export default function ChatContent({
   setIsShowProposalForm,
   fetchNextPage,
 }: Props) {
-  const { requestsList, handleAcceptRequest, handleDenyRequest, handleUploadProposalAsset } =
-    requestStateTools;
-  const { proposalsList, handleAcceptProposal, handleDenyProposal } = proposalStateTools;
+  const { handleAcceptRequest, handleDenyRequest, handleUploadProposalAsset } = requestStateTools;
+  const { handleAcceptProposal, handleDenyProposal } = proposalStateTools;
 
   const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -42,6 +42,46 @@ export default function ChatContent({
 
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
+
+  const renderMessage = (item: ChatMessageItemType) => {
+    if (item?.request?.id) {
+      return (
+        <RequestCard
+          key={"request" + item?.request?.id}
+          {...item?.request}
+          acceptCallback={handleAcceptRequest}
+          denyCallback={handleDenyRequest}
+          showFormCallback={setIsShowProposalForm}
+        />
+      );
+    } else if (item?.proposal?.id) {
+      return (
+        <ProposalCard
+          key={"proposal" + item?.proposal?.id}
+          {...item?.proposal}
+          acceptCallback={handleAcceptProposal}
+          denyCallback={handleDenyProposal}
+          editCallback={() => {
+            // setProposalFormData(proposal);
+            // setIsShowProposalForm(true);
+          }}
+          cancelCallback={handleDenyProposal}
+          uploadAssetCallback={handleUploadProposalAsset}
+        />
+      );
+    } else {
+      return (
+        <MemoizedMessageItem
+          key={"msg" + item.id}
+          isMyMessage={item.createdBy === currentUserId}
+          avatar={selectingChatbox?.avatar || tmpAvt}
+          createdOn={item.createdOn}
+          text={item.text}
+          fileUrl={item.fileLocation}
+        />
+      );
+    }
+  };
 
   useEffect(() => {
     const scrollArea = scrollRef.current;
@@ -86,45 +126,8 @@ export default function ChatContent({
   return (
     <div className="chat-content">
       <div className="chat-scroll-area" ref={scrollRef}>
-        {requestsList?.length !== 0 &&
-          requestsList?.map((request) => (
-            <RequestCard
-              key={request.id}
-              {...request}
-              acceptCallback={handleAcceptRequest}
-              denyCallback={handleDenyRequest}
-              showFormCallback={setIsShowProposalForm}
-            />
-          ))}
-
-        {proposalsList?.length !== 0 &&
-          proposalsList?.map((proposal) => (
-            <ProposalCard
-              key={proposal.id}
-              {...proposal}
-              acceptCallback={handleAcceptProposal}
-              denyCallback={handleDenyProposal}
-              editCallback={() => {
-                // setProposalFormData(proposal);
-                // setIsShowProposalForm(true);
-              }}
-              cancelCallback={handleDenyProposal}
-              uploadAssetCallback={handleUploadProposalAsset}
-            />
-          ))}
         <div ref={topMessageRef}></div>
-        {content.map((item: any, index: number) => {
-          return (
-            <MemoizedMessageItem
-              key={`msg-item-${index}`}
-              isMyMessage={item.createdBy === currentUserId}
-              avatar={selectingChatbox?.avatar || tmpAvt}
-              createdOn={item.createdOn}
-              text={item.text}
-              fileUrl={item.fileLocation}
-            />
-          );
-        })}
+        {content.map((item: any, index: number) => renderMessage(item))}
       </div>
     </div>
   );
