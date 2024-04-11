@@ -313,7 +313,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 <div className="concept-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="concept-label w-full h-fit flex flex-column justify-content-start align-items-start">
                     <label className="text-base font-bold" htmlFor="concept">
-                      Số lượng thể loại
+                      Số lượng ý tưởng
                     </label>
                     <InputNumber
                       id="concept"
@@ -369,7 +369,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 <div className="price-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="price-label w-full h-fit flex flex-column justify-content-start align-items-start">
                     <label className="text-base font-bold" htmlFor="price">
-                      Giá khởi điểm (VNĐ)
+                      Giá khởi điểm (XU)
                     </label>
                     <InputNumber
                       id="price"
