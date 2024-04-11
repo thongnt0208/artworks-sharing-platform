@@ -12,20 +12,7 @@ import { formatTime } from "../../../../util/TimeHandle";
 // ---------------------------------------------------------
 
 export default function ProposalCard({ ...props }: ProposalCardProps) {
-  const {
-    id,
-    projectTitle,
-    description,
-    targetDelivery,
-    initialPrice,
-    totalPrice,
-    status,
-    createdBy,
-    acceptCallback,
-    denyCallback,
-    editCallback,
-    cancelCallback,
-  } = props;
+  const { id, projectTitle, description, targetDelivery, initialPrice, totalPrice, status, createdBy, createdOn, acceptCallback, denyCallback, editCallback, cancelCallback } = props;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
@@ -55,6 +42,9 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
       />
 
       <p className="sys-noti-title text-cus-h1-bold pt-2">Thỏa thuận</p>
+      <span style={{ color: "gray", fontSize: "12px" }}>
+        Tạo lúc {formatTime(createdOn || "", "HH:mm ngày dd-MM-yyyy")}
+      </span>
       <div className="propo-noti-container">
         <p>
           Tên dự án: <strong>{projectTitle}</strong>
@@ -66,7 +56,7 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
           Thời gian hoàn thành: <strong>{formatTime(targetDelivery, "HH:mm ngày dd-MM-yyyy")}</strong>
         </p>
         <p>
-          Tổng chi phí: <strong>{numberToXu(totalPrice)}</strong>
+          Tổng chi phí: <strong>{numberToXu(totalPrice || 0)}</strong>
         </p>
         <p>
           Đã đặt cọc: <strong>{numberToXu(initialPrice * totalPrice)}</strong>

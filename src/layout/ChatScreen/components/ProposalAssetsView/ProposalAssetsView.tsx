@@ -44,7 +44,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
       <div className="proposal-assets-container">
         <div className="proposal-assets-content">
           {data?.map((asset) => (
-            <div className="proposal-asset-item flex flex-column">
+            <div key={asset.id} className="proposal-asset-item flex flex-column">
               <p className="text-cus-normal pb-1">
                 <Badge value={asset.type} severity={badgeSeverity(asset.type)} /> tải vào{" "}
                 <span style={{ color: "gray" }}>
