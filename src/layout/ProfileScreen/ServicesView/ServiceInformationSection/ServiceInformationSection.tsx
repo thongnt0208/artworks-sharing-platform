@@ -51,7 +51,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   useEffect(() => {
     const handleGetArtworks = async () => {
       try {
-        const response = await GetArtworksData(4, pageNumber, accountId);
+        const response = await GetArtworksData(4, pageNumber, accountId, 1, 0);
         if (Array.isArray(response)) {
           setArtworks((prevArtworks) => {
             const uniqueArtworkIds = new Set(
