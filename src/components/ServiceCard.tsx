@@ -21,6 +21,7 @@ export type ServiceProps = {
   accountFullname: string;
   accountAvatar: string;
   isCreator: boolean;
+  averageRating: number;
   artworkReferences?: ArtworkProps[];
   editHandler?: () => void;
   hireHandler: (request: RequestProps) => void;
@@ -56,10 +57,25 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
               {props.numberOfRevision} lần chỉnh sửa{" "}
             </p>
           </div>
-          <div className="review">
-            <Rating className="rating mt-1" stars={5} value={4} readOnly cancel={false} />
-            <p className="review-popup" onClick={props.reviewHandler}>Tất cả đánh giá</p>
-          </div>
+          {props.averageRating === 0 ? (
+            <div className="review">
+              <p className="review-popup" style={{ cursor: "default" }}>
+                Chưa có đánh giá
+              </p>
+            </div>
+          ) : (
+            <div className="review">
+              <Rating
+                className="rating mt-1"
+                value={props.averageRating}
+                readOnly
+                cancel={false}
+              />
+              <p className="review-popup" onClick={props.reviewHandler}>
+                Tất cả đánh giá
+              </p>
+            </div>
+          )}
         </div>
         {props.isCreator ? (
           <div className="hire-button-container w-full flex justify-content-center mt-3 mb-3 ">
