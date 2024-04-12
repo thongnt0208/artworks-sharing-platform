@@ -13,7 +13,7 @@ const ChatLeftNav: React.FC<ChatLeftNavProps> = (props) => {
 
   return (
     <div className='max-h-full w-full'>
-      <p className='text-cus-h2-bold'>Chưa đọc</p>
+      <p className='text-cus-h2-bold'>Tin nhắn</p>
       {!itemsList && <p>Không có yêu cầu nào</p>}
       <DataScroller
         value={itemsList}
