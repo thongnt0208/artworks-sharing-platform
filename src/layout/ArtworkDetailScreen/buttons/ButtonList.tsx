@@ -46,7 +46,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
-  const buttonsList: btnListItemType[] = [
+  let buttonsList: btnListItemType[] = [
     {
       title: data?.account?.id === currentUserId ? "Trang cá nhân" : "Theo dõi",
       thumbnailImg: data?.account?.avatar || blankPic,
@@ -100,6 +100,10 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
     },
   ];
 
+  if (!data?.assets?.length || data?.assets?.length === 0) {
+    buttonsList = buttonsList.filter((button) => button.title !== "Tài nguyên");
+  }
+
   const saveAssetHandler = (id: string) => {
     const _chosenAsset = data?.assets?.find((asset) => asset.id === id);
     setChosenAsset(_chosenAsset || ({} as AssetType));
@@ -114,6 +118,10 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
 
   const buyAssetHandler = () => {
     if (!chosenAsset.id) return;
+    if (chosenAsset.isBought) {
+     toast.warn("Tài nguyên này đã được mua trước đó. Vào trang 'Tài nguyên của tôi' để tải lại.");
+      return;
+    }
     BuyAsset(chosenAsset.id)
       .then(() => {
         toast.success(
@@ -151,7 +159,11 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
         }}
         reject={() => setIsShowBuyAssetDialog(false)}
       />
-      <ShareDialog awId={data?.id || ""} visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
+      <ShareDialog
+        awId={data?.id || ""}
+        visible={isShowShareDialog}
+        setVisibility={setIsShowShareDialog}
+      />
       <ReportDialog
         visible={isShowReportDialog}
         setVisibility={setIsShowReportDialog}
