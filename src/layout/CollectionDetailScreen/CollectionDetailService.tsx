@@ -39,13 +39,20 @@ export async function GetCollectionData(collectionId: string) {
     if (response.status !== 200) {
       return { artworks: [] };
     }
-
-    const artworks: Artwork[] = (response.data.artworks || []).map(
-      (artworkData: { artwork: Artwork }) => artworkData.artwork
-    );
+    const artworks: Artwork[] = response.data.artworks.map((artworkData: any) => {
+      return {
+        id: artworkData.artwork.id,
+        title: artworkData.artwork.title,
+        createdBy: artworkData.artwork.author.id,
+        creatorFullName: artworkData.artwork.author.fullname,
+        thumbnail: artworkData.artwork.thumbnail,
+        likeCount: artworkData.artwork.likeCount,
+        viewCount: artworkData.artwork.viewCount,
+      };
+    });
     const collection: CollectionProps = {
       id: response.data.id,
-      creatorFullName: response.data.createdBy.username,
+      creatorFullName: response.data.createdBy.fullname,
       collectionName: response.data.collectionName,
       privacy: response.data.privacy,
       numberOfArtworks: response.data.artworks.length,
@@ -74,17 +81,20 @@ export async function CreateCollectionData({
   artworkId,
 }: {
   collectionName: string;
-  privacy: boolean;
+  privacy: number;
   artworkId: string;
 }) {
-  let privacyType = privacy ? 1 : 0;
   try {
     const response = await axiosPrivate.post(`/collections`, {
-      collectionName: collectionName,
-      privacyType: privacyType,
-      artworkId: artworkId,
+      collectionName,
+      privacy,
+      artworkId,
     });
-    return true;
+    if (response.status === 201) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     return false;
   }

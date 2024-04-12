@@ -6,6 +6,7 @@ import { OverlayPanel } from "primereact/overlaypanel";
 
 import { formatLargeNumber } from "../util/NumberHandler";
 import "./ArtworkCard.scss";
+import { TextLimit } from "../util/StringHandler";
 const unsavedIcon = require("../assets/icons/collection-detail-01-unsaved-icon.png");
 
 export type ArtworkProps = {
@@ -125,7 +126,7 @@ const ArtworkCard: React.FC<ArtworkProps> = ({ ...props }: ArtworkProps) => {
   return (
     <Card
       id={props.id}
-      title={props.title}
+      title={TextLimit(props.title, 30)}
       subTitle={!props.onSelection && `bởi ${props.creatorFullName}`}
       header={header}
       footer={!props.onSelection && footer}

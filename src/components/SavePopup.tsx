@@ -30,7 +30,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
   const [selectedCollection, setSelectedCollection] =
     useState<CollectionProps>();
   const [collections, setCollections] = useState<CollectionProps[]>([]);
-  const [privacy, setPrivacy] = useState<boolean>(true);
+  const [privacy, setPrivacy] = useState<number>(0);
   let accountId = getAuthInfo()?.id;
 
   const formik = useFormik({
@@ -39,7 +39,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      handleCreateCollection(values.newCollectionName, artworkId);
+      handleCreateCollection(values.newCollectionName, artworkId, privacy);
       closeDialog();
     },
   });
@@ -65,7 +65,8 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
 
   const handleCreateCollection = async (
     newCollectionName: string,
-    artworkId: string
+    artworkId: string,
+    privacy: number
   ) => {
     try {
       const response = await CreateCollectionData({
