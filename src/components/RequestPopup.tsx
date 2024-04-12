@@ -95,6 +95,9 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
             {isHire && message.length < 10 && (
               <span className="text-red-500">Phải hơn 10 kí tự</span>
             )}
+            {isHire && message.length > 500 && (
+              <span className="text-red-500">Phải ít hơn 500 kí tự</span>
+            )}
           </div>
           {isHire && (
             <div className="w-full mt-4 flex flex-column justify-content-center align-items-center">
