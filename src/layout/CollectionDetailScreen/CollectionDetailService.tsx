@@ -39,19 +39,15 @@ export async function GetCollectionData(collectionId: string) {
     if (response.status !== 200) {
       return { artworks: [] };
     }
-
-    // const artworks: Artwork[] = (response.data.artworks || []).map(
-    //   (artworkData: { artwork: Artwork }) => artworkData.artwork
-    // );
     const artworks: Artwork[] = response.data.artworks.map((artworkData: any) => {
       return {
-        id: artworkData.id,
-        title: artworkData.title,
-        createdBy: artworkData.author.id,
-        creatorFullName: artworkData.author.fullname,
-        thumbnail: artworkData.thumbnail,
-        likeCount: artworkData.likeCount,
-        viewCount: artworkData.viewCount,
+        id: artworkData.artwork.id,
+        title: artworkData.artwork.title,
+        createdBy: artworkData.artwork.author.id,
+        creatorFullName: artworkData.artwork.author.fullname,
+        thumbnail: artworkData.artwork.thumbnail,
+        likeCount: artworkData.artwork.likeCount,
+        viewCount: artworkData.artwork.viewCount,
       };
     });
     const collection: CollectionProps = {
