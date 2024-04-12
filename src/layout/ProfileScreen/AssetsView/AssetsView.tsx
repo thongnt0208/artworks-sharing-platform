@@ -17,6 +17,11 @@ import BoughtAssets, {
 } from "./BoughtAssetsSection/BoughtAssets";
 import AssetsCard, { AssetsProps } from "../../../components/AssetsCard";
 import { GetAssetDownloadLinkById } from "../../ArtworkDetailScreen/dialogs/Service";
+import { GetWalletData } from "../WalletView/WalletService";
+import { WalletProps } from "../WalletView/WalletView";
+import { BuyAsset } from "../../ArtworkDetailScreen/Service";
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { numberToXu } from "../../../util/CurrencyHandle";
 import "./AssetsView.scss";
 
 const AssetsView: React.FC = () => {
@@ -24,6 +29,10 @@ const AssetsView: React.FC = () => {
   const [accountId, isCreator] = useOutletContext() as [string, boolean];
   const [assets, setAssets] = useState<AssetsProps[]>([]);
   const [boughtAssets, setBoughtAssets] = useState<BoughtAssetsProps[]>([]);
+  const [chosenAssetId, setChosenAssetId] = useState<string>();
+  const [chosenAssetPrice, setChosenAssetPrice] = useState<number>();
+  const [walletData, setWalletData] = useState({} as WalletProps);
+  const [isShowBuyAssetDialog, setIsShowBuyAssetDialog] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -38,10 +47,50 @@ const AssetsView: React.FC = () => {
     setActiveTab(event.index);
   };
 
-  const saveAssetHandler = (id: string) => {
-    GetAssetDownloadLinkById(id)
-      .then((link) => window.open(link, "_blank"))
+  const saveAssetHandler = (id: string, price?: number) => {
+    setChosenAssetId(id);
+    setChosenAssetPrice(price);
+    if (price && price > 0) {
+      getWalletData();
+      setIsShowBuyAssetDialog(true);
+    } else {
+      GetAssetDownloadLinkById(id)
+        .then((link) => window.open(link, "_blank"))
+        .catch((error) => CatchAPICallingError(error, navigate));
+    }
+  };
+
+  const getWalletData = () => {
+    GetWalletData(accountId)
+      .then((data) => setWalletData(data))
       .catch((error) => CatchAPICallingError(error, navigate));
+  };
+
+  const buyAssetHandler = () => {
+    if (!chosenAssetId) return;
+    BuyAsset(chosenAssetId)
+      .then(() => {
+        toast.success(
+          <>
+            <span className="text-cus-h3-bold">Mua tài nguyên thành công!</span>
+            <br />
+            <span>Tài nguyên sẽ tự động tải xuống sau ít phút.</span>
+            <br />
+            <span>
+              Nếu không, hãy sang trang "Tài nguyên của tôi" để tải lại.
+            </span>
+          </>
+        );
+        setTimeout(() => {
+          GetAssetDownloadLinkById(chosenAssetId).then((link) =>
+            window.open(link, "_blank")
+          );
+        }, 800);
+      })
+      .catch((error) => {
+        CatchAPICallingError(error, navigate);
+      })
+      .finally(() => setIsShowBuyAssetDialog(false));
   };
 
   const removeAssetHandler = async (id: string) => {
@@ -201,7 +250,28 @@ const AssetsView: React.FC = () => {
           )}
         </div>
       )}
-
+      <ConfirmDialog
+        visible={isShowBuyAssetDialog}
+        onHide={() => setIsShowBuyAssetDialog(false)}
+        header="Tài nguyên trả phí"
+        headerStyle={{ border: "none", textAlign: "center" }}
+        message={
+          <>
+            <p>Đây là tài nguyên trả phí.</p>
+            <p>
+              Bạn đang có{" "}
+              <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví,
+              tài nguyên này có giá{" "}
+              <strong>{numberToXu(chosenAssetPrice || 0)}</strong>.
+            </p>
+            <p>Bạn có muốn mua tài nguyên này không?</p>
+          </>
+        }
+        dismissableMask
+        icon="pi pi-exclamation-triangle"
+        accept={() => buyAssetHandler()}
+        reject={() => setIsShowBuyAssetDialog(false)}
+      />
       <div ref={lastAssetRef}>
         {/* This is an invisible marker to observe */}
       </div>
