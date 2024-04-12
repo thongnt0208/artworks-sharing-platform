@@ -8,7 +8,7 @@ import UserInformationCard, {
 import MenuTab from "./MenuTab/MenuTab";
 import { RequestProps } from "../../components/RequestPopup";
 import { toast } from "react-toastify";
-import { CatchAPICallingError } from "..";
+import { CatchAPICallingError, ProgressSpinner } from "..";
 import {
   addFollow,
   fetchFollowers,
@@ -40,6 +40,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   });
   const [isCreator, setIsCreator] = useState<boolean>(isLogin);
   const [isFollow, setIsFollow] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const requestMessageHandler = async (request: RequestProps) => {
     try {
@@ -73,14 +74,21 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const profileData = await GetProfileData(profileId || "");
-        const isFollowed = await fetchIsFollow(profileId || "");
-        const followerNum = await fetchFollowers(profileId || "");
-        const followingNum = await fetchFollowers(profileId || "");
         setProfile(profileData);
-        setIsFollow(isFollowed);
-        setProfile((prev) => ({ ...prev, followerNum: followerNum, followingNum: followingNum }));
+        if (profile.id) {
+          const isFollowed = await fetchIsFollow(profileId || "");
+          const followerNum = await fetchFollowers(profileId || "");
+          const followingNum = await fetchFollowers(profileId || "");
+          setIsFollow(isFollowed);
+          setProfile((prev) => ({
+            ...prev,
+            followerNum: followerNum,
+            followingNum: followingNum,
+          }));
+        }
         if (getAuthInfo()?.id === profileId) {
           setIsCreator(true);
         } else {
@@ -88,14 +96,17 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
         }
       } catch (error) {
         CatchAPICallingError(error, navigate);
+      } finally {
+        setInterval(() => {
+        setIsLoading(false);
+        }, 500);
       }
     };
     fetchData();
-  }, [isFollow, navigate, profileId]);
-
+  }, [isFollow, navigate, profile.id, profileId]);
   return (
     <>
-      {profile ? (
+      {profile.id ? (
         <div className="profile-screen-container grid">
           <div className="profile-information-container col col-3">
             <UserInformationCard
@@ -132,10 +143,13 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           </div>
         </div>
       ) : (
-        <div className="w-full h-screen flex justify-content-center align-items-center">
-          <h1>Opps! Chúng tôi không tìm thấy người dùng này.</h1>
-        </div>
+        !isLoading && (
+          <div className="w-full h-screen flex justify-content-center align-items-center">
+            <h1>Opps! Chúng tôi không tìm thấy người dùng này.</h1>
+          </div>
+        )
       )}
+      {isLoading && <ProgressSpinner />}
     </>
   );
 };
