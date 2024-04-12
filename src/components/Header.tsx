@@ -14,7 +14,7 @@ import "./Header.scss";
 import { MenuItem } from "primereact/menuitem";
 
 const logo = require("../assets/logo/logo-small.png");
-const tmpAvt = require("../assets/defaultImage/blank-100.png");
+const tmpAvt = require("../assets/defaultImage/default-avatar.png");
 
 type HeaderProps = {
   isLogin: boolean;
