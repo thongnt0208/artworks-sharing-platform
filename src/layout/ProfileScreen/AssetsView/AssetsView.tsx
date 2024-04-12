@@ -7,11 +7,16 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router-dom";
 import { CatchAPICallingError } from "../..";
-import { GetAssetsData, GetBoughtAssetsData } from "./AssetsService";
+import {
+  GetAssetsData,
+  GetBoughtAssetsData,
+  RemoveAssetData,
+} from "./AssetsService";
 import BoughtAssets, {
   BoughtAssetsProps,
 } from "./BoughtAssetsSection/BoughtAssets";
 import AssetsCard, { AssetsProps } from "../../../components/AssetsCard";
+import { GetAssetDownloadLinkById } from "../../ArtworkDetailScreen/dialogs/Service";
 import "./AssetsView.scss";
 
 const AssetsView: React.FC = () => {
@@ -31,6 +36,25 @@ const AssetsView: React.FC = () => {
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
+  };
+
+  const saveAssetHandler = (id: string) => {
+    GetAssetDownloadLinkById(id)
+      .then((link) => window.open(link, "_blank"))
+      .catch((error) => CatchAPICallingError(error, navigate));
+  };
+
+  const removeAssetHandler = async (id: string) => {
+    try {
+      const response = await RemoveAssetData(id);
+      if (response) {
+        toast.success("Xóa tài nguyên thành công!");
+      } else {
+        toast.error("Xóa tài nguyên thất bại!");
+      }
+    } catch (error) {
+      CatchAPICallingError(error, navigate);
+    }
   };
 
   const items = [{ label: "Đã đăng" }, { label: "Đã mua" }];
@@ -143,14 +167,15 @@ const AssetsView: React.FC = () => {
                   thumbnail={asset.thumbnail}
                   itemsList={asset.itemsList}
                   isCreator={isCreator}
-                  saveHandler={(id: string) => {}}
+                  saveHandler={saveAssetHandler}
+                  removeHandler={removeAssetHandler}
                 />
               </div>
             ))
           )}
         </div>
       ) : (
-        <div className="gallery">
+        <div className="bought-asset-gallery">
           {boughtAssets.length === 0 ? (
             <div> Bạn chưa mua tài nguyên nào </div>
           ) : (
@@ -169,6 +194,7 @@ const AssetsView: React.FC = () => {
                   isBought={asset.isBought}
                   fileMetaData={asset.fileMetaData}
                   lastModificatedOn={asset.lastModificatedOn}
+                  saveHandler={saveAssetHandler}
                 />
               </div>
             ))
