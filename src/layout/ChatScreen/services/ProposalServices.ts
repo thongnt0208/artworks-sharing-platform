@@ -154,7 +154,7 @@ export async function GetProposalsByChatboxId(chatboxId: string): Promise<Propos
     .get(`/chats/${chatboxId}/proposals`)
     .then((response) => {
       if (Array.isArray(response?.data)) {
-        return response.data.map((item: any) => mapProposalData(item));
+        return response.data.reverse().map((item: any) => mapProposalData(item));
       } else {
         return [];
       }

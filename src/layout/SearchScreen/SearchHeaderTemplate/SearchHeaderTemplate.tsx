@@ -51,7 +51,7 @@ export default function SearchHeaderTemplate({ ...props }: Props) {
         <span className="p-input-icon-right input-text-container w-full">
           <InputText
             className="input-text"
-            placeholder="Search"
+            placeholder="Tìm kiếm"
             value={searchValue}
             onKeyDown={(e: any) => handleKeyDown(e)}
             onInput={(e: any) => setSearchValue(e.target.value)}
