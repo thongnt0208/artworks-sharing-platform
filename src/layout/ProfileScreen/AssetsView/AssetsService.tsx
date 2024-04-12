@@ -95,3 +95,17 @@ export async function GetBoughtAssetsData(
     return [];
   }
 }
+
+export async function RemoveAssetData(assetId: string): Promise<boolean> {
+  try {
+    const response = await axiosPrivate.delete(`/assets/${assetId}`);
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
