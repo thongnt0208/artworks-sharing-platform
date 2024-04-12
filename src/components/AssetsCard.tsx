@@ -23,7 +23,7 @@ export type AssetsProps = {
   itemsList: AssetType[];
   onClickHandler?: () => void;
   editHandler?: () => void;
-  saveHandler?: (id: string) => void;
+  saveHandler?: (id: string, price?: number) => void;
   removeHandler?: (id: string) => void;
 };
 
@@ -50,7 +50,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
 
   const detailsColumn = (item: AssetType) => {
     const _saveHandler: any = () =>
-      props.saveHandler && props.saveHandler(item.id);
+      props.saveHandler && props.saveHandler(item.id, item.price);
     const _removeHandler: any = () => 
       props.removeHandler && props.removeHandler(item.id);
     return (
