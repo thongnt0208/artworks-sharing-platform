@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Toast } from "primereact/toast";
 
 import { GetCollectionData, UpdateCollectionData, DeleteCollectionData } from "./CollectionDetailService";
 import CollectionGallery from "./CollectionGallery/CollectionGallery";
 import CollectionInformationSection from "./CollectionInformationSection/CollectionInformationSection";
 import { getAuthInfo } from "../../util/AuthUtil";
+import { toast } from "react-toastify";
+import { CatchAPICallingError } from "..";
 
 type Artwork = {
   id: string;
@@ -30,7 +31,6 @@ export type CollectionProps = {
 const CollectionDetailScreen: React.FC = () => {
   let collectionId = useParams()?.id;
   const navigate = useNavigate();
-  const toast = useRef<Toast>(null);
   const accountAvatar = localStorage.getItem("accountAvatar");
   const [artworks, setArtworks] = React.useState<Artwork[]>([]);
   const [collection, setCollection] = React.useState<CollectionProps>({
@@ -51,13 +51,6 @@ const CollectionDetailScreen: React.FC = () => {
     }
   };
 
-  const showSuccess = () => {
-    toast.current?.show({severity:'success', summary: 'Success', detail:'Cập nhật thành công', life: 3000});
-  }
-  const showError = () => {
-    toast.current?.show({severity:'error', summary: 'Lỗi', detail:'Cập nhật lỗi', life: 3000});
-  }
-
   const handleUpdateCollection = async (collectionName: string, privacy: boolean) => {
     try {
       const response = await UpdateCollectionData({
@@ -71,13 +64,13 @@ const CollectionDetailScreen: React.FC = () => {
           collectionName,
           privacy: privacy? "Private" : "Public",
         });
-        showSuccess();
+        toast.success("Cập nhật bộ sưu tập thành công");
       }
       else {
-        showError();
+        toast.error("Cập nhật bộ sưu tập thất bại");
       }
     } catch (error) {
-      showError();
+      CatchAPICallingError(error, navigate);
     }
   };
 
@@ -85,13 +78,15 @@ const CollectionDetailScreen: React.FC = () => {
     try {
       const response = await DeleteCollectionData(collection.id);
       if (response) {
-        showSuccess();
+        toast.success("Xóa bộ sưu tập thành công");
         setTimeout(() => {
           navigate(`/account/${getAuthInfo().id}/collection`);
         }, 1000);
+      } else {
+        toast.error("Xóa bộ sưu tập thất bại");
       }
     } catch (error) {
-      showError();
+      CatchAPICallingError(error, navigate);
     }
   };
 
@@ -112,7 +107,7 @@ const CollectionDetailScreen: React.FC = () => {
       }
     };
     fetchArtworks();
-  }, [collectionId, artworks]);
+  }, [collectionId]);
 
   return (
     <>
@@ -126,7 +121,6 @@ const CollectionDetailScreen: React.FC = () => {
         onUpdate={(collectionName: string, privacy: boolean) => {handleUpdateCollection(collectionName, privacy)}}
         onDelete={() => {handleDeleteCollection()}}
       />
-      <Toast ref={toast} />
       {artworks && <CollectionGallery collectionId={collection.id} artworks={artworks} updateArtworks={updateArtworks}/>} 
       {!artworks && <p>Loading artworks...</p>} 
     </>
