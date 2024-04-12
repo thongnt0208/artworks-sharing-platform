@@ -14,7 +14,7 @@ export async function GetProfileData(accountId: string) {
     const response = await axiosPrivate.get(`/accounts/${accountId}`);
     if (response.status !== 200) {
       console.log("Error fetching profile data");
-      return [];
+      return {};
     }
     return response.data;
   } catch (error) {
