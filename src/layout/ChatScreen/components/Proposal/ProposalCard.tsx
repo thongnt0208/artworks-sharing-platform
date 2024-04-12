@@ -9,16 +9,43 @@ import { numberToXu } from "../../../../util/CurrencyHandle";
 import { Badge } from "primereact/badge";
 import { Divider } from "primereact/divider";
 import { formatTime } from "../../../../util/TimeHandle";
+import { GetWalletData } from "../../../ProfileScreen/WalletView/WalletService";
+import { CatchAPICallingError } from "../../..";
+import { useNavigate } from "react-router-dom";
+import { WalletProps } from "../../../ProfileScreen/WalletView/WalletView";
 // ---------------------------------------------------------
 
 export default function ProposalCard({ ...props }: ProposalCardProps) {
-  const { id, projectTitle, description, targetDelivery, initialPrice, totalPrice, status, createdBy, createdOn, acceptCallback, denyCallback, editCallback, cancelCallback } = props;
+  const {
+    id,
+    projectTitle,
+    description,
+    targetDelivery,
+    initialPrice,
+    totalPrice,
+    status,
+    createdBy,
+    createdOn,
+    acceptCallback,
+    denyCallback,
+    editCallback,
+    cancelCallback,
+  } = props;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const [walletData, setWalletData] = useState({} as WalletProps);
+  const navigate = useNavigate();
+
+  const getWalletData = () => {
+    GetWalletData(currentUserId)
+      .then((data) => setWalletData(data))
+      .catch((error) => CatchAPICallingError(error, navigate));
+  };
 
   const showConfirmPopup = () => {
+    getWalletData();
     setConfirmVisible(true);
   };
 
@@ -32,9 +59,16 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
       <ConfirmDialog
         visible={confirmVisible}
         onHide={() => setConfirmVisible(false)}
-        message={`Bạn sẽ bị trừ ${
-          initialPrice * totalPrice
-        } Xu để đặt cọc khi chấp nhận Bản thỏa thuận, bạn chắc chứ?`}
+        message={
+          <>
+            <p>Thanh toán đặt cọc.</p>
+            <p>
+              Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, số tiền
+              cần thanh toán là <strong>{numberToXu(initialPrice * totalPrice)}</strong>.
+            </p>
+            <p> Hành động này không thể hoàn tác. Bạn có chắc chắn muốn tiếp tục?</p>
+          </>
+        }
         headerStyle={{ border: "none", padding: "8px" }}
         icon="pi pi-exclamation-triangle"
         accept={handleAcceptConfirmation}
@@ -44,25 +78,29 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
       <p className="sys-noti-title text-cus-h1-bold pt-2">Thỏa thuận</p>
       <span style={{ color: "gray", fontSize: "12px" }}>
         Tạo lúc {formatTime(createdOn || "", "HH:mm ngày dd-MM-yyyy")}
+        <br />
+        Bởi: {createdBy === currentUserId ? "Bạn" : "Đối tác"}
       </span>
       <div className="propo-noti-container">
         <p>
-          Tên dự án: <strong>{projectTitle}</strong>
+          <strong>Tên dự án:</strong> {projectTitle}
         </p>
         <p>
-          Mô tả dự án: <strong>{description}</strong>
+          <strong>Mô tả dự án:</strong> {description}
         </p>
         <p>
-          Thời gian hoàn thành: <strong>{formatTime(targetDelivery, "HH:mm ngày dd-MM-yyyy")}</strong>
+          <strong>Thời gian hoàn thành:</strong>{" "}
+          {formatTime(targetDelivery, "HH:mm ngày dd-MM-yyyy")}
         </p>
         <p>
-          Tổng chi phí: <strong>{numberToXu(totalPrice || 0)}</strong>
+          <strong>Tổng chi phí:</strong> {numberToXu(totalPrice || 0)}
         </p>
         <p>
-          Đã đặt cọc: <strong>{numberToXu(initialPrice * totalPrice)}</strong>
+          <strong>Đã đặt cọc:</strong> {numberToXu(initialPrice * totalPrice)}
         </p>
+
         <p>
-          Trạng thái:{" "}
+          <strong>Trạng thái: </strong>
           <Badge
             value={translateProposalStatus(status)}
             severity={status === "Waiting" ? "info" : status === "Accepted" ? "success" : null}

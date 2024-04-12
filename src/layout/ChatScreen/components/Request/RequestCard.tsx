@@ -10,7 +10,19 @@ import "./styles/RequestCard.scss";
 // ---------------------------------------------------------
 
 export default function RequestCard({ ...props }: RequestCardProps) {
-  const { id, serviceId, message, timeline, price, requestStatus, createdBy, createdOn, acceptCallback, denyCallback, showFormCallback } = props;
+  const {
+    id,
+    serviceId,
+    message,
+    timeline,
+    price,
+    requestStatus,
+    createdBy,
+    createdOn,
+    acceptCallback,
+    denyCallback,
+    showFormCallback,
+  } = props;
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
@@ -19,16 +31,18 @@ export default function RequestCard({ ...props }: RequestCardProps) {
       <p className="sys-noti-title text-cus-h1-bold pt-2">Yêu cầu</p>
       <span style={{ color: "gray", fontSize: "12px" }}>
         Tạo lúc {formatTime(createdOn, "HH:mm ngày dd-MM-yyyy")}
+        <br />
+        Bởi: {createdBy === currentUserId ? "Bạn" : "Đối tác"}
       </span>
       <div className="request-noti-container" key={id}>
         <p>
-          Nội dung yêu cầu: <strong>{message}</strong>
+          <strong>Nội dung yêu cầu:</strong> {message}
         </p>
         <p>
-          Thời gian: <strong>{timeline}</strong>
+          <strong>Thời gian:</strong> {timeline}
         </p>
         <p>
-          Ngân sách: <strong>{numberToXu(price || 0)}</strong>
+          <strong>Ngân sách:</strong> {numberToXu(price || 0)}
         </p>
         <p>
           Trạng thái:{" "}

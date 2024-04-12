@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import {
   ChatboxItemType,
@@ -5,12 +6,11 @@ import {
   ProposalStateToolsType,
   RequestStateToolsType,
 } from "../ChatRelatedTypes";
-
-import "./ChatContent.scss";
 import MemoizedMessageItem from "./MessageItem/MessageItem";
-import { useEffect, useRef, useState } from "react";
 import ProposalCard from "./Proposal/ProposalCard";
 import RequestCard from "./Request/RequestCard";
+
+import "./ChatContent.scss";
 // ---------------------------------------------------------
 
 type Props = {
