@@ -11,15 +11,15 @@ export type CollectionProps = {
   collectionName: string;
   privacy: string;
   numberOfArtworks: number;
-  accountAvatar: string;
-  thumbnail: string;
+  accountAvatar?: string;
+  thumbnail?: string;
 }
 
 const CollectionCard: React.FC<CollectionProps> = (props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    localStorage.setItem("accountAvatar", props.accountAvatar);
+    localStorage.setItem("accountAvatar", props.accountAvatar ?? "");
     navigate(`/collection/${props.id}`);   
   }
   return (

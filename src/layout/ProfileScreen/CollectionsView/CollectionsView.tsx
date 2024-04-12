@@ -10,6 +10,7 @@ import CollectionCard, {
   CollectionProps,
 } from "../../../components/CollectionCard";
 import "./CollectionsView.scss";
+import { CatchAPICallingError } from "../..";
 
 const CollectionScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -22,16 +23,15 @@ const CollectionScreen: React.FC = () => {
 
   useEffect(() => {
     const fetchServices = async () => {
-      const response = await GetCollectionsData(accountId);
-      if (Array.isArray(response)) {
-        setCollections(response);
-      } else {
-        console.error("Response is not an array:", response);
+      try {
+        const collectionList = await GetCollectionsData(accountId);
+        setCollections(collectionList);
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
       }
     };
-
     fetchServices();
-  }, [accountId]);
+  }, [accountId, navigate]);
 
   const CardContent = (
     <div className="card-content flex flex-column justify-content-center align-items-center">
@@ -62,11 +62,15 @@ const CollectionScreen: React.FC = () => {
               </div>
             ))
           )
-        ) : collections.filter((collection) => isCreator || collection.privacy === "Public").length === 0 ? (
+        ) : collections.filter(
+            (collection) => isCreator || collection.privacy === "Public"
+          ).length === 0 ? (
           <div> Nhà sáng tạo chưa tạo bộ sưu tập nào </div>
         ) : (
           collections
-            .filter((collection) => isCreator || collection.privacy === "Public")
+            .filter(
+              (collection) => isCreator || collection.privacy === "Public"
+            )
             .map((collection) => (
               <div className="gallery__item col col-6" key={collection.id}>
                 <CollectionCard {...collection} accountAvatar={accountAvatar} />
