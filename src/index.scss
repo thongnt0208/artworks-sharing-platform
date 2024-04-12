@@ -149,3 +149,24 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: $strong-200;
 }
+
+.p-confirm-dialog-reject {
+  border-radius: 50px;
+  background-color:$primary-100 ;
+  color: $strong-200;
+
+  &:hover{
+    background-color: $strong-100;
+    color: $bg-100;
+  }
+}
+
+.p-confirm-dialog-accept{
+  border-radius: 50px;
+  background-color:$strong-100;
+  color: $bg-100;
+
+  &:hover{
+    background-color: $strong-200;
+  }
+}
