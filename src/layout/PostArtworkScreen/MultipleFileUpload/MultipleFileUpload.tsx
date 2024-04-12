@@ -32,6 +32,9 @@ export default function MultipleFileUpload({
   const [totalSize, setTotalSize] = useState(0);
   const [validationProgress, setValidationProgress] = useState<{ [key: string]: number }>({});
   const [validationResults, setValidationResults] = useState<{ [key: string]: boolean }>({});
+  const [validationDetails, setValidationDetails] = useState<
+    { fileName: string; porn?: number; sexy?: number; hentai?: number }[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const fileUploadRef = useRef<FileUpload>(null);
 
@@ -49,6 +52,16 @@ export default function MultipleFileUpload({
         prediction.probability > 0.7
     );
     setValidationResults((prevResults) => ({ ...prevResults, [file.name]: !isNSFW }));
+    let _validationDetails = validationDetails;
+
+    _validationDetails.push({
+      fileName: file.name,
+      porn: predictions.find((prediction) => prediction.className === "Porn")?.probability || 0,
+      sexy: predictions.find((prediction) => prediction.className === "Sexy")?.probability || 0,
+      hentai: predictions.find((prediction) => prediction.className === "Hentai")?.probability || 0,
+    });
+    setValidationDetails(_validationDetails);
+
     setIsLoading(false);
   };
 
@@ -148,6 +161,31 @@ export default function MultipleFileUpload({
               {_validationProgress === 100 && (
                 <span className={`validation-result ${isValid ? "valid" : "invalid"}`}>
                   {isValid ? "Đạt chuẩn" : "Không phù hợp"}
+                  {!isValid &&
+                    validationDetails.length &&
+                    validationDetails.map((detail) =>
+                      detail.fileName === file.name ? (
+                        <div key={file.name} className="validation-details flex flex-column">
+                          {detail?.porn && detail?.porn > 0.7 && (
+                            <span className="text-cus-normal">
+                              Khiêu dâm: {(detail?.porn * 100)?.toString().substring(0, 5)}%
+                            </span>
+                          )}
+                          {detail?.sexy && detail?.sexy > 0.7 && (
+                            <span className="text-cus-normal">
+                              Gợi cảm: {(detail?.sexy * 100)?.toString().substring(0, 5)}%
+                            </span>
+                          )}
+                          {detail?.hentai && detail?.hentai > 0.7 && (
+                            <span className="text-cus-normal">
+                              Hentai: {(detail?.hentai * 100)?.toString().substring(0, 5)}%
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        ""
+                      )
+                    )}
                 </span>
               )}
             </div>
