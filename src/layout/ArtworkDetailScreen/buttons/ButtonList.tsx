@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import hireIcon from "../../../assets/icons/aw-deatail-01-hire-icon.svg";
 import assetsIcon from "../../../assets/icons/aw-deatail-02-assets-icon.svg";
-import saveIcon from "../../../assets/icons/aw-deatail-03-save-icon.svg";
 import shareIcon from "../../../assets/icons/aw-deatail-04-share-icon.svg";
 import reportIcon from "../../../assets/icons/aw-deatail-05-report-icon.svg";
 import ShareDialog from "../dialogs/ShareDialog";
@@ -17,6 +16,9 @@ import { CatchAPICallingError } from "../..";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { toast } from "react-toastify";
 import { BuyAsset } from "../Service";
+import { GetWalletData } from "../../ProfileScreen/WalletView/WalletService";
+import { WalletProps } from "../../ProfileScreen/WalletView/WalletView";
+import { numberToXu } from "../../../util/CurrencyHandle";
 
 type Props = {
   data?: ArtworkDetailType;
@@ -40,6 +42,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
   const [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const [isShowBuyAssetDialog, setIsShowBuyAssetDialog] = useState(false);
   const [chosenAsset, setChosenAsset] = useState<AssetType>({} as AssetType);
+  const [walletData, setWalletData] = useState({} as WalletProps);
   const assetsPanelOptions = useRef<OverlayPanel>(null);
   const navigate = useNavigate();
   const blankPic = require("../../../assets/defaultImage/blank-100.png");
@@ -75,14 +78,6 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
       },
     },
     {
-      title: "Lưu",
-      thumbnailImg: saveIcon || blankPic,
-      thumbnailAlt: "",
-      onclick: () => {
-        navigate("");
-      },
-    },
-    {
       title: "Chia sẻ",
       thumbnailImg: shareIcon || blankPic,
       thumbnailAlt: "",
@@ -104,12 +99,19 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
     const _chosenAsset = data?.assets?.find((asset) => asset.id === id);
     setChosenAsset(_chosenAsset || ({} as AssetType));
     if (_chosenAsset?.price && _chosenAsset?.price > 0 && data?.account.id !== currentUserId) {
+      getWalletData();
       setIsShowBuyAssetDialog(true);
     } else {
       GetAssetDownloadLinkById(id)
         .then((link) => window.open(link, "_blank"))
         .catch((error) => CatchAPICallingError(error, navigate));
     }
+  };
+
+  const getWalletData = () => {
+    GetWalletData(currentUserId)
+      .then((data) => setWalletData(data))
+      .catch((error) => CatchAPICallingError(error, navigate));
   };
 
   const buyAssetHandler = () => {
@@ -131,7 +133,8 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
       })
       .catch((error) => {
         CatchAPICallingError(error, navigate);
-      });
+      })
+      .finally(() => setIsShowBuyAssetDialog(false));
   };
 
   return (
@@ -140,18 +143,27 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
       <ConfirmDialog
         visible={isShowBuyAssetDialog}
         onHide={() => setIsShowBuyAssetDialog(false)}
-        header="Mua tài nguyên"
+        header="Tài nguyên trả phí"
         headerStyle={{ border: "none", textAlign: "center" }}
-        message="Đây là tài nguyên trả phí. Bạn có muốn mua tài nguyên này không?"
+        message={
+          <>
+            <p>Đây là tài nguyên trả phí.</p>
+            <p>
+              Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, tài nguyên này có giá <strong>{numberToXu(chosenAsset?.price || 0)}</strong>.
+            </p>
+            <p>Bạn có muốn mua tài nguyên này không?</p>
+          </>
+        }
         dismissableMask
         icon="pi pi-exclamation-triangle"
-        accept={() => {
-          buyAssetHandler();
-          setIsShowBuyAssetDialog(false);
-        }}
+        accept={() => buyAssetHandler()}
         reject={() => setIsShowBuyAssetDialog(false)}
       />
-      <ShareDialog awId={data?.id || ""} visible={isShowShareDialog} setVisibility={setIsShowShareDialog} />
+      <ShareDialog
+        awId={data?.id || ""}
+        visible={isShowShareDialog}
+        setVisibility={setIsShowShareDialog}
+      />
       <ReportDialog
         visible={isShowReportDialog}
         setVisibility={setIsShowReportDialog}
