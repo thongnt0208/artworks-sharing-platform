@@ -50,7 +50,7 @@ const ServicesView: React.FC = () => {
     request: RequestProps,
     service: ServiceProps
   ) => {
-    console.log("Request budget: ", request.budget);  
+    console.log("Request budget: ", request.budget);
     try {
       const response = await CreateNewRequestData(
         service.id,
@@ -60,6 +60,8 @@ const ServicesView: React.FC = () => {
       );
       if (response) {
         toast.success("Gửi yêu cầu thành công");
+      } else {
+        toast.error("Gửi yêu cầu thất bại");
       }
     } catch (error) {
       CatchAPICallingError(error, navigate);
@@ -146,16 +148,18 @@ const ServicesView: React.FC = () => {
                   }}
                 />
               ))}
-             {isCreator && <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
-                <i className="pi pi-plus-circle icon m-3" />
-                <Button
-                  label="Tạo dịch vụ"
-                  onClick={() => {
-                    setServiceInfoDialogVisible(true);
-                    setIsNew(true);
-                  }}
-                ></Button>
-              </Card>}
+              {isCreator && (
+                <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
+                  <i className="pi pi-plus-circle icon m-3" />
+                  <Button
+                    label="Tạo dịch vụ"
+                    onClick={() => {
+                      setServiceInfoDialogVisible(true);
+                      setIsNew(true);
+                    }}
+                  ></Button>
+                </Card>
+              )}
             </div>
           </>
         ) : (
