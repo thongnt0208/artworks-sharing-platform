@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { TabMenu } from "primereact/tabmenu";
 
-import { toast } from "react-toastify";
 import {
   GetTransactionHistoryData,
   GetWalletData,
@@ -62,7 +61,6 @@ const WalletView: React.FC = () => {
           setTransactionHistory(transactionHistory);
         }
       } catch (error) {
-        toast.error("Lỗi khi tải dữ liệu ví");
       } finally {
         setRefresh(false);
       }
@@ -74,18 +72,29 @@ const WalletView: React.FC = () => {
     <div className="wallet-view">
       <div className="wallet-info-section">
         <h1 className="wallet-title">Thông tin ví</h1>
-        <h2 className="w-full text-center">
-          Phương thức:{" "}
-          {wallet?.withdrawMethod === "Zalopay" ? (
-            <img style={{ width: "100px" }} src={zalopayLogo} alt="" />
-          ) : (
-            <></>
-          )}
-        </h2>
-        <h2 className="w-full text-center">
-          Số điện thoại:{" "}
-          <strong className="underline">{wallet?.withdrawInformation}</strong>
-        </h2>
+        {wallet ? (
+          <>
+            <h2 className="w-full text-center">
+              Phương thức:{" "}
+              {wallet?.withdrawMethod === "Zalopay" ? (
+                <img style={{ width: "100px" }} src={zalopayLogo} alt="" />
+              ) : (
+                <></>
+              )}
+            </h2>
+            <h2 className="w-full text-center">
+              Số điện thoại:{" "}
+              <strong className="underline">
+                {wallet?.withdrawInformation}
+              </strong>
+            </h2>
+          </>
+        ) : (
+          <>
+            <h2 className="text-center font-bold">Hãy cập nhật thông tin ví của bạn để trải nghiệm các dịch vụ có trong Artworkia nhé!</h2>
+          </>
+        )}
+
         <div className="w-full flex justify-content-center align-items-center">
           <Button
             label="Cập nhật thông tin ví"

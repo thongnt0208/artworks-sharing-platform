@@ -37,31 +37,34 @@ const WithdrawCoin: React.FC<{
   const [loading, setLoading] = useState(false);
 
   const handleWithdrawBtn = () => {
-    VerifyZaloPayAccount(phoneNumber).then((data: AccountVerificationData) => {
-      WithdrawCoins(
-        amount,
-        data.data.muId,
-        data.data.phone,
-        data.data.referenceId
-      )
-        .then((returnCode) => {
-          if (returnCode === 1) {
+    VerifyZaloPayAccount(phoneNumber)
+      .then((data: AccountVerificationData) => {
+        WithdrawCoins(
+          amount,
+          data.data.muId,
+          data.data.phone,
+          data.data.referenceId
+        )
+          .then((returnCode) => {
+            if (returnCode === 1) {
+              setLoading(false);
+              toast.success("Rút Xu thành công");
+              refreshCallback();
+              hideCallback();
+            } else {
+              toast.error("Rút Xu thất bại");
+              setLoading(false);
+            }
+          })
+          .catch((error) => {
             setLoading(false);
-            toast.success("Rút Xu thành công");
-            refreshCallback();
-            hideCallback();
-          } else {
-            toast.error("Rút Xu thất bại");
-            setLoading(false);
-          }
-        })
-        .catch((error) => {
-          setLoading(false);
-          toast.error("Lỗi hệ thống");
-          CatchAPICallingError(error, navigate);
-          
-        });
-    });
+            CatchAPICallingError(error, navigate);
+          });
+      })
+      .catch((error) => {
+        setLoading(false);
+        CatchAPICallingError(error, navigate);
+      });
   };
 
   return (
@@ -84,11 +87,12 @@ const WithdrawCoin: React.FC<{
               onValueChange={(e: InputNumberValueChangeEvent) =>
                 e?.value && setAmount(e.value)
               }
-              min={1000}
+              min={50000}
               max={balance}
             />
             <p className="flex align-items-center">
-              <i className="pi pi-info-circle mr-1" /> Số XU rút tối thiểu: 1.000 Xu
+              <i className="pi pi-info-circle mr-1" /> Số XU rút tối thiểu:
+              50.000 Xu
             </p>
           </div>
 
