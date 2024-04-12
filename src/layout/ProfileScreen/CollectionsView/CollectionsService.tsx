@@ -1,20 +1,9 @@
-import axios from "axios";
-import { getAuthInfo } from "../../../util/AuthUtil";
-const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
-
-const accessToken = getAuthInfo()?.accessToken || "";
-const refreshToken = getAuthInfo()?.refreshToken || "";
+import axios from "../../../hooks/useAxios";
 
 export async function GetCollectionsData(account_id: string) {
   try {
     const response = await axios.get(
-      `${API_URL}/account/${account_id}/collections`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken || refreshToken}`,
-        },
-      }
+      `/account/${account_id}/collections`
     );
     if (response.status !== 200) {
       console.log("Error fetching artworks data");
