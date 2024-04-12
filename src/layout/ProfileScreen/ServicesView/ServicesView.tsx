@@ -50,6 +50,7 @@ const ServicesView: React.FC = () => {
     request: RequestProps,
     service: ServiceProps
   ) => {
+    console.log("Request budget: ", request.budget);  
     try {
       const response = await CreateNewRequestData(
         service.id,
@@ -145,7 +146,7 @@ const ServicesView: React.FC = () => {
                   }}
                 />
               ))}
-              <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
+             {isCreator && <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
                 <i className="pi pi-plus-circle icon m-3" />
                 <Button
                   label="Tạo dịch vụ"
@@ -154,7 +155,7 @@ const ServicesView: React.FC = () => {
                     setIsNew(true);
                   }}
                 ></Button>
-              </Card>
+              </Card>}
             </div>
           </>
         ) : (

@@ -53,7 +53,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
             </p>
             <p className="mt-1 mb-0">
               {" "}
-              <i className="pi pi-sync" /> {props.numberOfConcept} thể loại,{" "}
+              <i className="pi pi-sync" /> {props.numberOfConcept} ý tưởng,{" "}
               {props.numberOfRevision} lần chỉnh sửa{" "}
             </p>
           </div>
