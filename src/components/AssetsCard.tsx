@@ -24,7 +24,7 @@ export type AssetsProps = {
   onClickHandler?: () => void;
   editHandler?: () => void;
   saveHandler?: (id: string) => void;
-  removeHandler?: () => void;
+  removeHandler?: (id: string) => void;
 };
 
 const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
@@ -51,6 +51,8 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   const detailsColumn = (item: AssetType) => {
     const _saveHandler: any = () =>
       props.saveHandler && props.saveHandler(item.id);
+    const _removeHandler: any = () => 
+      props.removeHandler && props.removeHandler(item.id);
     return (
       <div className="detail-column grid">
         <div className="col col-4 file-info flex flex-column justify-content-start align-items-start">
@@ -72,7 +74,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
             tooltipOptions={{ position: "top" }}
             onClick={_saveHandler}
           />
-          {props.isCreator && props.editHandler && props.removeHandler && (
+          {props.isCreator && props.removeHandler && (
             <>
               <Button
                 icon="pi pi-pencil"
@@ -86,7 +88,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
                 className="remove-button"
                 tooltip="Xoá"
                 tooltipOptions={{ position: "top" }}
-                onClick={props.removeHandler}
+                onClick={_removeHandler}
               />
             </>
           )}
