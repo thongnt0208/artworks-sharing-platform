@@ -1,5 +1,4 @@
 import { axiosPrivate } from "../../hooks/useAxios";
-const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 
 /**
  *
@@ -34,18 +33,13 @@ export async function GetProfileData(accountId: string) {
  * @author AnhDH
  * @version 1.0.0
  */
-export async function SendRequestMessage(receiverId: string, text: string) {
+export async function SendRequestMessage(receiverId: string, text: string): Promise<any> {
   try {
-    const response = await axiosPrivate.post(`${API_URL}/messages`, {
-      receiverId,
-      text,
-    });
-    if (response.status !== 200) {
-      console.log("Error sending request message");
-      return {};
-    }
-    return response.data;
+    const formData = new FormData();
+    formData.append("receiverId", receiverId);
+    formData.append("text", text);
+    return axiosPrivate.post("/messages", formData);
   } catch (error) {
-    console.log("Error sending request message:", error);
+    return Promise.reject("Error sending request message");
   }
 }

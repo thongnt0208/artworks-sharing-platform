@@ -5,16 +5,17 @@ import { useNavigate } from "react-router-dom";
 import "./CollectionCard.scss";
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
-type Props = {
+export type CollectionProps = {
   id: string;
   creatorFullName: string;
   collectionName: string;
   privacy: string;
   numberOfArtworks: number;
   accountAvatar: string;
+  thumbnail: string;
 }
 
-const CollectionCard: React.FC<Props> = ({ ...props }: Props) => {
+const CollectionCard: React.FC<CollectionProps> = (props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -26,7 +27,8 @@ const CollectionCard: React.FC<Props> = ({ ...props }: Props) => {
       <Button
         id="collection-card"
         style={{
-          backgroundImage: `url(${background})`,
+          backgroundColor: "grey",
+          backgroundImage: `url(${props.thumbnail ? props.thumbnail : background.default})`,
         }}
         onClick={handleClick}
       >

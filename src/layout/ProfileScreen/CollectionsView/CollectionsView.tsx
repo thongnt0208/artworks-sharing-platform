@@ -6,20 +6,12 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 
-import CollectionCard from "../../../components/CollectionCard";
+import CollectionCard, { CollectionProps } from "../../../components/CollectionCard";
 import "./CollectionsView.scss";
-
-type Props = {
-  id: string;
-  creatorFullName: string;
-  collectionName: string;
-  privacy: string;
-  items: number;
-};
 
 const CollectionScreen: React.FC = () => {
   const navigate = useNavigate();
-  const [collections, setCollections] = React.useState<Props[]>([]);
+  const [collections, setCollections] = React.useState<CollectionProps[]>([]);
   const [accountId, isCreator, accountAvatar] = useOutletContext() as [
     string,
     boolean,
@@ -57,7 +49,7 @@ const CollectionScreen: React.FC = () => {
               className="add-collection-card cursor-pointer"
             />
           ) : (
-            <div> Tác giả chưa có tác phẩm nào </div>
+            <div> Tác giả chưa có bộ sưu tập nào </div>
           )
         ) : (
           collections.map((collection) => (
@@ -65,11 +57,12 @@ const CollectionScreen: React.FC = () => {
               <CollectionCard
                 key={collection.id}
                 id={collection.id}
-                creatorFullName={collection.creatorFullName}
                 collectionName={collection.collectionName}
+                creatorFullName={collection.creatorFullName}
                 privacy={collection.privacy}
-                numberOfArtworks={collection.items}
+                numberOfArtworks={collection.numberOfArtworks}
                 accountAvatar={accountAvatar}
+                thumbnail={collection.thumbnail}
               />
             </div>
           ))

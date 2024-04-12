@@ -40,9 +40,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
 
   useEffect(() => {
     const fieldsFilled =
-      message.trim() !== "" &&
-      (!isHire ||
-        (estimateDeliveryTime.trim() !== ""));
+      message.trim() !== "" && (!isHire || estimateDeliveryTime.trim() !== "");
     setAllFieldsFilled(fieldsFilled);
   }, [message, estimateDeliveryTime, budget, isHire, startingPrice]);
 
@@ -92,11 +90,11 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
           <div className="w-full flex flex-column justify-content-center align-items-center">
             <InputTextarea
               id="message"
-              rows={8} 
+              rows={8}
               style={{ width: "80%" }}
               onChange={(e) => setMessage(e.target.value)}
             />
-            {message.length < 10 && (
+            {isHire && message.length < 10 && (
               <span className="text-red-500">Phải hơn 10 kí tự</span>
             )}
           </div>
@@ -140,9 +138,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
           )}
           <div className="w-full flex flex-row justify-content-center align-items-center mt-4">
             <Button
-              className={`w-5 ${
-                allFieldsFilled ? "p-button-primary" : "disabled-button"
-              }`}
+              disabled={!allFieldsFilled && (isHire ? message.length < 10 : false)}
               rounded
               style={{
                 padding: "10px 20px",
