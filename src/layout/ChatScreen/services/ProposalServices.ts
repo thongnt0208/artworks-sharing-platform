@@ -34,7 +34,7 @@ export function mapProposalData(response: any): ProposalType {
     targetDelivery: response?.TargetDelivery || response?.targetDelivery,
     initialPrice: response?.InitialPrice || response?.initialPrice,
     totalPrice: response?.Total || response?.total,
-    status: response?.ProposalStatus || response?.status,
+    status: response?.ProposalStatus || response?.proposalStatus,
     createdBy: response?.CreatedBy || response?.createdBy,
     createdOn: response?.CreatedOn || response?.createdOn,
     isReviewed: response?.IsReviewed || response?.isReviewed,

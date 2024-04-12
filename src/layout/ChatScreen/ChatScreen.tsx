@@ -70,7 +70,10 @@ export default function ChatScreen() {
   // REQUESTS STATE TOOLS section end
 
   // PROPOSALS STATE TOOLS section start
-  const handleGetAllProposals = () => GetAllProposals(selectingChatbox, setProposalsList, navigate);
+  const handleGetAllProposals = () => {
+    GetChatMessages();
+    GetAllProposals(selectingChatbox, setProposalsList, navigate);
+  };
   const handleCreateAProposal = (values: any) =>
     CreateAProposal(
       values,
