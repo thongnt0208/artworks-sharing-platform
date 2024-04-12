@@ -64,7 +64,10 @@ export default function ChatScreen() {
   const toast = useRef<Toast>(null);
 
   // REQUESTS STATE TOOLS section start
-  const handleGetAllRequests = () => GetAllRequests(selectingChatbox, setRequestsList, navigate);
+  const handleGetAllRequests = () => {
+    GetChatMessages();
+    GetAllRequests(selectingChatbox, setRequestsList, navigate);
+  };
   const handleAcceptRequest = (id: string) => acceptRequest(id, handleGetAllRequests, navigate);
   const handleDenyRequest = (id: string) => denyRequest(id, handleGetAllRequests, navigate);
   // REQUESTS STATE TOOLS section end

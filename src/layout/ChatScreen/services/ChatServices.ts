@@ -3,7 +3,7 @@ import { notificationItemType } from "../../../components/Notification";
 import { axiosPrivate } from "../../../hooks/useAxios";
 import { getAuthInfo } from "../../../util/AuthUtil";
 import { Dispatch, SetStateAction } from "react";
-import { arraysChatboxEqual, arraysEqual } from "../../../util/ArrayUtil";
+import { arraysChatboxEqual, arraysChatMsgEqual } from "../../../util/ArrayUtil";
 import { mapProposalData, mapRequestData } from "./ProposalServices";
 const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
@@ -271,7 +271,9 @@ export function GetMessagesByChatboxIdRealTime(
       };
     });
 
-    if (Array.isArray(message) && arraysEqual(_tmpMessages, message) === false) {
+    if (Array.isArray(message) && arraysChatMsgEqual(_tmpMessages, message) === false) {
+      console.log("message: ", message);
+      
       _tmpMessages = message;
       setState(message);
     }
