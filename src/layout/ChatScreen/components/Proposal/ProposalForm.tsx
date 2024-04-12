@@ -168,12 +168,11 @@ export default function ProposalForm({ createProposalCallback }: ProposalFormPro
       </div>
 
       {/* Must choose checkboxes to accept platform rules */}
-      <div className="p-field">
+      <div className="p-field flex gap-1 align-items-center">
         <Checkbox
           inputId="acceptRules"
           checked={formik.values.acceptRules}
           onChange={() => formik.setFieldValue("acceptRules", !formik.values.acceptRules)}
-          className="w-full"
         />
         <label htmlFor="acceptRules">
           Tôi đồng ý với các <a href="/rules">quy định</a> của nền tảng
