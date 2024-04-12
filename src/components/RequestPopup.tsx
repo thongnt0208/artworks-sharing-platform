@@ -35,7 +35,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
 }) => {
   const [message, setMessage] = useState("");
   const [estimateDeliveryTime, setEstimateDeliveryTime] = useState("");
-  const [budget, setBudget] = useState(0);
+  const [budget, setBudget] = useState(startingPrice);
   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
       setAllFieldsFilled(false);
       setMessage("");
       setEstimateDeliveryTime("");
-      setBudget(0);
+      setBudget(startingPrice);
       onHide();
     }
   };
@@ -89,14 +89,13 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
             <InputTextarea
               id="message"
               rows={8}
+              minLength={10}
+              maxLength={255}
               style={{ width: "80%" }}
               onChange={(e) => setMessage(e.target.value)}
             />
             {isHire && message.length < 10 && (
               <span className="text-red-500">Phải hơn 10 kí tự</span>
-            )}
-            {isHire && message.length > 500 && (
-              <span className="text-red-500">Phải ít hơn 500 kí tự</span>
             )}
           </div>
           {isHire && (
