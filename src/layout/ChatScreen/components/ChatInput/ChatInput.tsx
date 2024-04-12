@@ -67,11 +67,6 @@ export default function ChatInput({
         fileInputRef.current?.click();
       },
     },
-    {
-      label: "Tạo thỏa thuận",
-      icon: "pi pi-file",
-      command: () => setIsShowProposalForm(true),
-    },
   ];
 
   return (
