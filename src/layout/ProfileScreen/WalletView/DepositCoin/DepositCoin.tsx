@@ -93,10 +93,10 @@ const DepositCoin: React.FC<{ isVisible: boolean; onHide: () => void }> = ({
               onValueChange={(e) => {
                 setAmount(e.value || 1000);
               }}
-              min={1000}
+              min={40000}
             />
             <p className="flex align-items-center">
-              <i className="pi pi-info-circle mr-1" /> Số XU nạp tối thiểu: 1.000 Xu
+              <i className="pi pi-info-circle mr-1" /> Số XU nạp tối thiểu: 40.000 Xu
             </p>
           </div>
           <div className="action-button">
