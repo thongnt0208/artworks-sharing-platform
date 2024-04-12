@@ -48,7 +48,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
     const request: RequestProps = {
       message,
       timeline: estimateDeliveryTime,
-      budget: startingPrice,
+      budget: budget,
     };
     onSubmit(request);
     if (allFieldsFilled) {
@@ -56,9 +56,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
       setMessage("");
       setEstimateDeliveryTime("");
       setBudget(0);
-      setTimeout(() => {
-        onHide();
-      }, 3000);
+      onHide();
     }
   };
 
