@@ -43,12 +43,14 @@ function castResponseData(data: any): ArtworkDetailType {
           id: asset.id,
           name: asset.assetTitle.split(".")[0],
           price: asset.price,
+          size: asset.size,
           description: asset.description,
           extension: asset.assetName.split(".").pop(),
           lastModificatedOn: asset.lastModificatedOn
             ? new Date(asset.lastModificatedOn)
             : undefined,
           assetType: asset.assetType,
+          isBought: asset.isBought,
         } as AssetType)
     ),
     isLiked: data.isLiked,

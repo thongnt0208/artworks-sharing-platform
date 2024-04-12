@@ -35,6 +35,7 @@ export type AssetType = {
   thumbnail?: string;
   lastModificatedOn?: string | Date;
   assetType?: string;
+  isBought?: boolean;
 };
 
 export type ArtworkDetailType = {
