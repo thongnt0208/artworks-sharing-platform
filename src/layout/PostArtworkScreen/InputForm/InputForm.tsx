@@ -1,7 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 // ---------------------------------------------------------------
-import { getCategoriesList, postArtwork } from "../Service";
+import {
+  getCategoriesList,
+  getLicenseList,
+  getSoftwareList,
+  LicenseType,
+  postArtwork,
+  SoftwareUsedType,
+} from "../Service";
 import { maxNumberOfCategories, maxNumberOfTags } from "../../../const/bizConstants";
 import { initialValues, validationSchema } from "./FormikData";
 import MultipleFileUpload from "../MultipleFileUpload/MultipleFileUpload";
@@ -15,9 +22,13 @@ import {
   Chips,
   Button,
   MultiSelect,
+  Divider,
+  Tooltip,
 } from "../../index";
 // ---------------------------------------------------------------
 import "./InputForm.scss";
+import { CategoryProps } from "../../HomeScreen/HomeScreen";
+import { Checkbox } from "primereact/checkbox";
 // ---------------------------------------------------------------
 
 type Props = {
@@ -35,7 +46,9 @@ export default function InputForm({
   setError,
   setSuccess,
 }: Props) {
-  const [categoriesOptions, setcategoriesOptions] = useState([] as any);
+  const [categoriesOptions, setcategoriesOptions] = useState([] as CategoryProps[]);
+  const [licenseTypeOptions, setLicenseTypeOptions] = useState([] as LicenseType[]);
+  const [softwaresUsedOptions, setSoftwaresUsedOptions] = useState([] as SoftwareUsedType[]);
   const [assets, setAssets] = useState([] as any);
   const [isLoading, setisLoading] = useState(false);
   const [hasNSFWImage, setHasNSFWImage] = useState(false);
@@ -83,6 +96,21 @@ export default function InputForm({
     ) : null;
   };
 
+  const licenseTypeOptionTemplate = (option: LicenseType) => {
+    return (
+      <>
+        <Tooltip
+          target={`.license-type-option${option.id}`}
+          position="mouse"
+          content={option.licenseDescription}
+        />
+        <div className={`p-multiselect-representative-option license-type-option${option.id}`}>
+          <span>{option.licenseName}</span>
+        </div>
+      </>
+    );
+  };
+
   useEffect(() => {
     setData(formik.values); // Update the data whenever formik values change
   }, [formik.values, setData]);
@@ -101,9 +129,9 @@ export default function InputForm({
   }, [validationResults]);
 
   useEffect(() => {
-    getCategoriesList().then((res) => {
-      setcategoriesOptions(res);
-    });
+    getCategoriesList().then((res) => setcategoriesOptions(res));
+    getLicenseList().then((res) => setLicenseTypeOptions(res));
+    getSoftwareList().then((res) => setSoftwaresUsedOptions(res));
   }, []);
 
   return (
@@ -193,8 +221,11 @@ export default function InputForm({
               onChange={(e) => formik.setFieldValue("categories", e.value)}
               {...formik.getFieldProps("categories")}
               className="w-full"
+              placeholder="Chọn thể loại"
             />
           </div>
+
+          <Divider />
 
           {/* Assets field */}
           <div className="p-field">
@@ -206,7 +237,53 @@ export default function InputForm({
             />
           </div>
 
+          {/* License type field  */}
           <div className="p-field">
+            <label htmlFor="licenseTypeId">Loại bản quyền</label>
+            <Dropdown
+              id="licenseTypeId"
+              name="licenseTypeId"
+              options={licenseTypeOptions}
+              optionLabel="licenseName"
+              optionValue="id"
+              itemTemplate={licenseTypeOptionTemplate}
+              {...formik.getFieldProps("licenseTypeId")}
+              onChange={formik.handleChange}
+              value={formik.values.licenseTypeId}
+              className="w-full"
+              placeholder="Chưa chọn bản quyền nào"
+            />
+          </div>
+
+          {/* Softwares used field */}
+          <div className="p-field">
+            <label htmlFor="softwareUseds">Phần mềm sử dụng</label>
+            <MultiSelect
+              id="softwareUseds"
+              name="softwareUseds"
+              options={softwaresUsedOptions}
+              optionLabel="softwareName"
+              optionValue="id"
+              value={formik.values.softwareUseds}
+              onChange={(e) => formik.setFieldValue("softwareUseds", e.value)}
+              {...formik.getFieldProps("softwareUseds")}
+              className="w-full"
+              placeholder="Chọn phần mềm"
+              filter
+            />
+          </div>
+
+          {/* Is AI Generated field */}
+          <div className="p-field flex gap-2 align-items-center">
+            <Checkbox
+              inputId="isAIGenerated"
+              checked={formik.values.isAIGenerated}
+              onChange={() => formik.setFieldValue("isAIGenerated", !formik.values.isAIGenerated)}
+            />
+            <label htmlFor="isAIGenerated">Dự án được tạo bởi AI</label>
+          </div>
+
+          <div className="p-field" style={{ textAlign: "center" }}>
             <Button
               type="submit"
               label="Lưu"

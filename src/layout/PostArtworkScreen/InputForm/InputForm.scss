@@ -12,7 +12,7 @@ form {
       line-height: 18.2px;
     }
 
-    input::placeholder, textarea::placeholder{
+    input::placeholder, textarea::placeholder, .p-multiselect-label-container>.p-placeholder {
         //text-cus-normal-bold
         font-size: 14px;
         font-weight: bold;

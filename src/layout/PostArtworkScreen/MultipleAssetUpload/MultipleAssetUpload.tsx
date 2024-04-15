@@ -99,7 +99,7 @@ export default function MultipleAssetUpload({ assets, setAssets, onFormChange }:
           style={{ width: "50%" }}
         >
           {/* Thumbnail */}
-          <img alt={file.name} role="presentation" src={URL.createObjectURL(file)} width={100} />
+          <i className="pi pi-paperclip" style={{ fontSize: '3rem', width: "fit-content" }}/>
           <p className="text-cus-normal-bold m-0"> {file.name} </p>
           <span className="max-w-max text-cus-normal">{props.formatSize}</span>
         </div>
