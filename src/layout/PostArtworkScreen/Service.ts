@@ -1,6 +1,17 @@
-import { CategoryProps } from './../HomeScreen/HomeScreen';
+import { CategoryProps } from "./../HomeScreen/HomeScreen";
 import useAxios, { axiosPrivate } from "../../hooks/useAxios";
 // ----------------------------------------------------------------------
+
+export type SoftwareUsedType = {
+  id: string;
+  softwareName: string;
+};
+
+export type LicenseType = {
+  id: string;
+  licenseName: string;
+  licenseDescription: string;
+};
 
 /**
  * This function to POST an artwork to the database
@@ -31,6 +42,9 @@ export async function postArtwork(formValue: any): Promise<any> {
         formData.append(`AssetFiles[${index}].Price`, asset.Price);
       });
     }
+    formData.append("LicenseTypeId", formValue.licenseTypeId);
+    formValue.softwareUseds.map((software: any) => formData.append("SoftwareUseds", software));
+    formData.append("IsAIGenerated", formValue.isAIGenerated);
 
     return axiosPrivate.post("/artworks", formData);
   } catch {
@@ -63,5 +77,66 @@ export async function getCategoriesList(): Promise<CategoryProps[]> {
     return transformedCategories;
   } catch {
     return Promise.reject("Error fetching categories");
+  }
+}
+
+/**
+ * This function to get software list from database
+ *
+ * @returns {Promise<SoftwareUsedType[]>}
+ * @example
+ * getSoftwareList().then((softwares) => {console.log(softwares)})
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function getSoftwareList(): Promise<SoftwareUsedType[]> {
+  try {
+    const response = await useAxios.get("/softwareuseds");
+
+    const softwares = response.data;
+
+    // Transform softwares into the desired format
+    const transformedSoftwares = softwares?.map(
+      (software: SoftwareUsedType) =>
+        ({
+          id: software.id,
+          softwareName: software.softwareName,
+        } as SoftwareUsedType)
+    );
+
+    return transformedSoftwares;
+  } catch {
+    return Promise.reject("Error fetching softwares");
+  }
+}
+
+/**
+ * This function to get license list from database
+ *
+ * @returns {Promise<LicenseType[]>}
+ * @example
+ * getLicenseList().then((licenses) => {console.log(licenses)})
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function getLicenseList(): Promise<LicenseType[]> {
+  try {
+    const response = await useAxios.get("/licensetypes");
+
+    const licenses = response.data;
+
+    // Transform licenses into the desired format
+    const transformedLicenses: LicenseType[] = licenses?.map(
+      (license: LicenseType) =>
+        ({
+          id: license.id,
+          licenseName: license.licenseName,
+          licenseDescription: license.licenseDescription,
+        } as LicenseType)
+    );
+
+    return transformedLicenses;
+  } catch {
+    return Promise.reject("Error fetching licenses");
   }
 }
