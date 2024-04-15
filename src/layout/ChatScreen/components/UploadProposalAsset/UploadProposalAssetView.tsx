@@ -19,7 +19,7 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
   const [selectedType, setSelectedType] = useState<number | null>(null);
 
   const typeOptions = [
-    { name: "Phát thảo", label: "Concept", value: 0 },
+    { name: "Phác thảo", label: "Concept", value: 0 },
     { name: "Làm lại", label: "Revision", value: 2 },
     { name: "Cuối", label: "Final", value: 1 },
   ];
@@ -38,7 +38,6 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
             mode="basic"
             chooseLabel="Chọn tệp"
             accept="*"
-            auto
             maxFileSize={maxSizeImagesUpload}
             onSelect={(event) => setUploadedFile(event.files[0])}
           />

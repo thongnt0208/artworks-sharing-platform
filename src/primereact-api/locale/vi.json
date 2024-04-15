@@ -22,7 +22,7 @@
     "dayNamesMin": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
     "dayNamesShort": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
     "emptyFilterMessage": "không có kết quả nào được tìm thấy",
-    "emptyMessage": "Không có tùy chọn có sẵn",
+    "emptyMessage": "Không có nội dung nào",
     "emptySearchMessage": "không có kết quả nào được tìm thấy",
     "emptySelectionMessage": "Không có mục nào được chọn",
     "endsWith": "Kết thúc bằng",
