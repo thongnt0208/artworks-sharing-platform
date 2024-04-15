@@ -106,7 +106,7 @@ const ArtworksView: React.FC = () => {
           className="w-max mb-3 text-black-alpha-90 text-sm"
         />
       ) : null}
-      <div className="gallery">
+      <div className="artwork-gallery">
         {artworks.length === 0 ? (
           isCreator ? (
             <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
