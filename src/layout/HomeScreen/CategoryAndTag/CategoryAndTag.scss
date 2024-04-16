@@ -2,24 +2,27 @@
 
 .category-and-tag {
   height: 66px;
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
   .category-carousel-section {
     border-right: 1px solid #e2e2e2;
   }
-  .category-carousel-section,.tag-carousel-section{
-    .category-carousel, .tag-carousel {
+  .category-carousel-section,
+  .tag-carousel-section {
+    position: relative;
+    .category-carousel,
+    .tag-carousel {
       position: relative;
       width: 100%;
       overflow-y: auto;
-    
+
       // Hide scrollbar initially
       scrollbar-width: none; /* Firefox */
       -ms-overflow-style: none; /* Internet Explorer 10+ */
-    
+
       &::-webkit-scrollbar {
         width: 0; /* Chrome, Safari, Opera */
       }
-    
+
       // Show scrollbar on hover
       &:hover {
         scrollbar-width: auto; /* Firefox */
@@ -49,4 +52,29 @@
     transition: opacity 0.3s ease;
     background-image: linear-gradient(to left, #ffffff00, $bg-100);
   }
+}
+
+.tag-carousel-section::after,
+.category-carousel-section::after,
+.tag-carousel-section::before,
+.category-carousel-section::before {
+  content: "";
+  display: block;
+  z-index: 1;
+  width: 80px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.tag-carousel-section::after,
+.category-carousel-section::after {
+  right: 0;
+  background-image: linear-gradient(to right, #ffffff00, $bg-100);
+}
+
+.tag-carousel-section::before,
+.category-carousel-section::before {
+  left: 0;
+  background-image: linear-gradient(to left, #ffffff00, $bg-100);
 }
