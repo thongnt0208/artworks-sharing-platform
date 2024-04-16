@@ -8,10 +8,11 @@ import { getAuthInfo, removeAuthInfo } from "../util/AuthUtil";
 import Notification, { notificationItemType } from "./Notification";
 import ProfilePopup from "./ProfilePopup";
 import { AuthContext } from "../auth/context/auth-provider";
-import { hideHeaderRoutes } from "../const/uiConstants";
+import { cookieNames, hideHeaderRoutes } from "../const/uiConstants";
 
 import "./Header.scss";
 import { MenuItem } from "primereact/menuitem";
+import Cookies from "js-cookie";
 
 const logo = require("../assets/logo/logo-small.png");
 const tmpAvt = require("../assets/defaultImage/default-avatar.png");
@@ -43,6 +44,10 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
       setIsLoading(false);
       setShowProfilePopup(false);
       removeAuthInfo();
+      Cookies.remove(cookieNames.accessToken);
+      Cookies.remove(cookieNames.refreshToken);
+      Cookies.remove(cookieNames.userInfo);
+      Cookies.remove(cookieNames.interactedArtworks);
       authContext?.setAuthInfo?.({});
       navigate("/");
     }, 1500);
