@@ -15,25 +15,10 @@ type TagsProps = {
 const TagCarousel: React.FC<TagsProps> = ({ tags }) => {
   const productTemplate = (tag: TagProps) => {
     const randomColorCode = GenerateRandomColorCode();
-    return (
-      <Tag
-        key={tag.id}
-        id={tag.id}
-        tagName={tag.tagName}
-        color={randomColorCode}
-      />
-    );
+    return <Tag key={tag.id} id={tag.id} tagName={tag.tagName} color={randomColorCode} />;
   };
 
-  return (
-    <>
-      <div className="tag-carousel flex">
-        {tags.map((tag)=> productTemplate(tag))}
-        <div className="style-section-right" />
-        <div className="style-section-left" />
-      </div>
-    </>
-  );
+  return <div className="tag-carousel flex">{tags.map((tag) => productTemplate(tag))}</div>;
 };
 
 export default TagCarousel;

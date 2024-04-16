@@ -3,11 +3,13 @@ import { axiosPrivate } from "../../hooks/useAxios";
 import { ArtworkDetailType, AssetType, CommentType } from "./ArtworkDetailType";
 import { arraysEqual } from "../../util/ArrayUtil";
 import { Dispatch, SetStateAction } from "react";
+import { getAuthInfo } from "../../util/AuthUtil";
 // import axios from "../../api/axios";
-const BASE_URL =
-  process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
-const WS_URL =
-  process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
+const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "http://127.0.0.1:1880";
+const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
+
+const authenticationInfo = getAuthInfo();
+let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
 function castResponseData(data: any): ArtworkDetailType {
   return {
@@ -100,10 +102,7 @@ export async function fetchArtworkDetail(
  * @author ThongNT
  * @version 1.0.0
  */
-export async function likeArtwork(
-  artworkId: string,
-  accountId: string
-): Promise<any> {
+export async function likeArtwork(artworkId: string, accountId: string): Promise<any> {
   try {
     let body = {
       accountId: accountId,
@@ -129,10 +128,7 @@ export async function likeArtwork(
  * @author ThongNT
  * @version 1.1.0
  */
-export async function unlikeArtwork(
-  artworkId: string,
-  accountId: string
-): Promise<any> {
+export async function unlikeArtwork(artworkId: string, accountId: string): Promise<any> {
   try {
     let body = {
       artworkId: artworkId,
@@ -160,13 +156,9 @@ export async function unlikeArtwork(
  * @author ThongNT
  * @version 1.1.1
  */
-export async function fetchCommentsForArtwork(
-  artworkId: string
-): Promise<CommentType[]> {
+export async function fetchCommentsForArtwork(artworkId: string): Promise<CommentType[]> {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/artworks/${artworkId}/comments`
-    );
+    const response = await axios.get(`${BASE_URL}/artworks/${artworkId}/comments`);
     console.log("response.data", response.data);
 
     return response.data?.map((comment: any) => ({
@@ -219,10 +211,7 @@ export function fetchCommentsForArtworkRealTime(
       };
     });
 
-    if (
-      Array.isArray(comments) &&
-      arraysEqual(_tmpComments, comments) === false
-    ) {
+    if (Array.isArray(comments) && arraysEqual(_tmpComments, comments) === false) {
       _tmpComments = comments;
       setComments(comments);
     }
@@ -254,18 +243,12 @@ export function fetchCommentsForArtworkRealTime(
  * @author ThongNT
  * @version 2.0.1
  */
-export async function addCommentToArtwork(
-  artworkId: string,
-  commentText: string
-): Promise<any> {
+export async function addCommentToArtwork(artworkId: string, commentText: string): Promise<any> {
   let body = {
     commentText: commentText,
   };
   try {
-    const response = await axiosPrivate.post(
-      `${BASE_URL}/artworks/${artworkId}/comments`,
-      body
-    );
+    const response = await axiosPrivate.post(`${BASE_URL}/artworks/${artworkId}/comments`, body);
     return response;
   } catch (error) {
     console.error("Error adding comment:", error);
@@ -283,13 +266,9 @@ console.log(removedComment);
  * @author ThongNT
  * @version 1.1.1
  */
-export async function removeCommentFromArtwork(
-  commentId: string
-): Promise<any> {
+export async function removeCommentFromArtwork(commentId: string): Promise<any> {
   try {
-    const response = await axiosPrivate.delete(
-      `${BASE_URL}/comments/${commentId}`
-    );
+    const response = await axiosPrivate.delete(`${BASE_URL}/comments/${commentId}`);
     return response;
   } catch (error) {
     console.error("Error removing comment:", error);
@@ -311,17 +290,11 @@ export async function removeCommentFromArtwork(
  * @author @thongnt0208
  * @version 1.1.0
  */
-export async function editCommentOnArtwork(
-  commentId: string,
-  newText: string
-): Promise<any> {
+export async function editCommentOnArtwork(commentId: string, newText: string): Promise<any> {
   try {
-    const response = await axiosPrivate.put(
-      `${BASE_URL}/comments/${commentId}`,
-      {
-        commentText: newText,
-      }
-    );
+    const response = await axiosPrivate.put(`${BASE_URL}/comments/${commentId}`, {
+      commentText: newText,
+    });
     return response;
   } catch (error) {
     console.error("Error editing comment:", error);
@@ -430,10 +403,10 @@ export async function fetchFollowing(userId: string): Promise<any> {
  */
 export async function fetchIsFollow(userId: string): Promise<boolean> {
   try {
-    const response = await axiosPrivate.get(
-      `${BASE_URL}/follows/is-existed/${userId}`
-    );
-    return response.data;
+    if (currentUserId !== "unknown") {
+      const response = await axiosPrivate.get(`${BASE_URL}/follows/is-existed/${userId}`);
+      return response.data;
+    } else return false;
   } catch (error) {
     console.error("Error fetching following:", error);
     throw error;
