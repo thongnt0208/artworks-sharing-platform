@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
-import { ConfirmDialog } from "primereact/confirmdialog";
 import { getAuthInfo } from "../../../../util/AuthUtil";
 import { ProposalCardProps } from "../../ChatRelatedTypes";
 import { translateProposalStatus } from "../../../../util/Enums";
@@ -9,10 +8,7 @@ import { numberToXu } from "../../../../util/CurrencyHandle";
 import { Badge } from "primereact/badge";
 import { Divider } from "primereact/divider";
 import { formatTime } from "../../../../util/TimeHandle";
-import { GetWalletData } from "../../../ProfileScreen/WalletView/WalletService";
-import { CatchAPICallingError } from "../../..";
-import { useNavigate } from "react-router-dom";
-import { WalletProps } from "../../../ProfileScreen/WalletView/WalletView";
+import PaymentConfirmation from "../../../../components/PaymentConfirmation";
 // ---------------------------------------------------------
 
 export default function ProposalCard({ ...props }: ProposalCardProps) {
@@ -31,23 +27,9 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
     editCallback,
     cancelCallback,
   } = props;
+  const [confirmVisible, setConfirmVisible] = useState(false);
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
-
-  const [confirmVisible, setConfirmVisible] = useState(false);
-  const [walletData, setWalletData] = useState({} as WalletProps);
-  const navigate = useNavigate();
-
-  const getWalletData = () => {
-    GetWalletData(currentUserId)
-      .then((data) => setWalletData(data))
-      .catch((error) => CatchAPICallingError(error, navigate));
-  };
-
-  const showConfirmPopup = () => {
-    getWalletData();
-    setConfirmVisible(true);
-  };
 
   const handleAcceptConfirmation = () => {
     acceptCallback && acceptCallback(id);
@@ -56,23 +38,11 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
 
   return (
     <div className="system-noti-card">
-      <ConfirmDialog
+      <PaymentConfirmation
         visible={confirmVisible}
-        onHide={() => setConfirmVisible(false)}
-        message={
-          <>
-            <p>Thanh toán đặt cọc.</p>
-            <p>
-              Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, số tiền
-              cần thanh toán là <strong>{numberToXu(initialPrice * totalPrice)}</strong>.
-            </p>
-            <p> Hành động này không thể hoàn tác. Bạn có chắc chắn muốn tiếp tục?</p>
-          </>
-        }
-        headerStyle={{ border: "none", padding: "8px" }}
-        icon="pi pi-exclamation-triangle"
-        accept={handleAcceptConfirmation}
-        reject={() => setConfirmVisible(false)}
+        setVisible={setConfirmVisible}
+        paymentAmount={initialPrice * totalPrice}
+        acceptCallback={handleAcceptConfirmation}
       />
 
       <p className="sys-noti-title text-cus-h1-bold pt-2">Thỏa thuận</p>
@@ -110,7 +80,7 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
 
         {createdBy !== currentUserId && status?.toUpperCase() === "WAITING" && (
           <div className="btns-container flex gap-3">
-            <Button className="btn-accept" rounded onClick={showConfirmPopup}>
+            <Button className="btn-accept" rounded onClick={() => setConfirmVisible(true)}>
               Chấp nhận
             </Button>
             <Button
