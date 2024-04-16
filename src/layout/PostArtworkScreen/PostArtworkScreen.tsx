@@ -9,6 +9,7 @@ import InputForm from "./InputForm/InputForm";
 // --------------------------------------------------------
 
 import "./PostArtworkScreen.scss";
+import { translate2Vietnamese } from "../../util/TextHandle";
 // --------------------------------------------------------
 type Props = {};
 
@@ -29,17 +30,21 @@ export default function PostArtworkScreen({ ...props }: Props) {
       let _tmpMsg = "";
       // if = 401 || 403 -> login again
       if (error?.response?.status === 401 || error?.response?.status === 403) {
-        _tmpMsg = "Vui lòng đăng nhập lại.";
+        _tmpMsg = "Hết phiên đăng nhập. Vui lòng đăng nhập lại.";
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       }
       if (error !== null) {
-        toast.current.show({
-          severity: "error",
-          summary: error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
-          detail: _tmpMsg === "" && error?.message,
-        });
+       translate2Vietnamese(error?.message + " " + error?.response?.statusText).then(
+          (translatedMsg) => {
+            toast.current.show({
+              severity: "error",
+              summary: error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
+              detail: _tmpMsg === "" ? translatedMsg : _tmpMsg,
+            });
+          }
+        );
       } else {
         toast.current.show({
           severity: "success",
