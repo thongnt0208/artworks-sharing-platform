@@ -1,18 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 // ---------------------------------------------------------------
-import {
-  FileUpload,
-  FileUploadHeaderTemplateOptions,
-  ItemTemplateOptions,
-} from "primereact/fileupload";
-import { Button, ProgressBar, Tooltip, Tag, Toast, ProgressSpinner } from "../../index";
+import { FileUpload, FileUploadHeaderTemplateOptions } from "primereact/fileupload";
+import { ProgressBar, Tooltip, Toast, ProgressSpinner } from "../../index";
 import * as nsfwjs from "nsfwjs";
 // ---------------------------------------------------------------
 import { maxSizeImagesUpload } from "../../../const/bizConstants";
-import { getFileExtension } from "../../../util/FileNameUtil";
 
 import "./MultipleFileUpload.scss";
-import { chooseOptions, emptyFileTemplate } from "./Templates";
+import { chooseOptions, emptyFileTemplate, itemTemplateFunc } from "./Templates";
+import WatermarkedImage, { imageToFile } from "../WatermarkImg";
 // ---------------------------------------------------------------
 type Props = {
   uploadedFiles: any;
@@ -37,6 +33,7 @@ export default function MultipleFileUpload({
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const fileUploadRef = useRef<FileUpload>(null);
+  // let [test, setTest] = useState<HTMLImageElement>();
 
   const validateImage = async (file: File) => {
     setIsLoading(true);
@@ -72,12 +69,34 @@ export default function MultipleFileUpload({
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+      const _img = new Image();
+      _img.src = URL.createObjectURL(file);
       _totalSize += file.size || 0;
       setValidationProgress((prevProgress) => ({ ...prevProgress, [file.name]: 0 }));
 
       try {
         await validateImage(file);
-        validatedFiles.push(file);
+        console.log("Non watermarked file:", file);
+        
+        try {
+          const _markedImg = await WatermarkedImage(_img);
+          console.log("Watermarked image:", _markedImg);
+          // setTest(_markedImg)
+          
+          const _file = await imageToFile(_markedImg, file.name, file.type);
+          console.log("Watermarked file:", _file);
+          // TODO: Add the watermarked file to the list of uploaded files
+          
+          validatedFiles.push(file);
+        } catch (error) {
+          console.error(`Error adding watermark to ${file.name}:`, error);
+          console.log(error);
+          toast.current?.show({
+            severity: "error",
+            summary: `Error adding watermark to ${file.name}`,
+            detail: "An error occurred while adding watermark to the image.",
+          });
+        }
       } catch (error) {
         console.error(`Error validating ${file.name}:`, error);
         console.log(error);
@@ -139,73 +158,6 @@ export default function MultipleFileUpload({
     );
   };
 
-  const itemTemplate = (inFile: object, props: ItemTemplateOptions) => {
-    const file = inFile as File;
-    const isValid = validationResults[file.name];
-    const _validationProgress = validationProgress[file.name];
-
-    return (
-      <div className="item-container flex align-items-center flex-wrap">
-        <div className="item-name-conatiner flex flex-column flex-wrap align-content-start">
-          <img
-            id={`img-item-${file.name}`}
-            alt={file.name}
-            role="presentation"
-            src={URL.createObjectURL(file)}
-            width={100}
-          />
-          <p className="text-cus-normal-bold m-0"> {file.name} </p>
-          <span className="max-w-max text-cus-normal">{props.formatSize}</span>
-          {validationProgress !== undefined && (
-            <div className="validation-progress">
-              {_validationProgress === 100 && (
-                <span className={`validation-result ${isValid ? "valid" : "invalid"}`}>
-                  {isValid ? "Đạt chuẩn" : "Không phù hợp"}
-                  {!isValid &&
-                    validationDetails.length &&
-                    validationDetails.map((detail) =>
-                      detail.fileName === file.name ? (
-                        <div key={file.name} className="validation-details flex flex-column">
-                          {detail?.porn && detail?.porn > 0.7 && (
-                            <span className="text-cus-normal">
-                              Khiêu dâm: {(detail?.porn * 100)?.toString().substring(0, 5)}%
-                            </span>
-                          )}
-                          {detail?.sexy && detail?.sexy > 0.7 && (
-                            <span className="text-cus-normal">
-                              Gợi cảm: {(detail?.sexy * 100)?.toString().substring(0, 5)}%
-                            </span>
-                          )}
-                          {detail?.hentai && detail?.hentai > 0.7 && (
-                            <span className="text-cus-normal">
-                              Hentai: {(detail?.hentai * 100)?.toString().substring(0, 5)}%
-                            </span>
-                          )}
-                        </div>
-                      ) : (
-                        ""
-                      )
-                    )}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-        <Tag
-          rounded
-          value={"." + getFileExtension(file.name).toUpperCase()}
-          className="text-cus-normal"
-        />
-        <Button
-          type="button"
-          icon="pi pi-times"
-          className="p-button-outlined p-button-rounded p-button-danger ml-auto"
-          onClick={() => onTemplateRemove(file, props.onRemove)}
-        />
-      </div>
-    );
-  };
-
   useEffect(() => {
     console.log("validatedFiles", uploadedFiles);
     console.log("validationResults", validationResults);
@@ -216,6 +168,7 @@ export default function MultipleFileUpload({
 
   return (
     <div style={{ position: "relative" }}>
+      {/* {test && <img src={test.src} alt="test" />} */}
       {isLoading && (
         <div className="nsfw-spiner-container">
           <ProgressSpinner
@@ -239,7 +192,12 @@ export default function MultipleFileUpload({
         onSelect={onTemplateSelect}
         onRemove={onRemove}
         headerTemplate={headerTemplate}
-        itemTemplate={itemTemplate}
+        itemTemplate={itemTemplateFunc(
+          validationResults,
+          validationProgress,
+          validationDetails,
+          onTemplateRemove
+        )}
         emptyTemplate={emptyFileTemplate}
         chooseOptions={chooseOptions}
       />
