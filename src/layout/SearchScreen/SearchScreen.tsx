@@ -10,12 +10,13 @@ import Gallery from "../../components/Gallery";
 // ----------------------------------------------------------------
 import { ProgressSpinner } from "primereact/progressspinner";
 import InputsContainer from "./InputsContainer/InputsContainer";
-import { searchArtworksByKeyword } from "./Service";
+import { GetSimilarAwsByCookie, searchArtworksByKeyword } from "./Service";
 import { ArtworkDetailType } from "../ArtworkDetailScreen/ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { fetchArtworkDetail, fetchIsFollow } from "../ArtworkDetailScreen/Service";
 import { CatchAPICallingError } from "..";
 import { useNavigate } from "react-router-dom";
+import CategoryAndTag from "../HomeScreen/CategoryAndTag/CategoryAndTag";
 // ----------------------------------------------------------------
 
 export type SearchScreenStateType = {
@@ -74,7 +75,7 @@ export default function SearchScreen({ ...props }: Props) {
     setState({ ...state, isLoading: true });
     try {
       const [searchArtworks, tagsData, categoriesData] = await Promise.all([
-        searchArtworksByKeyword(state.searchValue),
+        state.searchValue ? searchArtworksByKeyword(state.searchValue) : GetSimilarAwsByCookie(),
         GetTagsData(),
         GetCategoriesData(),
       ]);
@@ -170,18 +171,11 @@ export default function SearchScreen({ ...props }: Props) {
         <InputsContainer state={state} setState={setState} handleKeyDown={handleKeyDown} />
       </div>
 
-      {state.isLoading && <ProgressSpinner />}
-
       {/* Tags */}
-      <div className="tags-container flex flex-nowrap">
-        {state.tags?.map((tag) => (
-          <div key={tag.id}>
-            <Tag id={tag.id} tagName={tag.tagName} />
-          </div>
-        ))}
-      </div>
+      <CategoryAndTag tags={state.tags} categories={[]} />
 
       {/* Result */}
+      {state.isLoading && <ProgressSpinner />}
       <div className="result-container">
         {state.artworks.length === 0 && !state.isLoading && <p>Không tìm thấy dữ liệu nào</p>}
         <Gallery artworks={state.artworks} awDetailStateTools={awDetailStateTools} />

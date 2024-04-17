@@ -13,7 +13,6 @@ type CategoriesProps = {
 const CategoryCarousel: React.FC<CategoriesProps> = ({ categories }) => {
   return (
     <div className="category-carousel flex">
-      <div className="style-section-left" />
       {categories.map((category) => {
         return (
           <Tag
@@ -24,7 +23,6 @@ const CategoryCarousel: React.FC<CategoriesProps> = ({ categories }) => {
           />
         );
       })}
-      <div className="style-section-right" />
     </div>
   );
 };

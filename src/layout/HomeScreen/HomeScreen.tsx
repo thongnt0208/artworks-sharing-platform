@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { ArtworkDetailType } from "../ArtworkDetailScreen/ArtworkDetailType";
 import { fetchArtworkDetail, fetchIsFollow } from "../ArtworkDetailScreen/Service";
 import { getAuthInfo } from "../../util/AuthUtil";
+import Cookies from "js-cookie";
+import { cookieNames } from "../../const/uiConstants";
 
 export type CategoryProps = {
   id: string;
@@ -161,6 +163,10 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   useEffect(() => {
     if (selectingAw?.id) {
+      let _tmpCookies = JSON.parse(Cookies.get(cookieNames.interactedArtworks) || "[]") as [{ id: string }];
+      console.log(_tmpCookies);
+      
+      Cookies.set(cookieNames.interactedArtworks, JSON.stringify([..._tmpCookies, { id: selectingAw.id }]));
       fetchDetail();
     }
   }, [selectingAw]);

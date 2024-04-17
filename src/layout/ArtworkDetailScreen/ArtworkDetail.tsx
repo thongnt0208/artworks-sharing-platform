@@ -29,7 +29,6 @@ export default function ArtworkDetail() {
   const [closeSocket, setCloseSocket] = useState<() => void | null>();
   const [isLoading, setIsLoading] = useState(false);
   const authenticationInfo = getAuthInfo();
-
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
 
   let dialogProperties = {

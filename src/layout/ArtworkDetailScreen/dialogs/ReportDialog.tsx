@@ -58,7 +58,7 @@ export default function ReportDialog({ visible, setVisibility, targetId, entityN
         <div className="flex flex-column gap-2 pb-3">
           <div className="field-radiobutton flex flex-column align-items-start gap-2">
             {reportTypeEnums.map((type) => (
-              <div>
+              <div key={`report-type-enum-${type}`}>
                 <RadioButton
                   inputId={"rpType" + type.name}
                   key={type.name}
