@@ -16,6 +16,7 @@ import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
 import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
 import ServiceReviewPopup from "../../../components/ServiceReviewPopup";
 import "./ServicesView.scss";
+import { ConfirmDialog } from "primereact/confirmdialog";
 
 const ServicesView: React.FC = () => {
   const navigate = useNavigate();
@@ -50,7 +51,6 @@ const ServicesView: React.FC = () => {
     request: RequestProps,
     service: ServiceProps
   ) => {
-    console.log("Request budget: ", request.budget);
     try {
       const response = await CreateNewRequestData(
         service.id,
@@ -93,7 +93,9 @@ const ServicesView: React.FC = () => {
       const response = await DeleteServiceData(serviceId);
       if (response) {
         toast.success("Xóa dịch vụ thành công");
-        setServiceInfoDialogVisible(false);
+        setTimeout(() => {
+          setServiceInfoDialogVisible(false);
+        }, 1000);
       }
     } catch (error) {
       toast.error("Xóa dịch vụ thất bại");
@@ -215,6 +217,7 @@ const ServicesView: React.FC = () => {
           averageRating={selectedService.averageRating}
         />
       </Dialog>
+      <ConfirmDialog />
     </>
   );
 };

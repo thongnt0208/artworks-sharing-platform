@@ -51,14 +51,18 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
   const detailsColumn = (item: AssetType) => {
     const _saveHandler: any = () =>
       props.saveHandler && props.saveHandler(item.id, item.price);
-    const _removeHandler: any = () => 
+    const _removeHandler: any = () =>
       props.removeHandler && props.removeHandler(item.id);
     return (
       <div className="detail-column grid">
         <div className="col col-4 file-info flex flex-column justify-content-start align-items-start">
-          <span className="file-name">{TextLimit(item.name ?? '', 20)}</span>
-          <span className="file-description file-size">{TextLimit(item.description ?? '', 20)}</span>
-          {item.size && <span className="file-size">{formatFileSize(item.size)}</span>}
+          <span className="file-name">{TextLimit(item.name ?? "", 20)}</span>
+          <span className="file-description file-size">
+            {TextLimit(item.description ?? "", 20)}
+          </span>
+          {item.size && (
+            <span className="file-size">{formatFileSize(item.size)}</span>
+          )}
         </div>
         <div className="col col-2 file-type">
           {item.extension ? <span>.{item.extension}</span> : <span>.file</span>}
@@ -75,22 +79,13 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
             onClick={_saveHandler}
           />
           {props.isCreator && props.removeHandler && (
-            <>
-              <Button
-                icon="pi pi-pencil"
-                className="edit-button"
-                tooltip="Sửa"
-                tooltipOptions={{ position: "top" }}
-                onClick={props.editHandler}
-              />
-              <Button
-                icon="pi pi-trash"
-                className="remove-button"
-                tooltip="Xoá"
-                tooltipOptions={{ position: "top" }}
-                onClick={_removeHandler}
-              />
-            </>
+            <Button
+              icon="pi pi-trash"
+              className="remove-button"
+              tooltip="Xoá"
+              tooltipOptions={{ position: "top" }}
+              onClick={_removeHandler}
+            />
           )}
         </div>
       </div>

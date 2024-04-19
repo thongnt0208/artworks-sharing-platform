@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import ReferenceArtworksSection from "../ReferenceArtworksSection/ReferenceArtworksSection";
 import defaultCoverImage from "../../../../assets/defaultImage/default-card-blur-image.png";
 import "./ServiceInformationSection.scss";
-
+import { ConfirmDialog } from "primereact/confirmdialog";
 
 interface ServiceInformationProps {
   props: ServiceProps;
@@ -41,6 +41,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   let id = props?.id;
   const accountId = getAuthInfo()?.id;
   const navigate = useNavigate();
+  const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
   const [artworks, setArtworks] = useState<ArtworkProps[]>(
     props?.artworkReferences || []
   );
@@ -133,6 +134,10 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
     onSubmit: (values) => handleSubmit(values),
   });
 
+  const accept = (id: string) => {
+    handleDelete(id);
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
       {artworks.length === 0 ? (
@@ -143,6 +148,17 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
         </>
       ) : (
         <>
+          <ConfirmDialog
+            visible={confirmDialogVisible}
+            onHide={() => setConfirmDialogVisible(false)}
+            message="Bạn có muốn xóa dịch vụ này?"
+            header="Xóa dịch vụ"
+            headerStyle={{ border: "none", textAlign: "center" }}
+            icon="pi pi-exclamation-triangle"
+            dismissableMask
+            accept={() => accept(id)}
+            reject={() => setConfirmDialogVisible(false)}
+          />
           <div className="header-container mt-2 mb-2">
             {id ? (
               <>
@@ -171,12 +187,11 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                 }
                 alt="thumbnail"
               />
-              {formik.errors.thumbnail &&
-                      formik.touched.thumbnail && (
-                        <div className="error-message text-red-500">
-                          {formik.errors.thumbnail}
-                        </div>
-                      )}
+              {formik.errors.thumbnail && formik.touched.thumbnail && (
+                <div className="error-message text-red-500">
+                  {formik.errors.thumbnail}
+                </div>
+              )}
               <div className="w-full upload-file flex flex-row justify-content-center mt-3">
                 <FileUpload
                   mode="basic"
@@ -423,7 +438,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     className="p-button"
                     type="button"
                     onClick={() => {
-                      handleDelete(id);
+                      setConfirmDialogVisible(true);
                       formik.resetForm();
                     }}
                   />

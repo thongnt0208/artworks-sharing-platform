@@ -31,11 +31,7 @@ type CollectionProps = {
  */
 export async function GetCollectionData(collectionId: string) {
   try {
-    const response = await axiosPrivate.get(`/collections/${collectionId}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axiosPrivate.get(`/collections/${collectionId}`);
     if (response.status !== 200) {
       return { artworks: [] };
     }

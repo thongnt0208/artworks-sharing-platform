@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { DeleteArtworkData, GetArtworksData } from "./ArtworksService";
-
-import ArtworkCard, { ArtworkProps } from "../../../components/ArtworkCard";
-import { Dialog } from "primereact/dialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import { TabMenu } from "primereact/tabmenu";
-import "./ArtworksView.scss";
+
+import { DeleteArtworkData, GetArtworksData } from "./ArtworksService";
+import ArtworkCard, { ArtworkProps } from "../../../components/ArtworkCard";
 import { toast } from "react-toastify";
 import { CatchAPICallingError } from "../..";
+import "./ArtworksView.scss";
 
 const ArtworksView: React.FC = () => {
   const navigate = useNavigate();
@@ -145,10 +145,11 @@ const ArtworksView: React.FC = () => {
             </div>
           ))
         )}
-        <Dialog
+        <ConfirmDialog
           visible={visibleDialogs}
           headerClassName="confirm-dialog-header"
           header="Xác nhận xóa"
+          message="Bạn có chắc chắn muốn xóa tác phẩm này?"
           closable={false}
           onHide={() => setVisibleDialogs(false)}
           footer={
@@ -161,7 +162,7 @@ const ArtworksView: React.FC = () => {
           }
         >
           <h3>Bạn có chắc muốn xóa tác phẩm này?</h3>
-        </Dialog>
+        </ConfirmDialog>
       </div>
       <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
