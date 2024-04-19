@@ -6,6 +6,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@jimp/types": "^0.22.12",
     "@tensorflow/tfjs": "1.3.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -34,6 +35,7 @@
     "swiper": "^11.0.5",
     "translate": "^2.0.2",
     "typescript": "^4.9.5",
+    "watermark-image": "^1.0.6",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.3"
   },
@@ -66,6 +68,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jimp": "^0.2.28",
     "@types/js-cookie": "^3.0.6"
   }
 }
