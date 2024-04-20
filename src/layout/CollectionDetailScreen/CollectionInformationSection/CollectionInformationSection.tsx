@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { InputSwitch } from "primereact/inputswitch";
 
 import "./CollectionInformationSection.scss";
+import { ConfirmDialog } from "primereact/confirmdialog";
 const background = require("../../../assets/defaultImage/default-card-blur-image.png");
 
 type CollectionProps = {
@@ -22,6 +23,7 @@ type CollectionProps = {
 const CollectionInformationSection: React.FC<CollectionProps> = (
   props: CollectionProps
 ) => {
+  const [confirmDialogVisible, setConfirmDialogVisible] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
   const [editedCollectionName, setEditedCollectionName] = React.useState(
     props.collectionName
@@ -47,7 +49,7 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
     setShowEdit(false);
   };
 
-  const handleDeleteClick = () => {
+  const accept = () => {
     props.onDelete();
   };
 
@@ -77,7 +79,7 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
         <Button
           className="delete-btn"
           rounded
-          onClick={handleDeleteClick}
+          onClick={() => setConfirmDialogVisible(true)}
           label="Xóa bộ sưu tập"
         />
       </div>
@@ -86,6 +88,17 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
 
   return (
     <div className="collection-info-container">
+        <ConfirmDialog
+            visible={confirmDialogVisible}
+            onHide={() => setConfirmDialogVisible(false)}
+            message="Bạn có muốn xóa bộ sưu tập này?"
+            header="Xóa bộ sưu tập"
+            headerStyle={{ border: "none", textAlign: "center" }}
+            icon="pi pi-exclamation-triangle"
+            dismissableMask
+            accept={() => accept()}
+            reject={() => setConfirmDialogVisible(false)}
+          />
       <div className="collection-info">
         <Image
           src={props.accountAvatar ? props.accountAvatar : background}
