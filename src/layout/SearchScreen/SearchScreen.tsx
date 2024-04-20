@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "./SearchScreen.scss";
 import { useEffect, useState } from "react";
-import Tag, { TagProps } from "../../components/Tag";
+import { TagProps } from "../../components/Tag";
 import { GetCategoriesData, GetTagsData } from "../HomeScreen/HomeService";
 import { awDetailStateToolsType, CategoryProps } from "../HomeScreen/HomeScreen";
 import { ArtworkProps } from "../../components/ArtworkCard";
@@ -17,6 +17,7 @@ import { fetchArtworkDetail, fetchIsFollow } from "../ArtworkDetailScreen/Servic
 import { CatchAPICallingError } from "..";
 import { useNavigate } from "react-router-dom";
 import CategoryAndTag from "../HomeScreen/CategoryAndTag/CategoryAndTag";
+import { sortOptions } from "../../const/bizConstants";
 // ----------------------------------------------------------------
 
 export type SearchScreenStateType = {
@@ -28,7 +29,6 @@ export type SearchScreenStateType = {
   selectedSort: string;
   selectedType: string;
   selectedCategory: string | null;
-  isSubscribeArea: boolean;
   isAssets: boolean;
   isAssetsFree: boolean;
 };
@@ -42,12 +42,11 @@ export default function SearchScreen({ ...props }: Props) {
     categories: [],
     artworks: [],
     isLoading: false,
-    selectedSort: "Mới nhất",
+    selectedSort: sortOptions[0].code,
     selectedType: "artworks",
     selectedCategory: null,
-    isSubscribeArea: true,
-    isAssets: true,
-    isAssetsFree: true,
+    isAssets: false,
+    isAssetsFree: false,
   });
   const [selectingAw, setSelectingAw] = useState<ArtworkProps>({} as ArtworkProps);
   const [currentAwDetail, setCurrentAwDetail] = useState({} as any);
@@ -75,7 +74,9 @@ export default function SearchScreen({ ...props }: Props) {
     setState({ ...state, isLoading: true });
     try {
       const [searchArtworks, tagsData, categoriesData] = await Promise.all([
-        state.searchValue ? searchArtworksByKeyword(state.searchValue) : GetSimilarAwsByCookie(),
+        state.searchValue
+          ? searchArtworksByKeyword(state.searchValue, state.selectedSort)
+          : GetSimilarAwsByCookie(),
         GetTagsData(),
         GetCategoriesData(),
       ]);
@@ -84,21 +85,6 @@ export default function SearchScreen({ ...props }: Props) {
         artworks: searchArtworks,
         tags: tagsData,
         categories: categoriesData,
-        isLoading: false,
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setState({ ...state, isLoading: false });
-    }
-  };
-
-  const refreshData = async () => {
-    setState({ ...state, isLoading: true });
-    try {
-      const artworks = await searchArtworksByKeyword(state.searchValue);
-      setState({
-        ...state,
-        artworks: artworks,
         isLoading: false,
       });
     } catch (error) {
@@ -140,7 +126,7 @@ export default function SearchScreen({ ...props }: Props) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [state.selectedSort]);
 
   useEffect(() => {
     if (selectingAw?.id) {
@@ -157,11 +143,9 @@ export default function SearchScreen({ ...props }: Props) {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      timeoutId = setTimeout(() => refreshData(), 1000);
+      timeoutId = setTimeout(() => fetchData(), 1000);
     }
     return () => clearTimeout(timeoutId);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.searchValue]);
 
   return (
@@ -175,9 +159,11 @@ export default function SearchScreen({ ...props }: Props) {
       <CategoryAndTag tags={state.tags} categories={[]} />
 
       {/* Result */}
-      {state.isLoading && <ProgressSpinner />}
+      {state.isLoading && <ProgressSpinner className="progress-spinner" />}
       <div className="result-container">
-        {state.artworks.length === 0 && !state.isLoading && <p>Không tìm thấy dữ liệu nào</p>}
+        {state.artworks.length === 0 && !state.isLoading && (
+          <p style={{ textAlign: "center" }}>Không tìm thấy dữ liệu nào</p>
+        )}
         <Gallery artworks={state.artworks} awDetailStateTools={awDetailStateTools} />
       </div>
     </div>

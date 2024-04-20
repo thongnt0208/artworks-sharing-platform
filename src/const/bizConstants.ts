@@ -11,3 +11,9 @@ export const deliveryTime = [
     "Trong khoảng 2 tháng", 
     "Trong khoảng 3 tháng",
 ]
+export const sortOptions = [
+    { name: "Đề xuất", code: "recommend" },
+    { name: "Mới nhất", code: "newest" },
+    { name: "Xem nhiều nhất", code: "view" },
+    { name: "Thích nhiều nhất", code: "like" },
+  ];
