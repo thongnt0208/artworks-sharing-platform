@@ -60,24 +60,28 @@ export async function postArtwork(formValue: any): Promise<any> {
  * @example
  * getCategoryList().then((categories) => {console.log(categories)})
  * @author ThongNT
- * @version 1.0.1
+ * @version 1.2.1
  */
 export async function getCategoriesList(): Promise<CategoryProps[]> {
-  try {
-    const response = await useAxios.get("/categories");
+  return useAxios
+    .get("/categories")
+    .then((response) => {
+      const categories = response.data;
 
-    const categories = response.data;
+      // Transform categories into the desired format
+      const transformedCategories = categories?.map((category: CategoryProps) => ({
+        label: category.categoryName,
+        value: category.id,
+      }));
+      console.log(transformedCategories);
 
-    // Transform categories into the desired format
-    const transformedCategories = categories?.map((category: CategoryProps) => ({
-      label: category.categoryName,
-      value: category.id,
-    }));
+      return transformedCategories;
+    })
+    .catch((error) => {
+      console.log("Error fetching categories" + error);
 
-    return transformedCategories;
-  } catch {
-    return Promise.reject("Error fetching categories");
-  }
+      throw error;
+    });
 }
 
 /**

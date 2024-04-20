@@ -12,9 +12,9 @@ let password = process.env.REACT_APP_ELASTIC_PASSWORD || "";
  * @param value keyword to search
  * @returns Promise<any> response from API
  * @author ThongNT
- * @version 1.0.2
+ * @version 1.2.2
  */
-async function searchAll(value: string): Promise<any> {
+async function searchAll(value: string, sortCode?: string): Promise<any> {
   let url = `${BASE_URL}/artworks/_search`;
 
   const body = {
@@ -24,6 +24,14 @@ async function searchAll(value: string): Promise<any> {
         default_field: "*",
       },
     },
+    sort:
+      sortCode === "newest"
+        ? {
+            createdon: {
+              order: "desc",
+            },
+          }
+        : undefined,
   };
 
   try {
@@ -43,16 +51,20 @@ async function searchAll(value: string): Promise<any> {
 /**
  * This function is used to search all artworks by keyword
  * @param searchValue keyword to search
+ * @param sortCode (opt) sort code
  * @returns Promise<ArtworkProps[]> list of artworks that match the keyword
  * @example
  * ```
  * const artworks = await searchArtworksByKeyword("abc");
  * ```
  * @author ThongNT
- * @version 1.0.0
+ * @version 1.1.0
  */
-export async function searchArtworksByKeyword(searchValue: string): Promise<ArtworkProps[]> {
-  const res = await searchAll(searchValue);
+export async function searchArtworksByKeyword(
+  searchValue: string,
+  sortCode?: string
+): Promise<ArtworkProps[]> {
+  const res = await searchAll(searchValue, sortCode);
   const _artworks: ArtworkProps[] = [];
   if (res) {
     let _tmp = res.data?.hits?.hits;
