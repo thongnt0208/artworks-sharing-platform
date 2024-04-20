@@ -102,9 +102,11 @@ const WalletInformation: React.FC<WalletInformationProps> = ({
         });
       } else {
         toast.warning("Tài khoản ZaloPay chưa được xác thực");
+        setLoading(false);
       }
     } catch (error) {
       toast.error("Cập nhật thông tin ví không thành công");
+      setLoading(false);
     }
   };
 
