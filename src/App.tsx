@@ -48,6 +48,7 @@ import { notificationItemType } from "./components/Notification";
 import { GetChatboxesCurrentAccountRealtime } from "./layout/ChatScreen/services/ChatServices";
 import InternalServerErrPage from "./pages/500";
 import { ChatboxItemType } from "./layout/ChatScreen/ChatRelatedTypes";
+import PolicyPage from "./pages/policy";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -131,6 +132,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/error" element={<UnknownErrorPage />} />
             <Route path="/error-internal-server" element={<InternalServerErrPage />} />
+            <Route path="/policy" element={<PolicyPage />} />
           </Routes>
           <Footer />
           <ToastContainer />
