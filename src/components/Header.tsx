@@ -72,8 +72,8 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
     { label: "Khám phá", command: () => navigate("/explore") },
     { label: "Thuê", command: () => navigate("/hire") },
     {
-      label: !["/search", "/explore"].includes(currentUrl) ? "Tìm kiếm" : "",
-      template: !["/search", "/explore"].includes(currentUrl) && (
+      label: !["/search", "/explore"].some(item => currentUrl.includes(item)) ? "Tìm kiếm" : "",
+      template: !["/search", "/explore"].some(item => currentUrl.includes(item)) && (
         <span className="p-input-icon-right search-bar flex">
           <InputText
             className="w-full"

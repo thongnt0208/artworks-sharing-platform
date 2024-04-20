@@ -104,16 +104,25 @@ export async function GetSimilarAwsByCookie(): Promise<ArtworkProps[]> {
   const body = {
     size: 10,
     query: {
-      more_like_this: {
-        fields: ["title", "categorylist", "taglist", "username"],
-        like: interactedAws.map((aw) => {
-          return {
-            _id: aw.id,
-          };
-        }),
-        min_term_freq: 1,
-        min_doc_freq: 5,
-        max_query_terms: 20,
+      bool: {
+        should: [
+          {
+            more_like_this: {
+              fields: ["title", "categorylist", "taglist", "username"],
+              like: interactedAws.map((aw) => {
+                return {
+                  _id: aw.id,
+                };
+              }),
+              min_term_freq: 1,
+              min_doc_freq: 5,
+              max_query_terms: 20,
+            },
+          },
+          {
+            match_all: {},
+          },
+        ],
       },
     },
   };
