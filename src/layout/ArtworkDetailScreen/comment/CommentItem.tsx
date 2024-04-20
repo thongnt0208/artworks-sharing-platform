@@ -73,7 +73,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const confirmDelete = (event: any) => {
     confirmPopup({
       target: event.currentTarget,
-      message: "Are you sure you want to proceed?",
+      message: "Bạn muốn xóa bình luận này chứ?",
       icon: "pi pi-exclamation-triangle",
       accept: acceptDelete,
       reject: rejectDelete,
