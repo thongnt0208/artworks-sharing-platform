@@ -102,11 +102,11 @@ export async function GetSimilarAwsByCookie(): Promise<ArtworkProps[]> {
     Cookies.get(cookieNames.interactedArtworks) || "[]"
   );
   const body = {
-    size: 10,
+    size: 25,
     query: {
       more_like_this: {
         fields: ["title", "categorylist", "taglist", "username"],
-        like: interactedAws.map((aw) => {
+        like: interactedAws.slice(-3).map((aw) => {
           return {
             _id: aw.id,
           };
