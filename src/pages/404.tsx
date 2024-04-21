@@ -1,9 +1,18 @@
 import { Button } from "primereact/button";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 const logo = require("../assets/logo/logo.png");
 export default function NotFoundPage() {
   return (
+    <>
+    <Helmet>
+      <title>404 Không tìm thấy</title>
+      <meta
+        name="description"
+        content="Trang không tìm thấy, vui lòng kiểm tra lại đường dẫn hoặc liên hệ với bộ phận hỗ trợ của chúng tôi."
+      />
+    </Helmet>
     <div className="err-page-container flex align-items-center justify-content-center min-h-screen overflow-hidden">
       <div className="flex flex-column align-items-center justify-content-center">
         <img
@@ -63,6 +72,6 @@ export default function NotFoundPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div></>
   );
 }

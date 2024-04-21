@@ -5,14 +5,14 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start; /* Replace start with flex-start */
   align-items: center;
   .creator-info {
     width: fit-content;
     padding: 0 370px;
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start; /* Replace start with flex-start */
     align-items: center;
     margin: 20px 0;
     border-bottom: 1px solid $strong-200;

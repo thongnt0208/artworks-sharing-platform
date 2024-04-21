@@ -1,24 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Watermark from "watermark-image";
 
-function imageToCanvas(image: HTMLImageElement): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+// function imageToCanvas(image: HTMLImageElement): HTMLCanvasElement {
+//   const canvas = document.createElement("canvas");
+//   const ctx = canvas.getContext("2d");
 
-  if (!ctx) {
-    throw new Error("Could not get 2d context from canvas");
-  }
+//   if (!ctx) {
+//     throw new Error("Could not get 2d context from canvas");
+//   }
 
-  canvas.width = image.width;
-  canvas.height = image.height;
+//   canvas.width = image.width;
+//   canvas.height = image.height;
 
-  // Wait for image to load before drawing
-  image.onload = () => {
-    ctx.drawImage(image, 0, 0);
-  };
+//   // Wait for image to load before drawing
+//   image.onload = () => {
+//     ctx.drawImage(image, 0, 0);
+//   };
 
-  return canvas;
-}
+//   return canvas;
+// }
 
 function canvasToImage(canvas: HTMLCanvasElement): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
