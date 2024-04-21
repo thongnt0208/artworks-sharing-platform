@@ -1,17 +1,11 @@
 import "./InputsContainer.scss";
 import { KeyboardEvent, useRef } from "react";
-import { RadioButton } from "primereact/radiobutton";
 import { Checkbox } from "primereact/checkbox";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { SearchScreenStateType } from "../SearchScreen";
 import { Panel } from "primereact/panel";
 import SearchHeaderTemplate from "../SearchHeaderTemplate/SearchHeaderTemplate";
 // ----------------------------------------------------------------
-const types = [
-  { name: "Bài đăng", value: "artworks", key: "type1" },
-  { name: "Tài nguyên", value: "assets", key: "type2" },
-  { name: "Tác giả", value: "profiles", key: "type3" },
-];
 
 type Props = {
   state: SearchScreenStateType;
@@ -44,31 +38,8 @@ export default function InputsContainer({ ...props }: Props) {
   return (
     <Panel ref={panelRef} headerTemplate={searchHeaderTemplate} toggleable>
       <div className="filters flex flex-column md:flex-row align-items-center justify-content-center gap-3 md:gap-8">
-        {/* type */}
-        <div className="type flex gap-3">
-          {types.map((type) => (
-            <div key={type.key} className={`${type.value} type-item flex gap-2`}>
-              <RadioButton
-                inputId={type.key}
-                value={type.value}
-                onChange={(e) => setState({ ...state, selectedType: e.value })}
-                checked={state.selectedType === type.value}
-              />
-              <label htmlFor={type.key}>{type.name}</label>
-            </div>
-          ))}
-        </div>
-
         {/* checkbox */}
         <div className="subscribe-assets flex gap-3">
-          <div className="subscribe-checkbox">
-            <Checkbox
-              inputId="subscribeArea"
-              checked={state.isSubscribeArea}
-              onChange={() => setState({ ...state, isSubscribeArea: !state.isSubscribeArea })}
-            />
-            <label htmlFor="subscribeArea">Có khu vực đăng ký</label>
-          </div>
           <div className="assets-checkbox flex gap-3">
             <div className="asset">
               <Checkbox
@@ -78,14 +49,13 @@ export default function InputsContainer({ ...props }: Props) {
               />
               <label htmlFor="assets">Có kèm tài nguyên</label>
             </div>
-            <div className="free">
+            <div className={`free ${state.isAssets ? "" : "hidden"}`}>
               <Checkbox
                 inputId="assetsFree"
-                disabled={!state.isAssets}
                 checked={state.isAssetsFree}
                 onChange={() => setState({ ...state, isAssetsFree: !state.isAssetsFree })}
               />
-              <label htmlFor="assets">Tài nguyên miễn phí</label>
+              <label htmlFor="assetsFree">Tài nguyên miễn phí</label>
             </div>
           </div>
         </div>

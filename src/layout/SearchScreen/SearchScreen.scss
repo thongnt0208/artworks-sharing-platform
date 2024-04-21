@@ -1,5 +1,13 @@
 @import "./../../const/variables.scss";
 
+.search-container {
+  position: relative;
+  .progress-spinner{
+    position: absolute;
+    top: 12rem;
+    left: 45vw;
+  }
+}
 .tags-container {
   overflow-y: scroll;
   scrollbar-width: none;
