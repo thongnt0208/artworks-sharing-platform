@@ -22,6 +22,7 @@ import { Avatar } from "primereact/avatar";
 import { toast } from "react-toastify";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { translate2Vietnamese } from "../util/TextHandle";
+import { RadioButton } from "primereact/radiobutton";
 
 export {
   Tooltip,
@@ -46,6 +47,7 @@ export {
   Slider,
   Avatar,
   ProgressSpinner,
+  RadioButton,
 };
 
 /**
@@ -55,13 +57,13 @@ export {
  * Otherwise, it logs the error to the console.
  *
  * @param error - The error object.
- * @param navigate - The navigation function (from 'react-router-dom').
+ * @param navigate (opt) - The navigation function (from 'react-router-dom').
  * @author ThongNT
  * @version 1.2.0
  */
-export async function CatchAPICallingError(error: any, navigate: any) {
+export async function CatchAPICallingError(error: any, navigate?: any) {
   if (error.response?.status === 401) {
-    navigate("/login");
+    navigate && navigate("/login");
   } else if ([521, 500, 502].includes(error.response?.status)) {
     navigate("/error-internal-server");
   } else {
