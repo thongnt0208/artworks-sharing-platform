@@ -60,7 +60,7 @@ function CommentComponent({ ...props }: PropsType) {
     value: commentValue,
     placeholder: "Thêm bình luận...",
     className: "w-full",
-    tooltip: `Nội dung nên ít hơn ${maxCommentCharacter} ký tự`,
+    tooltip: `Nội dung phải ít hơn ${maxCommentCharacter} ký tự`,
     onChange: (e: any) => handleInputChange(e),
     onKeyDown: (e: any) => handleKeyDown(e),
   };

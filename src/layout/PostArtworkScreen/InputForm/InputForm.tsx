@@ -24,11 +24,13 @@ import {
   MultiSelect,
   Divider,
   Tooltip,
+  CatchAPICallingError,
 } from "../../index";
 // ---------------------------------------------------------------
 import "./InputForm.scss";
 import { CategoryProps } from "../../HomeScreen/HomeScreen";
 import { Checkbox } from "primereact/checkbox";
+import { useNavigate } from "react-router-dom";
 // ---------------------------------------------------------------
 
 type Props = {
@@ -53,6 +55,7 @@ export default function InputForm({
   const [isLoading, setisLoading] = useState(false);
   const [hasNSFWImage, setHasNSFWImage] = useState(false);
   const [validationResults, setValidationResults] = useState({} as any);
+  const navigate = useNavigate();
 
   const privacyOptions = [
     { label: "Công khai", value: 0 },
@@ -80,7 +83,7 @@ export default function InputForm({
           setSuccess(response);
         })
         .catch((err) => {
-          console.log("Post err: ", err);
+          CatchAPICallingError(err, navigate);
           setError(err);
           setSuccess(null);
         })

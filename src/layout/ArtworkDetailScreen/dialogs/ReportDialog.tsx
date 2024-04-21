@@ -1,11 +1,10 @@
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { RadioButton } from "primereact/radiobutton";
-import { InputTextarea } from "primereact/inputtextarea";
 import { useState, useRef } from "react";
-import {  MakeReport } from "./Service";
-import { Toast } from "primereact/toast";
+import { useNavigate } from "react-router-dom";
+import { Button, Dialog, InputTextarea, RadioButton, Toast, CatchAPICallingError } from "../..";
+import { MakeReport } from "./Service";
+import { maxCommentCharacter, minTextLength } from "../../../const/bizConstants";
 import { reportTypeEnums } from "../../../util/Enums";
+// --------------------------------------------------
 
 type Props = {
   visible: boolean;
@@ -22,6 +21,7 @@ export type ReportType = {
 export default function ReportDialog({ visible, setVisibility, targetId, entityName }: Props) {
   const [selectedType, setSelectedType] = useState(0);
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
   const toast: any = useRef(null);
 
   const onSubmit = () => {
@@ -35,15 +35,7 @@ export default function ReportDialog({ visible, setVisibility, targetId, entityN
         });
         setVisibility(false);
       })
-      .catch((error) => {
-        console.error(error);
-        toast.current.show({
-          severity: "error",
-          summary: "Báo cáo thất bại",
-          detail: "Có lỗi xảy ra, vui lòng thử lại sau!" + error?.message,
-          life: 3000,
-        });
-      });
+      .catch((error) => CatchAPICallingError(error, navigate));
   };
 
   return (
@@ -53,6 +45,7 @@ export default function ReportDialog({ visible, setVisibility, targetId, entityN
         visible={visible}
         onHide={() => setVisibility(false)}
         header="Báo cáo bài viết"
+        headerStyle={{ border: "none", padding: "24px" }}
         dismissableMask
       >
         <div className="flex flex-column gap-2 pb-3">
@@ -66,7 +59,7 @@ export default function ReportDialog({ visible, setVisibility, targetId, entityN
                   checked={selectedType === type.id}
                   onChange={(e) => setSelectedType(e.value)}
                 />
-                <label htmlFor={"rpType" + type.id.toString()} className="ml-2">
+                <label htmlFor={"rpType" + type.name} className="ml-2">
                   {type.vietnamese}
                 </label>
               </div>
@@ -75,14 +68,21 @@ export default function ReportDialog({ visible, setVisibility, targetId, entityN
 
           <InputTextarea
             value={description}
+            autoResize
             required
             onChange={(e) => setDescription(e.target.value)}
+            maxLength={maxCommentCharacter}
             rows={3}
             cols={20}
             placeholder="Mô tả chi tiết về lý do báo cáo của bạn..."
+            tooltip={`Phải có ít nhất ${minTextLength} ký tự. Tối đa ${maxCommentCharacter} ký tự.`}
           />
 
-          <Button label="Gửi" onClick={onSubmit} />
+          <Button
+            label="Gửi"
+            onClick={onSubmit}
+            disabled={description === "" || description.length < minTextLength}
+          />
         </div>
       </Dialog>
     </>
