@@ -1,8 +1,6 @@
-import React, { useState } from "react";
 import { Button } from "primereact/button";
 import { Rating } from "primereact/rating";
 
-import RequestPopup, { RequestProps } from "./RequestPopup";
 import { ArtworkProps } from "./ArtworkCard";
 import "./ServiceCard.scss";
 
@@ -23,12 +21,12 @@ export type ServiceProps = {
   isCreator: boolean;
   averageRating: number;
   artworkReferences?: ArtworkProps[];
+  setSelectedService?: (service: ServiceProps) => void;
   editHandler?: () => void;
-  hireHandler: (request: RequestProps) => void;
+  handleShowRequestPopup: () => void;
   reviewHandler?: () => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
-  const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
   return (
     <div
       className="service-card-container "
@@ -92,18 +90,10 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
               label="Thuê"
               rounded
               className="hire-button border-none pl-5 pr-5"
-              onClick={() => setIsShowRequestPopup(true)}
-            />
-            <RequestPopup
-              visible={isShowRequestPopup}
-              onHide={() => {
-                setIsShowRequestPopup(false);
+              onClick={() => {
+                props.handleShowRequestPopup();
+                props.setSelectedService && props.setSelectedService(props);
               }}
-              startingPrice={props.startingPrice}
-              accountAvatar={props.accountAvatar}
-              accountName={props.accountFullname}
-              isHire={true}
-              onSubmit={props.hireHandler}
             />
           </div>
         )}
