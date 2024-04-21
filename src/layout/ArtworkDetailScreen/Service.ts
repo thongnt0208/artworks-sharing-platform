@@ -29,9 +29,9 @@ function castResponseData(data: any): ArtworkDetailType {
     tagList: data.tagList,
     description: data.description,
     privacy: data.privacy,
-    createdOn: new Date(data.createdOn),
+    createdOn: data.createdOn,
     lastModificatedBy: data.lastModificatedBy,
-    lastModificatedOn: data.lastModificatedOn ? new Date(data.lastModificatedOn) : undefined,
+    lastModificatedOn: data.lastModificatedOn ? data.lastModificatedOn : undefined,
     tagDetails: data.tagDetails,
     categoryArtworkDetails: data.categoryArtworkDetails,
     likes: data.likes,
@@ -56,6 +56,9 @@ function castResponseData(data: any): ArtworkDetailType {
         } as AssetType)
     ),
     isLiked: data.isLiked,
+    licenseType: data.licenseType,
+    isAIGenerated: data.isAIGenerated,
+    softwareUseds: data.softwareUseds,
   };
 }
 

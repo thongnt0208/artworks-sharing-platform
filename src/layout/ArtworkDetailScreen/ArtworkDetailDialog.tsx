@@ -21,7 +21,8 @@ type Props = {
 
 export default function ArtworkDetailDialog(props: Props) {
   const { visible, setVisible, awDetailStateTools } = props;
-  const { currentAwDetail, isLiked, setIsLiked, isFollowed, setIsFollowed, isLoading } = awDetailStateTools;
+  const { currentAwDetail, isLiked, setIsLiked, isFollowed, setIsFollowed, isLoading } =
+    awDetailStateTools;
   const data = currentAwDetail;
   const navigate = useNavigate();
   const [comments, setComments] = useState([] as CommentType[]);
@@ -75,7 +76,6 @@ export default function ArtworkDetailDialog(props: Props) {
   useEffect(() => {
     fetchComments();
     console.log(currentAwDetail);
-    
   }, [data]);
 
   return (
