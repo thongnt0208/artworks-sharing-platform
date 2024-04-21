@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import "./style.scss";
+import { sortOptions } from "../../../const/bizConstants";
 
 type Props = {
   handleKeyDown: (e: any) => void;
@@ -12,12 +13,6 @@ type Props = {
   selectedSort: string;
   setSelectedSort: (value: string) => void;
 };
-
-const sortOptions = [
-  { name: "Đề xuất", code: "recommend" },
-  { name: "Mới nhất", code: "newest" },
-  { name: "Nhiều người thích", code: "like" },
-];
 
 export default function SearchHeaderTemplate({ ...props }: Props) {
   const {
@@ -64,9 +59,14 @@ export default function SearchHeaderTemplate({ ...props }: Props) {
           value={selectedSort}
           options={sortOptions}
           optionLabel="name"
-          placeholder="Sắp xếp theo ..."
+          optionValue="code"
+          tooltip="Sắp xếp theo ..."
+          tooltipOptions={{position: "mouse"}}
           dropdownIcon="pi pi-sort-alt"
-          onChange={(e) => setSelectedSort(e.value)}
+          onChange={(e) => {
+            console.log(e.value);
+            setSelectedSort(e.value);
+          }}
         />
       </div>
     </div>
