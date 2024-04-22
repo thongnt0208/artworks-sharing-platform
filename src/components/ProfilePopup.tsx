@@ -27,7 +27,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ fullname, email, avatar }) 
     <Link className="link" to={`/account/${profileId}/collection`}>
       Tác phẩm đã lưu
     </Link>,
-    <Link className="link" to={`/account/${profileId}/service`}>
+    <Link className="link" to={`/request`}>
       Yêu cầu của tôi
     </Link>,
     <Link className="link" to={`/account/${profileId}/assets`}>
