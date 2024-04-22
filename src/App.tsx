@@ -49,6 +49,7 @@ import { GetChatboxesCurrentAccountRealtime } from "./layout/ChatScreen/services
 import InternalServerErrPage from "./pages/500";
 import { ChatboxItemType } from "./layout/ChatScreen/ChatRelatedTypes";
 import PolicyPage from "./pages/policy";
+import RequestScreen from "./layout/RequestScreen/RequestScreen";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -112,6 +113,7 @@ function App() {
               <Route path="/artwork/post" element={<PostArtworkScreen />} />
               <Route path="/chat" element={<ChatScreen />} />
               <Route path="/chat/:id" element={<ChatScreen />} />
+              <Route path="/request" element={<RequestScreen isLogin={isLogin} />} />
             </Route>
             <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
               <Route path="/account/:id/" element={<ArtworksView />} />
