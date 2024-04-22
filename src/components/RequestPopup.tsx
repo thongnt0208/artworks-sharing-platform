@@ -37,8 +37,8 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
   const [estimateDeliveryTime, setEstimateDeliveryTime] = useState("");
   const [budget, setBudget] = useState(startingPrice);
   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
-
   useEffect(() => {
+    setBudget(startingPrice);
     const fieldsFilled =
       message.trim() !== "" && (!isHire || estimateDeliveryTime.trim() !== "");
     setAllFieldsFilled(fieldsFilled);
@@ -56,7 +56,6 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
       setMessage("");
       setEstimateDeliveryTime("");
       setBudget(startingPrice);
-      onHide();
     }
   };
 
