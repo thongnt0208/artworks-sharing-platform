@@ -9,7 +9,7 @@ import {
   DeleteServiceData,
   GetServicesData,
 } from "./ServicesService";
-import { RequestProps } from "../../../components/RequestPopup";
+import RequestPopup, { RequestProps } from "../../../components/RequestPopup";
 import { CatchAPICallingError } from "../..";
 import { toast } from "react-toastify";
 import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
@@ -29,7 +29,7 @@ const ServicesView: React.FC = () => {
   const [serviceReviewDialogVisible, setServiceReviewDialogVisible] =
     useState<boolean>(false);
   const [isNew, setIsNew] = useState<boolean>(false);
-
+  const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
   const [selectedService, setSelectedService] = useState<ServiceProps>({
     id: "",
     serviceName: "",
@@ -44,7 +44,7 @@ const ServicesView: React.FC = () => {
     accountAvatar: "",
     isCreator: isCreator,
     averageRating: 0,
-    hireHandler: () => {},
+    handleShowRequestPopup: () => {},
   });
 
   const handleHireRequest = async (
@@ -60,8 +60,11 @@ const ServicesView: React.FC = () => {
       );
       if (response) {
         toast.success("Gửi yêu cầu thành công");
+        setTimeout(() => {
+          setIsShowRequestPopup(false);
+        }, 1000);
       } else {
-        toast.error("Gửi yêu cầu thất bại");
+        toast.error("Gửi yêu cầu thất bại: /n" + response);
       }
     } catch (error) {
       CatchAPICallingError(error, navigate);
@@ -93,15 +96,15 @@ const ServicesView: React.FC = () => {
       const response = await DeleteServiceData(serviceId);
       if (response) {
         toast.success("Xóa dịch vụ thành công");
-        setTimeout(() => {
-          setServiceInfoDialogVisible(false);
-        }, 1000);
       }
     } catch (error) {
       toast.error("Xóa dịch vụ thất bại");
     } finally {
       fetchServices();
       setSelectedService({} as ServiceProps);
+      setTimeout(() => {
+        setServiceInfoDialogVisible(false);
+      }, 1000);
     }
   };
 
@@ -114,7 +117,6 @@ const ServicesView: React.FC = () => {
     dismissableMask: true,
     closable: false,
   };
-
   return (
     <>
       <h1>Các dịch vụ</h1>
@@ -143,11 +145,14 @@ const ServicesView: React.FC = () => {
                     handleArtworkReferences(service.artworkReferences);
                     setServiceInfoDialogVisible(true);
                   }}
-                  hireHandler={(request) => handleHireRequest(request, service)}
+                  setSelectedService={(service: ServiceProps) => {
+                    setSelectedService(service);
+                  }}
                   reviewHandler={() => {
                     setSelectedService(service);
                     setServiceReviewDialogVisible(true);
                   }}
+                  handleShowRequestPopup={() => setIsShowRequestPopup(true)}
                 />
               ))}
               {isCreator && (
@@ -217,6 +222,19 @@ const ServicesView: React.FC = () => {
           averageRating={selectedService.averageRating}
         />
       </Dialog>
+      <RequestPopup
+        visible={isShowRequestPopup}
+        onHide={() => {
+          setIsShowRequestPopup(false);
+        }}
+        startingPrice={selectedService.startingPrice}
+        accountAvatar={selectedService.accountAvatar}
+        accountName={selectedService.accountFullname}
+        isHire={true}
+        onSubmit={(request) => {
+          handleHireRequest(request, selectedService);
+        }}
+      />
       <ConfirmDialog />
     </>
   );

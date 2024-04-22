@@ -122,7 +122,6 @@ export async function CreateNewRequestData(
   timeline: string,
   budget: number
 ) {
-  console.log("Budget: ", budget);
   try {
     const response = await axiosPrivate.post(`/requests`, {
       serviceId,
@@ -137,7 +136,7 @@ export async function CreateNewRequestData(
     return true;
   } catch (error) {
     console.log("Error sending request message:", error);
-    return false;
+    return error;
   }
 }
 
