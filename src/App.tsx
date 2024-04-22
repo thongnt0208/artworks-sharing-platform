@@ -49,9 +49,11 @@ import { GetChatboxesCurrentAccountRealtime } from "./layout/ChatScreen/services
 import InternalServerErrPage from "./pages/500";
 import { ChatboxItemType } from "./layout/ChatScreen/ChatRelatedTypes";
 import PolicyPage from "./pages/policy";
-import { arraysNotisEqual } from "./util/ArrayUtil";
-
-const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
+import {
+  castChatboxToNotification,
+  GetNotificationsCurrentAccountRt,
+  ValidateAccessToken,
+} from "./service";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -61,74 +63,20 @@ function App() {
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatNotis, setChatNotis] = useState<notificationItemType[]>([]);
-
-  async function GetNotificationsCurrentAccountRt(
-    setChatNotis: (value: notificationItemType[]) => void
-  ) {
-    const authenticationInfo = getAuthInfo();
-    const url = `${WS_URL}/accounts/${authenticationInfo?.id}/notifications/ws?PageNumber=1&PageSize=10`;
-    const socket = new WebSocket(url);
-
-    let _tmpChatNotis: notificationItemType[] = [];
-
-    return new Promise<() => void>((resolve, reject) => {
-      socket.onopen = () => console.log("WS GetNotificationsCurrentAccountRt established");
-
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        const notis = data?.Items?.map((noti: any) => {
-          return {
-            notificationId: noti.Id,
-            content: noti.Content,
-            notifyType: noti.NotifyType,
-            isSeen: noti.IsSeen,
-            creationDate: noti.CreatedOn,
-            createdBy: noti.createdBy,
-            avatar: noti.avatar,
-          };
-        });
-        console.log("notis: ", notis);
-
-        if (Array.isArray(notis) && !arraysNotisEqual(_tmpChatNotis, notis)) {
-          _tmpChatNotis = notis;
-          setChatNotis(notis);
-        }
-      };
-
-      socket.onclose = () => {
-        console.log("WebSocket connection GetNotificationsCurrentAccountRt closed");
-      };
-
-      socket.onerror = (error) => {
-        console.error("WebSocket GetNotificationsCurrentAccountRt error:", error);
-        reject(error);
-      };
-
-      resolve(() => {
-        socket.close();
-      });
-    });
-  }
+  const [numNotis, setNumNotis] = useState(-3);
 
   useEffect(() => {
-    GetNotificationsCurrentAccountRt(setChatNotis);
-    GetChatboxesCurrentAccountRealtime(setChatboxes);
+    ValidateAccessToken(setIsLogin).then((res) => {
+      if (res) {
+        GetNotificationsCurrentAccountRt(setChatNotis);
+        GetChatboxesCurrentAccountRealtime(setChatboxes);
+      }
+    });
   }, []);
 
-  // Chatbox realtime - start
-  function castChatboxToNotification(chatbox: ChatboxItemType): notificationItemType {
-    const notification: notificationItemType = {
-      notificationId: chatbox.id,
-      content: chatbox?.text || "Tin nhắn mới ...",
-      notifyType: "chat",
-      isSeen: chatbox.isSeen,
-      creationDate: chatbox.time,
-      createdBy: chatbox.author.fullname,
-      avatar: chatbox.avatar,
-    };
-
-    return notification;
-  }
+  useEffect(() => {
+    setNumNotis(numNotis + 1);
+  }, [chatNotis]);
 
   return (
     <PrimeReactProvider value={primereactConfigValue}>
@@ -139,6 +87,7 @@ function App() {
             setIsLogin={setIsLogin}
             chatboxesData={chatboxes.map((chatbox) => castChatboxToNotification(chatbox))}
             notisData={chatNotis}
+            numNotis={numNotis}
           />
 
           <Routes>
