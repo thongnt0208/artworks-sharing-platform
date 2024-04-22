@@ -49,6 +49,9 @@ import { GetChatboxesCurrentAccountRealtime } from "./layout/ChatScreen/services
 import InternalServerErrPage from "./pages/500";
 import { ChatboxItemType } from "./layout/ChatScreen/ChatRelatedTypes";
 import PolicyPage from "./pages/policy";
+import { arraysNotisEqual } from "./util/ArrayUtil";
+
+const WS_URL = process.env.REACT_APP_REAL_API_WS_BASE_URL || "https://dummyjson.com";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -59,7 +62,56 @@ function App() {
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
   const [chatNotis, setChatNotis] = useState<notificationItemType[]>([]);
 
+  async function GetNotificationsCurrentAccountRt(
+    setChatNotis: (value: notificationItemType[]) => void
+  ) {
+    const authenticationInfo = getAuthInfo();
+    const url = `${WS_URL}/accounts/${authenticationInfo?.id}/notifications/ws?PageNumber=1&PageSize=10`;
+    const socket = new WebSocket(url);
+
+    let _tmpChatNotis: notificationItemType[] = [];
+
+    return new Promise<() => void>((resolve, reject) => {
+      socket.onopen = () => console.log("WS GetNotificationsCurrentAccountRt established");
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const notis = data?.Items?.map((noti: any) => {
+          return {
+            notificationId: noti.Id,
+            content: noti.Content,
+            notifyType: noti.NotifyType,
+            isSeen: noti.IsSeen,
+            creationDate: noti.CreatedOn,
+            createdBy: noti.createdBy,
+            avatar: noti.avatar,
+          };
+        });
+        console.log("notis: ", notis);
+
+        if (Array.isArray(notis) && !arraysNotisEqual(_tmpChatNotis, notis)) {
+          _tmpChatNotis = notis;
+          setChatNotis(notis);
+        }
+      };
+
+      socket.onclose = () => {
+        console.log("WebSocket connection GetNotificationsCurrentAccountRt closed");
+      };
+
+      socket.onerror = (error) => {
+        console.error("WebSocket GetNotificationsCurrentAccountRt error:", error);
+        reject(error);
+      };
+
+      resolve(() => {
+        socket.close();
+      });
+    });
+  }
+
   useEffect(() => {
+    GetNotificationsCurrentAccountRt(setChatNotis);
     GetChatboxesCurrentAccountRealtime(setChatboxes);
   }, []);
 
@@ -78,16 +130,16 @@ function App() {
     return notification;
   }
 
-  useEffect(() => {
-    setChatNotis(chatboxes.map((chatbox) => castChatboxToNotification(chatbox)));
-  }, [chatboxes]);
-  // Chatbox realtime - end
-
   return (
     <PrimeReactProvider value={primereactConfigValue}>
       <AuthProvider>
         <BrowserRouter>
-          <Header isLogin={isLogin} setIsLogin={setIsLogin} chatboxesData={chatNotis} />
+          <Header
+            isLogin={isLogin}
+            setIsLogin={setIsLogin}
+            chatboxesData={chatboxes.map((chatbox) => castChatboxToNotification(chatbox))}
+            notisData={chatNotis}
+          />
 
           <Routes>
             <Route path="/" element={<HomeScreen isLogin={isLogin} />} />

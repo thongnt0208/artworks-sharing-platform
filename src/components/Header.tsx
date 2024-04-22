@@ -21,9 +21,10 @@ type HeaderProps = {
   isLogin: boolean;
   setIsLogin: (value: boolean) => void;
   chatboxesData: notificationItemType[];
+  notisData: notificationItemType[];
 };
 
-const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
+const Header = ({ isLogin, setIsLogin, chatboxesData, notisData }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const authContext = useContext(AuthContext);
@@ -169,29 +170,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData }: HeaderProps) => {
         {...dialogModelFields}
       >
         <Notification
-          notifications={[
-            {
-              notificationId: "1",
-              content: "đã thích một bài viết của bạn.",
-              notifyType: "Notification",
-              isSeen: true,
-              creationDate: "26/12/2023",
-            },
-            {
-              notificationId: "2",
-              content: "đã bình luận về tác phẩm của bạn.",
-              notifyType: "Notification",
-              isSeen: false,
-              creationDate: "27/12/2023",
-            },
-            {
-              notificationId: "3",
-              content: "đã theo dõi bạn.",
-              notifyType: "Notification",
-              isSeen: false,
-              creationDate: "28/12/2023",
-            },
-          ]}
+          notifications={notisData}
           type="noti"
         />
       </Dialog>

@@ -26,7 +26,7 @@ const Notification: React.FC<Props> = ({ notifications, type }) => {
   const itemTemplate = (data: notificationItemType) => {
     return (
       <div className="notification-item">
-        <Link to={`/${type === "chat" ? "chat" : ""}/${data.notificationId}`}>
+        <Link to={`/${type === "chat" ? "chat" : ""}/${data?.notificationId}`}>
           <div className="avatar">
             <Avatar image={data.avatar || blankPic} size="large" shape="circle" />
           </div>
