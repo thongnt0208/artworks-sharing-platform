@@ -8,6 +8,7 @@ import { ArtworkDetailType } from "../ArtworkDetailType";
 import "./Content.scss";
 import { Splitter } from "primereact/splitter";
 import { likedIcon, likeIcon } from "../../../util/FindAssets";
+import { formatTime } from "../../../util/TimeHandle";
 
 const logo = require("../../../assets/logo/logo.png");
 
@@ -89,6 +90,20 @@ export default function Content({ data, isLiked, setIsLiked, id, currentUserId }
         </div>
         {/* Description */}
         <p>{data.description}</p>
+        {/* Privacy */}
+        <p>Quyền riêng tư: {data.privacy === "Public" ? "Công khai" : "Riêng tư"}</p>
+        {/* Categories */}
+        <div className="categories-aw-detail-container flex gap-3">
+          {data.categoryArtworkDetails?.map((category: any) => (
+            <Button key={category?.id} className="category-aw-detail-item p-2" rounded>
+              <Link to={`/search?value=${category?.categoryName}`} className="category-inline">
+                {category?.categoryName}
+              </Link>
+            </Button>
+          ))}
+        </div>
+        {/* Created Date */}
+        <p>Đăng lúc: {formatTime(data.createdOn.toString())}</p>
         {/* Tags */}
         <div className="tags-aw-detail-container flex gap-3">
           {data.tagList?.map((tag: any) => (
@@ -99,6 +114,30 @@ export default function Content({ data, isLiked, setIsLiked, id, currentUserId }
             </Button>
           ))}
         </div>
+        {/* Licence type */}
+        <span className="flex gap-1">
+          <p>Loại giấy phép: {data.licenseType?.licenseName}</p>
+          <Button
+            style={{ width: "20px", height: "8px" }}
+            className="mt-3"
+            icon="pi pi-info-circle"
+            rounded
+            text
+            severity="secondary"
+            tooltip={data.licenseType?.licenseDescription}
+          />
+        </span>
+        {/* AI generated */}
+        <p>{data.isAIGenerated ? "Được tạo bởi AI" : "Không được tạo bởi AI"}</p>
+        {/* Software used */}
+        <div className="software-used-container flex gap-3">
+          {data.softwareUseds?.map((software: any) => (
+            <Link to={`/search?value=${software?.softwareName}`} className="software-inline">
+              {software?.softwareName}
+            </Link>
+          ))}
+        </div>
+
         <Splitter className="mt-3" />
         {/* Like button */}
         <div className="like-btn-container p-3 pb-0">
