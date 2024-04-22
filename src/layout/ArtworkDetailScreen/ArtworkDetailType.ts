@@ -1,5 +1,6 @@
 import { TagProps } from "../../components/Tag";
 import { CategoryProps } from "../HomeScreen/HomeScreen";
+import { LicenseType, SoftwareUsedType } from "../PostArtworkScreen/Service";
 
 type Creator = {
   id: string;
@@ -59,4 +60,7 @@ export type ArtworkDetailType = {
   comments?: CommentType[];
   assets?: AssetType[];
   isLiked: boolean;
+  licenseType?: LicenseType;
+  isAIGenerated?: boolean;
+  softwareUseds?: SoftwareUsedType[];
 };
