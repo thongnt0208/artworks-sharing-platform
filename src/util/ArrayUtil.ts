@@ -1,3 +1,4 @@
+import { notificationItemType } from "../components/Notification";
 import { ChatMessageItemType } from "../layout/ChatScreen/ChatRelatedTypes";
 
 /**
@@ -35,9 +36,26 @@ export function arraysChatboxEqual(a: any[], b: any[]): boolean {
   return true;
 }
 
+export function arraysNotisEqual(
+  notis1: notificationItemType[],
+  notis2: notificationItemType[]
+): boolean {
+  if (notis1.length !== notis2.length) {
+    return false;
+  } else {
+    for (let i = 0; i < notis1.length; i++) {
+      if (notis1[i]?.notificationId !== notis2[i]?.notificationId) {
+        console.log(`notis1[${i}]: `, notis1[i], `notis2[${i}]: `, notis2[i]);
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 /**
  * This function compares two arrays of ChatMessageItemType
- * 
+ *
  * @param array1 - array of ChatMessageItemType
  * @param array2 - array of ChatMessageItemType
  * @returns boolean
@@ -47,14 +65,17 @@ export function arraysChatboxEqual(a: any[], b: any[]): boolean {
  * @version 1.0.0
  * @author @thongnt0208
  */
-export function arraysChatMsgEqual(array1: ChatMessageItemType[], array2: ChatMessageItemType[]): boolean {
+export function arraysChatMsgEqual(
+  array1: ChatMessageItemType[],
+  array2: ChatMessageItemType[]
+): boolean {
   if (array1.length !== array2.length) {
     console.log("array1.length !== array2.length: ", array1.length, array2.length);
-    
+
     return false;
   } else {
     console.log("array1.length === array2.length: ", array1.length, array2.length);
-    
+
     for (let i = 0; i < array1.length; i++) {
       if (array1[i]?.id !== array2[i]?.id) {
         console.log(`array1[${i}]: `, array1[i], `array2[${i}]: `, array2[i]);
