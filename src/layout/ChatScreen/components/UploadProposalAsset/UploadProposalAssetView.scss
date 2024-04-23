@@ -11,16 +11,36 @@
   gap: 1rem;
   box-shadow: $card-shadow;
 
-  .p-fileupload {
+  .file-inut-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    span {
-      width: 100%;
-      border-radius: 50px;
-      font-weight: bold;
-      text-decoration: underline;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    background-color: $bg-100 ;
+
+    .custom-file-input {
+      display: none; /* Hide the default file input */
+    }
+
+    .custom-file-label {
       background-color: $strong-100;
       color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background-color 0.3s; /* Example transition on hover */
+
+      &:hover {
+        background-color: $strong-200; /* Example hover background color */
+      }
     }
+  }
+
+  /* Optionally style the label when hovering */
+  .custom-file-label:hover {
+    background-color: #0056b3; /* Example hover background color */
   }
 
   .btn-upload-asset {
