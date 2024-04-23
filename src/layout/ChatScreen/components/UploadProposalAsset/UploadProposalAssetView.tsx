@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getAuthInfo } from "../../../../util/AuthUtil";
-import { FileUpload } from "primereact/fileupload";
 import { ProposalType } from "../../ChatRelatedTypes";
 import { maxSizeImagesUpload } from "../../../../const/bizConstants";
 import { RadioButton } from "primereact/radiobutton";
@@ -17,6 +16,7 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [selectedType, setSelectedType] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const typeOptions = [
     { name: "Phác thảo", label: "Concept", value: 0 },
@@ -29,18 +29,16 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
       setUploadedFile(null);
       setSelectedType(null);
     }
+
+    // Reset the inputs
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Assign an empty string instead of null
+    }
   };
   return (
     <div className="upload-proposal-container">
       {selectingProposal?.createdBy === currentUserId && (
         <div className="upload-proposal-assets-container">
-          <FileUpload
-            mode="basic"
-            chooseLabel="Chọn tệp"
-            accept="*"
-            maxFileSize={maxSizeImagesUpload}
-            onSelect={(event) => setUploadedFile(event.files[0])}
-          />
           <div className="radio-buttons flex gap-2 justify-content-center">
             {typeOptions.map((option) => (
               <div
@@ -48,17 +46,41 @@ export default function UploadProposalAssetView({ selectingProposal, uploadAsset
                 className="radio-button-container flex gap-1 align-items-center"
               >
                 <RadioButton
+                  inputId={`upload-asset-${option.label}`}
                   value={option.value}
                   checked={selectedType === option.value}
                   onChange={(e) => setSelectedType(e.value)}
                 />
-                <label>{option.name}</label>
+                <label htmlFor={`upload-asset-${option.label}`}>{option.name}</label>
               </div>
             ))}
           </div>
+
+          <div className="file-inut-container">
+            <label htmlFor="upload-asset-file" className="custom-file-label">
+              Chọn file
+            </label>
+            <label htmlFor="upload-asset-file" className="custom-file-label-path">
+              {fileInputRef.current?.value ? fileInputRef.current?.value : "Chưa chọn file nào"}
+            </label>
+
+            <input
+              type="file"
+              id="upload-asset-file"
+              ref={fileInputRef}
+              accept="*"
+              max={1}
+              max-file-size={maxSizeImagesUpload}
+              onChange={(e) => setUploadedFile(e.target.files?.[0] || null)}
+              className="custom-file-input"
+            />
+          </div>
+
           <Button
             className="btn-upload-asset"
-            disabled={selectedType === null && uploadedFile === null}
+            disabled={
+              selectedType === null || uploadedFile === null || fileInputRef.current?.value === ""
+            }
             onClick={handleUploadAsset}
             rounded
           >
