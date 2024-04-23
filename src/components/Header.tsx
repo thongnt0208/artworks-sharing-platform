@@ -54,6 +54,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData, notisData, numNotis }: Hea
       Cookies.remove(cookieNames.interactedArtworks);
       authContext?.setAuthInfo?.({});
       navigate("/");
+      document.location.reload();
     }, 1500);
   };
 

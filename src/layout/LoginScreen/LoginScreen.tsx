@@ -75,6 +75,7 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
         });
         setTimeout(() => {
           navigate(previousPath || "/");
+          setTimeout(() => window.location.reload(), 100);
         }, 800);
       })
       .catch((error) => {
