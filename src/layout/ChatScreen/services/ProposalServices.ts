@@ -8,6 +8,7 @@ import {
   RequestItemType,
   ReviewItemType,
 } from "../ChatRelatedTypes";
+// -------------------------------------------------------------------
 
 export function mapRequestData(response: any): RequestItemType {
   return {
@@ -49,7 +50,7 @@ export function mapProposalData(response: any): ProposalType {
  * @example
  *  const messages = await GetRequestsByCreator();
  *  console.log(messages);
- * @author ThongNT
+ * @author @thongnt0208
  * @version 1.0.0
  */
 export async function GetRequestsByCreator(): Promise<notificationItemType[]> {
@@ -72,7 +73,7 @@ export async function GetRequestsByCreator(): Promise<notificationItemType[]> {
  * @example
  *  const messages = await GetRequestsByCreator();
  *  console.log(messages);
- * @author ThongNT
+ * @author @thongnt0208
  * @version 1.0.0
  */
 export async function GetRequestsByAudience(): Promise<notificationItemType[]> {
@@ -96,7 +97,7 @@ export async function GetRequestsByAudience(): Promise<notificationItemType[]> {
  * @example
  * const request = await GetRequestById("123");
  * console.log(request);
- * @author ThongNT
+ * @author @thongnt0208
  * @version 1.0.0
  */
 export async function GetRequestById(requestId: string): Promise<RequestItemType> {
@@ -119,7 +120,7 @@ export async function GetRequestById(requestId: string): Promise<RequestItemType
  * const requests = await GetRequestsByChatboxId("123");
  * console.log(requests);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function GetRequestsByChatboxId(chatboxId: string): Promise<RequestItemType[]> {
   return axiosPrivate
@@ -147,7 +148,7 @@ export async function GetRequestsByChatboxId(chatboxId: string): Promise<Request
  * const proposals = await GetProposalsByChatboxId("123");
  * console.log(proposals);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function GetProposalsByChatboxId(chatboxId: string): Promise<ProposalType[]> {
   return axiosPrivate
@@ -175,7 +176,7 @@ export async function GetProposalsByChatboxId(chatboxId: string): Promise<Propos
  * @example
  * const updatedRequest = await UpdateRequestStatus("123", 1);
  * console.log(updatedRequest);
- * @author ThongNT
+ * @author @thongnt0208
  * @version 1.0.0
  */
 export async function UpdateRequestStatus(
@@ -208,7 +209,7 @@ export async function UpdateRequestStatus(
  * @example
  * const proposal = await CreateProposal("123", "456", { message: "I can do it", price: "1000", timeline: "1 week" });
  * console.log(proposal);
- * @author ThongNT
+ * @author @thongnt0208
  * @version 1.0.0
  */
 export async function CreateProposal(value: ProposalFormType): Promise<any> {
@@ -236,7 +237,7 @@ export async function CreateProposal(value: ProposalFormType): Promise<any> {
  * const updatedProposal = await UpdateProposalStatus("123", 1);
  * console.log(updatedProposal);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function UpdateProposalStatus(
   proposalId: string,
@@ -284,7 +285,7 @@ export async function UpdateProposalStatus(
  * const response = await InitPaymentProposal("123");
  * console.log(response);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function InitPaymentProposal(proposalId: string): Promise<any> {
   return axiosPrivate
@@ -334,7 +335,7 @@ export async function CompletePaymentProposal(proposalId: string): Promise<any> 
  * const response = await UploadProposalAsset("123", 0, file);
  * console.log(response);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function UploadProposalAsset(id: string, type: number, file: File): Promise<any> {
   const formData = new FormData();
@@ -366,7 +367,7 @@ export async function UploadProposalAsset(id: string, type: number, file: File):
  * const milestones = await GetProposalMilestone("123");
  * console.log(milestones);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function GetProposalMilestone(proposalId: string): Promise<MilestoneItemType[]> {
   return axiosPrivate
@@ -403,7 +404,7 @@ export async function GetProposalMilestone(proposalId: string): Promise<Mileston
  * const assets = await GetProposalAssets("123");
  * console.log(assets);
  * @version 1.0.0
- * @author ThongNT
+ * @author @thongnt0208
  */
 export async function GetProposalAssets(proposalId: string): Promise<ProposalAssetItemType[]> {
   return axiosPrivate
@@ -420,6 +421,30 @@ export async function GetProposalAssets(proposalId: string): Promise<ProposalAss
     })
     .catch((error) => {
       console.error("Error fetching assets:", error);
+      throw error;
+    });
+}
+
+/**
+ * This function is used to get the link of a proposal asset
+ *
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<string>} - the link of the asset
+ * @throws {Error} an error from the API request
+ * @example
+ * const link = await GetPropoAssetLink("123");
+ * console.log(link);
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function GetPropoAssetLink(proposalId: string): Promise<string> {
+  return axiosPrivate
+    .get(`/proposalassets/download/${proposalId}`)
+    .then((response) => {
+      return response.data?.link;
+    })
+    .catch((error) => {
+      console.error("Error fetching proposal asset link:", error);
       throw error;
     });
 }
