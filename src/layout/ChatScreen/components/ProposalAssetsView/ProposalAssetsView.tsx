@@ -8,6 +8,8 @@ import PaymentConfirmation from "../../../../components/PaymentConfirmation";
 import { ProposalAssetItemType, ProposalStateToolsType } from "../../ChatRelatedTypes";
 import "./ProposalAssetsView.scss";
 import { numberToXu } from "../../../../util/CurrencyHandle";
+import { GetPropoAssetLink } from "../../services/ProposalServices";
+import { toast } from "react-toastify";
 // ---------------------------------------------------------
 
 type Props = { data: ProposalAssetItemType[]; proposalStateTools: ProposalStateToolsType };
@@ -28,6 +30,17 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
     setConfirmVisible(false);
   };
 
+  const handleDownloadAsset = async (assetId: string) => {
+    GetPropoAssetLink(assetId)
+      .then((res) => {
+        if (res) {
+          window.open(res, "_blank");
+        }
+      })
+      .catch((err) =>
+        toast.error("Không thể tải tài nguyên" + JSON.stringify(err?.response?.data))
+      );
+  };
   const headerTemplate = (options: any) => {
     const className = `${options.className} justify-content-space-between`;
 
@@ -72,7 +85,9 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
                   </span>
                 </p>{" "}
                 <Button
-                  label={asset.name.slice(0, 10) + asset.name.slice(asset.name.lastIndexOf("."))}
+                  label={
+                    asset.name.slice(0, 10) + "..." + asset.name.slice(asset.name.lastIndexOf("."))
+                  }
                   icon="pi pi-download"
                   iconPos="right"
                   disabled={
@@ -81,9 +96,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
                     selectingProposal?.status !== "CompletePayment" &&
                     selectingProposal?.createdBy !== currentUserId
                   }
-                  onClick={() => {
-                    window.open(asset?.url, "_blank");
-                  }}
+                  onClick={() => handleDownloadAsset(asset.id)}
                   className="w-full mr-3"
                 />
               </div>
