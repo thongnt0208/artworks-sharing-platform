@@ -3,15 +3,17 @@ import React, { useEffect, useState } from "react";
 import RequestSection from "./RequestSection/RequestSection";
 import ProposalSection from "./ProposalSection/ProposalSection";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { GetReceiveRequestData, GetSendRequestData } from "./RequestService";
-import { RequestItemType } from "../ChatScreen/ChatRelatedTypes";
+import { GetCreatedProposalData, GetReceiveRequestData, GetSendRequestData } from "./RequestService";
+import { ProposalType, RequestItemType } from "../ChatScreen/ChatRelatedTypes";
+import { getAuthInfo } from "../../util/AuthUtil";
 
 const RequestScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
+  const accountId = getAuthInfo()?.id;
   const [activeTab, setActiveTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [receivedRequests, setReceivedRequests] = useState<RequestItemType[]>([]);
   const [sendedRequests, setSendedRequests] = useState<RequestItemType[]>([]);
-  const [proposals, setProposals] = useState([]);
+  const [proposals, setProposals] = useState<ProposalType[]>([]);
 
   const items = [
     { label: "Yêu cầu đã nhận" },
@@ -33,12 +35,11 @@ const RequestScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           const response: RequestItemType[] = await GetReceiveRequestData();
           setReceivedRequests(response);
         } else if (activeTab === 1) {
-          const response = await GetSendRequestData();
-           console.log("Response: ", response);
+          const response: RequestItemType[] = await GetSendRequestData();
           setSendedRequests(response);
         } else {
-          // const response = await GetProposalData();
-          // setProposals(response);
+          const response: ProposalType[] = await GetCreatedProposalData(accountId);
+          setProposals(response);
         }
       } catch (error) {
         console.error(error);
@@ -47,7 +48,8 @@ const RequestScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       }
     };
     fetchData();
-  }, [activeTab, isLogin]);
+  }, [accountId, activeTab, isLogin]);
+  console.log("Proposal: ", proposals);
   return (
     <>
       <TabMenu
@@ -59,7 +61,7 @@ const RequestScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       <div className="w-full flex flex-column align-items-center">
         {isLoading && <ProgressSpinner />}
         {activeTab === 2 ? (
-          <ProposalSection />
+          <ProposalSection data={proposals}/>
         ) : activeTab === 0 ? (
           <RequestSection data={receivedRequests} />
         ) : (

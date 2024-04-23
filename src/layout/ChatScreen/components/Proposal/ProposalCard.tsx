@@ -29,7 +29,9 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
   } = props;
   const [confirmVisible, setConfirmVisible] = useState(false);
   const authenticationInfo = getAuthInfo();
-  let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
+  let currentUserId = authenticationInfo?.id
+    ? authenticationInfo?.id
+    : "unknown";
 
   const handleAcceptConfirmation = () => {
     acceptCallback && acceptCallback(id);
@@ -73,48 +75,66 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
           <strong>Trạng thái: </strong>
           <Badge
             value={translateProposalStatus(status)}
-            severity={status === "Waiting" ? "info" : status === "Accepted" ? "success" : null}
+            severity={
+              status === "Waiting"
+                ? "info"
+                : status === "Accepted"
+                ? "success"
+                : null
+            }
           />
         </p>
         <p>Tuân theo mọi điều khoản của hệ thống.</p>
+        {props.acceptCallback &&
+          props.denyCallback &&
+          props.editCallback &&
+          props.cancelCallback && (
+            <>
+              {createdBy !== currentUserId &&
+                status?.toUpperCase() === "WAITING" && (
+                  <div className="btns-container flex gap-3">
+                    <Button
+                      className="btn-accept"
+                      rounded
+                      onClick={() => setConfirmVisible(true)}
+                    >
+                      Chấp nhận
+                    </Button>
+                    <Button
+                      className="btn-decline"
+                      rounded
+                      onClick={() => denyCallback && denyCallback(id)}
+                    >
+                      Từ chối
+                    </Button>
+                  </div>
+                )}
 
-        {createdBy !== currentUserId && status?.toUpperCase() === "WAITING" && (
-          <div className="btns-container flex gap-3">
-            <Button className="btn-accept" rounded onClick={() => setConfirmVisible(true)}>
-              Chấp nhận
-            </Button>
-            <Button
-              className="btn-decline"
-              rounded
-              onClick={() => denyCallback && denyCallback(id)}
-            >
-              Từ chối
-            </Button>
-          </div>
-        )}
-
-        {createdBy === currentUserId && status?.toUpperCase() === "WAITING" && (
-          <div className="btns-container flex flex-column gap-3 pt-0">
-            <Divider />
-            <strong>Bạn đang chờ đối tác chấp nhận thỏa thuận.</strong>
-            <div className="flex gap-2">
-              <Button
-                className="btn-accept"
-                rounded
-                onClick={() => editCallback && editCallback(id)}
-              >
-                Chỉnh sửa
-              </Button>
-              <Button
-                className="btn-decline"
-                rounded
-                onClick={() => cancelCallback && cancelCallback(id)}
-              >
-                Hủy thỏa thuận
-              </Button>
-            </div>
-          </div>
-        )}
+              {createdBy === currentUserId &&
+                status?.toUpperCase() === "WAITING" && (
+                  <div className="btns-container flex flex-column gap-3 pt-0">
+                    <Divider />
+                    <strong>Bạn đang chờ đối tác chấp nhận thỏa thuận.</strong>
+                    <div className="flex gap-2">
+                      <Button
+                        className="btn-accept"
+                        rounded
+                        onClick={() => editCallback && editCallback(id)}
+                      >
+                        Chỉnh sửa
+                      </Button>
+                      <Button
+                        className="btn-decline"
+                        rounded
+                        onClick={() => cancelCallback && cancelCallback(id)}
+                      >
+                        Hủy thỏa thuận
+                      </Button>
+                    </div>
+                  </div>
+                )}
+            </>
+          )}
       </div>
     </div>
   );

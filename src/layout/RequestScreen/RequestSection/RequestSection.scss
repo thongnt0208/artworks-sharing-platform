@@ -1,0 +1,15 @@
+@import "/src/const/variables.scss";
+
+.system-noti-card {
+    width: 100%;
+  text-align: center;
+  .sys-noti-title {
+    text-align: center;
+    color: $strong-200;
+  }
+
+  .sys-noti-header-img {
+    text-align: center;
+    width: 120px;
+  }
+}
