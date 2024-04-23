@@ -3,6 +3,7 @@ import { DataScroller } from "primereact/datascroller";
 import "./Notification.scss";
 import { Avatar } from "primereact/avatar";
 import { Link } from "react-router-dom";
+import { formatTime } from "../util/TimeHandle";
 
 const blankPic = require("../assets/defaultImage/blank-100.png");
 
@@ -26,20 +27,31 @@ const Notification: React.FC<Props> = ({ notifications, type }) => {
   const itemTemplate = (data: notificationItemType) => {
     return (
       <div className="notification-item">
-        <Link to={`/${type === "chat" ? "chat" : ""}/${data?.notificationId}`}>
-          <div className="avatar">
-            <Avatar image={data.avatar || blankPic} size="large" shape="circle" />
-          </div>
-          <div className={`notification-content ${data.isSeen ? "seen" : ""}`}>
-            <p className="notification-message">
-              <strong style={{ color: "black", fontWeight: "bold" }}>{data.createdBy}</strong>
-              {data.content}
-            </p>
-            <p className="notification-date" style={{ color: "#71C4EF" }}>
-              {data.creationDate}
-            </p>
-          </div>
-        </Link>
+        {type === "chat" && (
+          <Link to={`/chat/${data?.notificationId}`}>
+            <div className="avatar">
+              <Avatar image={data.avatar || blankPic} size="large" shape="circle" />
+            </div>
+            <div className={`notification-content ${data.isSeen ? "seen" : ""}`}>
+              <p className="notification-message">
+                <strong style={{ color: "black", fontWeight: "bold" }}>{data.createdBy}</strong>
+                {data.content}
+              </p>
+              <p className="notification-date" style={{ color: "#71C4EF" }}>
+                {data.creationDate}
+              </p>
+            </div>
+          </Link>
+        )}
+
+        {type === "noti" && (
+          <a href=" ">
+            <div className={`notification-content ${data.isSeen ? "seen" : ""}`}>
+              <p className="notification-message">{data.content}</p>
+              <p className="notification-date">{formatTime(data.creationDate)}</p>
+            </div>
+          </a>
+        )}
       </div>
     );
   };
