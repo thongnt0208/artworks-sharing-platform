@@ -77,8 +77,12 @@ const ProposalSection: React.FC<{ data: ProposalType[] }> = ({ data }) => {
     );
   };
 
-  const rowTime = (rowData: ProposalType) => {
+  const rowDeliveryTime = (rowData: ProposalType) => {
     return <>{formatTime(rowData.targetDelivery)}</>;
+  };
+
+  const rowCreatedTime = (rowData: ProposalType) => {
+    return <>{formatTime(rowData.createdOn ?? "")}</>;
   };
 
   const rowPrice = (rowData: ProposalType) => {
@@ -104,8 +108,9 @@ const ProposalSection: React.FC<{ data: ProposalType[] }> = ({ data }) => {
         <Column field="projectTitle" header="Tên dự án" />
         <Column field="category" header="Thể loại" />
         <Column field="totalPrice" header="Tổng chi phí" body={rowPrice} />
-        <Column field="targetDelivery" header="Ngày giao hàng" body={rowTime} />
+        <Column field="targetDelivery" header="Ngày giao hàng" body={rowDeliveryTime} />
         <Column field="status" header="Trạng thái" body={rowStatus} />
+        <Column field="createdOn" header="Ngày tạo" body={rowCreatedTime}/>
       </DataTable>
       <Dialog
         showHeader={false}
