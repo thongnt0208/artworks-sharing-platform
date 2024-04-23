@@ -114,7 +114,7 @@ function App() {
               <Route path="/artwork/post" element={<PostArtworkScreen />} />
               <Route path="/chat" element={<ChatScreen />} />
               <Route path="/chat/:id" element={<ChatScreen />} />
-              <Route path="/request" element={<RequestScreen isLogin={isLogin} />} />
+              <Route path="/my-requests" element={<RequestScreen isLogin={isLogin} />} />
             </Route>
             <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
               <Route path="/account/:id/" element={<ArtworksView />} />
