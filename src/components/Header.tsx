@@ -13,6 +13,7 @@ import { cookieNames, hideHeaderRoutes } from "../const/uiConstants";
 import "./Header.scss";
 import { MenuItem } from "primereact/menuitem";
 import Cookies from "js-cookie";
+import { Badge } from "primereact/badge";
 
 const logo = require("../assets/logo/logo-small.png");
 const tmpAvt = require("../assets/defaultImage/default-avatar.png");
@@ -22,9 +23,10 @@ type HeaderProps = {
   setIsLogin: (value: boolean) => void;
   chatboxesData: notificationItemType[];
   notisData: notificationItemType[];
+  numNotis?: number;
 };
 
-const Header = ({ isLogin, setIsLogin, chatboxesData, notisData }: HeaderProps) => {
+const Header = ({ isLogin, setIsLogin, chatboxesData, notisData, numNotis }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const authContext = useContext(AuthContext);
@@ -33,6 +35,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData, notisData }: HeaderProps) 
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  let numNotisTmp = numNotis ? numNotis / 2 : 0;
 
   const currentUrl = location.pathname + location.search + location.hash;
 
@@ -73,8 +76,8 @@ const Header = ({ isLogin, setIsLogin, chatboxesData, notisData }: HeaderProps) 
     { label: "Khám phá", command: () => navigate("/explore") },
     { label: "Thuê", command: () => navigate("/hire") },
     {
-      label: !["/search", "/explore"].some(item => currentUrl.includes(item)) ? "Tìm kiếm" : "",
-      template: !["/search", "/explore"].some(item => currentUrl.includes(item)) && (
+      label: !["/search", "/explore"].some((item) => currentUrl.includes(item)) ? "Tìm kiếm" : "",
+      template: !["/search", "/explore"].some((item) => currentUrl.includes(item)) && (
         <span className="p-input-icon-right search-bar flex">
           <InputText
             className="w-full"
@@ -129,10 +132,14 @@ const Header = ({ isLogin, setIsLogin, chatboxesData, notisData }: HeaderProps) 
                     <Button icon="" label="Đăng tác phẩm" />
                   </Link>
                   <div className="message-icon" onClick={() => setShowMessageNotification(true)}>
-                    <i className="pi pi-inbox"></i>
+                    <i className="pi pi-envelope"></i>
                   </div>
                   <div className="notification-icon" onClick={() => setShowNotification(true)}>
-                    <i className="pi pi-bell"></i>
+                    <i className="pi pi-bell p-overlay-badge">
+                      {numNotisTmp > 0 && (numNotisTmp * 10) % 10 === 0 && (
+                        <Badge value={numNotisTmp} />
+                      )}
+                    </i>
                   </div>
                   <div className="avatar-icon" onClick={() => setShowProfilePopup(true)}>
                     <Avatar image={authInfo?.avatar || tmpAvt} size="normal" shape="circle" />
@@ -169,10 +176,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData, notisData }: HeaderProps) 
         onHide={() => setShowNotification(false)}
         {...dialogModelFields}
       >
-        <Notification
-          notifications={notisData}
-          type="noti"
-        />
+        <Notification notifications={notisData} type="noti" />
       </Dialog>
 
       <Dialog
