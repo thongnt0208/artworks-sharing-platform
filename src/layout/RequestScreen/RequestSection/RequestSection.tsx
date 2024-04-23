@@ -5,8 +5,13 @@ import { formatTime } from "../../../util/TimeHandle";
 import { Dialog } from "primereact/dialog";
 import RequestCard from "../../ChatScreen/components/Request/RequestCard";
 import { RequestItemType } from "../../ChatScreen/ChatRelatedTypes";
+import { numberToXu } from "../../../util/CurrencyHandle";
+import "./RequestSection.scss";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
 
 const RequestSection: React.FC<{ data: RequestItemType[] }> = ({ data }) => {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState<RequestItemType[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<RequestItemType>();
   const [showRequestDetail, setShowRequestDetail] = useState(false);
@@ -45,22 +50,47 @@ const RequestSection: React.FC<{ data: RequestItemType[] }> = ({ data }) => {
   };
 
   const rowStatus = (rowData: RequestItemType) => {
+    let backgroundColor;
     let status;
     switch (rowData.requestStatus) {
       case "Waiting":
+        backgroundColor = "orange";
         status = "Đang chờ";
         break;
       case "Accepted":
+        backgroundColor = "green";
         status = "Đã chấp nhận";
         break;
       case "Declined":
+        backgroundColor = "red";
         status = "Đã từ chối";
         break;
       default:
+        backgroundColor = "orange";
         status = "Đang chờ";
     }
-    return <>{status}</>;
+
+    return (
+      <span
+        style={{
+          width: "fit-content",
+          height: "100%",
+          backgroundColor,
+          padding: "0.25rem 0.5rem",
+          borderRadius: "1rem",
+          color: "white",
+          fontWeight: "bold",
+          textAlign: "center",
+        }}
+      >
+        {status}
+      </span>
+    );
   };
+
+  const rowPrice = (rowData: RequestItemType) => {
+    return <>{numberToXu(rowData.price)}</>;
+  }
 
   const onRowSelect = () => {
     setShowRequestDetail(true);
@@ -69,7 +99,6 @@ const RequestSection: React.FC<{ data: RequestItemType[] }> = ({ data }) => {
   return (
     <>
       <DataTable
-        className="report-table"
         value={requests}
         selectionMode={"single"}
         selection={selectedRequest!}
@@ -85,19 +114,35 @@ const RequestSection: React.FC<{ data: RequestItemType[] }> = ({ data }) => {
           body={rowServiceInfo}
         />
         <Column field="from" header="Người yêu cầu" body={rowFrom} />
-        <Column field="price" header="Ngân sách" />
+        <Column field="price" header="Ngân sách" body={rowPrice}/>
         <Column field="timeline" header="Thời gian" />
         <Column field="requestStatus" header="Trạng thái" body={rowStatus} />
         <Column field="createdOn" header="Ngày tạo" body={rowTime} />
       </DataTable>
       <Dialog
-        header="Chi tiết yêu cầu"
+        showHeader={false}
         visible={showRequestDetail}
-        style={{ width: "50vw" }}
+        style={{ width: "30vw" }}
         dismissableMask
         onHide={() => setShowRequestDetail(false)}
+        contentStyle={{ borderRadius: "20px", padding: "10px" }}
       >
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "start",
+          }}
+        >
         <RequestCard {...selectedRequest!} />
+        <Button
+            label="Đi tới cuộc trò chuyện"
+            className="btn"
+            onClick={() => navigate(`/chat/${selectedRequest?.chatBoxId}`)}
+          />
+        </div>
       </Dialog>
     </>
   );

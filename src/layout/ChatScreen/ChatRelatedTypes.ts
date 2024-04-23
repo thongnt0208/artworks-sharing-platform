@@ -25,6 +25,7 @@ export type ChatMessageItemType = {
 
 export type RequestItemType = {
   id: string;
+  chatBoxId?: string;
   serviceId: string;
   message: string;
   timeline: string;
