@@ -7,6 +7,7 @@ import { getAuthInfo } from "../../../../util/AuthUtil";
 import { numberToXu } from "../../../../util/CurrencyHandle";
 import { translateRequestStatus } from "../../../../util/Enums";
 import "./styles/RequestCard.scss";
+import { useLocation } from "react-router-dom";
 // ---------------------------------------------------------
 
 export default function RequestCard({ ...props }: RequestCardProps) {
@@ -23,8 +24,10 @@ export default function RequestCard({ ...props }: RequestCardProps) {
     denyCallback,
     showFormCallback,
   } = props;
+  const location = useLocation();
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
+  const currentUrl = location.pathname + location.search + location.hash;
 
   return (
     <div className="system-noti-card">
@@ -53,47 +56,51 @@ export default function RequestCard({ ...props }: RequestCardProps) {
             }
           />
         </p>
-        {createdBy !== currentUserId && requestStatus?.toUpperCase() === "WAITING" && (
-          <div className="btns-container flex gap-3">
-            <Button
-              className="btn-accept"
-              rounded
-              onClick={() => acceptCallback && acceptCallback(id)}
-            >
-              Chấp nhận
-            </Button>
-            <Button
-              className="btn-decline"
-              rounded
-              onClick={() => denyCallback && denyCallback(id)}
-            >
-              Từ chối
-            </Button>
-          </div>
-        )}
-
-        {createdBy !== currentUserId && requestStatus?.toUpperCase() === "ACCEPTED" && (
-          <div className="create-proposal-container">
-            <Divider />
-            <span className="create-proposal-title text-cus-h3-bold pt-2">
-              Giờ hãy tạo thỏa thuận
-            </span>
-            <strong>Bạn đã chấp nhận yêu cầu của người dùng. </strong>
-            <span>Các bạn giờ đây có thể trao đổi và tạo thoả thuận cho công việc.</span>
-            <div className="btns-container">
+        {!currentUrl.includes("/my-requests") &&
+          createdBy !== currentUserId &&
+          requestStatus?.toUpperCase() === "WAITING" && (
+            <div className="btns-container flex gap-3">
               <Button
                 className="btn-accept"
-                label="Tạo thoả thuận"
                 rounded
-                onClick={() => {
-                  showFormCallback && showFormCallback(true);
-                  localStorage.setItem("serviceId", serviceId);
-                }}
-              />
-              <Button label="Từ chối" rounded onClick={() => denyCallback && denyCallback(id)} />
+                onClick={() => acceptCallback && acceptCallback(id)}
+              >
+                Chấp nhận
+              </Button>
+              <Button
+                className="btn-decline"
+                rounded
+                onClick={() => denyCallback && denyCallback(id)}
+              >
+                Từ chối
+              </Button>
             </div>
-          </div>
-        )}
+          )}
+
+        {!currentUrl.includes("/my-requests") &&
+          createdBy !== currentUserId &&
+          requestStatus?.toUpperCase() === "ACCEPTED" && (
+            <div className="create-proposal-container">
+              <Divider />
+              <span className="create-proposal-title text-cus-h3-bold pt-2">
+                Giờ hãy tạo thỏa thuận
+              </span>
+              <strong>Bạn đã chấp nhận yêu cầu của người dùng. </strong>
+              <span>Các bạn giờ đây có thể trao đổi và tạo thoả thuận cho công việc.</span>
+              <div className="btns-container">
+                <Button
+                  className="btn-accept"
+                  label="Tạo thoả thuận"
+                  rounded
+                  onClick={() => {
+                    showFormCallback && showFormCallback(true);
+                    localStorage.setItem("serviceId", serviceId);
+                  }}
+                />
+                <Button label="Từ chối" rounded onClick={() => denyCallback && denyCallback(id)} />
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );
