@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Dialog, Image } from "../..";
+import { Button, Dialog, Image, Tooltip } from "../..";
 import SquareButton from "../buttons/SquareButton";
 import { likeArtwork, unlikeArtwork } from "../Service";
 import { CatchAPICallingError } from "../..";
@@ -90,20 +90,7 @@ export default function Content({ data, isLiked, setIsLiked, id, currentUserId }
         </div>
         {/* Description */}
         <p>{data.description}</p>
-        {/* Privacy */}
-        <p>Quyền riêng tư: {data.privacy === "Public" ? "Công khai" : "Riêng tư"}</p>
-        {/* Categories */}
-        <div className="categories-aw-detail-container flex gap-3">
-          {data.categoryArtworkDetails?.map((category: any) => (
-            <Button key={category?.id} className="category-aw-detail-item p-2" rounded>
-              <Link to={`/search?value=${category?.categoryName}`} className="category-inline">
-                {category?.categoryName}
-              </Link>
-            </Button>
-          ))}
-        </div>
-        {/* Created Date */}
-        <p>Đăng lúc: {formatTime(data.createdOn.toString())}</p>
+
         {/* Tags */}
         <div className="tags-aw-detail-container flex gap-3">
           {data.tagList?.map((tag: any) => (
@@ -114,54 +101,64 @@ export default function Content({ data, isLiked, setIsLiked, id, currentUserId }
             </Button>
           ))}
         </div>
-        {/* Licence type */}
-        <span className="flex gap-1">
-          <p>Loại giấy phép: {data.licenseType?.licenseName}</p>
-          <Button
-            style={{ width: "20px", height: "8px" }}
-            className="mt-3"
-            icon="pi pi-info-circle"
-            rounded
-            text
-            severity="secondary"
-            tooltip={data.licenseType?.licenseDescription}
-          />
-        </span>
-        {/* AI generated */}
-        <p>{data.isAIGenerated ? "Được tạo bởi AI" : "Không được tạo bởi AI"}</p>
-        {/* Software used */}
-        <div className="software-used-container flex gap-3">
-          {data.softwareUseds?.map((software: any) => (
-            <Link to={`/search?value=${software?.softwareName}`} className="software-inline">
-              {software?.softwareName}
-            </Link>
-          ))}
-        </div>
 
         <Splitter className="mt-3" />
-        {/* Like button */}
-        <div className="like-btn-container p-3 pb-0">
-          <SquareButton
-            id={isLiked ? "dislikeBtn" : "likeBtn"}
-            title={isLiked ? "Bỏ thích" : "Thích"}
-            thumbnailImg={isLiked ? likedIcon : likeIcon}
-            thumbnailAlt=""
-            onclick={likeButtonHandle}
-          />
+        <br />
+        <div className="licence-and-ai-container flex flex-column gap-0">
+          {/* Licence type */}
+          {data.licenseType && (
+            <span className="flex gap-1 align-items-center">
+              Loại giấy phép: {data.licenseType?.licenseName}
+              <Tooltip target="#licence-info-ic" content={data.licenseType?.licenseDescription} />
+              <i id="licence-info-ic" className="pi pi-info" />
+            </span>
+          )}
+          {/* AI generated */}
+          {data.isAIGenerated && (
+            <span className="flex gap-1 align-items-center">
+              Được tạo bởi công cụ Trí tuệ nhân tạo (AI)
+              <Tooltip
+                target="#ai-generated-ic"
+                content="Tác giả đã xác nhận nội dung này được tạo ra bởi công cụ Trí tuệ nhân tạo (AI)"
+              />
+              <i id="ai-generated-ic" className="pi pi-info" />
+            </span>
+          )}
         </div>
-        {/* LikeCount, ViewCount, CommentCount */}
-        <div className="like-view-comment-count-container pb-3">
-          <div className="like-count">
-            <i className="pi pi-heart" />
-            {tmpLikeCount}
+
+        <div className="like-and-more-container flex flex-column align-items-center gap-1 pb-3">
+          {/* Like button */}
+          <div className="like-btn-container p-3 pb-0">
+            <SquareButton
+              id={isLiked ? "dislikeBtn" : "likeBtn"}
+              title={isLiked ? "Bỏ thích" : "Thích"}
+              thumbnailImg={isLiked ? likedIcon : likeIcon}
+              thumbnailAlt=""
+              onclick={likeButtonHandle}
+            />
           </div>
-          <div className="view-count">
-            <i className="pi pi-eye" />
-            {data.viewCount}
+          {/* LikeCount, ViewCount, CommentCount */}
+          <div className="like-view-comment-count-container">
+            <div className="like-count">
+              <i className="pi pi-heart" />
+              {tmpLikeCount}
+            </div>
+            <div className="view-count">
+              <i className="pi pi-eye" />
+              {data.viewCount}
+            </div>
+            <div className="comment-count">
+              <i className="pi pi-comments" />
+              {data.commentCount}
+            </div>
           </div>
-          <div className="comment-count">
-            <i className="pi pi-comments" />
-            {data.commentCount}
+          {/* Created Date & Privacy*/}
+          <div className="created-date-privacy-container">
+            Đã đăng{" "}
+            <span style={{ textDecoration: "underline" }}>
+              {data.privacy === "Public" ? "Công khai" : "Riêng tư"}
+            </span>{" "}
+            lúc {formatTime(data.createdOn.toString())}
           </div>
         </div>
       </div>

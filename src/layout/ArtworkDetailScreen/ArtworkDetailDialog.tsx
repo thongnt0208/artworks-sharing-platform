@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import "./ArtworkDetail.scss";
 import { addFollow, fetchCommentsForArtworkRealTime, removeFollow } from "./Service";
@@ -11,7 +11,7 @@ import { CommentType } from "./ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { CatchAPICallingError, ProgressSpinner } from "..";
 import { awDetailStateToolsType } from "../HomeScreen/HomeScreen";
-// import UserInformationCard from "../../components/UserInformationCard";
+import MinnorContentRight from "./MinnorContentRight";
 
 type Props = {
   visible: boolean;
@@ -25,7 +25,9 @@ export default function ArtworkDetailDialog(props: Props) {
     awDetailStateTools;
   const data = currentAwDetail;
   const navigate = useNavigate();
+  const location = useLocation();
   const [comments, setComments] = useState([] as CommentType[]);
+  const [_isLoading, setIsLoading] = useState(false);
   const [closeSocket, setCloseSocket] = useState<() => void | null>();
   const authenticationInfo = getAuthInfo();
 
@@ -33,7 +35,10 @@ export default function ArtworkDetailDialog(props: Props) {
 
   let dialogProperties = {
     visible: visible,
-    onHide: () => setVisible(false),
+    onHide: () => {
+      setVisible(false);
+      window.history.replaceState(null, "", location.pathname);
+    },
     closable: false,
     headerStyle: { border: "none", padding: "8px" },
     dismissableMask: true,
@@ -56,19 +61,29 @@ export default function ArtworkDetailDialog(props: Props) {
   };
 
   const followUser = () => {
+    setIsLoading(true);
     addFollow(data?.account?.id || "")
-      .then((res) => setIsFollowed(true))
+      .then(() => {
+        setIsFollowed(true);
+        setIsLoading(false);
+      })
       .catch((err) => {
         setIsFollowed(false);
+        setIsLoading(false);
         CatchAPICallingError(err, navigate);
       });
   };
 
   const unFollowUser = () => {
+    setIsLoading(true);
     removeFollow(data?.account?.id || "")
-      .then((res) => setIsFollowed(false))
+      .then((res) => {
+        setIsFollowed(false);
+        setIsLoading(false);
+      })
       .catch((err) => {
         setIsFollowed(true);
+        setIsLoading(false);
         CatchAPICallingError(err, navigate);
       });
   };
@@ -112,12 +127,13 @@ export default function ArtworkDetailDialog(props: Props) {
                 isFollowed={isFollowed}
                 makeFollow={followUser}
                 makeUnFollow={unFollowUser}
+                _isLoading={_isLoading}
               />
             </div>
           </div>
 
           <div className="interartion-container flex grid-nogutter">
-            <div className="col col-5">
+            <div className="col col-7">
               {currentUserId === "unknown" ? (
                 <>
                   <p>Bạn cần đăng nhập để bình luận.</p>
@@ -133,10 +149,10 @@ export default function ArtworkDetailDialog(props: Props) {
                 />
               )}
             </div>
-            <div className="creator-info-container col col-5">
-              {/* <UserInformationCard .. /> */}
+            <div className="creator-info-container col col-4">
+              <MinnorContentRight data={data} isFollowed={isFollowed} />
             </div>
-            <div className="blank-container col col-2" />
+            <div className="blank-container col col-1" />
           </div>
         </div>
       )}
