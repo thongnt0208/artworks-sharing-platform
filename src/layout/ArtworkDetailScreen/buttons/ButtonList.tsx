@@ -3,6 +3,7 @@ import hireIcon from "../../../assets/icons/aw-deatail-01-hire-icon.svg";
 import assetsIcon from "../../../assets/icons/aw-deatail-02-assets-icon.svg";
 import shareIcon from "../../../assets/icons/aw-deatail-04-share-icon.svg";
 import reportIcon from "../../../assets/icons/aw-deatail-05-report-icon.svg";
+import toolsIcon from "../../../assets/icons/aw-deatail-08-tools-icon.svg";
 import ShareDialog from "../dialogs/ShareDialog";
 import { useNavigate } from "react-router-dom";
 import SquareButton from "./SquareButton";
@@ -25,6 +26,7 @@ type Props = {
   isFollowed?: boolean;
   makeFollow?: () => void;
   makeUnFollow?: () => void;
+  _isLoading?: boolean;
 };
 
 export type btnListItemType = {
@@ -37,7 +39,7 @@ export type btnListItemType = {
   makeUnFollow?: () => void;
 };
 
-export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow }: Props) {
+export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow, _isLoading }: Props) {
   const [isShowShareDialog, setIsShowShareDialog] = useState(false);
   const [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const [isShowBuyAssetDialog, setIsShowBuyAssetDialog] = useState(false);
@@ -45,6 +47,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
   const [walletData, setWalletData] = useState({} as WalletProps);
   const assetsPanelOptions = useRef<OverlayPanel>(null);
   const navigate = useNavigate();
+  const toolsPanelOptions = useRef<OverlayPanel>(null);
   const blankPic = require("../../../assets/defaultImage/blank-100.png");
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
@@ -62,6 +65,12 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
       makeUnFollow: makeUnFollow,
     },
     {
+      title: "Phương tiện",
+      thumbnailImg: toolsIcon || blankPic,
+      thumbnailAlt: "",
+      onclick: (event?: any) => toolsPanelOptions.current?.toggle(event),
+    },
+    {
       title: "Thuê",
       thumbnailImg: hireIcon || blankPic,
       thumbnailAlt: "",
@@ -73,9 +82,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
       title: "Tài nguyên",
       thumbnailImg: assetsIcon || blankPic,
       thumbnailAlt: "",
-      onclick: (event?: any) => {
-        assetsPanelOptions.current?.toggle(event);
-      },
+      onclick: (event?: any) => assetsPanelOptions.current?.toggle(event),
     },
     {
       title: "Chia sẻ",
@@ -97,6 +104,10 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
 
   if (!data?.assets?.length || data?.assets?.length === 0) {
     buttonsList = buttonsList.filter((button) => button.title !== "Tài nguyên");
+  }
+
+  if (!data?.softwareUseds || data?.softwareUseds?.length === 0) {
+    buttonsList = buttonsList.filter((button) => button.title !== "Phương tiện");
   }
 
   const saveAssetHandler = (id: string) => {
@@ -121,7 +132,7 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
   const buyAssetHandler = () => {
     if (!chosenAsset.id) return;
     if (chosenAsset.isBought) {
-     toast.warn("Tài nguyên này đã được mua trước đó. Vào trang 'Tài nguyên của tôi' để tải lại.");
+      toast.warn("Tài nguyên này đã được mua trước đó. Vào trang 'Tài nguyên của tôi' để tải lại.");
       return;
     }
     BuyAsset(chosenAsset.id)
@@ -157,7 +168,8 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
           <>
             <p>Đây là tài nguyên trả phí.</p>
             <p>
-              Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, tài nguyên này có giá <strong>{numberToXu(chosenAsset?.price || 0)}</strong>.
+              Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, tài
+              nguyên này có giá <strong>{numberToXu(chosenAsset?.price || 0)}</strong>.
             </p>
             <p>Bạn có muốn mua tài nguyên này không?</p>
           </>
@@ -183,14 +195,23 @@ export default function ButtonList({ data, isFollowed, makeFollow, makeUnFollow 
         data={data?.assets || []}
         saveHandler={saveAssetHandler}
       />
+      <OverlayPanel ref={toolsPanelOptions}>
+        <div className="flex flex-column gap-4">
+          {data?.softwareUseds?.map((software) => {
+            return <span key={`sw-${software?.id}`}>{software?.softwareName}</span>;
+          })}
+        </div>
+      </OverlayPanel>
       {buttonsList.map((button, index) => {
         return (
           <SquareButton
             key={index}
             {...button}
+            data={data}
             onclick={(e?: any) => {
               button.onclick(e);
             }}
+            _isLoading={_isLoading}
           />
         );
       })}

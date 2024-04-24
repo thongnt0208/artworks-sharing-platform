@@ -33,7 +33,7 @@ function castResponseData(data: any): ArtworkDetailType {
     lastModificatedBy: data.lastModificatedBy,
     lastModificatedOn: data.lastModificatedOn ? data.lastModificatedOn : undefined,
     tagDetails: data.tagDetails,
-    categoryArtworkDetails: data.categoryArtworkDetails,
+    categoryArtworkDetails: data.categoryList,
     likes: data.likes,
     views: data.views,
     viewCount: data.viewCount,

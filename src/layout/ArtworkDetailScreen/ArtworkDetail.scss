@@ -1,18 +1,41 @@
 @import "./../../const/variables.scss";
 
+.artwork-detail-screen {
+  margin-top: -1rem;
+}
+.artwork-detail-screen,
 .artwork-detail-container {
   .detail-container {
     .content-container {
-     
     }
     .side-buttons-container {
     }
   }
 
   .interartion-container {
+    .creator-info-container {
+      .tmp-container {
+        padding: 1rem;
+        margin-left: 12rem;
+        margin-bottom: 2rem;
+        border: solid 1px $bg-300;
+        border-radius: $borderRadius-100;
+        text-align: center;
+        color: $gray-default;
+        flex-wrap: wrap;
+
+        .btns-container {
+          align-items: stretch;
+          padding: 0 1rem 1rem 1rem;
+
+          button {
+            justify-content: center;
+          }
+        }
+      }
+    }
   }
 }
-
 @media screen and (min-width: $desktop) {
   .side-buttons-container {
     padding-left: 30px !important;
