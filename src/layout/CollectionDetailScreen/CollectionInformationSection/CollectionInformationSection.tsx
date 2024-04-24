@@ -117,7 +117,7 @@ const CollectionInformationSection: React.FC<CollectionProps> = (
           </p>
           <p className="ml-2 mr-2 mt-0 mb-0">•</p>
           <p className="collection-artwork-num">
-            {props.numberOfArtworks} tac pham
+            {props.numberOfArtworks} tác phẩm
           </p>
         </div>
 

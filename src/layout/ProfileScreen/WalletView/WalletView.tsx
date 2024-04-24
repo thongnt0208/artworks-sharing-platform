@@ -33,7 +33,7 @@ export type WalletProps = {
 
 const WalletView: React.FC = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const [wallet, setWallet] = useState<WalletProps>();
@@ -53,6 +53,7 @@ const WalletView: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const wallet = await GetWalletData(getAuthInfo()?.id);
         setWallet(wallet);
@@ -78,7 +79,6 @@ const WalletView: React.FC = () => {
   return (
     <div className="wallet-view">
       {isLoading && <ProgressSpinner />}
-
       {!isLoading && (
         <>
           <div className="wallet-info-section">

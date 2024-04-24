@@ -10,10 +10,11 @@ import CollectionCard, {
   CollectionProps,
 } from "../../../components/CollectionCard";
 import "./CollectionsView.scss";
-import { CatchAPICallingError } from "../..";
+import { CatchAPICallingError, ProgressSpinner } from "../..";
 
 const CollectionScreen: React.FC = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(true);
   const [collections, setCollections] = React.useState<CollectionProps[]>([]);
   const [accountId, isCreator, accountAvatar] = useOutletContext() as [
     string,
@@ -28,6 +29,8 @@ const CollectionScreen: React.FC = () => {
         setCollections(collectionList);
       } catch (error) {
         CatchAPICallingError(error, navigate);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchServices();
@@ -49,34 +52,42 @@ const CollectionScreen: React.FC = () => {
     <>
       <h1>Bộ sưu tập</h1>
       <div className="gallery grid p-0 m-0">
-        {isCreator ? (
-          collections.length === 0 ? (
-            <Card
-              header={CardContent}
-              className="add-collection-card cursor-pointer"
-            />
-          ) : (
-            collections.map((collection) => (
-              <div className="gallery__item col col-6" key={collection.id}>
-                <CollectionCard {...collection} accountAvatar={accountAvatar} />
-              </div>
-            ))
-          )
-        ) : collections.filter(
-            (collection) => isCreator || collection.privacy === "Public"
-          ).length === 0 ? (
-          <div> Nhà sáng tạo chưa tạo bộ sưu tập nào </div>
-        ) : (
-          collections
-            .filter(
-              (collection) => isCreator || collection.privacy === "Public"
+        {isLoading && <ProgressSpinner />}
+        {!isLoading &&
+          (isCreator ? (
+            collections.length === 0 ? (
+              <Card
+                header={CardContent}
+                className="add-collection-card cursor-pointer"
+              />
+            ) : (
+              collections.map((collection) => (
+                <div className="gallery__item col col-6" key={collection.id}>
+                  <CollectionCard
+                    {...collection}
+                    accountAvatar={accountAvatar}
+                  />
+                </div>
+              ))
             )
-            .map((collection) => (
-              <div className="gallery__item col col-6" key={collection.id}>
-                <CollectionCard {...collection} accountAvatar={accountAvatar} />
-              </div>
-            ))
-        )}
+          ) : collections.filter(
+              (collection) => isCreator || collection.privacy === "Public"
+            ).length === 0 ? (
+            <div> Nhà sáng tạo chưa tạo bộ sưu tập nào </div>
+          ) : (
+            collections
+              .filter(
+                (collection) => isCreator || collection.privacy === "Public"
+              )
+              .map((collection) => (
+                <div className="gallery__item col col-6" key={collection.id}>
+                  <CollectionCard
+                    {...collection}
+                    accountAvatar={accountAvatar}
+                  />
+                </div>
+              ))
+          ))}
       </div>
     </>
   );
