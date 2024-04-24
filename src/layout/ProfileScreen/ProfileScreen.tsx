@@ -46,10 +46,10 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     try {
       const response = await SendRequestMessage(profile.id, request.message);
       if (response) {
-        toast.success("Gửi yêu cầu thành công");
+        toast.success("Gửi lời nhắn thành công");
       }
     } catch (error) {
-      toast.error("Gửi yêu cầu thất bại");
+      toast.error("Gửi lời nhắn thất bại");
       CatchAPICallingError(error, navigate);
     }
   };
