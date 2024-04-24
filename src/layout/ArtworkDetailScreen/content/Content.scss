@@ -29,17 +29,33 @@
     }
   }
 
-  .like-btn-container, .like-view-comment-count-container{
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
+  .licence-and-ai-container {
+    font-style: italic;
+
+    i{
+      font-size: x-small;
+      background-color: $bg-300;
+      border-radius: 50px;
+      padding: 0.25rem;
+    }
   }
 
-  .like-view-comment-count-container{
-    div{
+  .like-and-more-container {
+    .like-btn-container,
+    .like-view-comment-count-container {
       display: flex;
-      gap: 0.25rem;
-      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .like-view-comment-count-container {
+      div {
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
+      }
+    }
+    .created-date-privacy-container{
+      color: $gray-default;
     }
   }
 }

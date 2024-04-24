@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { Dialog } from "primereact/dialog";
 import { Divider } from "primereact/divider";
 
 import { useNavigate } from "react-router-dom";
 import ReportDialog from "../layout/ArtworkDetailScreen/dialogs/ReportDialog";
 import RequestPopup, { RequestProps } from "./RequestPopup";
-import ProfilePreview from "./ProfilePreview";
 import "./UserInformationCard.scss";
 
 const defaultAvatar = require("../assets/defaultImage/default-avatar.png");
@@ -16,18 +14,18 @@ export type UserInformationProps = {
   id: string;
   fullname: string;
   avatar: string;
+  email: string;
+  username: string;
+  isFollowed: boolean;
   job?: string;
   address?: string;
   isCreator?: boolean;
-  email: string;
-  username: string;
   role?: string;
   bio?: string;
   profileView?: number;
   artworksView?: number;
   followerNum?: number;
   followingNum?: number;
-  isFollowed: boolean;
   isVerrified?: boolean;
   projectCompleted?: number;
   hire?: boolean;
@@ -38,20 +36,15 @@ export type UserInformationProps = {
   privacyEditHandler?: () => void;
 };
 
-const UserInformationCard: React.FC<UserInformationProps> = (
-  props: UserInformationProps
-) => {
+const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformationProps) => {
   const navigate = useNavigate();
   let [isShowReportDialog, setIsShowReportDialog] = useState(false);
   const [isShowRequestPopup, setIsShowRequestPopup] = useState(false);
-  const [isShowProfilePreview, setIsShowProfilePreview] = useState(false);
   const [isHire, setIsHire] = useState(false);
 
   let footer = (
     <>
-      {props.hire ? (
-        <></>
-      ) : props.bio ? (
+      {!props.hire && props.bio && (
         <div
           className="bio-container w-full pt-2 pl-4 pr-4"
           style={{ borderTop: "1px solid #CCCBC8" }}
@@ -59,8 +52,6 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           <h3>Về tôi</h3>
           <p className="text-justify">{props.bio}</p>
         </div>
-      ) : (
-        <></>
       )}
 
       {props.hire ? (
@@ -122,29 +113,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (
         targetId={props.id}
         entityName="Account"
       />
-      <Dialog
-        style={{ width: "60%", height: "100vh" }}
-        showHeader={false}
-        contentStyle={{ borderRadius: "12px", height: "100%" }}
-        visible={isShowProfilePreview}
-        onHide={() => setIsShowProfilePreview(false)}
-        modal={true}
-        dismissableMask={true}
-      >
-        <ProfilePreview
-          creator={props}
-          hireCallback={() => {
-            setIsShowRequestPopup(true);
-            setIsHire(true);
-          }}
-        />
-      </Dialog>
-      <Card
-        footer={footer ? footer : undefined}
-        className="user-information-card"
-        onClick={props.hire ? () => setIsShowProfilePreview(true) : undefined}
-        style={props.hire ? { cursor: "pointer" } : {}}
-      >
+      <Card footer={footer ? footer : undefined} className="user-information-card">
         <div className="avatar-container">
           <img
             alt={`Ảnh đại diện của ${props.fullname}`}
@@ -157,15 +126,15 @@ const UserInformationCard: React.FC<UserInformationProps> = (
           <h3 className="m-0">{props.email}</h3>
         </div>
         {!props.hire && (
-        <div className="w-full h-fit flex flex-row justify-content-center mt-2">
-          <p className="h-fit m-0">
-            <strong>{props.followerNum}</strong> người theo dõi
-          </p>
-          <Divider layout="vertical" className="h-full p-0" />
-          <p className="h-fit m-0">
-            <strong>{props.followingNum}</strong> đang theo dõi
-          </p>
-        </div>
+          <div className="w-full h-fit flex flex-row justify-content-center mt-2">
+            <p className="h-fit m-0">
+              <strong>{props.followerNum}</strong> người theo dõi
+            </p>
+            <Divider layout="vertical" className="h-full p-0" />
+            <p className="h-fit m-0">
+              <strong>{props.followingNum}</strong> đang theo dõi
+            </p>
+          </div>
         )}
         <div className="action-section">
           {props.isCreator ? (
@@ -180,12 +149,8 @@ const UserInformationCard: React.FC<UserInformationProps> = (
               {props.hire ? (
                 <>
                   <div className="hire-info">
-                    <p className="project-completed">
-                      {props.projectCompleted} Dự án Hoàn thành
-                    </p>
-                    {props.isVerrified && (
-                      <i className="pi pi-verified verrified-icon" />
-                    )}
+                    <p className="project-completed">{props.projectCompleted} Dự án Hoàn thành</p>
+                    {props.isVerrified && <i className="pi pi-verified verrified-icon" />}
                   </div>
                   <Button
                     rounded

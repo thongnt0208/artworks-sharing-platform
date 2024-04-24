@@ -13,9 +13,9 @@ const Footer: React.FC = () => {
 
   const items1 = [
     { label: 'Artworkia', icon: '' },
-    { label: 'Điều khoản', icon: '' },
-    { label: 'Quyền riêng tư', icon: '' },
-    { label: 'Trợ giúp', icon: '' },
+    { label: 'Điều khoản', icon: '', url: '/policy' },
+    { label: 'Quyền riêng tư', icon: '', url: '/policy' },
+    { label: 'Trợ giúp', icon: '', url: '/policy' },
   ];
   const endItems = [[<Image src={logo} alt="Logo" height="28" />]];
 
