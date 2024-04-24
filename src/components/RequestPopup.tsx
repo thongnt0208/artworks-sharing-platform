@@ -55,7 +55,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
       setAllFieldsFilled(false);
       setMessage("");
       setEstimateDeliveryTime("");
-      setBudget(startingPrice);
+      setBudget(0);
     }
   };
 
@@ -91,6 +91,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
               minLength={10}
               maxLength={255}
               style={{ width: "80%" }}
+              value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
             {isHire && message.length < 10 && (
@@ -129,7 +130,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
                   name="startingPrice"
                   placeholder="100.000 Xu"
                   onValueChange={(e) => setBudget(e.value || 0)}
-                  value={startingPrice}
+                  value={budget}
                   min={startingPrice}
                 />
               </div>
@@ -150,7 +151,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
                 className="w-full text-center p-0 m-0"
                 style={{ fontSize: "0.9rem", fontWeight: "border" }}
               >
-                Gửi yêu cầu
+                {isHire ? "Gửi yêu cầu" : "Gửi tin nhắn"}  
               </p>
             </Button>
           </div>

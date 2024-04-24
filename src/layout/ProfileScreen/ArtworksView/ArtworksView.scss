@@ -4,7 +4,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start !important;
+    justify-content: start !important;
     flex-wrap: wrap !important;
     padding: 0 !important;
     .add-artwork-card {
@@ -22,5 +22,9 @@
                 color: $text-100;
             }
         }
+    }
+    .gallery__item {
+        width: 314px;
+        height: fit-content;
     }
 }
