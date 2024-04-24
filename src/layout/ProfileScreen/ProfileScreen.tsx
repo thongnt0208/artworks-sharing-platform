@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { GetProfileData, SendRequestMessage } from "./ProfileService";
 import UserInformationCard, {
@@ -18,7 +18,7 @@ import {
 import "./ProfileScreen.scss";
 
 const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
-  const profileId = getAuthInfo()?.id;
+  const profileId = useParams()?.id;
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserInformationProps>({
     id: "",
