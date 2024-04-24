@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
+import { Link, useParams } from "react-router-dom";
 import "./ArtworkDetail.scss";
 import {
   addFollow,
@@ -16,11 +15,10 @@ import CommentComponent from "./comment/Comment";
 import { ArtworkDetailType, CommentType } from "./ArtworkDetailType";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { ProgressSpinner } from "primereact/progressspinner";
-// import UserInformationCard from "../../components/UserInformationCard";
+import MinnorContentRight from "./MinnorContentRight";
 
 export default function ArtworkDetail() {
   const id = useParams().id || "";
-  const navigate = useNavigate();
   const [data, setData] = useState({} as ArtworkDetailType);
   const [comments, setComments] = useState([] as CommentType[]);
   const [isLiked, setIsLiked] = useState(false);
@@ -30,16 +28,6 @@ export default function ArtworkDetail() {
   const [isLoading, setIsLoading] = useState(false);
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
-
-  let dialogProperties = {
-    visible: true,
-    onHide: () => navigate(-1),
-    closable: false,
-    headerStyle: { border: "none", padding: "8px" },
-    dismissableMask: true,
-    draggable: false,
-    className: "artwork-detail-dialog w-screen h-screen ml-7 mr-7",
-  };
 
   const fetchIsFollowed = (id: string) => {
     fetchIsFollow(id)
@@ -109,7 +97,7 @@ export default function ArtworkDetail() {
   }, []);
 
   return (
-    <Dialog {...dialogProperties}>
+    <div className="artwork-detail-screen h-screen ml-7 mr-7">
       {isLoading ? (
         <div className={previewClassname}>
           <div className="empty-template flex flex-column gap-1">
@@ -126,7 +114,7 @@ export default function ArtworkDetail() {
       ) : (
         !data.images && <p>Không tìm thấy bài đăng, thử lại sau nhé.</p>
       )}
-      
+
       {data.images && (
         <div className="artwork-detail-container">
           <div className="detail-container flex grid-nogutter">
@@ -149,7 +137,7 @@ export default function ArtworkDetail() {
             </div>
           </div>
 
-          <div className="interartion-container flex grid-nogutter">
+          <div className="interartion-container flex grid-nogutter pb-4">
             <div className="col col-5">
               {currentUserId === "unknown" ? (
                 <>
@@ -167,12 +155,12 @@ export default function ArtworkDetail() {
               )}
             </div>
             <div className="creator-info-container col col-5">
-              {/* <UserInformationCard .. /> */}
+              <MinnorContentRight data={data} isFollowed={isFollowed} />
             </div>
             <div className="blank-container col col-2" />
           </div>
         </div>
       )}
-    </Dialog>
+    </div>
   );
 }

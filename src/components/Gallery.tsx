@@ -26,6 +26,9 @@ const Gallery: React.FC<ArtworksProps> = ({ artworks, awDetailStateTools }) => {
   const openDetailDialog = (artwork: ArtworkProps) => {
     setIsShowDetailDialog(true);
     setSelectingAw(artwork);
+    const newUrlText = `/artwork/${artwork?.id}`;
+    const newUrl = `${window.location.origin}${newUrlText}`;
+    window.history.pushState(null, '', newUrl);
   };
 
   return (

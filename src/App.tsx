@@ -39,7 +39,7 @@ import ChatScreen from "./layout/ChatScreen/ChatScreen";
 import CollectionDetailScreen from "./layout/CollectionDetailScreen/CollectionDetailScreen";
 import HireScreen from "./layout/HireScreen/HireScreen";
 
-import { getAuthInfo } from "./util/AuthUtil";
+import { getAuthInfo, removeAuthInfo } from "./util/AuthUtil";
 import NotFoundPage from "./pages/404";
 import SearchScreen from "./layout/SearchScreen/SearchScreen";
 import { AuthProvider } from "./auth/context/auth-provider";
@@ -71,6 +71,8 @@ function App() {
       if (res) {
         GetNotificationsCurrentAccountRt(setChatNotis);
         GetChatboxesCurrentAccountRealtime(setChatboxes);
+      } else {
+        removeAuthInfo();
       }
     });
   }, []);
