@@ -1,11 +1,11 @@
+import React from "react";
 import { Button } from "primereact/button";
 import { DataScroller } from "primereact/datascroller";
 
-import React from "react";
-import "./AssetsCard.scss";
 import { AssetType } from "../layout/ArtworkDetailScreen/ArtworkDetailType";
 import { TextLimit } from "../util/StringHandler";
 import { formatFileSize } from "../util/FileSizeHandler";
+import "./AssetsCard.scss";
 
 export type AssetsProps = {
   id: string;
@@ -38,12 +38,7 @@ const AssetsCard: React.FC<AssetsProps> = (props: AssetsProps) => {
           src={image}
           className="thumbnail"
         />
-        <Button
-          className="number-of-items"
-          rounded
-          label={`Chứa ${totalItems} tài nguyên`}
-          onClick={props.onClickHandler}
-        />
+        <div className="number-of-items">{`Chứa ${totalItems} tài nguyên`}</div>
       </div>
     );
   };
