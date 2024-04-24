@@ -46,6 +46,7 @@ const ArtworksView: React.FC = () => {
       const response = await DeleteArtworkData(artworkId);
       if (response) {
         setArtworks(artworks.filter((artwork) => artwork.id !== artworkId));
+        toast.success("Xóa tác phẩm thành công");
       } else {
         toast.error("Xóa tác phẩm thất bại");
       }
