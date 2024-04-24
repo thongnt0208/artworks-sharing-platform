@@ -22,11 +22,7 @@ const ArtworksView: React.FC = () => {
   const [activeTab, setActiveTab] = useState(1); // Changed initial active tab index to 0
   const [pageNumber, setPageNumber] = useState(1);
 
-  const items = [
-    { label: "Đang duyệt" },
-    { label: "Đã duyệt" },
-    { label: "Bị từ chối" },
-  ];
+  const items = [{ label: "Đang duyệt" }, { label: "Đã duyệt" }, { label: "Bị từ chối" }];
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastArtworkRef = useRef<HTMLDivElement | null>(null);
@@ -62,21 +58,12 @@ const ArtworksView: React.FC = () => {
     if (!accountId) return;
     const fetchArtworks = async () => {
       try {
-        const response = await GetArtworksData(
-          8,
-          pageNumber,
-          accountId,
-          activeTab
-        );
+        const response = await GetArtworksData(8, pageNumber, accountId, activeTab);
         if (Array.isArray(response)) {
           setArtworks((prevArtworks) => {
-            const uniqueArtworkIds = new Set<string>(
-              prevArtworks.map((artwork) => artwork.id)
-            );
+            const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
             const filteredArtworks = Array.isArray(response)
-              ? response.filter(
-                  (artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id)
-                )
+              ? response.filter((artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id))
               : [];
             return [...prevArtworks, ...filteredArtworks];
           });
@@ -90,7 +77,8 @@ const ArtworksView: React.FC = () => {
       }
     };
     fetchArtworks();
-  }, [accountId, activeTab, navigate, pageNumber]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId, activeTab, pageNumber]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -129,44 +117,47 @@ const ArtworksView: React.FC = () => {
       ) : null}
       <div className="artwork-gallery">
         {isLoading && <ProgressSpinner />}
-        {artworks.length === 0 && !isLoading ? (
-          isCreator ? (
-            <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
-              <i className="pi pi-plus-circle icon m-3" />
-              <Button
-                label="Tạo tác phẩm"
-                onClick={() => {
-                  navigate("/artwork/post");
-                }}
-              ></Button>
-            </Card>
-          ) : (
-            <div> Tác giả chưa có tác phẩm nào </div>
-          )
-        ) : (
-          !isLoading &&
-          artworks.map((artwork) => (
-            <div className="gallery__item" key={artwork.id}>
-              <ArtworkCard
-                key={artwork.id}
-                id={artwork.id}
-                title={artwork.title}
-                isCreator={isCreator}
-                privacy={artwork.privacy}
-                createdBy={artwork.createdBy}
-                creatorFullName={artwork.creatorFullName}
-                thumbnail={artwork.thumbnail}
-                likeCount={artwork.likeCount}
-                viewCount={artwork.viewCount}
-                deleteHandler={() => {
-                  setVisibleDialogs(true);
-                  setSelectedArtworkId(artwork.id);
-                }}
-                updateHandler={() => navigate("/artwork/post")}
-                viewHandler={() => navigate(`/artwork/${artwork.id}`)}
-              />
-            </div>
-          ))
+        {!isLoading && (
+          <>
+            {artworks.length === 0 ? (
+              isCreator ? (
+                <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
+                  <i className="pi pi-plus-circle icon m-3" />
+                  <Button
+                    label="Tạo tác phẩm"
+                    onClick={() => {
+                      navigate("/artwork/post");
+                    }}
+                  ></Button>
+                </Card>
+              ) : (
+                <div> Tác giả chưa có tác phẩm nào </div>
+              )
+            ) : (
+              artworks.map((artwork) => (
+                <div className="gallery__item" key={artwork.id}>
+                  <ArtworkCard
+                    key={artwork.id}
+                    id={artwork.id}
+                    title={artwork.title}
+                    isCreator={isCreator}
+                    privacy={artwork.privacy}
+                    createdBy={artwork.createdBy}
+                    creatorFullName={artwork.creatorFullName}
+                    thumbnail={artwork.thumbnail}
+                    likeCount={artwork.likeCount}
+                    viewCount={artwork.viewCount}
+                    deleteHandler={() => {
+                      setVisibleDialogs(true);
+                      setSelectedArtworkId(artwork.id);
+                    }}
+                    updateHandler={() => navigate("/artwork/post")}
+                    viewHandler={() => navigate(`/artwork/${artwork.id}`)}
+                  />
+                </div>
+              ))
+            )}
+          </>
         )}
         <ConfirmDialog
           visible={visibleDialogs}
@@ -177,9 +168,7 @@ const ArtworksView: React.FC = () => {
           onHide={() => setVisibleDialogs(false)}
           footer={
             <div>
-              <Button onClick={() => deleteArtworkHandler(selectedArtworkId)}>
-                Xác nhận
-              </Button>
+              <Button onClick={() => deleteArtworkHandler(selectedArtworkId)}>Xác nhận</Button>
               <Button onClick={() => setVisibleDialogs(false)}>Hủy</Button>
             </div>
           }
@@ -187,9 +176,7 @@ const ArtworksView: React.FC = () => {
           <h3>Bạn có chắc muốn xóa tác phẩm này?</h3>
         </ConfirmDialog>
       </div>
-      <div ref={lastArtworkRef}>
-        {/* This is an invisible marker to observe */}
-      </div>
+      <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
   );
 };
