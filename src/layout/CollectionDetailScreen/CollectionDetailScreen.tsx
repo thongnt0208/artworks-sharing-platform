@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { GetCollectionData, UpdateCollectionData, DeleteCollectionData } from "./CollectionDetailService";
+import {
+  GetCollectionData,
+  UpdateCollectionData,
+  DeleteCollectionData,
+} from "./CollectionDetailService";
 import CollectionGallery from "./CollectionGallery/CollectionGallery";
 import CollectionInformationSection from "./CollectionInformationSection/CollectionInformationSection";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { toast } from "react-toastify";
-import { CatchAPICallingError } from "..";
+import { CatchAPICallingError, ProgressSpinner } from "..";
 
 type Artwork = {
   id: string;
@@ -24,7 +28,7 @@ export type CollectionProps = {
   collectionName: string;
   privacy: string;
   numberOfArtworks: number;
-  artworks: Artwork[]; 
+  artworks: Artwork[];
   accountAvatar?: string;
 };
 
@@ -32,6 +36,8 @@ const CollectionDetailScreen: React.FC = () => {
   let collectionId = useParams()?.id;
   const navigate = useNavigate();
   const accountAvatar = localStorage.getItem("accountAvatar");
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoadingArtworks, setIsLoadingArtworks] = React.useState(true);
   const [artworks, setArtworks] = React.useState<Artwork[]>([]);
   const [collection, setCollection] = React.useState<CollectionProps>({
     id: "",
@@ -51,7 +57,11 @@ const CollectionDetailScreen: React.FC = () => {
     }
   };
 
-  const handleUpdateCollection = async (collectionName: string, privacy: boolean) => {
+  const handleUpdateCollection = async (
+    collectionName: string,
+    privacy: boolean
+  ) => {
+    setIsLoading(true);
     try {
       const response = await UpdateCollectionData({
         collectionId: collection.id,
@@ -62,19 +72,21 @@ const CollectionDetailScreen: React.FC = () => {
         setCollection({
           ...collection,
           collectionName,
-          privacy: privacy? "Private" : "Public",
+          privacy: privacy ? "Private" : "Public",
         });
         toast.success("Cập nhật bộ sưu tập thành công");
-      }
-      else {
+      } else {
         toast.error("Cập nhật bộ sưu tập thất bại");
       }
     } catch (error) {
       CatchAPICallingError(error, navigate);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDeleteCollection = async () => {
+    setIsLoading(true);
     try {
       const response = await DeleteCollectionData(collection.id);
       if (response) {
@@ -87,42 +99,86 @@ const CollectionDetailScreen: React.FC = () => {
       }
     } catch (error) {
       CatchAPICallingError(error, navigate);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const updateArtworks = (artworkId: string) => {
-    const updatedArtworks = artworks.filter(
-      (artwork) => artwork.id !== artworkId
-    );
-    setArtworks(updatedArtworks);
-  }
+    setIsLoadingArtworks(true);
+    try {
+      const updatedArtworks = artworks.filter(
+        (artwork) => artwork.id !== artworkId
+      );
+      setArtworks(updatedArtworks);
+    } finally {
+      setIsLoadingArtworks(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchArtworks = async () => {
-      const { collection: fetchedCollection, artworks: fetchedArtworks } =
-        await GetCollectionData(collectionId || "");
-      if (fetchedCollection) {
-        setCollection(fetchedCollection);
-        setArtworks(fetchedArtworks);
+    const fetchCollectionData = async () => {
+      setIsLoading(true);
+      try {
+        const { collection: fetchedCollection } = await GetCollectionData(collectionId || "");
+        if (fetchedCollection) {
+          setCollection(fetchedCollection);
+          return fetchedCollection;
+        }
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
+      } finally {
+        setIsLoading(false);
       }
     };
+    
+    const fetchArtworks = async () => {
+      setIsLoadingArtworks(true);
+      try {
+        const fetchedCollection = await fetchCollectionData();
+        if (fetchedCollection) {
+          const { artworks: fetchedArtworks } = fetchedCollection;
+          setArtworks(fetchedArtworks);
+        }
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
+      } finally {
+        setIsLoadingArtworks(false);
+      }
+    };
+    fetchCollectionData();  
     fetchArtworks();
-  }, [collectionId]);
+  }, [collectionId, navigate]);
 
   return (
     <>
-      <CollectionInformationSection
-        id={collection.id}
-        creatorFullName={collection.creatorFullName}
-        collectionName={collection.collectionName}
-        privacy={handlePrivacyType(collection.privacy)}
-        numberOfArtworks={collection.numberOfArtworks}
-        accountAvatar={collection.accountAvatar?.toString() || ""} 
-        onUpdate={(collectionName: string, privacy: boolean) => {handleUpdateCollection(collectionName, privacy)}}
-        onDelete={() => {handleDeleteCollection()}}
-      />
-      {artworks && <CollectionGallery collectionId={collection.id} artworks={artworks} updateArtworks={updateArtworks}/>} 
-      {!artworks && <p>Loading artworks...</p>} 
+      {isLoading && <ProgressSpinner />}
+      {!isLoading && (
+        <>
+          <CollectionInformationSection
+            id={collection.id}
+            creatorFullName={collection.creatorFullName}
+            collectionName={collection.collectionName}
+            privacy={handlePrivacyType(collection.privacy)}
+            numberOfArtworks={collection.numberOfArtworks}
+            accountAvatar={collection.accountAvatar?.toString() || ""}
+            onUpdate={(collectionName: string, privacy: boolean) => {
+              handleUpdateCollection(collectionName, privacy);
+            }}
+            onDelete={() => {
+              handleDeleteCollection();
+            }}
+          />
+          {isLoadingArtworks && <ProgressSpinner />}
+          {artworks && (
+            <CollectionGallery
+              collectionId={collection.id}
+              artworks={artworks}
+              updateArtworks={updateArtworks}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };

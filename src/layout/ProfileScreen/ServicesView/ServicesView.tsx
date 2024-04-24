@@ -10,7 +10,7 @@ import {
   GetServicesData,
 } from "./ServicesService";
 import RequestPopup, { RequestProps } from "../../../components/RequestPopup";
-import { CatchAPICallingError } from "../..";
+import { CatchAPICallingError, ProgressSpinner } from "../..";
 import { toast } from "react-toastify";
 import ServiceCard, { ServiceProps } from "../../../components/ServiceCard";
 import ServiceInformationSection from "./ServiceInformationSection/ServiceInformationSection";
@@ -23,6 +23,7 @@ const ServicesView: React.FC = () => {
   const paramAccountId = useParams()?.id;
   let [accountId, isCreator, accountAvatar, accountFullname] =
     useOutletContext() as [string, boolean, string, string];
+  const [isLoading, setIsLoading] = useState(true);
   const [services, setServices] = useState<ServiceProps[]>([]);
   const [serviceInfoDialogVisible, setServiceInfoDialogVisible] =
     useState<boolean>(false);
@@ -89,9 +90,11 @@ const ServicesView: React.FC = () => {
     } else {
       CatchAPICallingError(response, navigate);
     }
+    setIsLoading(false);
   }, [accountId, navigate]);
 
   const handleDeleteService = async (serviceId: string) => {
+    setIsLoading(true);
     try {
       const response = await DeleteServiceData(serviceId);
       if (response) {
@@ -121,57 +124,59 @@ const ServicesView: React.FC = () => {
     <>
       <h1>Các dịch vụ</h1>
       <div className="gallery p-0">
-        {isCreator || services.length > 0 ? (
-          <>
-            <div className="gallery__item flex flex-wrap flex-row justify-content-start align-items-start">
-              {services.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  id={service.id}
-                  serviceName={service.serviceName}
-                  description={service.description}
-                  deliveryTime={service.deliveryTime}
-                  numberOfConcept={service.numberOfConcept}
-                  numberOfRevision={service.numberOfRevision}
-                  startingPrice={service.startingPrice}
-                  thumbnail={service.thumbnail}
-                  accountId={accountId}
-                  accountFullname={accountFullname}
-                  accountAvatar={accountAvatar}
-                  averageRating={service.averageRating}
-                  isCreator={isCreator}
-                  editHandler={() => {
-                    setSelectedService(service);
-                    handleArtworkReferences(service.artworkReferences);
-                    setServiceInfoDialogVisible(true);
-                  }}
-                  setSelectedService={(service: ServiceProps) => {
-                    setSelectedService(service);
-                  }}
-                  reviewHandler={() => {
-                    setSelectedService(service);
-                    setServiceReviewDialogVisible(true);
-                  }}
-                  handleShowRequestPopup={() => setIsShowRequestPopup(true)}
-                />
-              ))}
-              {isCreator && (
-                <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
-                  <i className="pi pi-plus-circle icon m-3" />
-                  <Button
-                    label="Tạo dịch vụ"
-                    onClick={() => {
+        {isLoading && <ProgressSpinner />}
+        {!isLoading &&
+          (isCreator || services.length > 0 ? (
+            <>
+              <div className="gallery__item flex flex-wrap flex-row justify-content-start align-items-start">
+                {services.map((service) => (
+                  <ServiceCard
+                    key={service.id}
+                    id={service.id}
+                    serviceName={service.serviceName}
+                    description={service.description}
+                    deliveryTime={service.deliveryTime}
+                    numberOfConcept={service.numberOfConcept}
+                    numberOfRevision={service.numberOfRevision}
+                    startingPrice={service.startingPrice}
+                    thumbnail={service.thumbnail}
+                    accountId={accountId}
+                    accountFullname={accountFullname}
+                    accountAvatar={accountAvatar}
+                    averageRating={service.averageRating}
+                    isCreator={isCreator}
+                    editHandler={() => {
+                      setSelectedService(service);
+                      handleArtworkReferences(service.artworkReferences);
                       setServiceInfoDialogVisible(true);
-                      setIsNew(true);
                     }}
-                  ></Button>
-                </Card>
-              )}
-            </div>
-          </>
-        ) : (
-          <div> Tác giả chưa có dịch vụ nào </div>
-        )}
+                    setSelectedService={(service: ServiceProps) => {
+                      setSelectedService(service);
+                    }}
+                    reviewHandler={() => {
+                      setSelectedService(service);
+                      setServiceReviewDialogVisible(true);
+                    }}
+                    handleShowRequestPopup={() => setIsShowRequestPopup(true)}
+                  />
+                ))}
+                {isCreator && (
+                  <Card className="add-service-card cursor-pointer flex flex-column justify-content-center align-items-center">
+                    <i className="pi pi-plus-circle icon m-3" />
+                    <Button
+                      label="Tạo dịch vụ"
+                      onClick={() => {
+                        setServiceInfoDialogVisible(true);
+                        setIsNew(true);
+                      }}
+                    ></Button>
+                  </Card>
+                )}
+              </div>
+            </>
+          ) : (
+            <div> Tác giả chưa có dịch vụ nào </div>
+          ))}
       </div>
       <Dialog
         className="service-info-dialog"
