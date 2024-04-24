@@ -9,11 +9,12 @@ import { TabMenu } from "primereact/tabmenu";
 import { DeleteArtworkData, GetArtworksData } from "./ArtworksService";
 import ArtworkCard, { ArtworkProps } from "../../../components/ArtworkCard";
 import { toast } from "react-toastify";
-import { CatchAPICallingError } from "../..";
+import { CatchAPICallingError, ProgressSpinner } from "../..";
 import "./ArtworksView.scss";
 
 const ArtworksView: React.FC = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [accountId, isCreator] = useOutletContext() as [string, boolean];
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [selectedArtworkId, setSelectedArtworkId] = useState<string>("");
@@ -59,21 +60,41 @@ const ArtworksView: React.FC = () => {
   useEffect(() => {
     if (!accountId) return;
     const fetchArtworks = async () => {
-      const response = await GetArtworksData(8, pageNumber, accountId, activeTab);
-      if (Array.isArray(response)) {
-        setArtworks((prevArtworks) => {
-          const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
-          const filteredArtworks = Array.isArray(response)
-            ? response.filter((artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id))
-            : [];
-          return [...prevArtworks, ...filteredArtworks];
-        });
-      } else {
-        toast.error("Lấy dữ liệu tác phẩm thất bại");
+      try {
+        const response = await GetArtworksData(
+          8,
+          pageNumber,
+          accountId,
+          activeTab
+        );
+        if (Array.isArray(response)) {
+          setArtworks((prevArtworks) => {
+            const uniqueArtworkIds = new Set<string>(
+              prevArtworks.map((artwork) => artwork.id)
+            );
+            const filteredArtworks = Array.isArray(response)
+              ? response.filter(
+                  (artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id)
+                )
+              : [];
+            return [...prevArtworks, ...filteredArtworks];
+          });
+        } else {
+          toast.error("Lấy dữ liệu tác phẩm thất bại");
+        }
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchArtworks();
-  }, [accountId, activeTab, pageNumber]);
+  }, [accountId, activeTab, navigate, pageNumber]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setArtworks([]);
+  }, [activeTab]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(
@@ -95,7 +116,6 @@ const ArtworksView: React.FC = () => {
       }
     };
   }, []);
-
   return (
     <>
       {isCreator ? (
@@ -107,7 +127,8 @@ const ArtworksView: React.FC = () => {
         />
       ) : null}
       <div className="artwork-gallery">
-        {artworks.length === 0 ? (
+        {isLoading && <ProgressSpinner />}
+        {artworks.length === 0 && !isLoading ? (
           isCreator ? (
             <Card className="add-artwork-card cursor-pointer flex flex-column justify-content-center align-items-center">
               <i className="pi pi-plus-circle icon m-3" />
@@ -122,6 +143,7 @@ const ArtworksView: React.FC = () => {
             <div> Tác giả chưa có tác phẩm nào </div>
           )
         ) : (
+          !isLoading &&
           artworks.map((artwork) => (
             <div className="gallery__item" key={artwork.id}>
               <ArtworkCard
@@ -164,7 +186,9 @@ const ArtworksView: React.FC = () => {
           <h3>Bạn có chắc muốn xóa tác phẩm này?</h3>
         </ConfirmDialog>
       </div>
-      <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
+      <div ref={lastArtworkRef}>
+        {/* This is an invisible marker to observe */}
+      </div>
     </>
   );
 };
