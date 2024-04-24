@@ -113,7 +113,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
   ];
 
   return (
-    <div className="container">
+    <div className="save-to-collection-popup-container">
       <h2 className="font-bold">Thêm vào bộ sưu tập</h2>
       <div className="select-collection w-full flex flex-column justify-content-start align-items-start">
         {collections.length !== 0 && (
