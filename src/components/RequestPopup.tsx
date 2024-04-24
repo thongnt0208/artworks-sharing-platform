@@ -151,7 +151,7 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
                 className="w-full text-center p-0 m-0"
                 style={{ fontSize: "0.9rem", fontWeight: "border" }}
               >
-                Gửi yêu cầu
+                {isHire ? "Gửi yêu cầu" : "Gửi tin nhắn"}  
               </p>
             </Button>
           </div>
