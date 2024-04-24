@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router-dom";
-import { CatchAPICallingError } from "../..";
+import { CatchAPICallingError, ProgressSpinner } from "../..";
 import {
   GetAssetsData,
   GetBoughtAssetsData,
@@ -23,10 +23,13 @@ import { BuyAsset } from "../../ArtworkDetailScreen/Service";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { numberToXu } from "../../../util/CurrencyHandle";
 import "./AssetsView.scss";
+import { getAuthInfo } from "../../../util/AuthUtil";
 
 const AssetsView: React.FC = () => {
   const navigate = useNavigate();
+  const creatorId = getAuthInfo()?.id;
   const [accountId, isCreator] = useOutletContext() as [string, boolean];
+  const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsProps[]>([]);
   const [boughtAssets, setBoughtAssets] = useState<BoughtAssetsProps[]>([]);
   const [chosenAssetId, setChosenAssetId] = useState<string>();
@@ -50,7 +53,7 @@ const AssetsView: React.FC = () => {
   const saveAssetHandler = (id: string, price?: number) => {
     setChosenAssetId(id);
     setChosenAssetPrice(price);
-    if (price && price > 0) {
+    if (price && price > 0 && !isCreator) {
       getWalletData();
       setIsShowBuyAssetDialog(true);
     } else {
@@ -61,7 +64,7 @@ const AssetsView: React.FC = () => {
   };
 
   const getWalletData = () => {
-    GetWalletData(accountId)
+    GetWalletData(creatorId)
       .then((data) => setWalletData(data))
       .catch((error) => CatchAPICallingError(error, navigate));
   };
@@ -113,7 +116,6 @@ const AssetsView: React.FC = () => {
       setPageNumber(1);
       try {
         if (activeTab === 0) {
-          console.log("Page number: ", pageNumber);
           const response = await GetAssetsData(accountId, pageNumber, 3);
           if (Array.isArray(response)) {
             setAssets((prevAssets) => {
@@ -131,7 +133,6 @@ const AssetsView: React.FC = () => {
             toast.error("Lấy dữ liệu tài nguyên thất bại!");
           }
         } else if (activeTab === 1) {
-          console.log("Page number: ", pageNumber);
           const response = await GetBoughtAssetsData(accountId, pageNumber, 10);
           if (Array.isArray(response)) {
             setBoughtAssets((prevAssets) => {
@@ -153,10 +154,16 @@ const AssetsView: React.FC = () => {
         }
       } catch (error) {
         CatchAPICallingError(error, navigate);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchAssets();
   }, [accountId, navigate, pageNumber, activeTab]);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [activeTab]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(
@@ -189,8 +196,9 @@ const AssetsView: React.FC = () => {
           className="w-max mb-3 text-black-alpha-90 text-sm"
         />
       ) : null}
-
-      {activeTab === 0 ? (
+      {isLoading && <ProgressSpinner />}
+      {!isLoading &&
+      (activeTab === 0 ? (
         <div className="gallery">
           {assets.length === 0 ? (
             isCreator ? (
@@ -249,8 +257,8 @@ const AssetsView: React.FC = () => {
             ))
           )}
         </div>
-      )}
-      <ConfirmDialog
+      ))}
+      {!isCreator && <ConfirmDialog
         visible={isShowBuyAssetDialog}
         onHide={() => setIsShowBuyAssetDialog(false)}
         header="Tài nguyên trả phí"
@@ -271,7 +279,7 @@ const AssetsView: React.FC = () => {
         icon="pi pi-exclamation-triangle"
         accept={() => buyAssetHandler()}
         reject={() => setIsShowBuyAssetDialog(false)}
-      />
+      />}
       <div ref={lastAssetRef}>
         {/* This is an invisible marker to observe */}
       </div>
