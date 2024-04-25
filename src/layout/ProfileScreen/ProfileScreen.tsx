@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAuthInfo } from "../../util/AuthUtil";
 import { GetProfileData, SendRequestMessage } from "./ProfileService";
 import UserInformationCard, {
@@ -103,7 +103,8 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       }
     };
     fetchData();
-  }, [isFollow, navigate, profile.id, profileId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFollow, profile.id, profileId]);
   return (
     <>
       {profile.id ? (
