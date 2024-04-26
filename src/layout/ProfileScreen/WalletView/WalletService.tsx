@@ -21,9 +21,7 @@ const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
  */
 export async function GetWalletData(accountId: string): Promise<WalletProps> {
   try {
-    const response = await axiosPrivate.get(
-      `${API_URL}/account/${accountId}/wallets`
-    );
+    const response = await axiosPrivate.get(`${API_URL}/account/${accountId}/wallets`);
     return {
       balance: response.data.balance,
       withdrawMethod: response.data.withdrawMethod,
@@ -43,26 +41,21 @@ export async function GetWalletData(accountId: string): Promise<WalletProps> {
  * @author AnhDH
  * @version 1.0.0
  */
-export async function GetWalletHistoryData(
-  accountId: string
-): Promise<WalletHistoryProps[]> {
+export async function GetWalletHistoryData(accountId: string): Promise<WalletHistoryProps[]> {
   try {
-    const response = await axiosPrivate.get(
-      `${API_URL}/account/${accountId}/wallet-histories`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosPrivate.get(`${API_URL}/account/${accountId}/wallet-histories`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response.data.map((item: any) => {
       return {
         id: item.id,
         amount: item.amount,
+        walletBalance: item.walletBalance,
         type: item.type === "Deposit" ? "Nạp tiền" : "Rút tiền",
         paymentMethod: item.paymentMethod,
-        transactionStatus:
-          item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        transactionStatus: item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
         createdOn: formatTime(item.createdOn),
       };
     });
@@ -77,35 +70,45 @@ export async function GetWalletHistoryData(
  * @param accountId - The ID of the account.
  * @returns A promise that resolves to an array of TransactionHistoryProps objects.
  * @param AnhDH
- * @version 1.0.0
+ * @version 1.1.0
  */
-export async function GetTransactionHistoryData(
-  accountId: string
-): Promise<TransactionHistoryProps[]> {
+export async function GetTransactionHistoryData(accountId: string): Promise<TransactionHistoryProps[]> {
   try {
-    const response = await axiosPrivate.get(
-      `${API_URL}/account/${accountId}/transaction-histories`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axiosPrivate.get(`${API_URL}/account/${accountId}/transaction-histories`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response.data.map((item: any) => {
       return {
         id: item.id,
-        accountId: item.fromAccount.id,
-        fromFullname: item.fromAccount.fullname,
-        detail: item.detail,
+        createdAccount: {
+          id: item.createdAccount.id,
+          username: item.createdAccount.username,
+          email: item.createdAccount.email,
+          fullname: item.createdAccount.fullname,
+          avatar: item.createdAccount.avatar,
+        },
+        otherAccount: {
+          id: item.otherAccount.id,
+          username: item.otherAccount.username,
+          email: item.otherAccount.email,
+          fullname: item.otherAccount.fullname,
+          avatar: item.otherAccount.avatar,
+        },
         assetId: item.assetId,
         proposalId: item.proposalId,
-        transactionStatus:
-          item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        detail: item.detail,
         price: item.price,
+        walletBalance: item.walletBalance,
+        fee: item.fee,
+        transactionStatus: item.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+        createdBy: item.createdBy,
         createdOn: formatTime(item.createdOn),
       };
     });
   } catch (error) {
+    console.log("GetTransactionHistoryData", error);  
     throw new Error("Không thể lấy dữ liệu lịch sử giao dịch.");
   }
 }
@@ -147,9 +150,7 @@ export async function DepositCoins(amount: number, redirectUrl: string) {
  */
 export async function GetQueryOrder(appTransId: string) {
   try {
-    const response = await axiosPrivate.get(
-      `${WS_API_URL}/payments/query-order/${appTransId}/ws`
-    );
+    const response = await axiosPrivate.get(`${WS_API_URL}/payments/query-order/${appTransId}/ws`);
     if (response.status !== 200) {
       return {};
     }
@@ -168,16 +169,11 @@ export async function GetQueryOrder(appTransId: string) {
  * @author AnhDH
  * @version 1.0.0
  */
-export async function VerifyZaloPayAccount(
-  phoneNumber: string
-): Promise<AccountVerificationData> {
+export async function VerifyZaloPayAccount(phoneNumber: string): Promise<AccountVerificationData> {
   try {
     console.log("VerifyZaloPayAccount", phoneNumber);
 
-    const response = await axiosPrivate.post(
-      `${API_URL}/payments/query-account`,
-      { phone: phoneNumber }
-    );
+    const response = await axiosPrivate.post(`${API_URL}/payments/query-account`, { phone: phoneNumber });
     return {
       returnCode: response.data.returnCode,
       returnMessage: response.data.returnMessage,
@@ -205,12 +201,9 @@ export async function VerifyZaloPayAccount(
  */
 export async function UpdateWalletInformation(phoneNumber: string) {
   try {
-    const response = await axiosPrivate.post(
-      `${API_URL}/payments/query-account`,
-      {
-        phone: phoneNumber,
-      }
-    );
+    const response = await axiosPrivate.post(`${API_URL}/payments/query-account`, {
+      phone: phoneNumber,
+    });
     if (response.status !== 200) {
       return false;
     }
@@ -228,12 +221,7 @@ export async function UpdateWalletInformation(phoneNumber: string) {
  * @param referenceId - The reference ID for the withdrawal.
  * @returns A Promise that resolves to the response data if successful, or an empty object if there was an error.
  */
-export async function WithdrawCoins(
-  amount: number,
-  muId: string,
-  phone: string,
-  referenceId: string
-): Promise<number> {
+export async function WithdrawCoins(amount: number, muId: string, phone: string, referenceId: string): Promise<number> {
   try {
     const response = await axiosPrivate.post(`${API_URL}/payments/topup`, {
       amount,
@@ -243,8 +231,6 @@ export async function WithdrawCoins(
     });
     return response.data.returnCode;
   } catch (error) {
-    throw new Error(
-      "Không đủ tiền! Số Xu còn lại trong ví của bạn không đủ để thực hiện giao dịch này."
-    );
+    throw new Error("Không đủ tiền! Số Xu còn lại trong ví của bạn không đủ để thực hiện giao dịch này.");
   }
 }

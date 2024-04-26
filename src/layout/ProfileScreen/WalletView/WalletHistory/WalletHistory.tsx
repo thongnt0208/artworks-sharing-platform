@@ -6,6 +6,7 @@ export type WalletHistoryProps = {
   id: string;
   amount: number;
   type: string;
+  walletBalance: number;
   paymentMethod: string;
   transactionStatus: string;
   createdOn: string;
@@ -18,16 +19,8 @@ export type walletHistoryList = {
 const WalletHistory: React.FC<walletHistoryList> = (walletHistoryList) => {
   const typeRowTemplate = (rowData: WalletHistoryProps) => {
     return (
-      <span
-        className={
-          rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"
-        }
-      >
-        {rowData.type === "Nạp tiền" ? (
-          <i className="pi pi-arrow-down mr-1" />
-        ) : (
-          <i className="pi pi-arrow-up mr-1" />
-        )}
+      <span className={rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"}>
+        {rowData.type === "Nạp tiền" ? <i className="pi pi-arrow-down mr-1" /> : <i className="pi pi-arrow-up mr-1" />}
         {rowData.type}
       </span>
     );
@@ -35,17 +28,16 @@ const WalletHistory: React.FC<walletHistoryList> = (walletHistoryList) => {
 
   const amountRowTemplate = (rowData: WalletHistoryProps) => {
     return (
-      <span
-        className={
-          rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"
-        }
-      >
-        {rowData.type === "Nạp tiền" ? (
-          `+${rowData.amount.toLocaleString()}`
-        ) : (
-          `-${rowData.amount.toLocaleString()}`
-        )}
-        
+      <span className={rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"}>
+        {rowData.type === "Nạp tiền" ? `+${rowData.amount.toLocaleString()}` : `${rowData.amount.toLocaleString()}`}
+      </span>
+    );
+  };
+
+  const walletBalanceRowTemplate = (rowData: WalletHistoryProps) => {
+    return (
+      <span className={rowData.type === "Nạp tiền" ? "text-blue-600" : "text-red-500"}>
+        {rowData.walletBalance.toLocaleString()}
       </span>
     );
   };
@@ -55,8 +47,7 @@ const WalletHistory: React.FC<walletHistoryList> = (walletHistoryList) => {
       <span
         style={{
           width: "fit-content",
-          backgroundColor:
-            rowData.transactionStatus === "Thành công" ? "green" : "red",
+          backgroundColor: rowData.transactionStatus === "Thành công" ? "green" : "red",
           padding: "0.25rem 0.5rem",
           borderRadius: "1rem",
           color: "white",
@@ -79,19 +70,10 @@ const WalletHistory: React.FC<walletHistoryList> = (walletHistoryList) => {
       currentPageReportTemplate="{first} to {last} of {totalRecords}"
       emptyMessage="Hãy nạp thêm Xu để trải nghiệm các dịch vụ của Artworkia nhé!"
     >
-      <Column
-        field="type"
-        header="Loại"
-        body={typeRowTemplate}
-        sortable
-      ></Column>
+      <Column field="type" header="Loại" body={typeRowTemplate} sortable></Column>
       <Column field="paymentMethod" header="Phương thức" sortable></Column>
-      <Column
-        field="amount"
-        header="Số lượng (Xu)"
-        body={amountRowTemplate}
-        sortable
-      ></Column>
+      <Column field="amount" header="Số lượng (Xu)" body={amountRowTemplate} sortable></Column>
+      <Column field="walletBalance" header="Số dư ví" body={walletBalanceRowTemplate} sortable></Column>
       <Column
         field="transactionStatus"
         header="Trạng thái"
