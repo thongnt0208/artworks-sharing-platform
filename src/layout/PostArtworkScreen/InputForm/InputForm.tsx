@@ -68,9 +68,9 @@ export default function InputForm({
     onSubmit: (values) => {
       const modifiedValues = values;
       modifiedValues.thumbnail = values.images[0];
-      if (assets) {
-        modifiedValues.assets = assets;
-      }
+      // if (assets) {
+      //   modifiedValues.assets = assets;
+      // }
       setisLoading(true);
 
       // Call API to post
@@ -124,10 +124,8 @@ export default function InputForm({
     if (Object.values(validationResults).includes(false)) {
       formik.setFieldError("images", "Hình ảnh không được chứa nội dung không phù hợp.");
       setHasNSFWImage(true);
-      console.log("hasNSFWFFFFF", true);
     } else {
       setHasNSFWImage(false);
-      console.log("hasNSFWFFFFF", false);
     }
   }, [validationResults]);
 
@@ -139,6 +137,9 @@ export default function InputForm({
 
   return (
     <>
+    {JSON.stringify(assets)}
+    <br /> <br />
+    {JSON.stringify(formik.values)}
       {hasNSFWImage && <p style={{ color: "red" }}> Có hình ảnh không phù hợp </p>}
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">

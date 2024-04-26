@@ -68,7 +68,7 @@ export default function MultipleFileUpload({
   const onTemplateSelect = async (e: { files: File[]; originalEvent: any }) => {
     let _totalSize = totalSize;
     let files = e.files;
-    const validatedFiles = [];
+    setUploadedFiles(files);
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -77,11 +77,8 @@ export default function MultipleFileUpload({
 
       try {
         await validateImage(file);
-        validatedFiles.push(file);
       } catch (error) {
-        console.error(`Error validating ${file.name}:`, error);
-        console.log(error);
-
+        console.log(`Error validating ${file.name}:`, error);
         toast.current?.show({
           severity: "error",
           summary: `Error validating ${file.name}`,
@@ -89,10 +86,8 @@ export default function MultipleFileUpload({
         });
       } finally {
         setValidationProgress((prevProgress) => ({ ...prevProgress, [file.name]: 100 }));
-        setUploadedFiles(validatedFiles);
       }
     }
-
     setTotalSize(_totalSize);
   };
 
@@ -102,7 +97,7 @@ export default function MultipleFileUpload({
   };
 
   const onRemove = (event: any) => {
-    const removedFile = event.file; // Get the file being removed
+    const removedFile = event?.file; // Get the file being removed
     const updatedFiles = uploadedFiles.filter((file: any) => file !== removedFile); // Filter out the removed file
     setValidationResults((prevResults) => {
       const updatedResults = { ...prevResults };
