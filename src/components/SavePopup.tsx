@@ -27,8 +27,7 @@ interface SavePopupProps {
 
 const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
   const [createCollection, setCreateCollection] = useState(false);
-  const [selectedCollection, setSelectedCollection] =
-    useState<CollectionProps>();
+  const [selectedCollection, setSelectedCollection] = useState<CollectionProps>();
   const [collections, setCollections] = useState<CollectionProps[]>([]);
   const [privacy, setPrivacy] = useState<number>(0);
   let accountId = getAuthInfo()?.id;
@@ -44,17 +43,14 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
     },
   });
 
-  const handleAddArtworkToCollection = async (
-    collectionId: string,
-    artworkId: string
-  ) => {
+  const handleAddArtworkToCollection = async (collectionId: string, artworkId: string) => {
     try {
       const response = await AddArtworkToCollection({
         collectionId,
         artworkId,
       });
       if (response) {
-        toast.success("Đã lưu tác phẩm này vào bộ sưu tập của mình");
+        toast.success("Đã lưu tác phẩm vào bộ sưu tập");
       } else {
         toast.warning("Tác phẩm này đã tồn tại trong bộ sưu tập của bạn");
       }
@@ -76,6 +72,9 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
       });
       if (response) {
         toast.success("Đã tạo bộ sưu tập mới thành công");
+        setTimeout(() => {
+          toast.success("Đã lưu tác phẩm vào bộ sưu tập");
+        }, 400);
       } else {
         toast.error("Đã xảy ra lỗi khi tạo bộ sưu tập mới");
       }
@@ -130,9 +129,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
             <div className="flex flex-row align-items-center mt-2 mb-4">
               <InputSwitch
                 checked={createCollection}
-                onChange={(e: InputSwitchChangeEvent) =>
-                  setCreateCollection(e.value)
-                }
+                onChange={(e: InputSwitchChangeEvent) => setCreateCollection(e.value)}
               />
               <label className="ml-2">Tạo bộ sưu tập mới</label>
             </div>
@@ -143,9 +140,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
           <>
             <form className="w-full" onSubmit={formik.handleSubmit}>
               <div className="create-collection mb-4 w-full flex flex-column justify-content-start align-items-start">
-                <label style={{ marginBottom: "10px" }}>
-                  Tên bộ sưu tập mới
-                </label>
+                <label style={{ marginBottom: "10px" }}>Tên bộ sưu tập mới</label>
                 <InputText
                   className="w-full"
                   type="text"
@@ -154,12 +149,11 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
                   onBlur={formik.handleBlur}
                   value={formik.values.newCollectionName}
                 />
-                {formik.touched.newCollectionName &&
-                  formik.errors.newCollectionName && (
-                    <div className="error-message text-red-500">
-                      {formik.errors.newCollectionName}
-                    </div>
-                  )}
+                {formik.touched.newCollectionName && formik.errors.newCollectionName && (
+                  <div className="error-message text-red-500">
+                    {formik.errors.newCollectionName}
+                  </div>
+                )}
               </div>
               <div className="create-collection w-full flex flex-column justify-content-start align-items-start">
                 <label style={{ marginBottom: "10px" }}>Quyền riêng tư</label>
@@ -171,16 +165,8 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
                 />
               </div>
               <div className="btn mt-4 w-full flex flex-row justify-content-evenly">
-                <Button
-                  type="submit"
-                  label="Tạo bộ sưu tập"
-                  className="save-btn p-button"
-                />
-                <Button
-                  label="Hủy"
-                  className="cancel-btn p-button"
-                  onClick={closeDialog}
-                />
+                <Button type="submit" label="Tạo bộ sưu tập" className="save-btn p-button" />
+                <Button label="Hủy" className="cancel-btn p-button" onClick={closeDialog} />
               </div>
             </form>
           </>
@@ -191,19 +177,12 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
               label="Lưu"
               className="save-btn p-button"
               onClick={() => {
-                handleAddArtworkToCollection(
-                  selectedCollection?.id ?? "",
-                  artworkId
-                );
+                handleAddArtworkToCollection(selectedCollection?.id ?? "", artworkId);
                 closeDialog();
               }}
             />
 
-            <Button
-              label="Hủy"
-              className="cancel-btn p-button"
-              onClick={closeDialog}
-            />
+            <Button label="Hủy" className="cancel-btn p-button" onClick={closeDialog} />
           </div>
         )}
       </div>
