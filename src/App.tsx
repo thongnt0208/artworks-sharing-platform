@@ -131,7 +131,7 @@ function App() {
             </Route>
             <Route path="/account/settings" element={<ProfileSettings />} />
             <Route path="/collection/:id" element={<CollectionDetailScreen />} />
-            <Route path="/hire" element={<HireScreen />} />
+            <Route path="/hire" element={<HireScreen isLogin={isLogin} />} />
             <Route path="/search" element={<SearchScreen />} />
             <Route path="/explore" element={<SearchScreen />} />
             <Route path="*" element={<NotFoundPage />} />

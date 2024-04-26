@@ -83,7 +83,6 @@ const ServicesView: React.FC = () => {
   };
 
   const fetchServices = useCallback(async () => {
-    if (!accountId) return;
     const response = await GetServicesData(accountId);
     if (Array.isArray(response.items)) {
       setServices(response.items);
@@ -91,7 +90,8 @@ const ServicesView: React.FC = () => {
       CatchAPICallingError(response, navigate);
     }
     setIsLoading(false);
-  }, [accountId, navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId]);
 
   const handleDeleteService = async (serviceId: string) => {
     setIsLoading(true);

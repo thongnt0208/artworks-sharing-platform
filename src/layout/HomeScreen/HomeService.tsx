@@ -117,6 +117,8 @@ export async function GetFollowingArtworksData(
       params: {
         pageNumber,
         pageSize,
+        sortColumn: "create",
+        sortOrder: "desc",
       },
       headers: {
         "Content-Type": "application/json",

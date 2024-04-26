@@ -55,7 +55,6 @@ const ArtworksView: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!accountId) return;
     const fetchArtworks = async () => {
       try {
         const response = await GetArtworksData(8, pageNumber, accountId, activeTab);
