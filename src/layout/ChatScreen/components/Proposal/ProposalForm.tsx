@@ -175,7 +175,11 @@ export default function ProposalForm({ createProposalCallback }: ProposalFormPro
           onChange={() => formik.setFieldValue("acceptRules", !formik.values.acceptRules)}
         />
         <label htmlFor="acceptRules">
-          Tôi đồng ý với các <a href="/rules">quy định</a> của nền tảng
+          Tôi đồng ý với các{" "}
+          <a href="/policy" target="_blank" style={{ textDecoration: "underline" }}>
+            quy định
+          </a>{" "}
+          của nền tảng.
         </label>
       </div>
 
