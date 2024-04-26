@@ -8,6 +8,7 @@ export const initalValues = {
   email: "",
   fullname: "",
   birthdate: null,
+  acceptRules: false,
 }
 
 export const yupObject = Yup.object({
@@ -26,5 +27,8 @@ export const yupObject = Yup.object({
   fullname: Yup.string()
     .required("Họ và tên không được bỏ trống")
     .matches(/^[^\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/, "Họ và tên chỉ được chứa ký tự"),
-  birthdate: Yup.date().required("Ngày sinh không được bỏ trống"),
+  birthdate: Yup.date()
+    .required("Ngày sinh không được bỏ trống")
+    .max(new Date(new Date().setFullYear(new Date().getFullYear() - 12)), "Bạn phải trên 12 tuổi"),
+  acceptRules: Yup.boolean().oneOf([true], "Bạn phải đồng ý với quy định của nền tảng"),
 });
