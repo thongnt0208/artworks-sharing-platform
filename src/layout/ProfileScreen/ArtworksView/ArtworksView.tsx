@@ -55,7 +55,6 @@ const ArtworksView: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!accountId) return;
     const fetchArtworks = async () => {
       try {
         const response = await GetArtworksData(8, pageNumber, accountId, activeTab);
@@ -71,7 +70,7 @@ const ArtworksView: React.FC = () => {
           toast.error("Lấy dữ liệu tác phẩm thất bại");
         }
       } catch (error) {
-        CatchAPICallingError(error, navigate);
+        // CatchAPICallingError(error, navigate);
       } finally {
         setIsLoading(false);
       }

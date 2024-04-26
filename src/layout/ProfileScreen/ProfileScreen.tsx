@@ -22,6 +22,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserInformationProps>({
     id: "",
+    isLogin: isLogin,
     fullname: "",
     avatar: "",
     job: "",
@@ -78,7 +79,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       try {
         const profileData = await GetProfileData(profileId || "");
         setProfile(profileData);
-        if (profile.id) {
+        if (profile.id && isLogin) {
           const isFollowed = await fetchIsFollow(profileId || "");
           const followerNum = await fetchFollowers(profileId || "");
           const followingNum = await fetchFollowers(profileId || "");
@@ -112,6 +113,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
           <div className="profile-information-container col col-3">
             <UserInformationCard
               id={profile.id}
+              isLogin={isLogin}
               username={profile.username}
               fullname={profile.fullname}
               email={profile.email}
@@ -128,6 +130,7 @@ const ProfileScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
               isFollowed={isFollow}
               followHandler={handleFollow}
               unfollowHandler={handleUnfollow}
+              hire={false}
               editHandler={() => {
                 editProfileHandler();
               }}

@@ -83,15 +83,14 @@ const ServicesView: React.FC = () => {
   };
 
   const fetchServices = useCallback(async () => {
-    if (!accountId) return;
     const response = await GetServicesData(accountId);
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
-      CatchAPICallingError(response, navigate);
+      // CatchAPICallingError(response, navigate);
     }
     setIsLoading(false);
-  }, [accountId, navigate]);
+  }, [accountId]);
 
   const handleDeleteService = async (serviceId: string) => {
     setIsLoading(true);
