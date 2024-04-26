@@ -3,12 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
 import Gallery from "../../components/Gallery";
 import { TabMenu } from "primereact/tabmenu";
-import {
-  GetCategoriesData,
-  GetFollowingArtworksData,
-  GetNewArtworksData,
-  GetTagsData,
-} from "./HomeService";
+import { GetCategoriesData, GetFollowingArtworksData, GetNewArtworksData, GetTagsData } from "./HomeService";
 import "./HomeScreen.scss";
 import { TagProps } from "../../components/Tag";
 import { ArtworkProps } from "../../components/ArtworkCard";
@@ -44,18 +39,16 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
   const [selectingAw, setSelectingAw] = useState<ArtworkProps>({} as ArtworkProps); //an artwork from the artworks list state
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
-  const [currentAwDetail, setCurrentAwDetail] = useState<ArtworkDetailType>(
-    {} as ArtworkDetailType
-  ); //the artwork detail of the selectingAw
+  const [currentAwDetail, setCurrentAwDetail] = useState<ArtworkDetailType>({} as ArtworkDetailType);
 
   const [isLiked, setIsLiked] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
 
   const navigate = useNavigate();
-  const pageSize = 10;
+  const pageSize = 20;
 
   const authenticationInfo = getAuthInfo();
   let currentUserId = authenticationInfo?.id ? authenticationInfo?.id : "unknown";
@@ -106,41 +99,6 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   // AW Detail state tools - end
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        let newArtworksData: ArtworkProps[];
-        if (activeTab === 0) {
-          newArtworksData = await GetNewArtworksData(pageNumber, pageSize);
-        } else if (activeTab === 1) {
-          newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
-        }
-
-        const tagData = await GetTagsData();
-        const categoriesData = await GetCategoriesData();
-        setTags(tagData);
-        setCategories(categoriesData);
-        setArtworks((prevArtworks) => {
-          const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
-          const filteredArtworks = Array.isArray(newArtworksData)
-            ? newArtworksData.filter((artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id))
-            : [];
-          return [...prevArtworks, ...filteredArtworks];
-        });
-      } catch (error) {
-        CatchAPICallingError(error, navigate);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [pageNumber, activeTab]);
-
-  useEffect(() => {
-    setArtworks([]);
-  }, [activeTab]);
-
-  useEffect(() => {
     observer.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -162,10 +120,40 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   }, []);
 
   useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        let newArtworksData: ArtworkProps[];
+        if (activeTab === 0) {
+          newArtworksData = await GetNewArtworksData(pageNumber, pageSize);
+        } else if (activeTab === 1) {
+          newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
+        }
+        const tagData = await GetTagsData();
+        const categoriesData = await GetCategoriesData();
+        setTags(tagData);
+        setCategories(categoriesData);
+        setArtworks((prevArtworks) => {
+          const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
+          const filteredArtworks = Array.isArray(newArtworksData)
+            ? newArtworksData.filter((artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id))
+            : [];
+          return [...prevArtworks, ...filteredArtworks];
+        });
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [pageNumber, activeTab]);
+
+  useEffect(() => {
     if (selectingAw?.id) {
       let _tmpCookies = JSON.parse(Cookies.get(cookieNames.interactedArtworks) || "[]") as [{ id: string }];
       console.log(_tmpCookies);
-      
+
       Cookies.set(cookieNames.interactedArtworks, JSON.stringify([..._tmpCookies, { id: selectingAw.id }]));
       fetchDetail();
     }
@@ -173,9 +161,10 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
+    setArtworks([]);
     setPageNumber(1);
   };
-
+  console.log("Artworks: ", pageNumber, artworks)
   return (
     <>
       <CategoryAndTag categories={categories} tags={tags} />
@@ -189,12 +178,8 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       ) : null}
 
       {isLoading && <ProgressSpinner />}
-      {!isLoading && artworks.length === 0 && (
-        <div className="text-center text-2xl">Không có dữ liệu</div>
-      )}
-      {artworks.length > 0 && (
-        <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />
-      )}
+      {!isLoading && artworks.length === 0 && <div className="text-center text-2xl">Không có dữ liệu</div>}
+      {artworks.length > 0 && <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />}
       <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
   );
