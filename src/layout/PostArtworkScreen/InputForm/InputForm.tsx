@@ -137,9 +137,6 @@ export default function InputForm({
 
   return (
     <>
-    {JSON.stringify(assets)}
-    <br /> <br />
-    {JSON.stringify(formik.values)}
       {hasNSFWImage && <p style={{ color: "red" }}> Có hình ảnh không phù hợp </p>}
       <form onSubmit={formik.handleSubmit}>
         <div className="inner-form-container">
