@@ -70,7 +70,7 @@ const ArtworksView: React.FC = () => {
           toast.error("Lấy dữ liệu tác phẩm thất bại");
         }
       } catch (error) {
-        // CatchAPICallingError(error, navigate);
+        CatchAPICallingError(error, navigate);
       } finally {
         setIsLoading(false);
       }
