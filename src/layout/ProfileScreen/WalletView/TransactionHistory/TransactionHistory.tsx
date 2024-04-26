@@ -5,13 +5,28 @@ import { getAuthInfo } from "../../../../util/AuthUtil";
 
 export type TransactionHistoryProps = {
   id: string;
-  accountId: string;
-  fromFullname: string;
-  detail: string;
+  createdAccount: {
+    id: string;
+    username: string;
+    email: string;
+    fullname: string;
+    avatar: string;
+  };
+  otherAccount: {
+    id: string;
+    username: string;
+    email: string;
+    fullname: string;
+    avatar: string;
+  };
   assetId: string;
   proposalId: string;
-  transactionStatus: string;
+  detail: string;
   price: number;
+  walletBalance: number;
+  fee: number;
+  transactionStatus: string;
+  createdBy: string;
   createdOn: string;
 };
 
@@ -19,49 +34,51 @@ interface TransactionHistoryList {
   transactions: TransactionHistoryProps[];
 }
 
-const TransactionHistory: React.FC<TransactionHistoryList> = (
-  transactionHistory
-) => {
-  const fromAccRowTemplate = (rowData: TransactionHistoryProps) => {
+const TransactionHistory: React.FC<TransactionHistoryList> = (transactionHistory) => {
+  const fromAccRowTemplate = (rowData: TransactionHistoryProps) => (
+    <div className="flex flex-row align-items-center">
+      <img
+        src={rowData.createdAccount.avatar}
+        alt={rowData.createdAccount.fullname}
+        style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+      />
+      <span className="ml-1">{rowData.createdAccount.fullname}</span>
+    </div>
+  );
+
+  const toAccRowTemplate = (rowData: TransactionHistoryProps) => (
+    <div className="flex flex-row align-items-center">
+      <img
+        src={rowData.otherAccount.avatar}
+        alt={rowData.otherAccount.fullname}
+        style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+      />
+      <span className="ml-1">{rowData.otherAccount.fullname}</span>
+    </div>
+  );
+
+  const priceRowTemplate = (rowData: TransactionHistoryProps) => {
     return (
-      <span
-        className={
-          rowData.accountId !== getAuthInfo()?.id
-            ? "text-blue-600"
-            : "text-red-500"
-        }
-      >
-        {rowData.accountId !== getAuthInfo()?.id ? (
-          <>
-            <i className="pi pi-arrow-up mr-1" />
-            {rowData.fromFullname}
-          </>
+      <span className={rowData.createdBy !== getAuthInfo()?.id ? "text-blue-600" : "text-red-500"}>
+        {rowData.createdBy !== getAuthInfo()?.id ? (
+          <>+{rowData.price.toLocaleString()}</>
         ) : (
-          <>
-            <i className="pi pi-arrow-down mr-1" />
-            Tôi
-          </>
+          <>{rowData.price.toLocaleString()}</>
         )}
       </span>
     );
   };
 
-  const priceRowTemplate = (rowData: TransactionHistoryProps) => {
+  const walletBalanceRowTemplate = (rowData: TransactionHistoryProps) => {
     return (
-      <span
-        className={
-          rowData.accountId !== getAuthInfo()?.id
-            ? "text-blue-600"
-            : "text-red-500"
-        }
-      >
-        {rowData.accountId !== getAuthInfo()?.id ? (
-          <>+{rowData.price.toLocaleString()}</>
-        ) : (
-          <>-{rowData.price.toLocaleString()}</>
-        )}
+      <span className={rowData.createdBy !== getAuthInfo()?.id ? "text-blue-600" : "text-red-500"}>
+        {rowData.walletBalance.toLocaleString()}
       </span>
     );
+  };
+
+  const feeRowTemplate = (rowData: TransactionHistoryProps) => {
+    return <span>{rowData.fee.toLocaleString()}</span>;
   };
 
   const statusRowTemplate = (rowData: TransactionHistoryProps) => {
@@ -70,8 +87,7 @@ const TransactionHistory: React.FC<TransactionHistoryList> = (
         style={{
           width: "fit-content",
           textAlign: "center",
-          backgroundColor:
-            rowData.transactionStatus === "Thành công" ? "green" : "red",
+          backgroundColor: rowData.transactionStatus === "Thành công" ? "green" : "red",
           padding: "0.25rem 0.5rem",
           borderRadius: "1rem",
           color: "white",
@@ -93,18 +109,13 @@ const TransactionHistory: React.FC<TransactionHistoryList> = (
       currentPageReportTemplate="{first} to {last} of {totalRecords}"
       emptyMessage="Hãy tham gia vào các dịch vụ của Artworkia nhé!"
     >
-      <Column
-        field="fromFullname"
-        header="Người gửi/nhận"
-        body={fromAccRowTemplate}
-      ></Column>
+      <Column field="fromAccount" header="Người gửi" body={fromAccRowTemplate} />
+      <Column body={<i className="pi pi-arrow-right ml-1" />} />
+      <Column field="toAccount" header="Người nhận" body={toAccRowTemplate} />
       <Column field="detail" header="Chi tiết"></Column>
-      <Column
-        field="price"
-        header="Giá (XU)"
-        body={priceRowTemplate}
-        sortable
-      ></Column>
+      <Column field="price" header="Số lượng (XU)" body={priceRowTemplate} sortable></Column>
+      <Column field="walletBalance" header="Số dư ví (XU)" body={walletBalanceRowTemplate} sortable></Column>
+      <Column field="fee" header="Tổng phí (XU)" body={feeRowTemplate} sortable></Column>
       <Column
         field="transactionStatus"
         header="Trạng thái"
