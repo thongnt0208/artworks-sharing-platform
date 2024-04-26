@@ -6,9 +6,7 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 
-import CollectionCard, {
-  CollectionProps,
-} from "../../../components/CollectionCard";
+import CollectionCard, { CollectionProps } from "../../../components/CollectionCard";
 import "./CollectionsView.scss";
 import { CatchAPICallingError, ProgressSpinner } from "../..";
 
@@ -16,11 +14,7 @@ const CollectionScreen: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = React.useState(true);
   const [collections, setCollections] = React.useState<CollectionProps[]>([]);
-  const [accountId, isCreator, accountAvatar] = useOutletContext() as [
-    string,
-    boolean,
-    string
-  ];
+  const [accountId, isCreator, accountAvatar] = useOutletContext() as [string, boolean, string];
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -56,35 +50,23 @@ const CollectionScreen: React.FC = () => {
         {!isLoading &&
           (isCreator ? (
             collections.length === 0 ? (
-              <Card
-                header={CardContent}
-                className="add-collection-card cursor-pointer"
-              />
+              <Card header={CardContent} className="add-collection-card cursor-pointer" />
             ) : (
               collections.map((collection) => (
-                <div className="gallery__item col col-6" key={collection.id}>
-                  <CollectionCard
-                    {...collection}
-                    accountAvatar={accountAvatar}
-                  />
+                <div className="gallery__item col" key={collection.id}>
+                  <CollectionCard {...collection} accountAvatar={accountAvatar} />
                 </div>
               ))
             )
-          ) : collections.filter(
-              (collection) => isCreator || collection.privacy === "Public"
-            ).length === 0 ? (
+          ) : collections.filter((collection) => isCreator || collection.privacy === "Public")
+              .length === 0 ? (
             <div> Nhà sáng tạo chưa tạo bộ sưu tập nào </div>
           ) : (
             collections
-              .filter(
-                (collection) => isCreator || collection.privacy === "Public"
-              )
+              .filter((collection) => isCreator || collection.privacy === "Public")
               .map((collection) => (
-                <div className="gallery__item col col-6" key={collection.id}>
-                  <CollectionCard
-                    {...collection}
-                    accountAvatar={accountAvatar}
-                  />
+                <div className="gallery__item col" key={collection.id}>
+                  <CollectionCard {...collection} accountAvatar={accountAvatar} />
                 </div>
               ))
           ))}
