@@ -12,7 +12,7 @@ type TagProps = {
   tagName: string;
 };
 
-const HireScreen: React.FC = () => {
+const HireScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [tags, setTags] = React.useState<TagProps[]>([]);
   const [creators, setCreators] = React.useState<UserInformationProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +90,7 @@ const HireScreen: React.FC = () => {
       {!isLoading && creators.length === 0 && (
         <div className="text-center text-2xl">Không có dữ liệu</div>
       )}
-      <CreatorsView creators={creators} />
+      <CreatorsView creators={creators} isLogin={isLogin} />
       <div ref={lastArtworkRef}>
         {/* This is an invisible marker to observe */}
       </div>

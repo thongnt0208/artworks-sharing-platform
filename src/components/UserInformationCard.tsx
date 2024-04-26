@@ -125,7 +125,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
         </div>
         {props.isLogin ? (
           <>
-            (!props.hire && props.followerNum && props.followingNum && (
+            {!props.hire && (
             <div className="w-full h-fit flex flex-row justify-content-center mt-2">
               <p className="h-fit m-0">
                 <strong>{props.followerNum}</strong> người theo dõi
@@ -135,7 +135,7 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
                 <strong>{props.followingNum}</strong> đang theo dõi
               </p>
             </div>
-            ))
+            )}
             <div className="action-section">
               {props.isCreator ? (
                 <Button rounded className="top-button" label="Chỉnh sửa thông tin" onClick={props.editHandler} />
