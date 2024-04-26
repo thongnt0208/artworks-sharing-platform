@@ -87,9 +87,10 @@ const ServicesView: React.FC = () => {
     if (Array.isArray(response.items)) {
       setServices(response.items);
     } else {
-      // CatchAPICallingError(response, navigate);
+      CatchAPICallingError(response, navigate);
     }
     setIsLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId]);
 
   const handleDeleteService = async (serviceId: string) => {
