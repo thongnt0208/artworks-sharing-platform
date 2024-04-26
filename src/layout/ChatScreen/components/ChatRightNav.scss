@@ -25,7 +25,7 @@
     }
   }
 
-  .p-panel-content{
+  .p-panel-content {
     padding: 0;
   }
   .milestone-view-container,
@@ -87,6 +87,9 @@
 }
 
 .highlight-btn-100 {
+  display: flex;
+  align-self: center;
+  align-items: center;
   background-color: $primary-100;
   border-radius: $borderRadius-100;
   width: fit-content;
@@ -94,6 +97,9 @@
 }
 
 .highlight-btn-200 {
+  display: flex;
+  align-self: center;
+  align-items: center;
   background-color: $strong-200;
   border-radius: $borderRadius-100;
   width: fit-content;

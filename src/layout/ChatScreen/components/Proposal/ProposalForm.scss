@@ -1,0 +1,9 @@
+.create-proposal-form {
+  label {
+    font-weight: bold;
+
+    &:last-child {
+      font-weight: normal;
+    }
+  }
+}
