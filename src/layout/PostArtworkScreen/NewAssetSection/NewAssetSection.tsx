@@ -2,9 +2,10 @@ import "./NewAssetSection.scss";
 
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber";
+import { InputNumber, InputNumberChangeEvent } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
+import FeesInfo from "../../../components/FeesInfo";
 
 type Props = {
   isVisible: boolean;
@@ -91,7 +92,9 @@ export default function NewAssetSection({
           * Đăng tài nguyên có trả phí đồng nghĩa với việc bạn đồng ý mọi điều khoản của nền tảng.
         </span>
         <br />
-        <span>* Tác phẩm sẽ cần được duyệt bởi Quản trị viên hệ thống trước khi được hiển thị.</span>
+        <span>
+          * Tác phẩm sẽ cần được duyệt bởi Quản trị viên hệ thống trước khi được hiển thị.
+        </span>
         <br />
         <span>* Tài nguyên không phù hợp sẽ bị xóa cùng tác phẩm chứa tài nguyên đó.</span>
         <br />
@@ -132,11 +135,17 @@ export default function NewAssetSection({
               id="Price"
               name="Price"
               value={price}
-              onValueChange={(e: InputNumberValueChangeEvent) => {
+              onChange={(e: InputNumberChangeEvent) => {
                 setPrice(e.value as number);
               }}
             />
           </div>
+          {price > 0 && (
+            <div className="p-field" style={{ textAlign: "left" }}>
+              <label>Biểu phí</label>
+              <FeesInfo totalAmount={price} />
+            </div>
+          )}
         </div>
       </form>
     </Dialog>
