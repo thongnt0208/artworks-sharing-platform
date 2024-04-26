@@ -32,7 +32,6 @@ type Props = {
 
 export default function MultipleAssetUpload({ assets, setAssets, onFormChange }: Props) {
   const [totalSize, setTotalSize] = useState(0);
-  const [uploadedAssets, setUploadedAssets] = useState([]);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [currentFiles, setCurrentFiles] = useState({} as any);
   const toast = useRef<Toast>(null);
@@ -58,9 +57,13 @@ export default function MultipleAssetUpload({ assets, setAssets, onFormChange }:
 
   const onRemove = (event: any) => {
     const removedFile = event.file; // Get the file being removed
-    const updatedFiles = uploadedAssets.filter((file: any) => file !== removedFile); // Filter out the removed file
-    setUploadedAssets(updatedFiles); // Update the uploadedAssets state
-    onFormChange(updatedFiles);
+    console.log("removedFile: ", removedFile);
+    
+    const updatedFiles = assets.filter((file: any) => file !== removedFile); // Filter out the removed file
+    console.log("updatedFiles: ", updatedFiles);
+    
+    setAssets([]); // Update the assets state
+    onFormChange([]); // Update the form state
   };
 
   const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
@@ -141,7 +144,6 @@ export default function MultipleAssetUpload({ assets, setAssets, onFormChange }:
         isVisible={isDialogVisible}
         setIsVisible={setIsDialogVisible}
         currentFiles={currentFiles}
-        setUploadedAssets={setUploadedAssets}
         assets={assets}
         setAssets={setAssets}
         onFormChange={onFormChange}
