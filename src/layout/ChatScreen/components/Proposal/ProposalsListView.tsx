@@ -2,6 +2,7 @@ import { ProposalType } from "../../ChatRelatedTypes";
 import { formatTime } from "../../../../util/TimeHandle";
 import { translateProposalStatus } from "../../../../util/Enums";
 import { Panel } from "primereact/panel";
+import { numberToXu } from "../../../../util/CurrencyHandle";
 
 type Props = {
   data: ProposalType[];
@@ -46,7 +47,7 @@ export default function ProposalsListView({
                 <p className="text-cus-normal highlight-btn-100">
                   {translateProposalStatus(proposal.status)}
                 </p>
-                <p className="text-cus-normal highlight-btn-200">{proposal.totalPrice}Xu</p>
+                <p className="text-cus-normal highlight-btn-200">{numberToXu(proposal.totalPrice)}</p>
               </div>
             </div>
           ))}

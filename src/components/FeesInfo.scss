@@ -1,0 +1,29 @@
+@import "/src/const/variables.scss";
+
+.fees-info-container {
+  padding-top: 0.5rem;
+  .fee-item-container {
+    display: flex;
+    justify-content: space-between;
+
+    .fee-item-title {
+      span {
+        &:last-child {
+          font-size: small;
+          color: $gray-default;
+        }
+      }
+    }
+
+    &:last-of-type {
+        p{
+            font-weight: bold;
+        }
+    }
+  }
+  .note {
+    padding-top: 0.5rem;
+    font-size: small;
+    color: $gray-default;
+  }
+}

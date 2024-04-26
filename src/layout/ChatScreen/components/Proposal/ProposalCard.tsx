@@ -70,7 +70,7 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
           <strong>Tổng chi phí:</strong> {numberToXu(totalPrice || 0)}
         </p>
         <p>
-          <strong>Đã đặt cọc:</strong> {numberToXu(initialPrice * totalPrice)}
+          <strong>Đặt cọc:</strong> {numberToXu(initialPrice * totalPrice)}
         </p>
 
         <p>
