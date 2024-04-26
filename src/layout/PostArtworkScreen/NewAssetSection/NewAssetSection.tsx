@@ -11,7 +11,6 @@ type Props = {
   isVisible: boolean;
   currentFiles: any;
   setIsVisible: (data: boolean) => void;
-  setUploadedAssets: (data: any) => void;
   assets: any;
   setAssets: (data: any) => void;
   onFormChange: (data: any) => void;
@@ -21,7 +20,6 @@ export default function NewAssetSection({
   isVisible,
   currentFiles,
   setIsVisible,
-  setUploadedAssets,
   assets,
   setAssets,
   onFormChange,

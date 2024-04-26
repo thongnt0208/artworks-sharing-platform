@@ -36,11 +36,12 @@ export default function PostArtworkScreen({ ...props }: Props) {
         }, 3000);
       }
       if (error !== null) {
-       translate2Vietnamese(error?.message + " " + error?.response?.statusText).then(
+        translate2Vietnamese(error?.message + " " + error?.response?.statusText).then(
           (translatedMsg) => {
             toast.current.show({
               severity: "error",
-              summary: error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
+              summary:
+                error?.response?.status + " " + error?.code + " " + error?.response?.statusText,
               detail: _tmpMsg === "" ? translatedMsg : _tmpMsg,
             });
           }
@@ -58,9 +59,12 @@ export default function PostArtworkScreen({ ...props }: Props) {
     }
   }, [error, navigate, success]);
 
+  useEffect(() => {
+    console.log("Uploaded files: ", uploadedFiles);
+  }, [uploadedFiles]);
+
   return (
     <>
-      {/* <p>{JSON.stringify(data)}</p> */}
       <Toast ref={toast} />
       <div className="artwork-detail-container">
         <div className="detail-container flex grid-nogutter">
