@@ -5,11 +5,7 @@ import UserInformationCard, {
 
 import "./CreatorsView.scss";
 
-type CreatorsProps = {
-  creators: UserInformationProps[];
-};
-
-const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
+const CreatorsView: React.FC<{creators: UserInformationProps[], isLogin: boolean}> = ({ creators, isLogin }) => {
   return (
     <div className="creators-view-container w-full flex flex-column flex-wrap justify-content-center align-items-start">
       <p className="title">
@@ -19,7 +15,7 @@ const CreatorsView: React.FC<CreatorsProps> = ({ creators }) => {
         {Array.isArray(creators) &&
           creators.map((creator) => (
             <div className="creator-card" key={creator.id}>
-              <UserInformationCard {...creator} hire={true} />
+              <UserInformationCard {...creator} isLogin={isLogin} hire={true} />
             </div>
           ))}
       </div>

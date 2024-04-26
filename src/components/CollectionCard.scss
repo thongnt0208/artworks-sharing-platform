@@ -1,12 +1,11 @@
 .collection-card-container {
-  width: fit-content;
   position: relative;
   #collection-card {
     background-size: cover !important;
     background-color: rgba(182, 182, 182, 0.5) !important;
     border: none !important;
     outline: none !important;
-    width: 340.11px !important;
+    width: 100% !important;
     height: 263px !important;
     display: flex !important;
     flex-direction: column !important;
