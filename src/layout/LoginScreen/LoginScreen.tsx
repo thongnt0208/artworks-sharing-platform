@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./LoginScreen.scss";
 
-import { InputText, Button, Toast, Divider, Image } from "../index";
+import { InputText, Button, Toast, Divider, Image, Password } from "../index";
 
 import { login } from "../../auth/AuthService";
 import logotext from "../../assets/logo/logo.png";
@@ -83,7 +83,7 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
         setIsLoading(false);
         let message = "Kiểm tra lại thông tin và thử lại sau.";
         if (error?.response?.status === 500) message = "Lỗi hệ thống, vui lòng thử lại sau.";
-        else error?.response?.data?.message && (message = error?.response?.data?.message);
+        else error?.response?.data?.errorMessage && (message = error?.response?.data?.errorMessage);
         toast.current.show({
           severity: "error",
           summary: "Đăng nhập lỗi",
@@ -126,9 +126,8 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
                   />
                 </div>
                 <div className="password-container">
-                  <InputText
+                  <Password
                     id="password"
-                    type="password"
                     value={password}
                     placeholder="Mật khẩu"
                     onChange={(e) => setPassword(e.target.value)}
@@ -138,6 +137,8 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
                       }
                     }}
                     required
+                    toggleMask
+                    feedback={false}
                   />
                 </div>
                 <div className="">

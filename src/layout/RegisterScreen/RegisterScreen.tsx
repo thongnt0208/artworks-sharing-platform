@@ -7,6 +7,7 @@ import { getAuthInfo } from "../../util/AuthUtil";
 import { initalValues, yupObject } from "./FormikData";
 import { register } from "../../auth/AuthService";
 import { translate2Vietnamese } from "../../util/TextHandle";
+import { Checkbox } from "primereact/checkbox";
 
 const RegisterScreen = () => {
   const authenticationInfo = getAuthInfo();
@@ -45,7 +46,7 @@ const RegisterScreen = () => {
           });
         }
       })
-      .catch((err) => showToastErr("Vui lòng thử lại sau giây lát!"));
+      .catch((err) => showToastErr(err.message || JSON.stringify(err)));
   };
 
   const formik: any = useFormik({
@@ -103,7 +104,6 @@ const RegisterScreen = () => {
               <Divider layout="vertical" />
             </div>
             <div className="register-right">
-
               <div className="normal-register">
                 {/* Form begin */}
                 <form onSubmit={formik.handleSubmit}>
@@ -163,10 +163,32 @@ const RegisterScreen = () => {
                       maxDate={today}
                     />
                   </div>
+                  {/* Must choose checkboxes to accept platform rules */}
+                  <div className="p-field flex gap-1 align-items-center pt-3">
+                    <Checkbox
+                      inputId="acceptRules"
+                      checked={formik.values.acceptRules}
+                      onChange={() =>
+                        formik.setFieldValue("acceptRules", !formik.values.acceptRules)
+                      }
+                    />
+                    <label htmlFor="acceptRules">
+                      Tôi đồng ý với các{" "}
+                      <a href="/policy" target="_blank" style={{ textDecoration: "underline" }}>
+                        quy định
+                      </a>{" "}
+                      của nền tảng.
+                    </label>
+                  </div>
                   <div className="mt-3">
                     <span>Người dùng cũ?</span> <Link to={"/login"}>Đăng nhập</Link>
                   </div>
-                  <Button label="Tiếp tục" type="submit" className="mt-3" disabled={!formik.isValid} />
+                  <Button
+                    label="Tiếp tục"
+                    type="submit"
+                    className="mt-3"
+                    disabled={!formik.isValid}
+                  />
                 </form>
                 {/* Form end */}
               </div>
