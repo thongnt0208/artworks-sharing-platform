@@ -25,16 +25,19 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ fullname, email, avatar }) 
       Quản lý tác phẩm
     </Link>,
     <Link className="link" to={`/account/${profileId}/collection`}>
-      Tác phẩm đã lưu
+      Quản lý bộ sưu tập
     </Link>,
     <Link className="link" to={`/my-requests`}>
-      Yêu cầu của tôi
+      Quản lý yêu cầu
     </Link>,
-    <Link className="link" to={`/account/${profileId}/assets`}>
-      Tài nguyên đã mua
+    <Link className="link" to={`/account/${profileId}/service`}>
+      Quản lý dịch vụ
     </Link>,
     <Link className="link" to={`/account/${profileId}/wallet`}>
       Quản lý ví
+    </Link>,
+    <Link className="link" to={`/account/${profileId}/assets`} state={{ boughtAssetTabValue: 1 }}>
+      Tài nguyên đã mua
     </Link>,
     <Link className="link" to="/help">
       Trợ giúp
