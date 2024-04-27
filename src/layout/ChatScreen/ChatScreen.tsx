@@ -25,6 +25,7 @@ import LazyProposalForm from "./components/Proposal/LazyProposalForm";
 import { acceptRequest, denyRequest, GetAllRequests } from "./components/Request/RequestUtils";
 import {
   AcceptProposal,
+  CancelProposal,
   CompletePaymentProposalUtil,
   CreateAProposal,
   DenyProposal,
@@ -88,6 +89,7 @@ export default function ChatScreen() {
     );
   const handleAcceptProposal = (id: string) => AcceptProposal(id, handleGetAllProposals, navigate);
   const handleDenyProposal = (id: string) => DenyProposal(id, handleGetAllProposals, navigate);
+  const handleCancelProposal = (id: string) => CancelProposal(id, handleGetAllProposals, navigate);
   const handleUploadProposalAsset = (id: string, type: number, file: File) =>
     UploadProposalAssetUtil(id, type, file, handleGetAllProposals, navigate);
   const handleGetMilestone = (id: string) => GetMilestone(id, setCurrentMilestone, navigate);
@@ -169,6 +171,7 @@ export default function ChatScreen() {
     handleGetAllProposals,
     handleAcceptProposal,
     handleDenyProposal,
+    handleCancelProposal,
     handleUploadProposalAsset,
     handleCompletePayment,
   };

@@ -74,6 +74,7 @@ export type ProposalStateToolsType = {
   handleGetAllProposals?: () => void;
   handleAcceptProposal?: (id: string) => void;
   handleDenyProposal?: (id: string) => void;
+  handleCancelProposal?: (id: string) => void;
   handleCompletePayment?: (id: string) => void;
   editCallback?: (id: string) => void;
   cancelCallback?: (id: string) => void;

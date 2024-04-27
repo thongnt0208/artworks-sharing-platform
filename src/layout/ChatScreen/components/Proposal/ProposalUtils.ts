@@ -18,6 +18,7 @@ import {
 } from "../../services/ProposalServices";
 import { CatchAPICallingError, Toast } from "../../..";
 import { toast as toastify } from "react-toastify";
+import { proposalStatusEnums } from "../../../../util/Enums";
 
 export const GetAllProposals = (
   selectingChatbox: ChatboxItemType,
@@ -101,7 +102,25 @@ export const DenyProposal = (
   GetAllProposals: Function,
   navigate: ReturnType<typeof useNavigate>
 ) => {
-  UpdateProposalStatus(id, 2)
+  UpdateProposalStatus(
+    id,
+    proposalStatusEnums.find((element) => element.name === "Declined")?.value || 2
+  )
+    .then(() => GetAllProposals())
+    .catch((error) => {
+      CatchAPICallingError(error, navigate);
+    });
+};
+
+export const CancelProposal = (
+  id: string,
+  GetAllProposals: Function,
+  navigate: ReturnType<typeof useNavigate>
+) => {
+  UpdateProposalStatus(
+    id,
+    proposalStatusEnums.find((element) => element.name === "Cancelled")?.value || 5
+  )
     .then(() => GetAllProposals())
     .catch((error) => {
       CatchAPICallingError(error, navigate);
