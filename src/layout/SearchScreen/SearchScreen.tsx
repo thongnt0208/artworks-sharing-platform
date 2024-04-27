@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import "./SearchScreen.scss";
 import { useEffect, useState } from "react";
 import { TagProps } from "../../components/Tag";
 import { GetCategoriesData, GetTagsData } from "../HomeScreen/HomeService";
@@ -18,6 +17,7 @@ import { CatchAPICallingError } from "..";
 import { useNavigate } from "react-router-dom";
 import CategoryAndTag from "../HomeScreen/CategoryAndTag/CategoryAndTag";
 import { sortOptions } from "../../const/bizConstants";
+import "./SearchScreen.scss";
 // ----------------------------------------------------------------
 
 export type SearchScreenStateType = {
@@ -28,7 +28,7 @@ export type SearchScreenStateType = {
   isLoading: boolean;
   selectedSort: string;
   selectedType: string;
-  selectedCategory: string | null;
+  selectedCategory: string | undefined;
   isAssets: boolean;
   isAssetsFree: boolean;
 };
@@ -44,7 +44,7 @@ export default function SearchScreen({ ...props }: Props) {
     isLoading: false,
     selectedSort: sortOptions[0].code,
     selectedType: "artworks",
-    selectedCategory: null,
+    selectedCategory: undefined,
     isAssets: false,
     isAssetsFree: false,
   });
@@ -53,6 +53,7 @@ export default function SearchScreen({ ...props }: Props) {
   const [isLiked, setIsLiked] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+
   const navigate = useNavigate();
 
   const authenticationInfo = getAuthInfo();
@@ -74,8 +75,14 @@ export default function SearchScreen({ ...props }: Props) {
     setState({ ...state, isLoading: true });
     try {
       const [searchArtworks, tagsData, categoriesData] = await Promise.all([
-        state.searchValue
-          ? searchArtworksByKeyword(state.searchValue, state.selectedSort)
+        state.searchValue || state.isAssets || state.selectedCategory || state.selectedSort
+          ? searchArtworksByKeyword(
+              state.searchValue || "",
+              state.isAssets,
+              state.isAssetsFree,
+              state.selectedCategory,
+              state.selectedSort
+            )
           : GetSimilarAwsByCookie(),
         GetTagsData(),
         GetCategoriesData(),
@@ -126,7 +133,7 @@ export default function SearchScreen({ ...props }: Props) {
 
   useEffect(() => {
     fetchData();
-  }, [state.selectedSort]);
+  }, [state.selectedSort, state.selectedCategory, state.isAssets, state.isAssetsFree]);
 
   useEffect(() => {
     if (selectingAw?.id) {
