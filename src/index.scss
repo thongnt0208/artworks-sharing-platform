@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
 @import "/src/const/variables.scss";
 
 body {
   margin: 0;
   font-size: 14px;
   font-weight: 400; //regular
-  font-family: "IBM Plex Sans", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "IBM Plex Sans", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -152,21 +152,25 @@ code {
 
 .p-confirm-dialog-reject {
   border-radius: 50px;
-  background-color:$primary-100 ;
+  background-color: $primary-100;
   color: $strong-200;
 
-  &:hover{
+  &:hover {
     background-color: $strong-100;
     color: $bg-100;
   }
 }
 
-.p-confirm-dialog-accept{
+.p-confirm-dialog-accept {
   border-radius: 50px;
-  background-color:$strong-100;
+  background-color: $strong-100;
   color: $bg-100;
 
-  &:hover{
+  &:hover {
     background-color: $strong-200;
   }
+}
+
+.p-rating-item-active svg {
+  color: $strong-200;
 }

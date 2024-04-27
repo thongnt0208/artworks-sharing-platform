@@ -114,24 +114,32 @@ export default function ChatScreen() {
   };
 
   const GetChatMessages = () => {
+    setIsLoading(true);
     if (selectingChatbox?.id) {
       if (!closeSocket) {
         const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
         setCloseSocket(() => cleanup);
+        setIsLoading(false);
       } else {
         closeSocket();
         const cleanup = GetMessagesByChatboxIdRealTime(selectingChatbox.id, setChatMessages);
         setCloseSocket(() => cleanup);
+        setIsLoading(false);
       }
+    } else {
+      setIsLoading(false);
     }
   };
 
   const SendChatMessage = () => {
+    setIsLoading(true);
     SendMessageToAccount(selectingChatbox?.author?.id, newChatMessage)
       .then(() => {
         setNewChatMessage(""); // Clear input after sending message
+        setTimeout(() => setIsLoading(false), 800);
       })
-      .catch((error) => CatchAPICallingError(error, navigate));
+      .catch((error) => CatchAPICallingError(error, navigate))
+      .finally(() => setTimeout(() => setIsLoading(false), 800));
   };
 
   const SendChatImages = () => {
@@ -231,7 +239,7 @@ export default function ChatScreen() {
         style={{ position: "absolute", bottom: "1rem", left: "1rem" }}
         onClick={GetChatboxes}
       />
-      <Splitter className="chat-screen-container">
+      <Splitter className="chat-screen-container p-2">
         <SplitterPanel className="first-col" size={20}>
           <ChatLeftNav itemsList={chatboxes} selectingChatbox={selectingChatbox} />
         </SplitterPanel>
@@ -254,7 +262,7 @@ export default function ChatScreen() {
             />
           </div>
 
-          <div className="chat-input-container">
+          <div className="chat-input-container m-2">
             <ChatInput
               newChatMessage={newChatMessage}
               setNewChatMessage={setNewChatMessage}
