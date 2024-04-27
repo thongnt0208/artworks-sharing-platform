@@ -77,7 +77,13 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
           <strong>Trạng thái: </strong>
           <Badge
             value={translateProposalStatus(status)}
-            severity={status === "Waiting" ? "info" : status === "Accepted" ? "success" : null}
+            severity={
+              status === "Waiting"
+                ? "info"
+                : status === "Accepted" || status === "CompletePayment"
+                ? "success"
+                : null
+            }
           />
         </p>
         <p>Tuân theo mọi điều khoản của hệ thống.</p>
