@@ -56,12 +56,25 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
 
   const badgeSeverity = (type: string) => {
     switch (type) {
-      case "Cuối cùng":
+      case "Final":
         return "success";
-      case "Sửa đổi":
+      case "Revision":
         return "warning";
       default:
         return null;
+    }
+  };
+
+  const badgeVietnamese = (type: string) => {
+    switch (type) {
+      case "Final":
+        return "Cuối";
+      case "Revision":
+        return "Làm lại";
+      case "Concept":
+        return "Phác thảo";
+      default:
+        return type;
     }
   };
   return (
@@ -79,7 +92,7 @@ export default function ProposalAssetsView({ data, proposalStateTools }: Props) 
             {data?.map((asset) => (
               <div key={asset.id} className="proposal-asset-item flex flex-column">
                 <p className="text-cus-normal pb-1">
-                  <Badge value={asset.type} severity={badgeSeverity(asset.type)} /> tải vào{" "}
+                  <Badge value={badgeVietnamese(asset.type)} severity={badgeSeverity(asset.type)} /> tải vào{" "}
                   <span style={{ color: "gray" }}>
                     {formatTime(asset.createdOn, "HH:mm ngày dd/MM/yyyy")}
                   </span>

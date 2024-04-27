@@ -91,8 +91,6 @@ export default function ChatRightNav({
             value={reviews?.rating}
             readOnly
             cancel={false}
-            onIcon={<span>🩵</span>}
-            offIcon={<span>🩶</span>}
           />
           <p className="text-cus-normal">{reviews?.detail}</p>
         </div>

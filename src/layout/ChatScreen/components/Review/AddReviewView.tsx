@@ -70,8 +70,6 @@ const AddReviewView: React.FC<Props> = ({ selectingProposal, refreshProposalList
           cancel={false}
           stars={5}
           id="rating"
-          onIcon={<span>🩵</span>}
-          offIcon={<span>🩶</span>}
         />
         <InputTextarea {...textareaProperties} />
         <span className="text-cus-caption">
