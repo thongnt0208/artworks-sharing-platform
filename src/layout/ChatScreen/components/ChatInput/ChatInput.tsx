@@ -53,7 +53,7 @@ export default function ChatInput({
     autoResize: true,
     value: newChatMessage,
     placeholder: "Thêm tin nhắn...",
-    className: "w-full",
+    rows: 1,
     tooltip: `Nội dung nên ít hơn ${maxCommentCharacter} ký tự`,
     onChange: (e: any) => handleInputChange(e),
     onKeyDown: (e: any) => handleKeyDown(e),
@@ -70,35 +70,33 @@ export default function ChatInput({
   ];
 
   return (
-    <>
-      <div className="chat-input-container">
-        <div className="flex gap-1">
-          <>
-            <Menu model={menuItems} popup ref={menuRef} id="dropdown-chat-menu" />
-            <Button
-              rounded
-              icon="pi pi-plus"
-              onClick={(e) => menuRef.current && menuRef.current.toggle(e)}
-            />
-          </>
-          <InputTextarea {...textareaProperties} />
+    <div className="chat-input-bar-container">
+      <div className="flex gap-1 align-items-center">
+        <>
+          <Menu model={menuItems} popup ref={menuRef} id="dropdown-chat-menu" />
           <Button
-            className="max-w-max align-self-end"
-            label="Gửi"
-            onClick={SendChatMessage}
-            disabled={isLoading || !newChatMessage}
-            loading={isLoading}
+            rounded
+            icon="pi pi-plus"
+            onClick={(e) => menuRef.current && menuRef.current.toggle(e)}
           />
-        </div>
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={handleFileUpload}
-          ref={fileInputRef}
-          style={{ display: "none" }}
+        </>
+        <InputTextarea {...textareaProperties} className="chat-input-text" />
+        <Button
+          className="max-w-max"
+          label="Gửi"
+          onClick={SendChatMessage}
+          disabled={isLoading || !newChatMessage}
+          loading={isLoading}
         />
       </div>
-    </>
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={handleFileUpload}
+        ref={fileInputRef}
+        style={{ display: "none" }}
+      />
+    </div>
   );
 }
