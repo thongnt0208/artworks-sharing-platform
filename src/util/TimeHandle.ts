@@ -13,7 +13,7 @@
  */
 export const formatTime = (
     time: string,
-    format: string = 'HH:mm - dd/MM/yyyy'
+    format: string = 'HH:mm ngày dd/MM/yyyy'
   ): string => {
     const date = new Date(time);
     const day = String(date.getDate()).padStart(2, '0');
