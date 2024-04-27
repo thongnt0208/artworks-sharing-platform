@@ -3,98 +3,90 @@ import { ArtworkProps } from "../../components/ArtworkCard";
 import Cookies from "js-cookie";
 import { cookieNames } from "../../const/uiConstants";
 
-const BASE_URL = process.env.REACT_APP_REAL_API_ELASTICSEARCH_URL || "https://dummyjson.com";
-let username = process.env.REACT_APP_ELASTIC_USERNAME || "";
-let password = process.env.REACT_APP_ELASTIC_PASSWORD || "";
-
-/**
- * This function is used to call API that search all artworks by keyword
- * @param value keyword to search
- * @returns Promise<any> response from API
- * @author ThongNT
- * @version 1.2.2
- */
-async function searchAll(value: string, sortCode?: string): Promise<any> {
-  let url = `${BASE_URL}/artworks/_search`;
-
-  const body = {
-    query: {
-      query_string: {
-        query: value,
-        default_field: "*",
-      },
-    },
-    sort:
-      sortCode === "newest"
-        ? {
-            createdon: {
-              order: "desc",
-            },
-          }
-        : undefined,
-  };
-
-  try {
-    const response = await axios.post(url, body, {
-      auth: { username, password },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response;
-  } catch (error: any) {
-    console.error(`Error making search ${value}: `, error);
-    return error;
-  }
-}
+const BASE_URL = process.env.REACT_APP_REAL_API_BASE_URL || "https://dummyjson.com";
+type searchParamTypes = {
+  keyword: string;
+  isAssetAvailable?: boolean;
+  isAssetFree?: boolean;
+  categoryId?: string;
+  sortColumn?: string;
+  sortOrder?: string;
+  pageSize?: number;
+  pageNumber?: number;
+};
 
 /**
  * This function is used to search all artworks by keyword
  * @param searchValue keyword to search
- * @param sortCode (opt) sort code
+ * @param isHaveAssets is have assets
+ * @param isAssetsFree is assets free
+ * @param categoryId category id
+ * @param sortColumn sort column 'viewCount': sắp xếp theo view
+'createdOn': sx theo ngày tạo
+'commentCount': sx theo comment
+'likeCount': sx theo like
+mặc định sx theo liên quan nhất (score do elasticsearch đưa ra)
+
+  * @param sortOrder sort order 'asc' or 'desc'
+  * @param pageSize page size
+  * @param pageNumber page number
  * @returns Promise<ArtworkProps[]> list of artworks that match the keyword
  * @example
  * ```
  * const artworks = await searchArtworksByKeyword("abc");
  * ```
- * @author ThongNT
- * @version 1.1.0
+ * @author @thongnt0208
+ * @version 2.0.0
  */
 export async function searchArtworksByKeyword(
   searchValue: string,
-  sortCode?: string
+  isHaveAssets?: boolean,
+  isAssetsFree?: boolean,
+  categoryId?: string,
+  sortColumn?: string,
+  sortOrder?: string,
+  pageSize?: number,
+  pageNumber?: number
 ): Promise<ArtworkProps[]> {
-  const res = await searchAll(searchValue, sortCode);
-  const _artworks: ArtworkProps[] = [];
-  if (res) {
-    let _tmp = res.data?.hits?.hits;
-    if (_tmp && _tmp.length > 0) {
-      for (const artwork of _tmp) {
-        _artworks.push({
-          id: artwork?._source?.id,
-          title: artwork?._source?.title,
-          thumbnail: artwork?._source?.thumbnail,
-          viewCount: artwork?._source?.viewCount,
-          likeCount: artwork?._source?.likeCount,
-          createdBy: artwork?._source?.fullname,
-          creatorFullName: artwork?._source?.fullname,
-        });
-      }
-    }
-  }
-  return _artworks;
+  const url = `${BASE_URL}/artworks/elastic`;
+  const param: searchParamTypes = {
+    keyword: searchValue,
+    ...(isHaveAssets && { isAssetAvailable: isHaveAssets }),
+    ...(isAssetsFree && { isAssetFree: isAssetsFree }),
+    ...(categoryId && { categoryId }),
+    ...(sortColumn && sortColumn !== "" && { sortColumn }),
+    ...(sortOrder && { sortOrder }),
+    ...(pageSize && { pageSize }),
+    ...(pageNumber && { pageNumber }),
+  };
+
+  const res = await axios.get(url, { params: param });
+  const artworks: ArtworkProps[] = res.data?.items?.map(
+    (artwork: any) =>
+      ({
+        id: artwork?.id,
+        title: artwork?.title,
+        thumbnail: artwork?.thumbnail,
+        viewCount: artwork?.viewCount,
+        likeCount: artwork?.likeCount,
+        createdBy: artwork?.account?.fullname,
+        creatorFullName: artwork?.account?.fullname,
+      } ?? [])
+  );
+
+  return artworks;
 }
 
 function castElt2ArtworkProps(artworks: any[]): ArtworkProps[] {
   return artworks?.map((artwork: any) => {
     return {
-      id: artwork._source.id,
-      title: artwork._source.title,
-      thumbnail: artwork._source.thumbnail,
-      viewCount: artwork._source.viewCount,
-      likeCount: artwork._source.likeCount,
-      createdBy: artwork._source.fullname,
-      creatorFullName: artwork._source.fullname,
+      id: artwork?.id,
+      title: artwork?.title,
+      thumbnail: artwork?.thumbnail,
+      viewCount: artwork?.viewCount,
+      likeCount: artwork?.likeCount,
+      createdBy: artwork?.account?.fullname,
+      creatorFullName: artwork?.account?.fullname,
     };
   });
 }
@@ -106,47 +98,25 @@ function castElt2ArtworkProps(artworks: any[]): ArtworkProps[] {
  * ```
  * const similarArtworks = await GetSimilarAwsByCookie();
  * ```
- * @version 1.0.0
+ * @version 2.0.0
  * @author @thongnt0208
  */
 export async function GetSimilarAwsByCookie(): Promise<ArtworkProps[]> {
   const interactedAws: { id: string }[] = JSON.parse(
     Cookies.get(cookieNames.interactedArtworks) || "[]"
   );
-  const body = {
-    size: 25,
-    query: {
-      bool: {
-        should: [
-          {
-            more_like_this: {
-              fields: ["title", "categorylist", "taglist", "username"],
-              like: interactedAws.slice(-3).map((aw) => {
-                return {
-                  _id: aw.id,
-                };
-              }),
-              min_term_freq: 1,
-              min_doc_freq: 5,
-              max_query_terms: 20,
-            },
-          },
-          {
-            match_all: {},
-          },
-        ],
-      },
-    },
-  };
+
+  let _url = `${BASE_URL}/artworks/recommendation`;
+
+  interactedAws.slice(-3).map((aw, index) => {
+    if (index === 0) _url += `?ArtworkIds=${aw.id}`;
+    else _url += `&ArtworkIds=${aw.id}`;
+    return undefined;
+  });
 
   try {
-    const res = await axios.post(`${BASE_URL}/artworks/_search`, body, {
-      auth: { username, password },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return castElt2ArtworkProps(res.data?.hits?.hits);
+    const res = await axios.get(_url);
+    return castElt2ArtworkProps(res.data?.items);
   } catch (error: any) {
     console.error(`Error making search similar artworks: `, error);
     return [];
