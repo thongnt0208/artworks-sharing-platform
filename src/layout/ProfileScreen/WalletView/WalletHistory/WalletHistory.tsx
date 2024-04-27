@@ -4,6 +4,13 @@ import { DataTable } from "primereact/datatable";
 
 export type WalletHistoryProps = {
   id: string;
+  account: {
+    id: string;
+    username: string;
+    email: string;
+    fullname: string;
+    avatar: string; 
+  };
   amount: number;
   type: string;
   walletBalance: number;
