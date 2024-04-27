@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
-import { useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 import { CatchAPICallingError, ProgressSpinner } from "../..";
 import {
   GetAssetsData,
@@ -28,6 +28,7 @@ import { getAuthInfo } from "../../../util/AuthUtil";
 const AssetsView: React.FC = () => {
   const navigate = useNavigate();
   const creatorId = getAuthInfo()?.id;
+  let boughtAssetTabValue = useLocation().state?.boughtAssetTabValue;
   const [accountId, isCreator] = useOutletContext() as [string, boolean];
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsProps[]>([]);
@@ -36,7 +37,7 @@ const AssetsView: React.FC = () => {
   const [chosenAssetPrice, setChosenAssetPrice] = useState<number>();
   const [walletData, setWalletData] = useState({} as WalletProps);
   const [isShowBuyAssetDialog, setIsShowBuyAssetDialog] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(boughtAssetTabValue || 0);
   const [pageNumber, setPageNumber] = useState(1);
 
   const observer = useRef<IntersectionObserver | null>(null);
