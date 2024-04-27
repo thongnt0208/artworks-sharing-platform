@@ -4,6 +4,7 @@ import { WalletProps } from "./WalletView";
 import { formatTime } from "../../../util/TimeHandle";
 import { WalletHistoryProps } from "./WalletHistory/WalletHistory";
 import { TransactionHistoryProps } from "./TransactionHistory/TransactionHistory";
+import { GeneralTransactionHistoryProps } from "./GeneralTransactionHistory/GeneralTransactionHistory";
 const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
 
@@ -29,6 +30,66 @@ export async function GetWalletData(accountId: string): Promise<WalletProps> {
     };
   } catch (error) {
     throw new Error("Failed to retrieve wallet data.");
+  }
+}
+
+export async function GetGeneralTransactionHistoryData(accountId: string): Promise<GeneralTransactionHistoryProps[]> {
+  try {
+    const response = await axiosPrivate.get(`${API_URL}/account/${accountId}/general-histories`);
+    return response.data.map((item: any) => {
+      return {
+        transactionHistory: item.transactionHistory
+          ? {
+              id: item.transactionHistory.id,
+              createdAccount: {
+                id: item.transactionHistory.createdAccount.id,
+                username: item.transactionHistory.createdAccount.username,
+                email: item.transactionHistory.createdAccount.email,
+                fullname: item.transactionHistory.createdAccount.fullname,
+                avatar: item.transactionHistory.createdAccount.avatar,
+              },
+              otherAccount: {
+                id: item.transactionHistory.otherAccount.id,
+                username: item.transactionHistory.otherAccount.username,
+                email: item.transactionHistory.otherAccount.email,
+                fullname: item.transactionHistory.otherAccount.fullname,
+                avatar: item.transactionHistory.otherAccount.avatar,
+              },
+              assetId: item.transactionHistory.assetId,
+              proposalId: item.transactionHistory.proposalId,
+              detail: item.transactionHistory.detail,
+              price: item.transactionHistory.price,
+              walletBalance: item.transactionHistory.walletBalance,
+              fee: item.transactionHistory.fee,
+              transactionStatus: item.transactionHistory.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+              createdBy: item.transactionHistory.createdBy,
+              createdOn: formatTime(item.transactionHistory.createdOn),
+            }
+          : null,
+        walletHistory: item.walletHistory
+          ? {
+              id: item.walletHistory.id,
+              account: {
+                id: item.walletHistory.account.id,
+                username: item.walletHistory.account.username,
+                email: item.walletHistory.account.email,
+                fullname: item.walletHistory.account.fullname,
+                avatar: item.walletHistory.account.avatar,
+              },
+              amount: item.walletHistory.amount,
+              walletBalance: item.walletHistory.walletBalance,
+              type: item.walletHistory.type === "Deposit" ? "Nạp tiền vào ví" : "Rút tiền về tài khoản liên kết",
+              paymentMethod: item.walletHistory.paymentMethod,
+              transactionStatus: item.walletHistory.transactionStatus === "Success" ? "Thành công" : "Thất bại",
+              createdOn: formatTime(item.walletHistory.createdOn),
+            }
+          : null,
+        createdOn: formatTime(item.createdOn),
+      };
+    });
+  } catch (error) {
+    console.log("GetGeneralTransactionHistoryData", error);
+    throw new Error("Failed to retrieve general transaction history data.");
   }
 }
 
@@ -108,7 +169,7 @@ export async function GetTransactionHistoryData(accountId: string): Promise<Tran
       };
     });
   } catch (error) {
-    console.log("GetTransactionHistoryData", error);  
+    console.log("GetTransactionHistoryData", error);
     throw new Error("Không thể lấy dữ liệu lịch sử giao dịch.");
   }
 }
