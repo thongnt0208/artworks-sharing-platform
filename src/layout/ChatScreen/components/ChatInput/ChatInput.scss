@@ -1,2 +1,13 @@
 @import "/src/const/variables.scss";
 
+.chat-input-bar-container {
+  textarea {
+    border-radius: 50px;
+    width: 100%;
+    padding: 0.75rem;
+  }
+  button {
+    flex: none;
+    font-weight: bold;
+  }
+}
