@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import CategoryAndTag from "./CategoryAndTag/CategoryAndTag";
 import Gallery from "../../components/Gallery";
 import { TabMenu } from "primereact/tabmenu";
@@ -39,7 +39,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [artworks, setArtworks] = useState<ArtworkProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const [selectingAw, setSelectingAw] = useState<ArtworkProps>({} as ArtworkProps); //an artwork from the artworks list state
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [currentAwDetail, setCurrentAwDetail] = useState<ArtworkDetailType>({} as ArtworkDetailType);
@@ -70,13 +70,6 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     { label: "Theo dõi", icon: "pi pi-fw pi-users" },
   ];
 
-  const observer = useRef<IntersectionObserver | null>(null);
-  const lastArtworkRef = useRef<HTMLDivElement | null>(null);
-
-  const loadMoreData = () => {
-    setPageNumber((prevPageNumber) => prevPageNumber + 1);
-  };
-
   // AW Detail state tools - start
   const fetchIsFollowed = (id: string) => {
     fetchIsFollow(id)
@@ -97,27 +90,6 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       .finally(() => setIsLoadingDetail(false));
   };
   // AW Detail state tools - end
-
-  useEffect(() => {
-    observer.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMoreData();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (lastArtworkRef.current && observer.current) {
-      observer.current.observe(lastArtworkRef.current);
-    }
-
-    return () => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,12 +131,25 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     }
   }, [selectingAw]);
 
+  const handleScroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
     setArtworks([]);
     setPageNumber(1);
   };
-  console.log("Artworks: ", pageNumber, artworks)
+
   return (
     <>
       <CategoryAndTag categories={categories} tags={tags} />
@@ -180,7 +165,6 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
       {isLoading && <ProgressSpinner />}
       {!isLoading && artworks.length === 0 && <div className="text-center text-2xl">Không có dữ liệu</div>}
       {artworks.length > 0 && <Gallery artworks={artworks} awDetailStateTools={awDetailStateTools} />}
-      <div ref={lastArtworkRef}>{/* This is an invisible marker to observe */}</div>
     </>
   );
 };
