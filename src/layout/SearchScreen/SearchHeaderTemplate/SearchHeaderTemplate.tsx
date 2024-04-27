@@ -61,12 +61,9 @@ export default function SearchHeaderTemplate({ ...props }: Props) {
           optionLabel="name"
           optionValue="code"
           tooltip="Sắp xếp theo ..."
-          tooltipOptions={{position: "mouse"}}
+          tooltipOptions={{ position: "mouse" }}
           dropdownIcon="pi pi-sort-alt"
-          onChange={(e) => {
-            console.log(e.value);
-            setSelectedSort(e.value);
-          }}
+          onChange={(e) => setSelectedSort(e.value)}
         />
       </div>
     </div>
