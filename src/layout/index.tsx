@@ -21,7 +21,6 @@ import { Slider } from "primereact/slider";
 import { Avatar } from "primereact/avatar";
 import { toast } from "react-toastify";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { translate2Vietnamese } from "../util/TextHandle";
 import { RadioButton } from "primereact/radiobutton";
 
 export {
@@ -67,12 +66,9 @@ export async function CatchAPICallingError(error: any, navigate?: any) {
   } else if ([521, 500, 502].includes(error.response?.status)) {
     navigate("/error-internal-server");
   } else {
-    const vnmMsg = await translate2Vietnamese(error?.response?.data?.errorMessage || error?.response?.data + error?.message);
     toast.error(
       <>
         <span className="text-cus-h3-bold">Đã xảy ra lỗi.</span>
-        <br />
-        <span>{vnmMsg}</span>
         <br />
         <span>{error?.response?.data?.errorMessage}</span>
       </>
