@@ -168,6 +168,22 @@ const ServicesView: React.FC = () => {
                       onClick={() => {
                         setServiceInfoDialogVisible(true);
                         setIsNew(true);
+                        setSelectedService({
+                          id: "",
+                          serviceName: "",
+                          description: "",
+                          deliveryTime: "",
+                          numberOfConcept: 0,
+                          numberOfRevision: 0,
+                          startingPrice: 0,
+                          thumbnail: "",
+                          accountId: accountId,
+                          accountFullname: accountFullname,
+                          accountAvatar: accountAvatar,
+                          isCreator: isCreator,
+                          averageRating: 0,
+                          handleShowRequestPopup: () => {},
+                        });
                       }}
                     ></Button>
                   </Card>
