@@ -55,18 +55,18 @@ export async function GetArtworksData(
 
 /**
  *
- * Deletes an artwork from the server.
+ * Soft deletes an artwork from the server.
  *
  * @param artworkId - The ID of the artwork to delete.
  * @returns A boolean indicating whether the artwork was successfully deleted.
  * @author AnhDH
- * @version 1.0.0
+ * @version 1.1.0
  */
 export async function DeleteArtworkData(artworkId: string) {
   try {
-    await axiosPrivate.delete(`/artworks/${artworkId}`);
-    return true;
+    const response = await axiosPrivate.delete(`/artworks/softdelete/${artworkId}`);
+    return response.status;
   } catch (error) {
-    return false;
+    throw new Error("Xóa tác phẩm bị lỗi: " + error);
   }
 }
