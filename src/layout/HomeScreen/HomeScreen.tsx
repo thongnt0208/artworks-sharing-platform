@@ -132,7 +132,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   }, [selectingAw]);
 
   const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+    if (window.innerHeight + window.scrollY > document.body.offsetHeight - 500) {
       setPageNumber((prevPageNumber) => prevPageNumber + 1);
     }
   };
