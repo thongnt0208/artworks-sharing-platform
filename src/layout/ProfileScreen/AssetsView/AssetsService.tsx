@@ -2,11 +2,7 @@ import { axiosPrivate } from "../../../hooks/useAxios";
 import { AssetsProps } from "../../../components/AssetsCard";
 import { BoughtAssetsProps } from "./BoughtAssetsSection/BoughtAssets";
 
-export async function GetAssetsData(
-  accountId: string,
-  pageNumber: number,
-  pageSize: number
-): Promise<AssetsProps[]> {
+export async function GetAssetsData(accountId: string, pageNumber: number, pageSize: number): Promise<AssetsProps[]> {
   try {
     const response = await axiosPrivate.get(`/accounts/${accountId}/assets`, {
       params: {
@@ -58,15 +54,12 @@ export async function GetBoughtAssetsData(
   pageSize: number
 ): Promise<BoughtAssetsProps[]> {
   try {
-    const response = await axiosPrivate.get(
-      `/accounts/${accountId}/assets-bought`,
-      {
-        params: {
-          pageNumber,
-          pageSize,
-        },
-      }
-    );
+    const response = await axiosPrivate.get(`/accounts/${accountId}/assets-bought`, {
+      params: {
+        pageNumber,
+        pageSize,
+      },
+    });
     if (response.status !== 200) {
       return [];
     } else {
@@ -96,16 +89,12 @@ export async function GetBoughtAssetsData(
   }
 }
 
-export async function RemoveAssetData(assetId: string): Promise<boolean> {
+export async function RemoveAssetData(assetId: string): Promise<number> {
   try {
     const response = await axiosPrivate.delete(`/assets/${assetId}`);
-    if (response.status === 200) {
-      return true;
-    } else {
-      return false;
-    }
+    console.log(response);
+    return response.status;
   } catch (error) {
-    console.log(error);
-    return false;
+    throw new Error("Xóa tài nguyên bị lỗi: " + error);
   }
 }
