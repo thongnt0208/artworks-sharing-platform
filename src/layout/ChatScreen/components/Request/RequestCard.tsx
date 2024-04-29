@@ -97,7 +97,6 @@ export default function RequestCard({ ...props }: RequestCardProps) {
                     localStorage.setItem("serviceId", serviceId);
                   }}
                 />
-                <Button label="Từ chối" rounded onClick={() => denyCallback && denyCallback(id)} />
               </div>
             </div>
           )}
