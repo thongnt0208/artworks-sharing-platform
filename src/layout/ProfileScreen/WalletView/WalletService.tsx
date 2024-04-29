@@ -41,20 +41,20 @@ export async function GetGeneralTransactionHistoryData(accountId: string): Promi
         transactionHistory: item.transactionHistory
           ? {
               id: item.transactionHistory.id,
-              createdAccount: {
+              createdAccount: item.transactionHistory.createdAccount ? {
                 id: item.transactionHistory.createdAccount.id,
                 username: item.transactionHistory.createdAccount.username,
                 email: item.transactionHistory.createdAccount.email,
                 fullname: item.transactionHistory.createdAccount.fullname,
                 avatar: item.transactionHistory.createdAccount.avatar,
-              },
-              otherAccount: {
+              } : null,
+              otherAccount: item.transactionHistory.otherAccount ? {
                 id: item.transactionHistory.otherAccount.id,
                 username: item.transactionHistory.otherAccount.username,
                 email: item.transactionHistory.otherAccount.email,
                 fullname: item.transactionHistory.otherAccount.fullname,
                 avatar: item.transactionHistory.otherAccount.avatar,
-              },
+              } : null,
               assetId: item.transactionHistory.assetId,
               proposalId: item.transactionHistory.proposalId,
               detail: item.transactionHistory.detail,
@@ -69,13 +69,13 @@ export async function GetGeneralTransactionHistoryData(accountId: string): Promi
         walletHistory: item.walletHistory
           ? {
               id: item.walletHistory.id,
-              account: {
+              account: item.walletHistory.acocunt ? {
                 id: item.walletHistory.account.id,
                 username: item.walletHistory.account.username,
                 email: item.walletHistory.account.email,
                 fullname: item.walletHistory.account.fullname,
                 avatar: item.walletHistory.account.avatar,
-              },
+              } : null,
               amount: item.walletHistory.amount,
               walletBalance: item.walletHistory.walletBalance,
               type: item.walletHistory.type === "Deposit" ? "Nạp tiền vào ví" : "Rút tiền về tài khoản liên kết",
