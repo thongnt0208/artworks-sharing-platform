@@ -26,7 +26,7 @@ import { ConfirmDialog } from "primereact/confirmdialog";
 
 interface ServiceInformationProps {
   props: ServiceProps;
-  isNew?: boolean;
+  isNew: boolean;
   setClose: (close: boolean) => void;
   handleDelete: (serviceId: string) => void;
   fetchServiceData: () => void;
@@ -42,9 +42,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
   const accountId = getAuthInfo()?.id;
   const navigate = useNavigate();
   const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
-  const [artworks, setArtworks] = useState<ArtworkProps[]>(
-    props?.artworkReferences || []
-  );
+  const [artworks, setArtworks] = useState<ArtworkProps[]>(props?.artworkReferences || []);
   const [pageNumber, setPageNumber] = useState(1);
   const [thumbnail, setThumbnail] = useState<File | string>(props?.thumbnail);
   const [isShow, setShow] = useState(false);
@@ -55,12 +53,8 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
         const response = await GetArtworksData(4, pageNumber, accountId, 1, 0);
         if (Array.isArray(response)) {
           setArtworks((prevArtworks) => {
-            const uniqueArtworkIds = new Set(
-              prevArtworks.map((artwork) => artwork.id)
-            );
-            const newArtworks = response.filter(
-              (artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id)
-            );
+            const uniqueArtworkIds = new Set(prevArtworks.map((artwork) => artwork.id));
+            const newArtworks = response.filter((artwork: { id: string }) => !uniqueArtworkIds.has(artwork.id));
             return [...prevArtworks, ...newArtworks];
           });
         }
@@ -70,7 +64,8 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
       }
     };
     handleGetArtworks();
-  }, [accountId, navigate, pageNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId, pageNumber]);
 
   const loadMoreData = () => {
     setPageNumber((prevPageNumber) => prevPageNumber + 1);
@@ -166,12 +161,9 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
               </>
             ) : (
               <>
-                <h1 className="p-1 m-1 pl-0 ml-0 font-bold">
-                  Thông tin dịch vụ
-                </h1>
+                <h1 className="p-1 m-1 pl-0 ml-0 font-bold">Thông tin dịch vụ</h1>
                 <p className="text-lg">
-                  Thêm dịch vụ để cho khách hàng tiềm năng biết bạn sẵn sàng làm
-                  gì và giúp họ dễ dàng thuê bạn.
+                  Thêm dịch vụ để cho khách hàng tiềm năng biết bạn sẵn sàng làm gì và giúp họ dễ dàng thuê bạn.
                 </p>
               </>
             )}
@@ -180,17 +172,11 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
             <div className="thumbnail-container col-4 pr-5 w-fit flex flex-column justify-content-start align-items-center mt-3">
               <img
                 className="thumbnail"
-                src={
-                  (thumbnail instanceof File
-                    ? URL.createObjectURL(thumbnail)
-                    : thumbnail) || defaultCoverImage
-                }
+                src={(thumbnail instanceof File ? URL.createObjectURL(thumbnail) : thumbnail) || defaultCoverImage}
                 alt="thumbnail"
               />
               {formik.errors.thumbnail && formik.touched.thumbnail && (
-                <div className="error-message text-red-500">
-                  {formik.errors.thumbnail}
-                </div>
+                <div className="error-message text-red-500">{formik.errors.thumbnail}</div>
               )}
               <div className="w-full upload-file flex flex-row justify-content-center mt-3">
                 <FileUpload
@@ -235,19 +221,14 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
               >
                 <div className="service-name-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="service-name-label w-full h-fit flex flex-column justify-content-start align-items-start">
-                    <label
-                      className="text-base font-bold"
-                      htmlFor="serviceName"
-                    >
+                    <label className="text-base font-bold" htmlFor="serviceName">
                       Tên dịch vụ
                     </label>
                     <InputText
                       type="text"
                       id="service-name"
                       className={`text-base w-full ${
-                        formik.errors.serviceName &&
-                        formik.touched.serviceName &&
-                        "error"
+                        formik.errors.serviceName && formik.touched.serviceName && "error"
                       }`}
                       name="serviceName"
                       placeholder={formik.values.serviceName || ""}
@@ -255,29 +236,21 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors.serviceName &&
-                      formik.touched.serviceName && (
-                        <div className="error-message text-red-500">
-                          {formik.errors.serviceName}
-                        </div>
-                      )}
+                    {formik.errors.serviceName && formik.touched.serviceName && (
+                      <div className="error-message text-red-500">{formik.errors.serviceName}</div>
+                    )}
                   </div>
                 </div>
 
                 <div className="description-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="description-label w-full h-fit flex flex-column justify-content-start align-items-start">
-                    <label
-                      className="text-base font-bold"
-                      htmlFor="description"
-                    >
+                    <label className="text-base font-bold" htmlFor="description">
                       Mô tả dịch vụ
                     </label>
                     <InputTextarea
                       id="description"
                       className={`text-base w-full ${
-                        formik.errors.description &&
-                        formik.touched.description &&
-                        "error"
+                        formik.errors.description && formik.touched.description && "error"
                       }`}
                       name="description"
                       placeholder={formik.values.description || ""}
@@ -285,29 +258,21 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors.description &&
-                      formik.touched.description && (
-                        <div className="error-message">
-                          {formik.errors.description}
-                        </div>
-                      )}
+                    {formik.errors.description && formik.touched.description && (
+                      <div className="error-message">{formik.errors.description}</div>
+                    )}
                   </div>
                 </div>
 
                 <div className="delivery-time-container w-full h-fit  flex flex-row justify-content-start align-content-between pb-3">
                   <div className="delivery-time-label w-full h-fit flex flex-column justify-content-start align-items-start">
-                    <label
-                      className="text-base font-bold"
-                      htmlFor="deliveryTime"
-                    >
+                    <label className="text-base font-bold" htmlFor="deliveryTime">
                       Thời gian hoàn thành
                     </label>
                     <Dropdown
                       id="deliveryTime"
                       className={`text-base w-full ${
-                        formik.errors.deliveryTime &&
-                        formik.touched.deliveryTime &&
-                        "error"
+                        formik.errors.deliveryTime && formik.touched.deliveryTime && "error"
                       }`}
                       name="deliveryTime"
                       placeholder={formik.values.deliveryTime || ""}
@@ -316,12 +281,9 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors.deliveryTime &&
-                      formik.touched.deliveryTime && (
-                        <div className="error-message">
-                          {formik.errors.deliveryTime}
-                        </div>
-                      )}
+                    {formik.errors.deliveryTime && formik.touched.deliveryTime && (
+                      <div className="error-message">{formik.errors.deliveryTime}</div>
+                    )}
                   </div>
                 </div>
 
@@ -333,23 +295,16 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     <InputNumber
                       id="concept"
                       className={`text-base w-full ${
-                        formik.errors.numberOfConcept &&
-                        formik.touched.numberOfConcept &&
-                        "error"
+                        formik.errors.numberOfConcept && formik.touched.numberOfConcept && "error"
                       }`}
                       name="numberOfConcept"
                       value={formik.values.numberOfConcept}
-                      onValueChange={(e) =>
-                        formik.setFieldValue("numberOfConcept", e.value)
-                      }
+                      onValueChange={(e) => formik.setFieldValue("numberOfConcept", e.value)}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors.numberOfConcept &&
-                      formik.touched.numberOfConcept && (
-                        <div className="error-message">
-                          {formik.errors.numberOfConcept}
-                        </div>
-                      )}
+                    {formik.errors.numberOfConcept && formik.touched.numberOfConcept && (
+                      <div className="error-message">{formik.errors.numberOfConcept}</div>
+                    )}
                   </div>
                 </div>
 
@@ -361,23 +316,16 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     <InputNumber
                       id="revision"
                       className={`text-base w-full ${
-                        formik.errors.numberOfRevision &&
-                        formik.touched.numberOfRevision &&
-                        "error"
+                        formik.errors.numberOfRevision && formik.touched.numberOfRevision && "error"
                       }`}
                       name="numberOfRevision"
                       value={formik.values.numberOfRevision}
-                      onValueChange={(e) =>
-                        formik.setFieldValue("numberOfRevision", e.value)
-                      }
+                      onValueChange={(e) => formik.setFieldValue("numberOfRevision", e.value)}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors.numberOfRevision &&
-                      formik.touched.numberOfRevision && (
-                        <div className="error-message">
-                          {formik.errors.numberOfRevision}
-                        </div>
-                      )}
+                    {formik.errors.numberOfRevision && formik.touched.numberOfRevision && (
+                      <div className="error-message">{formik.errors.numberOfRevision}</div>
+                    )}
                   </div>
                 </div>
 
@@ -389,23 +337,16 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     <InputNumber
                       id="price"
                       className={`text-base w-full ${
-                        formik.errors.startingPrice &&
-                        formik.touched.startingPrice &&
-                        "error"
+                        formik.errors.startingPrice && formik.touched.startingPrice && "error"
                       }`}
                       name="startingPrice"
                       value={formik.values.startingPrice}
-                      onValueChange={(e) =>
-                        formik.setFieldValue("startingPrice", e.value)
-                      }
+                      onValueChange={(e) => formik.setFieldValue("startingPrice", e.value)}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.errors.startingPrice &&
-                      formik.touched.startingPrice && (
-                        <div className="error-message">
-                          {formik.errors.startingPrice}
-                        </div>
-                      )}
+                    {formik.errors.startingPrice && formik.touched.startingPrice && (
+                      <div className="error-message">{formik.errors.startingPrice}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -413,11 +354,7 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
               <div className="btn-container w-full h-fit flex flex-row justify-content-between align-items-start">
                 <div className="submission-container w-full h-fit flex flex-row justify-content-start align-items-center">
                   <div className="submit-btn w-fit h-fit mr-2 flex flex-row justify-content-center text-300">
-                    <Button
-                      label={id ? "Cập nhật" : "Tạo"}
-                      className="p-button"
-                      type="submit"
-                    />
+                    <Button label={id ? "Cập nhật" : "Tạo"} className="p-button" type="submit" />
                   </div>
                   <div className="cancel-btn w-fit h-fit flex flex-row justify-content-center">
                     <Button
@@ -431,18 +368,19 @@ const ServiceInformationSection: React.FC<ServiceInformationProps> = ({
                     />
                   </div>
                 </div>
-
-                <div className="delete-account-btn w-full h-fit flex flex-row justify-content-center">
-                  <Button
-                    label="Xóa dịch vụ"
-                    className="p-button"
-                    type="button"
-                    onClick={() => {
-                      setConfirmDialogVisible(true);
-                      formik.resetForm();
-                    }}
-                  />
-                </div>
+                {!isNew && (
+                  <div className="delete-account-btn w-full h-fit flex flex-row justify-content-center">
+                    <Button
+                      label="Xóa dịch vụ"
+                      className="p-button"
+                      type="button"
+                      onClick={() => {
+                        setConfirmDialogVisible(true);
+                        formik.resetForm();
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

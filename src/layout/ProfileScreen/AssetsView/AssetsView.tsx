@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from "react";
 import { Card } from "primereact/card";
 import { TabMenu } from "primereact/tabmenu";
@@ -7,14 +8,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useLocation, useOutletContext } from "react-router-dom";
 import { CatchAPICallingError, ProgressSpinner } from "../..";
-import {
-  GetAssetsData,
-  GetBoughtAssetsData,
-  RemoveAssetData,
-} from "./AssetsService";
-import BoughtAssets, {
-  BoughtAssetsProps,
-} from "./BoughtAssetsSection/BoughtAssets";
+import { GetAssetsData, GetBoughtAssetsData, RemoveAssetData } from "./AssetsService";
+import BoughtAssets, { BoughtAssetsProps } from "./BoughtAssetsSection/BoughtAssets";
 import AssetsCard, { AssetsProps } from "../../../components/AssetsCard";
 import { GetAssetDownloadLinkById } from "../../ArtworkDetailScreen/dialogs/Service";
 import { GetWalletData } from "../WalletView/WalletService";
@@ -30,6 +25,7 @@ const AssetsView: React.FC = () => {
   const creatorId = getAuthInfo()?.id;
   let boughtAssetTabValue = useLocation().state?.boughtAssetTabValue;
   const [accountId, isCreator] = useOutletContext() as [string, boolean];
+  const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsProps[]>([]);
   const [boughtAssets, setBoughtAssets] = useState<BoughtAssetsProps[]>([]);
@@ -39,6 +35,8 @@ const AssetsView: React.FC = () => {
   const [isShowBuyAssetDialog, setIsShowBuyAssetDialog] = useState(false);
   const [activeTab, setActiveTab] = useState(boughtAssetTabValue || 0);
   const [pageNumber, setPageNumber] = useState(1);
+  const [deleteAssetId, setDeleteAssetId] = useState("");
+  const [confirmDeleteDialog, setConfirmDeleteDialog] = useState(false);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastAssetRef = useRef<HTMLDivElement | null>(null);
@@ -49,6 +47,46 @@ const AssetsView: React.FC = () => {
 
   const handleTabChange = (event: any) => {
     setActiveTab(event.index);
+  };
+
+  const fetchAssets = async () => {
+    setPageNumber(1);
+    try {
+      if (activeTab === 0) {
+        const response = await GetAssetsData(accountId, pageNumber, 3);
+        if (Array.isArray(response)) {
+          setAssets((prevAssets) => {
+            const uniqueAssetIds = new Set<string>(prevAssets.map((asset) => asset.id));
+            const filteredAssets = Array.isArray(response)
+              ? response.filter((asset: { id: string }) => !uniqueAssetIds.has(asset.id))
+              : [];
+            return [...prevAssets, ...filteredAssets];
+          });
+        } else {
+          toast.error("Lấy dữ liệu tài nguyên thất bại!");
+        }
+      } else if (activeTab === 1) {
+        const response = await GetBoughtAssetsData(accountId, pageNumber, 10);
+        if (Array.isArray(response)) {
+          setBoughtAssets((prevAssets) => {
+            const uniqueAssetIds = new Set<string>(prevAssets.map((asset) => asset.id));
+            const filteredAssets = Array.isArray(response)
+              ? response.filter((asset: { id: string }) => !uniqueAssetIds.has(asset.id))
+              : [];
+            return [...prevAssets, ...filteredAssets];
+          });
+        } else {
+          toast.error("Lấy dữ liệu tài nguyên thất bại!");
+        }
+      } else {
+        toast.error("Lấy dữ liệu tài nguyên thất bại!");
+      }
+    } catch (error) {
+      CatchAPICallingError(error, navigate);
+    } finally {
+      setIsLoading(false);
+      setRefresh(false);
+    }
   };
 
   const saveAssetHandler = (id: string, price?: number) => {
@@ -80,15 +118,11 @@ const AssetsView: React.FC = () => {
             <br />
             <span>Tài nguyên sẽ tự động tải xuống sau ít phút.</span>
             <br />
-            <span>
-              Nếu không, hãy sang trang "Tài nguyên của tôi" để tải lại.
-            </span>
+            <span>Nếu không, hãy sang trang "Tài nguyên của tôi" để tải lại.</span>
           </>
         );
         setTimeout(() => {
-          GetAssetDownloadLinkById(chosenAssetId).then((link) =>
-            window.open(link, "_blank")
-          );
+          GetAssetDownloadLinkById(chosenAssetId).then((link) => window.open(link, "_blank"));
         }, 800);
       })
       .catch((error) => {
@@ -102,8 +136,7 @@ const AssetsView: React.FC = () => {
       const response = await RemoveAssetData(id);
       if (response) {
         toast.success("Xóa tài nguyên thành công!");
-      } else {
-        toast.error("Xóa tài nguyên thất bại!");
+        fetchAssets();
       }
     } catch (error) {
       CatchAPICallingError(error, navigate);
@@ -113,58 +146,9 @@ const AssetsView: React.FC = () => {
   const items = [{ label: "Đã đăng" }, { label: "Đã mua" }];
 
   useEffect(() => {
-    const fetchAssets = async () => {
-      setPageNumber(1);
-      try {
-        if (activeTab === 0) {
-          const response = await GetAssetsData(accountId, pageNumber, 3);
-          if (Array.isArray(response)) {
-            setAssets((prevAssets) => {
-              const uniqueAssetIds = new Set<string>(
-                prevAssets.map((asset) => asset.id)
-              );
-              const filteredAssets = Array.isArray(response)
-                ? response.filter(
-                    (asset: { id: string }) => !uniqueAssetIds.has(asset.id)
-                  )
-                : [];
-              return [...prevAssets, ...filteredAssets];
-            });
-          } else {
-            toast.error("Lấy dữ liệu tài nguyên thất bại!");
-          }
-        } else if (activeTab === 1) {
-          const response = await GetBoughtAssetsData(accountId, pageNumber, 10);
-          if (Array.isArray(response)) {
-            setBoughtAssets((prevAssets) => {
-              const uniqueAssetIds = new Set<string>(
-                prevAssets.map((asset) => asset.id)
-              );
-              const filteredAssets = Array.isArray(response)
-                ? response.filter(
-                    (asset: { id: string }) => !uniqueAssetIds.has(asset.id)
-                  )
-                : [];
-              return [...prevAssets, ...filteredAssets];
-            });
-          } else {
-            toast.error("Lấy dữ liệu tài nguyên thất bại!");
-          }
-        } else {
-          toast.error("Lấy dữ liệu tài nguyên thất bại!");
-        }
-      } catch (error) {
-        CatchAPICallingError(error, navigate);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchAssets();
-  }, [accountId, navigate, pageNumber, activeTab]);
-
-  useEffect(() => {
     setIsLoading(true);
-  }, [activeTab]);
+    fetchAssets();
+  }, [accountId, refresh, pageNumber, activeTab]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(
@@ -199,91 +183,108 @@ const AssetsView: React.FC = () => {
       ) : null}
       {isLoading && <ProgressSpinner />}
       {!isLoading &&
-      (activeTab === 0 ? (
-        <div className="gallery">
-          {assets.length === 0 ? (
-            isCreator ? (
-              <Card className="add-asset-card">
-                <div className="cursor-pointer flex flex-column justify-content-center align-items-center">
-                  <i className="pi pi-plus-circle icon m-3" />
-                  <Button
-                    label="Thêm tài nguyên"
-                    onClick={() => {
-                      navigate("/artwork/post");
-                    }}
-                  ></Button>
-                </div>
-              </Card>
+        (activeTab === 0 ? (
+          <div className="gallery">
+            {assets.length === 0 ? (
+              isCreator ? (
+                <Card className="add-asset-card">
+                  <div className="cursor-pointer flex flex-column justify-content-center align-items-center">
+                    <i className="pi pi-plus-circle icon m-3" />
+                    <Button
+                      label="Thêm tài nguyên"
+                      onClick={() => {
+                        navigate("/artwork/post");
+                      }}
+                    ></Button>
+                  </div>
+                </Card>
+              ) : (
+                <div> Tác giả chưa có tài nguyên nào </div>
+              )
             ) : (
-              <div> Tác giả chưa có tài nguyên nào </div>
-            )
-          ) : (
-            assets.map((asset, index) => (
-              <div className="gallery__item col col-12" key={index}>
-                <AssetsCard
-                  id={asset.id}
-                  thumbnail={asset.thumbnail}
-                  itemsList={asset.itemsList}
-                  isCreator={isCreator}
-                  saveHandler={saveAssetHandler}
-                  removeHandler={removeAssetHandler}
-                />
-              </div>
-            ))
-          )}
-        </div>
-      ) : (
-        <div className="bought-asset-gallery">
-          {boughtAssets.length === 0 ? (
-            <div> Bạn chưa mua tài nguyên nào </div>
-          ) : (
-            boughtAssets.map((asset, index) => (
-              <div className="gallery__item col col-12" key={index}>
-                <BoughtAssets
-                  id={asset.id}
-                  artworkId={asset.artworkId}
-                  order={asset.order}
-                  assetTitle={asset.assetTitle}
-                  description={asset.description}
-                  assetName={asset.assetName}
-                  price={asset.price}
-                  extension={asset.extension}
-                  size={asset.size}
-                  isBought={asset.isBought}
-                  fileMetaData={asset.fileMetaData}
-                  lastModificatedOn={asset.lastModificatedOn}
-                  saveHandler={saveAssetHandler}
-                />
-              </div>
-            ))
-          )}
-        </div>
-      ))}
-      {!isCreator && <ConfirmDialog
-        visible={isShowBuyAssetDialog}
-        onHide={() => setIsShowBuyAssetDialog(false)}
-        header="Tài nguyên trả phí"
-        headerStyle={{ border: "none", textAlign: "center" }}
-        message={
-          <>
-            <p>Đây là tài nguyên trả phí.</p>
-            <p>
-              Bạn đang có{" "}
-              <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví,
-              tài nguyên này có giá{" "}
-              <strong>{numberToXu(chosenAssetPrice || 0)}</strong>.
-            </p>
-            <p>Bạn có muốn mua tài nguyên này không?</p>
-          </>
+              assets.map((asset, index) => (
+                <div className="gallery__item col col-12" key={index}>
+                  <AssetsCard
+                    id={asset.id}
+                    thumbnail={asset.thumbnail}
+                    itemsList={asset.itemsList}
+                    isCreator={isCreator}
+                    saveHandler={saveAssetHandler}
+                    removeHandler={(assetId) => {
+                      setDeleteAssetId(assetId);
+                      setConfirmDeleteDialog(true);
+                    }}
+                  />
+                </div>
+              ))
+            )}
+          </div>
+        ) : (
+          <div className="bought-asset-gallery">
+            {boughtAssets.length === 0 ? (
+              <div> Bạn chưa mua tài nguyên nào </div>
+            ) : (
+              boughtAssets.map((asset, index) => (
+                <div className="gallery__item col col-12" key={index}>
+                  <BoughtAssets
+                    id={asset.id}
+                    artworkId={asset.artworkId}
+                    order={asset.order}
+                    assetTitle={asset.assetTitle}
+                    description={asset.description}
+                    assetName={asset.assetName}
+                    price={asset.price}
+                    extension={asset.extension}
+                    size={asset.size}
+                    isBought={asset.isBought}
+                    fileMetaData={asset.fileMetaData}
+                    lastModificatedOn={asset.lastModificatedOn}
+                    saveHandler={saveAssetHandler}
+                  />
+                </div>
+              ))
+            )}
+          </div>
+        ))}
+      {!isCreator && (
+        <ConfirmDialog
+          visible={isShowBuyAssetDialog}
+          onHide={() => setIsShowBuyAssetDialog(false)}
+          header="Tài nguyên trả phí"
+          headerStyle={{ border: "none", textAlign: "center" }}
+          message={
+            <>
+              <p>Đây là tài nguyên trả phí.</p>
+              <p>
+                Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, tài
+                nguyên này có giá <strong>{numberToXu(chosenAssetPrice || 0)}</strong>.
+              </p>
+              <p>Bạn có muốn mua tài nguyên này không?</p>
+            </>
+          }
+          dismissableMask
+          icon="pi pi-exclamation-triangle"
+          accept={() => buyAssetHandler()}
+          reject={() => setIsShowBuyAssetDialog(false)}
+        />
+      )}
+      <ConfirmDialog
+        visible={confirmDeleteDialog}
+        headerClassName="confirm-dialog-header"
+        header="Xác nhận xóa"
+        message="Bạn có chắc chắn muốn xóa tác phẩm này?"
+        closable={false}
+        onHide={() => setConfirmDeleteDialog(false)}
+        footer={
+          <div>
+            <Button onClick={() => removeAssetHandler(deleteAssetId)}>Xác nhận</Button>
+            <Button onClick={() => setConfirmDeleteDialog(false)}>Hủy</Button>
+          </div>
         }
-        dismissableMask
-        icon="pi pi-exclamation-triangle"
-        accept={() => buyAssetHandler()}
-        reject={() => setIsShowBuyAssetDialog(false)}
-      />}
-      <div ref={lastAssetRef}>
-        {/* This is an invisible marker to observe */}
-      </div>
+      >
+        <h3>Bạn có chắc muốn xóa tác phẩm này?</h3>
+      </ConfirmDialog>
+      <div ref={lastAssetRef}>{/* This is an invisible marker to observe */}</div>
     </div>
   );
 };

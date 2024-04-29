@@ -40,14 +40,11 @@ const ArtworksView: React.FC = () => {
   const deleteArtworkHandler = async (artworkId: string) => {
     try {
       const response = await DeleteArtworkData(artworkId);
-      if (response) {
+      if (response === 204) {
         setArtworks(artworks.filter((artwork) => artwork.id !== artworkId));
         toast.success("Xóa tác phẩm thành công");
-      } else {
-        toast.error("Xóa tác phẩm thất bại");
       }
     } catch (error) {
-      toast.error("Xóa tác phẩm thất bại");
       CatchAPICallingError(error, navigate);
     } finally {
       setVisibleDialogs(false);
@@ -76,7 +73,7 @@ const ArtworksView: React.FC = () => {
       }
     };
     fetchArtworks();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountId, activeTab, pageNumber]);
 
   useEffect(() => {
