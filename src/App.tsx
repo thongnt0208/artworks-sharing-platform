@@ -13,6 +13,7 @@ import "primeflex/primeflex.css";
 //---------------------------
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 //---------------------------
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -60,6 +61,7 @@ function App() {
   addLocale("vi", vi.vi);
   locale("vi");
   const primereactConfigValue = {};
+  const ggClientId = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID || "";
   const [authInfo, setAuthInfo] = useState(getAuthInfo());
   const [isLogin, setIsLogin] = useState(authInfo?.id ? true : false);
   const [chatboxes, setChatboxes] = useState<ChatboxItemType[]>([]);
@@ -83,66 +85,68 @@ function App() {
 
   return (
     <PrimeReactProvider value={primereactConfigValue}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Header
-            isLogin={isLogin}
-            setIsLogin={setIsLogin}
-            chatboxesData={chatboxes.map((chatbox) => castChatboxToNotification(chatbox))}
-            notisData={chatNotis}
-            numNotis={numNotis}
-          />
-
-          <Routes>
-            <Route path="/" element={<HomeScreen isLogin={isLogin} />} />
-            <Route
-              path="/login"
-              element={
-                <LoginScreen
-                  isLogin={isLogin}
-                  setIsLogin={setIsLogin}
-                  setAuthInfoChanged={setAuthInfo}
-                />
-              }
+      <GoogleOAuthProvider clientId={ggClientId}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Header
+              isLogin={isLogin}
+              setIsLogin={setIsLogin}
+              chatboxesData={chatboxes.map((chatbox) => castChatboxToNotification(chatbox))}
+              notisData={chatNotis}
+              numNotis={numNotis}
             />
-            <Route path="/register" element={<RegisterScreen />} />
-            <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
-            <Route path="/reset-password" element={<ResetPasswordScreen />} />
-            <Route path="/change-pasword" element={<ChangePasswordScreen />} />
-            <Route path="/artwork/:id" element={<ArtworkDetail />} />
-            <Route element={<RequireAuth />}>
-              {/* Routes need to protect (must log in to access)*/}
-              <Route path="/editTest" element={<EditProfileTestPage />} />
-              <Route path="/artwork/post" element={<PostArtworkScreen />} />
-              <Route path="/chat" element={<ChatScreen />} />
-              <Route path="/chat/:id" element={<ChatScreen />} />
-              <Route path="/my-requests" element={<RequestScreen isLogin={isLogin} />} />
-            </Route>
-            <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
-              <Route path="/account/:id/" element={<ArtworksView />} />
-              <Route path="/account/:id/artwork" element={<ArtworksView />} />
-              <Route path="/account/:id/assets" element={<AssetsView />} />
-              <Route path="/account/:id/service" element={<ServicesView />} />
-              <Route path="/account/:id/collection" element={<CollectionsView />} />
-              <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
-              <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
-              <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
-              <Route path="/account/:id/wallet" element={<WalletView />} />
-            </Route>
-            <Route path="/account/settings" element={<ProfileSettings />} />
-            <Route path="/collection/:id" element={<CollectionDetailScreen />} />
-            <Route path="/hire" element={<HireScreen isLogin={isLogin} />} />
-            <Route path="/search" element={<SearchScreen />} />
-            <Route path="/explore" element={<SearchScreen />} />
-            <Route path="*" element={<NotFoundPage />} />
-            <Route path="/error" element={<UnknownErrorPage />} />
-            <Route path="/error-internal-server" element={<InternalServerErrPage />} />
-            <Route path="/policy" element={<PolicyPage />} />
-          </Routes>
-          <Footer />
-          <ToastContainer />
-        </BrowserRouter>
-      </AuthProvider>
+
+            <Routes>
+              <Route path="/" element={<HomeScreen isLogin={isLogin} />} />
+              <Route
+                path="/login"
+                element={
+                  <LoginScreen
+                    isLogin={isLogin}
+                    setIsLogin={setIsLogin}
+                    setAuthInfoChanged={setAuthInfo}
+                  />
+                }
+              />
+              <Route path="/register" element={<RegisterScreen />} />
+              <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+              <Route path="/reset-password" element={<ResetPasswordScreen />} />
+              <Route path="/change-pasword" element={<ChangePasswordScreen />} />
+              <Route path="/artwork/:id" element={<ArtworkDetail />} />
+              <Route element={<RequireAuth />}>
+                {/* Routes need to protect (must log in to access)*/}
+                <Route path="/editTest" element={<EditProfileTestPage />} />
+                <Route path="/artwork/post" element={<PostArtworkScreen />} />
+                <Route path="/chat" element={<ChatScreen />} />
+                <Route path="/chat/:id" element={<ChatScreen />} />
+                <Route path="/my-requests" element={<RequestScreen isLogin={isLogin} />} />
+              </Route>
+              <Route path="/account/:id" element={<ProfileScreen isLogin={isLogin} />}>
+                <Route path="/account/:id/" element={<ArtworksView />} />
+                <Route path="/account/:id/artwork" element={<ArtworksView />} />
+                <Route path="/account/:id/assets" element={<AssetsView />} />
+                <Route path="/account/:id/service" element={<ServicesView />} />
+                <Route path="/account/:id/collection" element={<CollectionsView />} />
+                <Route path="/account/:id/edit" element={<EditProfileTestPage />} />
+                <Route path="/account/:id/subscribe" element={<SubscribeArea />} />
+                <Route path="/account/:id/subscribe/setup" element={<SetupSubscribeArea />} />
+                <Route path="/account/:id/wallet" element={<WalletView />} />
+              </Route>
+              <Route path="/account/settings" element={<ProfileSettings />} />
+              <Route path="/collection/:id" element={<CollectionDetailScreen />} />
+              <Route path="/hire" element={<HireScreen isLogin={isLogin} />} />
+              <Route path="/search" element={<SearchScreen />} />
+              <Route path="/explore" element={<SearchScreen />} />
+              <Route path="*" element={<NotFoundPage />} />
+              <Route path="/error" element={<UnknownErrorPage />} />
+              <Route path="/error-internal-server" element={<InternalServerErrPage />} />
+              <Route path="/policy" element={<PolicyPage />} />
+            </Routes>
+            <Footer />
+            <ToastContainer />
+          </BrowserRouter>
+        </AuthProvider>
+      </GoogleOAuthProvider>
     </PrimeReactProvider>
   );
 }
