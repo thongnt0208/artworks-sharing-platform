@@ -92,9 +92,8 @@ export async function GetBoughtAssetsData(
 export async function RemoveAssetData(assetId: string): Promise<number> {
   try {
     const response = await axiosPrivate.delete(`/assets/${assetId}`);
-    console.log(response);
     return response.status;
   } catch (error) {
-    throw new Error("Xóa tài nguyên bị lỗi: " + error);
+    throw  error;
   }
 }
