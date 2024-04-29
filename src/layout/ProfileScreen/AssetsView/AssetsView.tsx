@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from "react";
 import { Card } from "primereact/card";
 import { TabMenu } from "primereact/tabmenu";
@@ -48,6 +49,46 @@ const AssetsView: React.FC = () => {
     setActiveTab(event.index);
   };
 
+  const fetchAssets = async () => {
+    setPageNumber(1);
+    try {
+      if (activeTab === 0) {
+        const response = await GetAssetsData(accountId, pageNumber, 3);
+        if (Array.isArray(response)) {
+          setAssets((prevAssets) => {
+            const uniqueAssetIds = new Set<string>(prevAssets.map((asset) => asset.id));
+            const filteredAssets = Array.isArray(response)
+              ? response.filter((asset: { id: string }) => !uniqueAssetIds.has(asset.id))
+              : [];
+            return [...prevAssets, ...filteredAssets];
+          });
+        } else {
+          toast.error("Lấy dữ liệu tài nguyên thất bại!");
+        }
+      } else if (activeTab === 1) {
+        const response = await GetBoughtAssetsData(accountId, pageNumber, 10);
+        if (Array.isArray(response)) {
+          setBoughtAssets((prevAssets) => {
+            const uniqueAssetIds = new Set<string>(prevAssets.map((asset) => asset.id));
+            const filteredAssets = Array.isArray(response)
+              ? response.filter((asset: { id: string }) => !uniqueAssetIds.has(asset.id))
+              : [];
+            return [...prevAssets, ...filteredAssets];
+          });
+        } else {
+          toast.error("Lấy dữ liệu tài nguyên thất bại!");
+        }
+      } else {
+        toast.error("Lấy dữ liệu tài nguyên thất bại!");
+      }
+    } catch (error) {
+      CatchAPICallingError(error, navigate);
+    } finally {
+      setIsLoading(false);
+      setRefresh(false);
+    }
+  };
+
   const saveAssetHandler = (id: string, price?: number) => {
     setChosenAssetId(id);
     setChosenAssetPrice(price);
@@ -93,11 +134,9 @@ const AssetsView: React.FC = () => {
   const removeAssetHandler = async (id: string) => {
     try {
       const response = await RemoveAssetData(id);
-      if (response === 200) {
+      if (response) {
         toast.success("Xóa tài nguyên thành công!");
-        setRefresh(true);
-      } else {
-        toast.error("Xóa tài nguyên thất bại!");
+        fetchAssets();
       }
     } catch (error) {
       CatchAPICallingError(error, navigate);
@@ -107,52 +146,9 @@ const AssetsView: React.FC = () => {
   const items = [{ label: "Đã đăng" }, { label: "Đã mua" }];
 
   useEffect(() => {
-    const fetchAssets = async () => {
-      setPageNumber(1);
-      try {
-        if (activeTab === 0) {
-          const response = await GetAssetsData(accountId, pageNumber, 3);
-          if (Array.isArray(response)) {
-            setAssets((prevAssets) => {
-              const uniqueAssetIds = new Set<string>(prevAssets.map((asset) => asset.id));
-              const filteredAssets = Array.isArray(response)
-                ? response.filter((asset: { id: string }) => !uniqueAssetIds.has(asset.id))
-                : [];
-              return [...prevAssets, ...filteredAssets];
-            });
-          } else {
-            toast.error("Lấy dữ liệu tài nguyên thất bại!");
-          }
-        } else if (activeTab === 1) {
-          const response = await GetBoughtAssetsData(accountId, pageNumber, 10);
-          if (Array.isArray(response)) {
-            setBoughtAssets((prevAssets) => {
-              const uniqueAssetIds = new Set<string>(prevAssets.map((asset) => asset.id));
-              const filteredAssets = Array.isArray(response)
-                ? response.filter((asset: { id: string }) => !uniqueAssetIds.has(asset.id))
-                : [];
-              return [...prevAssets, ...filteredAssets];
-            });
-          } else {
-            toast.error("Lấy dữ liệu tài nguyên thất bại!");
-          }
-        } else {
-          toast.error("Lấy dữ liệu tài nguyên thất bại!");
-        }
-      } catch (error) {
-        CatchAPICallingError(error, navigate);
-      } finally {
-        setIsLoading(false);
-        setRefresh(false);
-      }
-    };
-    fetchAssets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountId, refresh, pageNumber, activeTab]);
-
-  useEffect(() => {
     setIsLoading(true);
-  }, [activeTab]);
+    fetchAssets();
+  }, [accountId, refresh, pageNumber, activeTab]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(
@@ -260,8 +256,8 @@ const AssetsView: React.FC = () => {
             <>
               <p>Đây là tài nguyên trả phí.</p>
               <p>
-                Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, tài nguyên này có giá{" "}
-                <strong>{numberToXu(chosenAssetPrice || 0)}</strong>.
+                Bạn đang có <strong>{numberToXu(walletData?.balance || 0)}</strong> trong ví, tài
+                nguyên này có giá <strong>{numberToXu(chosenAssetPrice || 0)}</strong>.
               </p>
               <p>Bạn có muốn mua tài nguyên này không?</p>
             </>
