@@ -16,10 +16,13 @@
     .notification-content {
       .notification-message {
         display: flex;
+        font-size: medium;
+        margin: 0.2rem 0;
         flex-direction: column;
       }
       .notification-date {
         color: $gray-default;
+        margin: 0.5rem 0;
       }
     }
   }
