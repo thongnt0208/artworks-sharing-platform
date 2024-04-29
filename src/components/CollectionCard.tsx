@@ -13,15 +13,15 @@ export type CollectionProps = {
   numberOfArtworks: number;
   accountAvatar?: string;
   thumbnail?: string;
-}
+};
 
 const CollectionCard: React.FC<CollectionProps> = (props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     localStorage.setItem("accountAvatar", props.accountAvatar ?? "");
-    navigate(`/collection/${props.id}`);   
-  }
+    navigate(`/collection/${props.id}`);
+  };
   return (
     <div className="collection-card-container">
       <Button
@@ -32,8 +32,10 @@ const CollectionCard: React.FC<CollectionProps> = (props) => {
         }}
         onClick={handleClick}
       >
-        <span className="text-cus-h3-bold">{props.collectionName}</span>
-        <span className="text-cus-small">{props.numberOfArtworks} tác phẩm</span>
+        <div className="collection-card__info">
+          <span className="text-cus-h3-bold">{props.collectionName}</span>
+          <span className="text-cus-small">{props.numberOfArtworks} tác phẩm</span>
+        </div>
       </Button>
     </div>
   );

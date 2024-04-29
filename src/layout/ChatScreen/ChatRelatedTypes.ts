@@ -34,6 +34,13 @@ export type RequestItemType = {
   createdBy: string;
   createdOn: string;
   service?: any;
+  account?: {
+    id: string;
+    username: string;
+    email: string;
+    fullname: string;
+    avatar: string;
+  };
 };
 
 export type RequestStateToolsType = {
