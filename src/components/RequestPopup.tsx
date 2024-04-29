@@ -34,13 +34,13 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
   onSubmit,
 }) => {
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [estimateDeliveryTime, setEstimateDeliveryTime] = useState("");
   const [budget, setBudget] = useState(startingPrice);
   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
   useEffect(() => {
     setBudget(startingPrice);
-    const fieldsFilled =
-      message.trim() !== "" && (!isHire || estimateDeliveryTime.trim() !== "");
+    const fieldsFilled = message.trim() !== "" && (!isHire || estimateDeliveryTime.trim() !== "");
     setAllFieldsFilled(fieldsFilled);
   }, [message, estimateDeliveryTime, budget, isHire, startingPrice]);
 
@@ -59,6 +59,19 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
     }
   };
 
+  const handleChange = (e: any) => {
+    const inputValue = e.target.value;
+    setMessage(inputValue);
+
+    if (inputValue.length < 10) {
+      setErrorMessage("Tin nhắn phải nhiều hơn 10 kí tự.");
+    } else if (inputValue.length > 255) {
+      setErrorMessage("Tin nhắn phải ít hơn 255 kí tự.");
+    } else {
+      setErrorMessage("");
+    }
+  };
+
   return (
     <>
       <Dialog
@@ -74,37 +87,37 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
         <div className="request-popup-container w-full flex flex-column justify-content-center align-items-center">
           <div className="account-info w-full flex flex-column justify-content-center align-items-center">
             <div className="avatar-container">
-              <img
-                alt={`Ảnh đại diện của ${accountName}`}
-                src={accountAvatar}
-                className="avatar-image"
-              />
+              <img alt={`Ảnh đại diện của ${accountName}`} src={accountAvatar} className="avatar-image" />
             </div>
             <div className="information-container">
               <h2>{accountName}</h2>
             </div>
           </div>
-          <div className="w-full flex flex-column justify-content-center align-items-center">
-            <InputTextarea
-              id="message"
-              rows={8}
-              minLength={10}
-              maxLength={255}
-              style={{ width: "80%" }}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            {isHire && message.length < 10 && (
-              <span className="text-red-500">Phải hơn 10 kí tự</span>
-            )}
-          </div>
           {isHire && (
             <div className="w-full mt-4 flex flex-column justify-content-center align-items-center">
-              <div className="delivery-time-label w-6 mb-2 h-fit flex flex-column justify-content-start align-items-center">
-                <label
-                  className="w-full text-left text-base font-bold"
-                  htmlFor="deliveryTime"
-                >
+              <div className="w-8 mb-2 h-fit flex flex-column justify-content-start align-items-center">
+                <label className="w-full text-left text-base font-bold" htmlFor="deliveryTime">
+                  Tin nhắn
+                </label>
+                <InputTextarea
+                  className="w-full"
+                  id="message"
+                  placeholder="Mô tả chi tiết yêu cầu của bạn"
+                  rows={8}
+                  minLength={10}
+                  maxLength={255}
+                  value={message}
+                  onChange={handleChange}
+                  onBlur={() => {
+                    if (!message.trim()) {
+                      setErrorMessage("");
+                    }
+                  }}
+                />
+                {isHire && errorMessage && <span className="text-red-500">{errorMessage}</span>}
+              </div>
+              <div className="delivery-time-label w-8 mb-2 h-fit flex flex-column justify-content-start align-items-center">
+                <label className="w-full text-left text-base font-bold" htmlFor="deliveryTime">
                   Thời gian hoàn thành
                 </label>
                 <Dropdown
@@ -117,11 +130,8 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
                 />
               </div>
 
-              <div className="price-label w-6 h-fit flex flex-column justify-content-start align-items-center">
-                <label
-                  className="w-full text-left text-base font-bold"
-                  htmlFor="price"
-                >
+              <div className="price-label w-8 h-fit flex flex-column justify-content-start align-items-center">
+                <label className="w-full text-left text-base font-bold" htmlFor="price">
                   Giá khởi điểm
                 </label>
                 <InputNumber
@@ -147,11 +157,8 @@ const RequestPopup: React.FC<RequestPopupProps> = ({
               }}
               onClick={() => handleSubmit()}
             >
-              <p
-                className="w-full text-center p-0 m-0"
-                style={{ fontSize: "0.9rem", fontWeight: "border" }}
-              >
-                {isHire ? "Gửi yêu cầu" : "Gửi tin nhắn"}  
+              <p className="w-full text-center p-0 m-0" style={{ fontSize: "0.9rem", fontWeight: "border" }}>
+                {isHire ? "Gửi yêu cầu" : "Gửi tin nhắn"}
               </p>
             </Button>
           </div>

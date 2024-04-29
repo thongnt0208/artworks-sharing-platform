@@ -25,8 +25,8 @@ const ProposalSection: React.FC<{ data: ProposalType[] }> = ({ data }) => {
     let status;
     switch (rowData.status) {
       case "Waiting":
-        backgroundColor = "yellow";
-        color = "black";
+        backgroundColor = "lightyellow";
+        color = "grey";
         status = "Đang chờ";
         break;
       case "Accepted":
@@ -46,7 +46,7 @@ const ProposalSection: React.FC<{ data: ProposalType[] }> = ({ data }) => {
         status = "Đã thanh toán cọc";
         break;
       case "CompletePayment":
-        backgroundColor = "purple";
+        backgroundColor = "green";
         status = "Đã hoàn tất thanh toán";
         break;
       case "Complete":

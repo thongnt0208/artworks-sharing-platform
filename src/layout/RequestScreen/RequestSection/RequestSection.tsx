@@ -39,7 +39,7 @@ const RequestSection: React.FC<{ data: RequestItemType[] }> = ({ data }) => {
     return (
       <div className="flex items-center">
         <div>
-          <p className="font-semibold">{rowData.createdBy}</p>
+          <p className="font-semibold">{rowData.account?.fullname}</p>
         </div>
       </div>
     );
@@ -113,7 +113,7 @@ const RequestSection: React.FC<{ data: RequestItemType[] }> = ({ data }) => {
           header="Thông tin dịch vụ"
           body={rowServiceInfo}
         />
-        <Column field="from" header="Người yêu cầu" body={rowFrom} />
+        <Column field="account" header="Người yêu cầu" body={rowFrom} />
         <Column field="price" header="Ngân sách" body={rowPrice}/>
         <Column field="timeline" header="Thời gian" />
         <Column field="requestStatus" header="Trạng thái" body={rowStatus} />
