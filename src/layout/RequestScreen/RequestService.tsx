@@ -6,7 +6,7 @@ import { ProposalType, RequestItemType } from "../ChatScreen/ChatRelatedTypes";
  * @returns A promise that resolves to an array of RequestItemType.
  * @throws An error if there is an issue retrieving the data.
  * @author AnhDH
- * @version 1.0.0
+ * @version 1.1.0
  */
 export async function GetReceiveRequestData(): Promise<RequestItemType[]> {
   try {
@@ -23,7 +23,13 @@ export async function GetReceiveRequestData(): Promise<RequestItemType[]> {
         requestStatus: item.requestStatus,
         createdBy: item.createdBy,
         createdOn: item.createdOn,
-        account: item.account,
+        account: {
+          id: item.account.id,
+          username: item.account.username,
+          email: item.account.email,
+          fullname: item.account.fullname,
+          avatar: item.account.avatar,
+        },
         service: {
           id: item.service.id,
           serviceName: item.service.serviceName,
@@ -72,7 +78,13 @@ export async function GetSendRequestData(): Promise<RequestItemType[]> {
         requestStatus: item.requestStatus,
         createdBy: item.createdBy,
         createdOn: item.createdOn,
-        account: item.account,
+        account: {
+          id: item.account.id,
+          username: item.account.username,
+          email: item.account.email,
+          fullname: item.account.fullname,
+          avatar: item.account.avatar,
+        },
         service: {
           id: item.service.id,
           serviceName: item.service.serviceName,
@@ -102,7 +114,7 @@ export async function GetSendRequestData(): Promise<RequestItemType[]> {
 
 export async function GetCreatedProposalData(accountId: string): Promise<ProposalType[]> {
   try {
-    const response = await axiosPrivate.get(`/accounts/${accountId}/proposals`);
+    const response = await axiosPrivate.get(`/creators/${accountId}/proposals`);
 
     return response.data.map((item: any) => {
       return {
@@ -123,6 +135,20 @@ export async function GetCreatedProposalData(accountId: string): Promise<Proposa
         createdBy: item.createdBy,
         createdOn: item.createdOn,
         isReviewed: item.isReviewed,
+        creator: {
+          id: item.creator.id,
+          username: item.creator.username,
+          email: item.creator.email,
+          fullname: item.creator.fullname,
+          avatar: item.creator.avatar,
+        },
+        orderer: {
+          id: item.orderer.id,
+          username: item.orderer.username,
+          email: item.orderer.email,
+          fullname: item.orderer.fullname,
+          avatar: item.orderer.avatar,
+        },
       };
     });
   } catch (error) {
