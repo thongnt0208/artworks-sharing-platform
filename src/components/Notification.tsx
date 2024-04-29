@@ -46,6 +46,15 @@ const Notification: React.FC<Props> = ({ notifications, type }) => {
 
         {type === "noti" && (
           <a href=" ">
+            <div className="avatar">
+              {
+                {
+                  0: <div className="avatar pi pi-megaphone" style={{fontSize: '1.8rem', color: 'red' }}></div>,
+                  1: <div className="avatar pi pi-exclamation-triangle" style={{fontSize: '1.8rem', color: 'orange' }}></div>,
+                  2: <div className="avatar pi pi-info-circle" style={{fontSize: '1.8rem', color: 'green' }}></div>,
+                }[data.notifyType]
+              }
+            </div>
             <div className={`notification-content ${data.isSeen ? "seen" : ""}`}>
               <p className="notification-message">{data.content}</p>
               <p className="notification-date">{formatTime(data.creationDate)}</p>
