@@ -91,6 +91,7 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
   };
   // AW Detail state tools - end
 
+  //Fetch Artworks data
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -101,10 +102,6 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
         } else if (activeTab === 1) {
           newArtworksData = await GetFollowingArtworksData(pageNumber, pageSize);
         }
-        const tagData = await GetTagsData();
-        const categoriesData = await GetCategoriesData();
-        setTags(tagData);
-        setCategories(categoriesData);
         setArtworks((prevArtworks) => {
           const uniqueArtworkIds = new Set<string>(prevArtworks.map((artwork) => artwork.id));
           const filteredArtworks = Array.isArray(newArtworksData)
@@ -120,6 +117,21 @@ const HomeScreen: React.FC<{ isLogin: boolean }> = ({ isLogin }) => {
     };
     fetchData();
   }, [pageNumber, activeTab]);
+
+  //Fetch Categories and Tags data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tagData = await GetTagsData();
+        const categoriesData = await GetCategoriesData();
+        setTags(tagData);
+        setCategories(categoriesData);
+      } catch (error) {
+        CatchAPICallingError(error, navigate);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (selectingAw?.id) {
