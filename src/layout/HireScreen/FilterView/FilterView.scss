@@ -1,6 +1,29 @@
 @import "/src/const/variables.scss";
 
 .filter-view {
+  padding: 10px 0px;
+  .tag-carousel-section {
+    position: relative;
+    .tag-carousel {
+      position: relative;
+      width: 100%;
+      overflow-y: auto;
+
+      // Hide scrollbar initially
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+      &::-webkit-scrollbar {
+        width: 0; /* Chrome, Safari, Opera */
+      }
+
+      // Show scrollbar on hover
+      &:hover {
+        scrollbar-width: auto; /* Firefox */
+        -ms-overflow-style: auto; /* Internet Explorer 10+ */
+      }
+    }
+  }
   .search-section {
     display: flex;
     flex-direction: row;

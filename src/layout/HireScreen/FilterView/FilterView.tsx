@@ -1,33 +1,19 @@
-import React, { useState, useRef } from "react";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { OverlayPanel } from "primereact/overlaypanel";
+import React from "react";
 import "./FilterView.scss";
-import TagCarousel from "../../HomeScreen/CategoryAndTag/TagCarousel/TagCarousel";
+import TagCarousel from "../../../components/TagCarousel";
 
 type TagProps = {
   id: string;
   tagName: string;
 };
 
-interface SortOptions {
-  sortBy: string;
-  sortOrder: "asc" | "desc";
-}
-
 const FilterView: React.FC<{ tags: TagProps[] }> = ({ tags }) => {
-  const [sortOptions, setSortOptions] = useState<SortOptions>({
-    sortBy: "name",
-    sortOrder: "asc",
-  });
-  const op = useRef<OverlayPanel>(null);
-
   return (
     <div className="filter-view grid w-full">
-      <div className="tag-carousel-section col-10 p-3">
-        <TagCarousel tags={tags} />
+      <div className="tag-carousel-section h-full w-full">
+        <TagCarousel tags={tags} slidesPerView={9}/>
       </div>
-      <div className="search-section col-2 p-3 flex flex-row justify-content-center align-items-center">
+      {/* <div className="search-section col-2 flex flex-row justify-content-center align-items-center">
         <span className="search-bar p-input-icon-right">
           <i className="pi pi-search" />
           <InputText
@@ -71,12 +57,10 @@ const FilterView: React.FC<{ tags: TagProps[] }> = ({ tags }) => {
                 }
               />
             </div>
-            {/* <div>
-              <Button label="Sort" onClick={} />
-            </div> */}
+            
           </div>
         </OverlayPanel>
-      </div>
+      </div> */}
     </div>
   );
 };

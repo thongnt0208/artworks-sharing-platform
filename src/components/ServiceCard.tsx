@@ -3,6 +3,7 @@ import { Rating } from "primereact/rating";
 
 import { ArtworkProps } from "./ArtworkCard";
 import "./ServiceCard.scss";
+import { useNavigate } from "react-router-dom";
 
 const background = require("../assets/defaultImage/default-card-blur-image.png");
 
@@ -27,6 +28,7 @@ export type ServiceProps = {
   reviewHandler?: () => void;
 };
 const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
+  const navigate = useNavigate();
   return (
     <div
       className="service-card-container "
@@ -36,12 +38,8 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
     >
       <div className="information">
         <div className="service-card-details-top mt-2">
-          <h2 className="service-name mt-0 mb-0 ml-3 font-bold">
-            {props.serviceName}
-          </h2>
-          <p className="starting-price mt-0 mb-0 ml-3">
-            Từ {props.startingPrice.toLocaleString()} Xu
-          </p>
+          <h2 className="service-name mt-0 mb-0 ml-3 font-bold">{props.serviceName}</h2>
+          <p className="starting-price mt-0 mb-0 ml-3">Từ {props.startingPrice.toLocaleString()} Xu</p>
         </div>
         <div className="service-card-details-bottom">
           <div>
@@ -51,8 +49,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
             </p>
             <p className="mt-1 mb-0">
               {" "}
-              <i className="pi pi-sync" /> {props.numberOfConcept} ý tưởng,{" "}
-              {props.numberOfRevision} lần chỉnh sửa{" "}
+              <i className="pi pi-sync" /> {props.numberOfConcept} ý tưởng, {props.numberOfRevision} lần chỉnh sửa{" "}
             </p>
           </div>
           {props.averageRating === 0 ? (
@@ -63,12 +60,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
             </div>
           ) : (
             <div className="review">
-              <Rating
-                className="rating mt-1"
-                value={props.averageRating}
-                readOnly
-                cancel={false}
-              />
+              <Rating className="rating mt-1" value={props.averageRating} readOnly cancel={false} />
               <p className="review-popup" onClick={props.reviewHandler}>
                 Tất cả đánh giá
               </p>
@@ -91,8 +83,12 @@ const ServiceCard: React.FC<ServiceProps> = ({ ...props }: ServiceProps) => {
               rounded
               className="hire-button border-none pl-5 pr-5"
               onClick={() => {
-                props.handleShowRequestPopup();
-                props.setSelectedService && props.setSelectedService(props);
+                if (props.isCreator) {
+                  props.handleShowRequestPopup();
+                  props.setSelectedService && props.setSelectedService(props);
+                } else {
+                  navigate(`/login`);
+                }
               }}
             />
           </div>

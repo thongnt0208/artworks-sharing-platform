@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import {
-  GetCollectionData,
-  UpdateCollectionData,
-  DeleteCollectionData,
-} from "./CollectionDetailService";
+import { GetCollectionData, UpdateCollectionData, DeleteCollectionData } from "./CollectionDetailService";
 import CollectionGallery from "./CollectionGallery/CollectionGallery";
 import CollectionInformationSection from "./CollectionInformationSection/CollectionInformationSection";
 import { getAuthInfo } from "../../util/AuthUtil";
@@ -57,10 +53,7 @@ const CollectionDetailScreen: React.FC = () => {
     }
   };
 
-  const handleUpdateCollection = async (
-    collectionName: string,
-    privacy: boolean
-  ) => {
+  const handleUpdateCollection = async (collectionName: string, privacy: boolean) => {
     setIsLoading(true);
     try {
       const response = await UpdateCollectionData({
@@ -91,9 +84,7 @@ const CollectionDetailScreen: React.FC = () => {
       const response = await DeleteCollectionData(collection.id);
       if (response) {
         toast.success("Xóa bộ sưu tập thành công");
-        setTimeout(() => {
-          navigate(`/account/${getAuthInfo().id}/collection`);
-        }, 1000);
+        navigate(`/account/${getAuthInfo().id}/collection`);
       } else {
         toast.error("Xóa bộ sưu tập thất bại");
       }
@@ -107,9 +98,7 @@ const CollectionDetailScreen: React.FC = () => {
   const updateArtworks = (artworkId: string) => {
     setIsLoadingArtworks(true);
     try {
-      const updatedArtworks = artworks.filter(
-        (artwork) => artwork.id !== artworkId
-      );
+      const updatedArtworks = artworks.filter((artwork) => artwork.id !== artworkId);
       setArtworks(updatedArtworks);
     } finally {
       setIsLoadingArtworks(false);
@@ -131,7 +120,7 @@ const CollectionDetailScreen: React.FC = () => {
         setIsLoading(false);
       }
     };
-    
+
     const fetchArtworks = async () => {
       setIsLoadingArtworks(true);
       try {
@@ -146,7 +135,7 @@ const CollectionDetailScreen: React.FC = () => {
         setIsLoadingArtworks(false);
       }
     };
-    fetchCollectionData();  
+    fetchCollectionData();
     fetchArtworks();
   }, [collectionId, navigate]);
 
@@ -171,11 +160,7 @@ const CollectionDetailScreen: React.FC = () => {
           />
           {isLoadingArtworks && <ProgressSpinner />}
           {artworks && (
-            <CollectionGallery
-              collectionId={collection.id}
-              artworks={artworks}
-              updateArtworks={updateArtworks}
-            />
+            <CollectionGallery collectionId={collection.id} artworks={artworks} updateArtworks={updateArtworks} />
           )}
         </>
       )}

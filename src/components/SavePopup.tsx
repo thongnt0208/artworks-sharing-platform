@@ -166,7 +166,7 @@ const SavePopup: React.FC<SavePopupProps> = ({ closeDialog, artworkId }) => {
               </div>
               <div className="btn mt-4 w-full flex flex-row justify-content-evenly">
                 <Button type="submit" label="Tạo bộ sưu tập" className="save-btn p-button" />
-                <Button label="Hủy" className="cancel-btn p-button" onClick={closeDialog} />
+                <Button type="button" label="Hủy" className="cancel-btn p-button" onClick={closeDialog} />
               </div>
             </form>
           </>
