@@ -450,6 +450,30 @@ export async function GetPropoAssetLink(proposalId: string): Promise<string> {
 }
 
 /**
+ * This function is used to confirm a proposal
+ * 
+ * @param proposalId - the id of the proposal
+ * @returns {Promise<any>} - the response from the API
+ * @throws {Error} an error from the API request
+ * @example
+ * const response = await ConfirmProposal("123");
+ * console.log(response);
+ * @version 1.0.0
+ * @author @thongnt0208
+ */
+export async function ConfirmProposal(proposalId: string): Promise<any> {
+  return axiosPrivate
+    .post(`/proposals/${proposalId}/confirm`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error confirming proposal:", error);
+      throw error;
+    });
+}
+
+/**
  * This function is used to get all reviews of a proposal
  *
  * @param proposalId - the id of the proposal

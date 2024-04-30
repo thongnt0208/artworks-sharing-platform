@@ -80,7 +80,7 @@ export default function ProposalCard({ ...props }: ProposalCardProps) {
             severity={
               status === "Waiting"
                 ? "info"
-                : status === "Accepted" || status === "CompletePayment"
+                : status === "Accepted" || status === "CompletePayment" || status === "ConfirmPayment"
                 ? "success"
                 : null
             }

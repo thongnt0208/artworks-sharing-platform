@@ -34,6 +34,11 @@ export const proposalStatusEnums = [
     value: 6,
     vietnamese: "Hoàn thành",
   },
+  {
+    name: "ConfirmPayment",
+    value: 7,
+    vietnamese: "Đã xác nhận thanh toán",
+  }
 ];
 
 export const reportTypeEnums = [
