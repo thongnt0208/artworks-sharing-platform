@@ -149,7 +149,7 @@ const Header = ({ isLogin, setIsLogin, chatboxesData, notisData, numNotis }: Hea
               ) : (
                 <>
                   <Button label="Đăng nhập" onClick={() => navigate("/login")} />
-                  <Button label="Đăng ký" onClick={() => navigate("/register")} className="ml-2" />
+                  <Button label="Đăng ký" onClick={() => navigate("/verify-email")} className="ml-2" />
                 </>
               )}
             </div>,

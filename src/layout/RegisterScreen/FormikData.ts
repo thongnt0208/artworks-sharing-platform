@@ -5,7 +5,6 @@ export const initalValues = {
   username: "",
   password: "",
   confirmPassword: "",
-  email: "",
   fullname: "",
   birthdate: null,
   acceptRules: false,
