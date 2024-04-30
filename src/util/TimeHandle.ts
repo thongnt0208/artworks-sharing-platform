@@ -16,6 +16,7 @@ export const formatTime = (
     format: string = 'HH:mm ngày dd/MM/yyyy'
   ): string => {
     const date = new Date(time);
+    date.setHours(date.getHours() + 7);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();

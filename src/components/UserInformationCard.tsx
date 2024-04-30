@@ -183,9 +183,9 @@ const UserInformationCard: React.FC<UserInformationProps> = (props: UserInformat
             <Button
               rounded
               className="mt-4"
-              label="Đăng nhập để thuê"
+              label="Tới trang đăng nhập"
               onClick={() => {
-                navigate("/login");
+                navigate(`/account/${props.id}/service`);
               }}
             />
           )
