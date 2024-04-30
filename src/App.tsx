@@ -56,6 +56,7 @@ import {
   GetNotificationsCurrentAccountRt,
   ValidateAccessToken,
 } from "./service";
+import VerifyEmailScreen from "./layout/VerifyEmailScreen/VerifyEmailScreen";
 
 function App() {
   addLocale("vi", vi.vi);
@@ -108,6 +109,7 @@ function App() {
                   />
                 }
               />
+              <Route path="/verify-email" element={<VerifyEmailScreen/>} />
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
               <Route path="/reset-password" element={<ResetPasswordScreen />} />
