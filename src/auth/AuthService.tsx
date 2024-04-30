@@ -8,7 +8,7 @@ import axios from "../hooks/useAxios";
  * @example
  * @description This function will be used to login the user
  * @returns Promise<any>
- * @author ThongNT
+ * @author @thongnt0208
  * @version 1.0.0
  */
 export async function login(username: string, password: string) {
@@ -25,6 +25,25 @@ export async function login(username: string, password: string) {
         },
       }
     );
+
+    return response;
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+/**
+ * This function will be used to login the user with Google
+ * 
+ * @param token - the credential token from Google
+ * @returns Promise<any>
+ * @author @thongnt0208
+ */
+export async function loginWithGoogle(token: string) {
+  try {
+    let response = await axios.post("/auth/login-google", {
+      idToken: token,
+    });
 
     return response;
   } catch (error: any) {
