@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./RegisterScreen.scss";
 import logotext from "../../assets/logo/logo.png";
 import { InputText, Button, Toast, Divider, Image, useFormik, Password, Calendar } from "../index";
@@ -11,6 +11,7 @@ import { Checkbox } from "primereact/checkbox";
 
 const RegisterScreen = () => {
   const authenticationInfo = getAuthInfo();
+  const location = useLocation();
   let today = new Date();
 
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const RegisterScreen = () => {
   };
 
   const formik: any = useFormik({
-    initialValues: initalValues,
+    initialValues: { ...initalValues, email: location.state?.email || "" },
     validationSchema: yupObject,
     onSubmit: (values) => {
       // Omit confirmPassword from the submitted values
@@ -138,7 +139,7 @@ const RegisterScreen = () => {
                   {/* Email InputText */}
                   <div className="email-container">
                     {renderError("email")}
-                    <InputText id="email" {...formik.getFieldProps("email")} placeholder="Email" />
+                    <InputText id="email" {...formik.getFieldProps("email")} disabled />
                   </div>
                   {/* Fullname InputText */}
                   <div className="fullname-container">
