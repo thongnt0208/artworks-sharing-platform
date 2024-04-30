@@ -83,9 +83,9 @@ const TransactionHistory: React.FC<TransactionHistoryList> = (transactionHistory
 
   const statusRowTemplate = (rowData: TransactionHistoryProps) => {
     return (
-      <span
+      <div
         style={{
-          width: "fit-content",
+          width: "w-full",
           textAlign: "center",
           backgroundColor: rowData.transactionStatus === "Thành công" ? "green" : "red",
           padding: "0.25rem 0.5rem",
@@ -94,7 +94,7 @@ const TransactionHistory: React.FC<TransactionHistoryList> = (transactionHistory
         }}
       >
         {rowData.transactionStatus}
-      </span>
+      </div>
     );
   };
 
@@ -119,7 +119,6 @@ const TransactionHistory: React.FC<TransactionHistoryList> = (transactionHistory
       <Column
         field="transactionStatus"
         header="Trạng thái"
-        style={{ display: "flex" }}
         body={statusRowTemplate}
         sortable
       ></Column>

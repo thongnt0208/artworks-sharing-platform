@@ -51,7 +51,7 @@ const WalletHistory: React.FC<walletHistoryList> = (walletHistoryList) => {
 
   const statusRowTemplate = (rowData: WalletHistoryProps) => {
     return (
-      <span
+      <div
         style={{
           width: "fit-content",
           backgroundColor: rowData.transactionStatus === "Thành công" ? "green" : "red",
@@ -62,7 +62,7 @@ const WalletHistory: React.FC<walletHistoryList> = (walletHistoryList) => {
         }}
       >
         {rowData.transactionStatus}
-      </span>
+      </div>
     );
   };
 
