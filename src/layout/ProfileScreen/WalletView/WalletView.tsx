@@ -73,7 +73,7 @@ const WalletView: React.FC = () => {
         <>
           <div className="wallet-info-section">
             <h1 className="wallet-title">Thông tin ví</h1>
-            {wallet ? (
+            {wallet?.withdrawInformation ? (
               <>
                 <h2 className="w-full text-center">
                   Phương thức:{" "}
