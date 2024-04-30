@@ -15,6 +15,7 @@ import { GetReviewsByProposalId } from "../services/ProposalServices";
 import { Rating } from "primereact/rating";
 import AddReviewView from "./Review/AddReviewView";
 import { getAuthInfo } from "../../../util/AuthUtil";
+import AddConfirmProposal from "./ConfirmProposal/AddConfirmProposal";
 
 type Props = {
   userInfo: {
@@ -74,7 +75,13 @@ export default function ChatRightNav({
       )}
       {
         // check if proposal status is CompletePayment && current user is not the creator -> Start to add review
-        selectingProposal?.status === "CompletePayment" &&
+        selectingProposal?.status === "CompletePayment" && !isCreator && <AddConfirmProposal 
+        selectingProposal={selectingProposal} 
+        refreshProposalList={handleGetAllProposals}/>
+      }
+      {
+        // check if proposal status is ConfirmPayment && current user is not the creator -> Start to add confirmation proposal
+        selectingProposal?.status === "ConfirmPayment" &&
           !selectingProposal?.isReviewed &&
           !isCreator && (
             <AddReviewView
@@ -87,11 +94,7 @@ export default function ChatRightNav({
         <div className="review-container">
           <p className="text-cus-h2-bold">Đánh giá</p>
           <p>{reviews?.createdAccount?.fullname} đã đánh giá dự án này: </p>
-          <Rating
-            value={reviews?.rating}
-            readOnly
-            cancel={false}
-          />
+          <Rating value={reviews?.rating} readOnly cancel={false} />
           <p className="text-cus-normal">{reviews?.detail}</p>
         </div>
       )}
