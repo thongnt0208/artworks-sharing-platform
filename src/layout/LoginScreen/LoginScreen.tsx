@@ -172,7 +172,7 @@ const LoginScreen = ({ isLogin, setIsLogin, setAuthInfoChanged }: Props) => {
                     shape="pill"
                   />
                   <div className="flex align-self-center m-0">
-                    <span>Người dùng mới? </span><Link to={"/register"}>Tạo tài khoản</Link>
+                    <span>Người dùng mới? </span><Link to={"/verify-email"}>Tạo tài khoản</Link>
                   </div>
                 </div>
                 <Button
