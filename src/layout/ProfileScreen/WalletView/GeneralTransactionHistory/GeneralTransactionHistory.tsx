@@ -94,7 +94,7 @@ const GeneralTransactionHistory: React.FC<GeneralTransactionHistoryList> = (gene
     return (
       <>
         {rowData.transactionHistory && (
-          <span
+          <div
             style={{
               width: "fit-content",
               backgroundColor: rowData.transactionHistory.transactionStatus === "Thành công" ? "green" : "red",
@@ -105,10 +105,10 @@ const GeneralTransactionHistory: React.FC<GeneralTransactionHistoryList> = (gene
             }}
           >
             {rowData.transactionHistory.transactionStatus}
-          </span>
+          </div>
         )}
         {rowData.walletHistory && (
-          <span
+          <div
             style={{
               width: "fit-content",
               backgroundColor: rowData.walletHistory?.transactionStatus === "Thành công" ? "green" : "red",
@@ -119,7 +119,7 @@ const GeneralTransactionHistory: React.FC<GeneralTransactionHistoryList> = (gene
             }}
           >
             {rowData.walletHistory?.transactionStatus}
-          </span>
+          </div>
         )}
       </>
     );

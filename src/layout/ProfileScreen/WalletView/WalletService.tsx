@@ -8,9 +8,6 @@ import { GeneralTransactionHistoryProps } from "./GeneralTransactionHistory/Gene
 const API_URL = process.env.REACT_APP_REAL_API_BASE_URL;
 const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
 
-// const accessToken = getAuthInfo()?.accessToken || "";
-// const refreshToken = getAuthInfo()?.refreshToken || "";
-
 /**
  *
  * Retrieves wallet data for a given account ID.
@@ -23,13 +20,17 @@ const WS_API_URL = process.env.REACT_APP_WS_API_BASE_URL;
 export async function GetWalletData(accountId: string): Promise<WalletProps> {
   try {
     const response = await axiosPrivate.get(`${API_URL}/account/${accountId}/wallets`);
-    return {
-      balance: response.data.balance,
-      withdrawMethod: response.data.withdrawMethod,
-      withdrawInformation: response.data.withdrawInformation,
-    };
+    if (!response.data) {
+      return {} as WalletProps;
+    } else {
+      return {
+        balance: response.data.balance,
+        withdrawMethod: response.data.withdrawMethod,
+        withdrawInformation: response.data.withdrawInformation,
+      };
+    }
   } catch (error) {
-    throw new Error("Failed to retrieve wallet data.");
+    return {} as WalletProps;
   }
 }
 
@@ -41,20 +42,24 @@ export async function GetGeneralTransactionHistoryData(accountId: string): Promi
         transactionHistory: item.transactionHistory
           ? {
               id: item.transactionHistory.id,
-              createdAccount: item.transactionHistory.createdAccount ? {
-                id: item.transactionHistory.createdAccount.id,
-                username: item.transactionHistory.createdAccount.username,
-                email: item.transactionHistory.createdAccount.email,
-                fullname: item.transactionHistory.createdAccount.fullname,
-                avatar: item.transactionHistory.createdAccount.avatar,
-              } : null,
-              otherAccount: item.transactionHistory.otherAccount ? {
-                id: item.transactionHistory.otherAccount.id,
-                username: item.transactionHistory.otherAccount.username,
-                email: item.transactionHistory.otherAccount.email,
-                fullname: item.transactionHistory.otherAccount.fullname,
-                avatar: item.transactionHistory.otherAccount.avatar,
-              } : null,
+              createdAccount: item.transactionHistory.createdAccount
+                ? {
+                    id: item.transactionHistory.createdAccount.id,
+                    username: item.transactionHistory.createdAccount.username,
+                    email: item.transactionHistory.createdAccount.email,
+                    fullname: item.transactionHistory.createdAccount.fullname,
+                    avatar: item.transactionHistory.createdAccount.avatar,
+                  }
+                : null,
+              otherAccount: item.transactionHistory.otherAccount
+                ? {
+                    id: item.transactionHistory.otherAccount.id,
+                    username: item.transactionHistory.otherAccount.username,
+                    email: item.transactionHistory.otherAccount.email,
+                    fullname: item.transactionHistory.otherAccount.fullname,
+                    avatar: item.transactionHistory.otherAccount.avatar,
+                  }
+                : null,
               assetId: item.transactionHistory.assetId,
               proposalId: item.transactionHistory.proposalId,
               detail: item.transactionHistory.detail,
@@ -69,13 +74,15 @@ export async function GetGeneralTransactionHistoryData(accountId: string): Promi
         walletHistory: item.walletHistory
           ? {
               id: item.walletHistory.id,
-              account: item.walletHistory.acocunt ? {
-                id: item.walletHistory.account.id,
-                username: item.walletHistory.account.username,
-                email: item.walletHistory.account.email,
-                fullname: item.walletHistory.account.fullname,
-                avatar: item.walletHistory.account.avatar,
-              } : null,
+              account: item.walletHistory.acocunt
+                ? {
+                    id: item.walletHistory.account.id,
+                    username: item.walletHistory.account.username,
+                    email: item.walletHistory.account.email,
+                    fullname: item.walletHistory.account.fullname,
+                    avatar: item.walletHistory.account.avatar,
+                  }
+                : null,
               amount: item.walletHistory.amount,
               walletBalance: item.walletHistory.walletBalance,
               type: item.walletHistory.type === "Deposit" ? "Nạp tiền vào ví" : "Rút tiền về tài khoản liên kết",
@@ -88,8 +95,8 @@ export async function GetGeneralTransactionHistoryData(accountId: string): Promi
       };
     });
   } catch (error) {
-    console.log("GetGeneralTransactionHistoryData", error);
-    throw new Error("Failed to retrieve general transaction history data.");
+    // throw error;
+    return [];
   }
 }
 
@@ -169,8 +176,7 @@ export async function GetTransactionHistoryData(accountId: string): Promise<Tran
       };
     });
   } catch (error) {
-    console.log("GetTransactionHistoryData", error);
-    throw new Error("Không thể lấy dữ liệu lịch sử giao dịch.");
+    return [];
   }
 }
 
