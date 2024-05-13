@@ -1,69 +1,78 @@
-# Artworkia - Artworks Sharing Platform
-A product in our capstone project
+# Artworkia - Artwork Sharing Platform
 
-## Coding instruction
-1. Commit format: ```<name> - <content>```
-2. Using REBASING technique (1 branch - 1 task)
-3. Do NOT merge your code by yourself
+👋 Welcome to our Capstone Project Artworkia 👋
 
-### Rebasing instruction
-1: Mở code lên qua master pull về
-2: Check out về nhánh mình code
-3: Commit, rebase
-4: Check out qua master pull về
-5: Nếu master ko có gì thay đổi thì checkout về nhánh mình push lên
-nếu master có thay đổi thì checkout về nhánh mình, rebase, fix conflict, xong push lên
-6: Lên github tạo push request
-7. Finish
+## Table of Contents
 
-### Author: (4)
-- Leader: LamVNT
-- Front-end Developer: ThongNT, AnhDH
-- Backend Developer: LamVNT, PhuHV
+- [Description](#description)
+- [Preview Screenshot](#preview-screenshot)
+- [Technology](#technology)
+- [Main Features](#main-features)
+- [Contributors](#contributors)
+- [License & Copyright](#license--copyright)
 
-# Getting Started with Create React App
+## Description
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- A social web application platform for digital artworks.
+- Serves as an intermediary connecting creators and audiences who appreciate their artworks.
+- Facilitates creators and audiences in selling and buying assets related to the artworks.
+- Enables creators to offer creative content services upon request.
 
-## Available Scripts
+## Preview Screenshot
 
-In the project directory, you can run:
+<div align="center">
+  <img src="./preview-screenshot/login_screen.png.png" alt="Login Screen" width="45%"></img> &nbsp;&nbsp; <img src="./preview-screenshot/register_screen.png" alt="Register Screen" width="45%"></img>
+  <img src="./preview-screenshot/home_screen.png" alt="Home Screen" width="100%"></img>
+  <img src="./preview-screenshot/post_artwork_1.png" alt="Post Artwork Screen" width="45%"></img> &nbsp;&nbsp; <img src="./preview-screenshot/post_artwork_2.png" alt="Post Artwork Screen" width="45%"></img>
+  <img src="./preview-screenshot/artwork_detail_screen.png" alt="Artwork Detail Screen" width="45%"></img> &nbsp;&nbsp; <img src="./preview-screenshot/artwork_detail_screen_2.png.png" alt="Artwork Detail Screen" width="45%"></img>
+  <img src="./preview-screenshot/my_artwork_screen.png" alt="My Artwork Screen" width="45%"></img> &nbsp;&nbsp; <img src="./preview-screenshot/my_service_screen.png" alt="My Services Screen" width="45%"></img>
+  <img src="./preview-screenshot/my_wallet_screen.png" alt="My Wallet Screen" width="45%"></img> &nbsp;&nbsp; <img src="./preview-screenshot/zalopay_gateway.png" alt="ZaloPay Gateway" width="45%"></img>
+  <img src="./preview-screenshot/chat_screen.png" alt="Chat Screen" width="100%"></img>
+  <img src="./preview-screenshot/tracking_deliverable_screen.png" alt="Chat Screen" width="100%"></img> &nbsp;&nbsp; <img src="./preview-screenshot/tracking_deliverable_screen_2.png" alt="Chat Screen" width="45%"></img>
+</div>
 
-### `npm start`
+## Technology
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Client:** ReactJS, NSFWJS, PrimeReact
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**Server:** Microsoft .Net, Microsoft SQL Server
 
-### `npm test`
+**Deployment:** Docker, Jenkins, Google Cloud, Firebase Hosting
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Third-party:** ZaloPay, Elastic Search, Cloudflare
 
-### `npm run build`
+## Main features
+**1. Guest:**
+- [x]  Login
+- [x]  Login by Google
+- [x]  Register
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**2. Creator:**
+- [x]  Profile Management
+- [x]  Artwork Management
+- [x]  Asset Management
+- [x]  Service Management
+- [x]  Proposal Management
+- [x]  Chat
+- [x]  Report
+- [x]  Notification
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**3. Audience**
+- [x]  Collection Management
+- [x]  Request Management
+- [x]  Chat
+- [x]  Report
+- [x]  Notification
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contributors
+**1. Mentor:**
+- Lecturer - Main Mentor: Nguyen Thi Cam Huong
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+**2. Members:**
+- [Vo Ngoc Truc Lam](https://github.com/vliam0206) - SE160857 - **Leader | Back-end Developer**
+- [Huynh Van Phu](https://github.com/hvpexe) - SE140456 - **Back-end Developer | DevOps**
+- [Dang Hoang Anh](https://github.com/danghoanganh36) - SE160846 - **Front-end Developer**
+- [Nguyen Trung Thong](https://github.com/thongnt0208) - SE160850 - **Front-end Developer**
+  
+## License & Copyright 
+&copy; 2024 GSP24SE42-SP24SE061-Artworkia
